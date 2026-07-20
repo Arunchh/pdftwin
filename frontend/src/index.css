@@ -1,29 +1,41 @@
 :root {
-  --bg: #ffffff;
+  --bg: #f8f8f8;
   --surface: #ffffff;
-  --surface-hover: #eef2f7;
-  --surface-muted: #f8fafc;
-  --border: #d7dee8;
-  --text: #1e293b;
-  --text-muted: #64748b;
-  --accent: #1d4ed8;
-  --accent-hover: #1e40af;
-  --accent-soft: #eff6ff;
-  --accent-border: #bfdbfe;
-  --accent-text: #1d4ed8;
-  --success: #059669;
-  --success-bg: #ecfdf5;
-  --success-text: #047857;
-  --success-border: #a7f3d0;
-  --error: #dc2626;
+  --surface-hover: #f4f4f5;
+  --surface-muted: #f4f4f5;
+  --surface-subtle: #fafafa;
+  --border: #e4e4e7;
+  --border-strong: #a1a1aa;
+  --text: #18181b;
+  --text-muted: #71717a;
+  --text-subtle: #a1a1aa;
+  /* Primary actions — single high-contrast anchor */
+  --accent: #27272a;
+  --accent-hover: #09090b;
+  --accent-soft: #f4f4f5;
+  --accent-border: #d4d4d8;
+  --accent-text: #3f3f46;
+  /* Selection & focus — neutral, not competing with CTAs */
+  --selected-bg: #f4f4f5;
+  --selected-border: #52525b;
+  --focus-border: #71717a;
+  --success: #15803d;
+  --success-bg: #f0fdf4;
+  --success-text: #166534;
+  --success-border: #bbf7d0;
+  --error: #b91c1c;
   --error-bg: #fef2f2;
-  --error-text: #b91c1c;
+  --error-text: #991b1b;
   --error-border: #fecaca;
-  --warning-bg: #fffbeb;
-  --warning-text: #b45309;
-  --warning-border: #fde68a;
+  --warning-bg: #fafaf9;
+  --warning-text: #57534e;
+  --warning-border: #d6d3d1;
+  --info-bg: #fafafa;
+  --info-text: #52525b;
+  --info-border: #e4e4e7;
   --radius: 8px;
-  --shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 16px rgba(15, 23, 42, 0.05);
+  --shadow: 0 1px 2px rgba(24, 24, 27, 0.05), 0 2px 8px rgba(24, 24, 27, 0.04);
+  --shadow-lg: 0 8px 24px rgba(24, 24, 27, 0.08);
 }
 
 * {
@@ -160,6 +172,11 @@ textarea {
   box-shadow: var(--shadow);
 }
 
+.tool-panel {
+  margin-top: 1rem;
+  background: var(--surface-subtle);
+}
+
 .panel h2 {
   font-size: 1.25rem;
   margin-bottom: 0.35rem;
@@ -182,8 +199,8 @@ textarea {
 
 .dropzone:hover,
 .dropzone.dragging {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
 }
 
 .dropzone-icon {
@@ -295,7 +312,8 @@ textarea {
 .field input:focus,
 .field textarea:focus {
   outline: none;
-  border-color: var(--accent);
+  border-color: var(--focus-border);
+  box-shadow: 0 0 0 3px rgba(113, 113, 122, 0.12);
 }
 
 .field .help {
@@ -403,7 +421,7 @@ textarea {
   display: flex;
   justify-content: center;
   margin-bottom: 0.75rem;
-  color: var(--accent);
+  color: var(--text-muted);
 }
 
 @keyframes spin {
@@ -452,8 +470,8 @@ textarea {
 
 .page-reorder-item:hover,
 .order-list-item:hover {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
 }
 
 .order-list.frozen .order-list-item:hover {
@@ -549,9 +567,9 @@ textarea {
 }
 
 .order-list-item.selected {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  box-shadow: inset 0 0 0 1px var(--accent-border);
+  border-color: var(--selected-border);
+  background: var(--selected-bg);
+  box-shadow: inset 0 0 0 1px var(--selected-border);
 }
 
 .order-list-label-row {
@@ -566,8 +584,9 @@ textarea {
   font-weight: 600;
   padding: 0.15rem 0.45rem;
   border-radius: 999px;
-  background: var(--accent-soft);
-  color: var(--accent-text);
+  background: var(--surface-hover);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
 }
 
 .workflow-rail {
@@ -624,8 +643,8 @@ textarea {
   flex: 1;
   min-width: 1.5rem;
   height: 2px;
-  background: linear-gradient(90deg, var(--border), var(--accent), var(--border));
-  opacity: 0.55;
+  background: var(--border);
+  opacity: 1;
 }
 
 .workflow-panel {
@@ -641,8 +660,13 @@ textarea {
 }
 
 .workflow-panel-merge {
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
+  border-color: var(--border-strong);
+  background: var(--surface-subtle);
+}
+
+.workflow-panel-export {
+  border-color: var(--border-strong);
+  background: var(--surface-subtle);
 }
 
 .workflow-panel-header {
@@ -676,9 +700,9 @@ textarea {
 }
 
 .workflow-status.optional {
-  border-color: var(--accent-border);
-  color: var(--accent-text);
-  background: var(--accent-soft);
+  border-color: var(--info-border);
+  color: var(--info-text);
+  background: var(--info-bg);
 }
 
 .workflow-status.pending {
@@ -726,14 +750,14 @@ textarea {
 }
 
 .format-output-card:hover {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
 }
 
 .format-output-card.selected {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  box-shadow: inset 0 0 0 1px var(--accent-border);
+  border-color: var(--selected-border);
+  background: var(--selected-bg);
+  box-shadow: inset 0 0 0 1px var(--selected-border);
 }
 
 .format-output-flow {
@@ -768,11 +792,6 @@ textarea {
   border-radius: 999px;
   background: var(--surface-muted);
   border: 1px solid var(--border);
-}
-
-.workflow-panel-export {
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
 }
 
 .export-summary {
@@ -830,12 +849,13 @@ textarea {
 }
 
 .pdf-select-item:hover {
-  border-color: var(--accent);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
 }
 
 .pdf-select-item.active {
-  border-color: var(--accent);
-  background: var(--accent-soft);
+  border-color: var(--selected-border);
+  background: var(--selected-bg);
 }
 
 /* ── SaaS layout ── */
@@ -885,7 +905,7 @@ textarea {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--accent), #1e3a8a);
+  background: linear-gradient(135deg, #52525b, #27272a);
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -943,9 +963,9 @@ textarea {
   gap: 0.35rem;
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  background: var(--accent-soft);
-  border: 1px solid var(--accent-border);
-  color: var(--accent-text);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  color: var(--text-muted);
   font-size: 0.78rem;
   font-weight: 600;
 }
@@ -981,7 +1001,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
-  color: var(--accent-text);
+  color: var(--text-muted);
   font-size: 0.85rem;
   font-weight: 600;
   margin-bottom: 0.85rem;
@@ -1042,8 +1062,9 @@ textarea {
   height: 2rem;
   margin-bottom: 0.5rem;
   border-radius: 8px;
-  background: var(--accent-soft);
-  color: var(--accent-text);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
 }
 
 .hero-stats strong,
@@ -1079,8 +1100,9 @@ textarea {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 10px;
-  background: var(--accent-soft);
-  color: var(--accent-text);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1161,22 +1183,24 @@ textarea {
 }
 
 .tool-card:hover {
-  border-color: var(--accent);
+  border-color: var(--border-strong);
+  background: var(--surface-hover);
   transform: translateY(-1px);
 }
 
 .tool-card.active {
-  border-color: var(--accent);
-  background: var(--accent-soft);
-  box-shadow: inset 0 0 0 1px var(--accent-border);
+  border-color: var(--selected-border);
+  background: var(--selected-bg);
+  box-shadow: inset 0 0 0 1px var(--selected-border);
 }
 
 .tool-card-icon {
   width: 2.5rem;
   height: 2.5rem;
   border-radius: 10px;
-  background: var(--accent-soft);
-  color: var(--accent-text);
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1238,9 +1262,10 @@ textarea {
 }
 
 .workspace-tool-tab.active {
-  color: var(--accent-text);
-  background: var(--accent-soft);
-  box-shadow: inset 0 0 0 1px var(--accent-border);
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--selected-border);
+  font-weight: 600;
 }
 
 .workspace-tool-tab-label {
@@ -1258,7 +1283,7 @@ textarea {
 }
 
 .workspace-tool-browse:hover {
-  color: var(--accent-text);
+  color: var(--text);
   background: var(--surface-hover);
 }
 
@@ -1283,15 +1308,11 @@ textarea {
   flex-shrink: 0;
   font-size: 0.78rem;
   font-weight: 600;
-  color: var(--accent-text);
+  color: var(--text-muted);
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  background: var(--accent-soft);
-  border: 1px solid var(--accent-border);
-}
-
-.tool-panel {
-  margin-top: 1rem;
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
 }
 
 .pdf-select-block {
@@ -1318,8 +1339,9 @@ textarea {
 }
 
 .pricing-card.highlighted {
-  border-color: var(--accent-border);
-  background: var(--accent-soft);
+  border-color: var(--selected-border);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
 }
 
 .pricing-badge {
@@ -1333,16 +1355,16 @@ textarea {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--accent-text);
+  color: var(--text-muted);
 }
 
 .pricing-banner {
   margin-bottom: 1rem;
   padding: 0.85rem 1rem;
   border-radius: var(--radius);
-  background: var(--accent-soft);
-  border: 1px solid var(--accent-border);
-  color: var(--accent-text);
+  background: var(--info-bg);
+  border: 1px solid var(--info-border);
+  color: var(--info-text);
   font-size: 0.9rem;
 }
 
@@ -1386,7 +1408,7 @@ textarea {
 }
 
 .pricing-features svg {
-  color: var(--success);
+  color: var(--text-subtle);
   flex-shrink: 0;
 }
 
@@ -1568,7 +1590,7 @@ textarea {
   display: inline-flex;
   align-items: center;
   gap: 0.35rem;
-  color: var(--accent-text);
+  color: var(--text-muted);
   font-size: 0.78rem;
   font-weight: 700;
   text-transform: uppercase;
@@ -1667,8 +1689,8 @@ textarea {
   padding: 1.1rem;
   margin-bottom: 1rem;
   border-radius: var(--radius);
-  border: 1px solid var(--accent-border);
-  background: var(--accent-soft);
+  border: 1px solid var(--border);
+  background: var(--surface-muted);
 }
 
 .checkout-plan-price {
@@ -1708,7 +1730,7 @@ textarea {
 }
 
 .checkout-feature-list svg {
-  color: var(--success);
+  color: var(--text-subtle);
   flex-shrink: 0;
   margin-top: 0.1rem;
 }
@@ -1738,8 +1760,9 @@ textarea {
   width: 2rem;
   height: 2rem;
   border-radius: 8px;
-  background: var(--accent-soft);
-  color: var(--accent-text);
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
   display: inline-flex;
   align-items: center;
   justify-content: center;
