@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 180 180" fill="none">
+  <rect width="180" height="180" rx="40" fill="url(#touch-gradient)"/>
+  <path d="M44 50h54c11 0 20 9 20 20v60H64c-11 0-20-9-20-20V50z" fill="#fff" fill-opacity="0.96"/>
+  <path d="M82 50h54c11 0 20 9 20 20v60H102c-11 0-20-9-20-20V50z" fill="#bfdbfe" fill-opacity="0.95"/>
+  <path d="M56 72h30v8H56v-8zm0 18h39v8H56v-8zm0 18h27v8H56v-8z" fill="#1d4ed8"/>
+  <path d="M94 72h30v8H94v-8zm0 18h39v8H94v-8z" fill="#1e40af" fill-opacity="0.55"/>
+  <defs>
+    <linearGradient id="touch-gradient" x1="28" y1="24" x2="152" y2="156" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#2563eb"/>
+      <stop offset="1" stop-color="#1e3a8a"/>
+    </linearGradient>
+  </defs>
+</svg>

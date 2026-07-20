@@ -1,0 +1,485 @@
+import io
+import json
+import os
+import zipfile
+from typing import Annotated
+
+from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from pydantic import BaseModel, Field
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response, StreamingResponse
+
+from services.pdf_arrange_merge import arrange_and_merge
+from services.pdf_convert import pdf_to_excel, pdf_to_word
+from services.pdf_extract import extract_pages
+from services.pdf_images import extract_images
+from services.pdf_info import get_pdf_page_count
+from services.pdf_lock import lock_pdf
+from services.pdf_merge import merge_pdfs
+from services.pdf_reorder import reorder_pdf
+from services.pdf_split import split_pdf
+from services.pdf_unlock import unlock_pdf
+from services import paypal_service
+from utils import attachment_header, normalize_filename, output_filename, write_zip_entry
+
+app = FastAPI(title="PDFTwin API")
+
+FREE_FILE_LIMIT_MB = int(os.environ.get("FREE_FILE_LIMIT_MB", "30"))
+FREE_FILE_LIMIT_BYTES = FREE_FILE_LIMIT_MB * 1024 * 1024
+PRO_FILE_LIMIT_MB = int(os.environ.get("PRO_FILE_LIMIT_MB", "200"))
+
+
+class PayPalConnectRequest(BaseModel):
+    client_id: str = Field(min_length=1)
+    client_secret: str = Field(min_length=1)
+    mode: str = "sandbox"
+
+
+class PayPalSubscriptionRequest(BaseModel):
+    return_url: str = Field(min_length=1)
+    cancel_url: str = Field(min_length=1)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:5173",
+        "http://127.0.0.1:5173",
+        "http://localhost:5174",
+        "http://127.0.0.1:5174",
+        "https://pdftwin.com",
+        "https://www.pdftwin.com",
+    ],
+    allow_origin_regex=r"https://(.*\.)?(vercel\.app|pdftwin\.com)",
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+ALLOWED_EXTENSIONS = {".pdf", ".xlsx", ".xls", ".docx", ".doc"}
+
+
+def validate_extension(filename: str) -> str:
+    ext = "." + filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
+    if ext not in ALLOWED_EXTENSIONS:
+        raise HTTPException(
+            status_code=400,
+            detail=f"Unsupported file type. Allowed: {', '.join(sorted(ALLOWED_EXTENSIONS))}",
+        )
+    return ext
+
+
+def read_upload(file: UploadFile) -> bytes:
+    if not file.filename:
+        raise HTTPException(status_code=400, detail="Filename is required.")
+    validate_extension(file.filename)
+    content = file.file.read()
+    if not content:
+        raise HTTPException(status_code=400, detail="Uploaded file is empty.")
+    if len(content) > FREE_FILE_LIMIT_BYTES:
+        raise HTTPException(
+            status_code=413,
+            detail=f"File exceeds the {FREE_FILE_LIMIT_MB} MB free plan limit.",
+        )
+    return content
+
+
+@app.get("/api/health")
+def health():
+    return {"status": "ok"}
+
+
+@app.get("/api/config")
+def app_config():
+    payment = paypal_service.get_payment_config()
+    return {
+        "free_file_limit_mb": FREE_FILE_LIMIT_MB,
+        "pro_file_limit_mb": PRO_FILE_LIMIT_MB,
+        "payments": {
+            "configured": payment["configured"],
+            "mode": payment["mode"],
+            "client_id": payment["client_id"],
+            "pro_price": payment["pro_price"],
+            "pro_currency": payment["pro_currency"],
+        },
+    }
+
+
+@app.get("/api/payments/config")
+def payments_config():
+    payment = paypal_service.get_payment_config()
+    return {
+        "configured": payment["configured"],
+        "client_id": payment["client_id"],
+        "mode": payment["mode"],
+        "pro_price": payment["pro_price"],
+        "pro_currency": payment["pro_currency"],
+    }
+
+
+@app.post("/api/payments/connect")
+def payments_connect(payload: PayPalConnectRequest):
+    mode = payload.mode.lower()
+    if mode not in {"sandbox", "live"}:
+        raise HTTPException(status_code=400, detail="Mode must be sandbox or live.")
+
+    try:
+        result = paypal_service.verify_connection(
+            payload.client_id.strip(),
+            payload.client_secret.strip(),
+            mode,
+        )
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+    return result
+
+
+@app.post("/api/payments/create-subscription")
+def payments_create_subscription(payload: PayPalSubscriptionRequest):
+    try:
+        return paypal_service.create_subscription(payload.return_url, payload.cancel_url)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.get("/api/payments/subscription/{subscription_id}")
+def payments_subscription_status(subscription_id: str):
+    try:
+        return paypal_service.get_subscription_status(subscription_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+
+
+@app.post("/api/upload")
+async def upload_files(files: Annotated[list[UploadFile], File(...)]):
+    if not files:
+        raise HTTPException(status_code=400, detail="At least one file is required.")
+
+    uploaded = []
+    for file in files:
+        content = read_upload(file)
+        uploaded.append(
+            {
+                "filename": normalize_filename(file.filename),
+                "size": len(content),
+                "type": validate_extension(file.filename),
+            }
+        )
+
+    return {"message": f"Successfully uploaded {len(uploaded)} file(s).", "files": uploaded}
+
+
+def read_pdf_upload(file: UploadFile) -> bytes:
+    ext = validate_extension(file.filename or "")
+    if ext != ".pdf":
+        raise HTTPException(status_code=400, detail="Only PDF files are supported for this action.")
+    return read_upload(file)
+
+
+def pdf_error_response(exc: Exception, action: str) -> HTTPException:
+    if isinstance(exc, ValueError):
+        return HTTPException(status_code=400, detail=str(exc))
+    return HTTPException(status_code=500, detail=f"Failed to {action}: {exc}")
+
+
+@app.post("/api/merge")
+async def merge(files: Annotated[list[UploadFile], File(...)]):
+    if len(files) < 2:
+        raise HTTPException(status_code=400, detail="At least 2 PDF files are required to merge.")
+
+    contents = []
+    for file in files:
+        ext = validate_extension(file.filename or "")
+        if ext != ".pdf":
+            raise HTTPException(status_code=400, detail="Only PDF files can be merged.")
+        contents.append(read_upload(file))
+
+    try:
+        merged = merge_pdfs(contents)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to merge PDFs: {exc}") from exc
+
+    return Response(
+        content=merged,
+        media_type="application/pdf",
+        headers=attachment_header("merged.pdf"),
+    )
+
+
+@app.post("/api/arrange-merge")
+async def arrange_merge(
+    files: Annotated[list[UploadFile], File(...)],
+    page_orders: Annotated[str, Form()] = "[]",
+):
+    if len(files) < 2:
+        raise HTTPException(status_code=400, detail="At least 2 PDF files are required to merge.")
+
+    try:
+        orders_payload = json.loads(page_orders)
+    except json.JSONDecodeError as exc:
+        raise HTTPException(status_code=400, detail="Invalid page order data.") from exc
+
+    if not isinstance(orders_payload, list):
+        raise HTTPException(status_code=400, detail="Page order data must be a list.")
+
+    if len(orders_payload) != len(files):
+        raise HTTPException(
+            status_code=400,
+            detail="Page order data must include one entry per PDF file.",
+        )
+
+    contents = []
+    normalized_orders: list[str | None] = []
+
+    for file, page_order in zip(files, orders_payload):
+        ext = validate_extension(file.filename or "")
+        if ext != ".pdf":
+            raise HTTPException(status_code=400, detail="Only PDF files can be merged.")
+        contents.append(read_upload(file))
+        normalized_orders.append(page_order if isinstance(page_order, str) and page_order.strip() else None)
+
+    try:
+        merged = arrange_and_merge(contents, normalized_orders)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to arrange and merge PDFs: {exc}") from exc
+
+    return Response(
+        content=merged,
+        media_type="application/pdf",
+        headers=attachment_header("merged.pdf"),
+    )
+
+
+@app.post("/api/split")
+async def split(
+    file: Annotated[UploadFile, File(...)],
+    ranges: Annotated[str, Form(...)],
+):
+    """
+    Split a PDF using page ranges.
+    Format: "1-3,5-7,10" (single pages like "10" become "10-10")
+    """
+    ext = validate_extension(file.filename or "")
+    if ext != ".pdf":
+        raise HTTPException(status_code=400, detail="Only PDF files can be split.")
+
+    content = read_upload(file)
+    parsed_ranges: list[tuple[int, int]] = []
+
+    for part in ranges.replace(" ", "").split(","):
+        if not part:
+            continue
+        if "-" in part:
+            start_str, end_str = part.split("-", 1)
+            parsed_ranges.append((int(start_str), int(end_str)))
+        else:
+            page = int(part)
+            parsed_ranges.append((page, page))
+
+    if not parsed_ranges:
+        raise HTTPException(status_code=400, detail="Provide at least one page range.")
+
+    try:
+        split_files = split_pdf(content, parsed_ranges)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to split PDF: {exc}") from exc
+
+    if len(split_files) == 1:
+        filename, data = split_files[0]
+        return Response(
+            content=data,
+            media_type="application/pdf",
+            headers=attachment_header(filename),
+        )
+
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        for filename, data in split_files:
+            write_zip_entry(zip_file, filename, data)
+    zip_buffer.seek(0)
+
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers=attachment_header("split_pdfs.zip"),
+    )
+
+
+@app.post("/api/convert/pdf-to-word")
+async def convert_pdf_to_word(file: Annotated[UploadFile, File(...)]):
+    ext = validate_extension(file.filename or "")
+    if ext != ".pdf":
+        raise HTTPException(status_code=400, detail="Only PDF files can be converted to Word.")
+
+    content = read_upload(file)
+
+    try:
+        docx_bytes = pdf_to_word(content)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to convert PDF to Word: {exc}") from exc
+
+    base_name = output_filename(file.filename, ".docx")
+    return Response(
+        content=docx_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        headers=attachment_header(base_name),
+    )
+
+
+@app.post("/api/convert/pdf-to-excel")
+async def convert_pdf_to_excel(file: Annotated[UploadFile, File(...)]):
+    ext = validate_extension(file.filename or "")
+    if ext != ".pdf":
+        raise HTTPException(status_code=400, detail="Only PDF files can be converted to Excel.")
+
+    content = read_upload(file)
+
+    try:
+        xlsx_bytes = pdf_to_excel(content)
+    except Exception as exc:
+        raise HTTPException(status_code=500, detail=f"Failed to convert PDF to Excel: {exc}") from exc
+
+    base_name = output_filename(file.filename, ".xlsx")
+    return Response(
+        content=xlsx_bytes,
+        media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+        headers=attachment_header(base_name),
+    )
+
+
+@app.post("/api/pdf-info")
+async def pdf_info(file: Annotated[UploadFile, File(...)]):
+    content = read_pdf_upload(file)
+
+    try:
+        page_count = get_pdf_page_count(content)
+    except Exception as exc:
+        raise pdf_error_response(exc, "read PDF info") from exc
+
+    return {"page_count": page_count, "filename": normalize_filename(file.filename or "document.pdf")}
+
+
+@app.post("/api/reorder")
+async def reorder(
+    file: Annotated[UploadFile, File(...)],
+    order: Annotated[str, Form(...)],
+):
+    content = read_pdf_upload(file)
+
+    try:
+        result = reorder_pdf(content, order)
+    except Exception as exc:
+        raise pdf_error_response(exc, "reorder PDF") from exc
+
+    base_name = output_filename(file.filename, "_reordered.pdf")
+    return Response(
+        content=result,
+        media_type="application/pdf",
+        headers=attachment_header(base_name),
+    )
+
+
+@app.post("/api/extract-pages")
+async def extract_pages_endpoint(
+    file: Annotated[UploadFile, File(...)],
+    pages: Annotated[str, Form(...)],
+):
+    content = read_pdf_upload(file)
+
+    try:
+        result = extract_pages(content, pages)
+    except Exception as exc:
+        raise pdf_error_response(exc, "extract pages") from exc
+
+    base_name = output_filename(file.filename, "_extracted.pdf")
+    return Response(
+        content=result,
+        media_type="application/pdf",
+        headers=attachment_header(base_name),
+    )
+
+
+@app.post("/api/extract-images")
+async def extract_images_endpoint(file: Annotated[UploadFile, File(...)]):
+    content = read_pdf_upload(file)
+
+    try:
+        image_files = extract_images(content)
+    except Exception as exc:
+        raise pdf_error_response(exc, "extract images") from exc
+
+    if len(image_files) == 1:
+        filename, data = image_files[0]
+        ext = filename.rsplit(".", 1)[-1].lower()
+        media_types = {
+            "png": "image/png",
+            "jpg": "image/jpeg",
+            "jpeg": "image/jpeg",
+            "gif": "image/gif",
+            "bmp": "image/bmp",
+            "tiff": "image/tiff",
+            "webp": "image/webp",
+        }
+        return Response(
+            content=data,
+            media_type=media_types.get(ext, "application/octet-stream"),
+            headers=attachment_header(filename),
+        )
+
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        for filename, data in image_files:
+            write_zip_entry(zip_file, filename, data)
+    zip_buffer.seek(0)
+
+    base_name = output_filename(file.filename, "_images.zip")
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers=attachment_header(base_name),
+    )
+
+
+@app.post("/api/unlock")
+async def unlock(
+    file: Annotated[UploadFile, File(...)],
+    password: Annotated[str | None, Form()] = None,
+):
+    content = read_pdf_upload(file)
+
+    try:
+        result = unlock_pdf(content, password or None)
+    except Exception as exc:
+        raise pdf_error_response(exc, "unlock PDF") from exc
+
+    base_name = output_filename(file.filename, "_unlocked.pdf")
+    return Response(
+        content=result,
+        media_type="application/pdf",
+        headers=attachment_header(base_name),
+    )
+
+
+@app.post("/api/lock")
+async def lock(
+    file: Annotated[UploadFile, File(...)],
+    password: Annotated[str, Form(...)],
+    current_password: Annotated[str | None, Form()] = None,
+):
+    content = read_pdf_upload(file)
+
+    try:
+        result = lock_pdf(content, password, current_password or None)
+    except Exception as exc:
+        raise pdf_error_response(exc, "lock PDF") from exc
+
+    base_name = output_filename(file.filename, "_locked.pdf")
+    return Response(
+        content=result,
+        media_type="application/pdf",
+        headers=attachment_header(base_name),
+    )
