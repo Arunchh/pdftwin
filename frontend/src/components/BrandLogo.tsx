@@ -22,15 +22,15 @@ export default function BrandLogo({ size = 36, className }: BrandLogoProps) {
       />
       <path
         d="M16 11h10c2.2 0 4 1.8 4 4v10H20c-2.2 0-4-1.8-4-4V11z"
-        fill="#e4e4e7"
+        fill="#bfdbfe"
         fillOpacity="0.95"
       />
-      <path d="M12 15h6v1.5h-6V15zm0 3.5h8v1.5h-8V18.5zm0 3.5h5v1.5h-5V22z" fill="#52525b" />
-      <path d="M20 15h6v1.5h-6V15zm0 3.5h8v1.5h-8V18.5z" fill="#71717a" fillOpacity="0.65" />
+      <path d="M12 15h6v1.5h-6V15zm0 3.5h8v1.5h-8V18.5zm0 3.5h5v1.5h-5V22z" fill="#1d4ed8" />
+      <path d="M20 15h6v1.5h-6V15zm0 3.5h8v1.5h-8V18.5z" fill="#1e40af" fillOpacity="0.55" />
       <defs>
         <linearGradient id="brand-gradient" x1="6" y1="4" x2="30" y2="32" gradientUnits="userSpaceOnUse">
-          <stop stopColor="#52525b" />
-          <stop offset="1" stopColor="#27272a" />
+          <stop stopColor="#2563eb" />
+          <stop offset="1" stopColor="#1e3a8a" />
         </linearGradient>
       </defs>
     </svg>

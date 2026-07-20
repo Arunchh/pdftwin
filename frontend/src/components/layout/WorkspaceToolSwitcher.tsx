@@ -24,7 +24,7 @@ export default function WorkspaceToolSwitcher({
             type="button"
             role="tab"
             aria-selected={isActive}
-            className={`workspace-tool-tab ${isActive ? "active" : ""}`}
+            className={`workspace-tool-tab workspace-tool-tab--${tool.category} ${isActive ? "active" : ""}`}
             onClick={() => onSelectTool(tool.id)}
             title={tool.description}
           >

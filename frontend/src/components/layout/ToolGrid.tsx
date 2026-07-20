@@ -40,7 +40,7 @@ export default function ToolGrid({ activeTool, onSelectTool }: ToolGridProps) {
                 <button
                   key={tool.id}
                   type="button"
-                  className={`tool-card ${isActive ? "active" : ""}`}
+                  className={`tool-card tool-card--${tool.category} ${isActive ? "active" : ""}`}
                   onClick={() => onSelectTool(tool.id)}
                 >
                   <span className="tool-card-icon">
