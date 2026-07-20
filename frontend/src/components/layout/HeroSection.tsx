@@ -1,44 +1,41 @@
-import { ArrowRight, Gauge, Layers3, ShieldCheck, Sparkles, Zap } from "lucide-react";
+import { ArrowRight, Building2, Gauge, Layers3, Sparkles, Zap } from "lucide-react";
 import { formatFileLimit, FREE_FILE_LIMIT_MB } from "../../config/limits";
-
-interface HeroSectionProps {
-  onGetStarted: () => void;
-}
+import { BUSINESS_TAGLINE } from "../../config/formats";
 
 const HERO_STATS = [
-  { icon: Layers3, value: "5", label: "Professional tools" },
+  { icon: Layers3, value: "7", label: "Business tools" },
   { icon: Gauge, value: formatFileLimit(FREE_FILE_LIMIT_MB), label: "Free per file" },
-  { icon: Zap, value: "0", label: "Accounts needed" },
+  { icon: Zap, value: "0", label: "Install required" },
 ] as const;
 
-export default function HeroSection({ onGetStarted }: HeroSectionProps) {
+export default function HeroSection() {
   return (
     <section className="hero">
       <div className="hero-copy">
         <p className="hero-eyebrow">
-          <ShieldCheck size={16} />
-          Private, browser-based PDF workspace
+          <Building2 size={16} />
+          {BUSINESS_TAGLINE}
         </p>
         <h1>
-          Handle every PDF task
-          <span> without leaving your browser</span>
+          One workspace for every
+          <span> file format your business touches</span>
         </h1>
         <p className="hero-description">
-          Merge, split, convert, extract, and protect documents in seconds. Upload once, work
-          across every tool, and download results instantly — no install or signup on the Free plan.
+          Convert PDFs to Word and Excel, export WebP-ready images, compare contract revisions side
+          by side, merge reports, and protect confidential files — without switching tools.
         </p>
         <div className="hero-actions">
-          <button type="button" className="btn btn-primary" onClick={onGetStarted}>
+          <a className="btn btn-primary" href="/tools/convert">
             Open the workspace
             <ArrowRight size={18} />
-          </button>
-          <a className="btn btn-secondary" href="#pricing">
-            Compare plans
+          </a>
+          <a className="btn btn-secondary" href="/formats">
+            See supported formats
           </a>
         </div>
         <p className="hero-footnote">
           <Sparkles size={14} />
-          Pro unlocks larger files and priority processing via PayPal.
+          Pro adds higher limits and priority processing for growing teams.
         </p>
       </div>
 

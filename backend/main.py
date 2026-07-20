@@ -9,6 +9,7 @@ from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 
+from services.image_convert import convert_image, convert_image_filename
 from services.pdf_arrange_merge import arrange_and_merge
 from services.pdf_convert import pdf_to_excel, pdf_to_word
 from services.pdf_extract import extract_pages
@@ -56,22 +57,24 @@ app.add_middleware(
 )
 
 ALLOWED_EXTENSIONS = {".pdf", ".xlsx", ".xls", ".docx", ".doc"}
+IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tiff", ".tif"}
 
 
-def validate_extension(filename: str) -> str:
+def validate_extension(filename: str, allowed: set[str] | None = None) -> str:
     ext = "." + filename.rsplit(".", 1)[-1].lower() if "." in filename else ""
-    if ext not in ALLOWED_EXTENSIONS:
+    allowed_set = allowed or ALLOWED_EXTENSIONS
+    if ext not in allowed_set:
         raise HTTPException(
             status_code=400,
-            detail=f"Unsupported file type. Allowed: {', '.join(sorted(ALLOWED_EXTENSIONS))}",
+            detail=f"Unsupported file type. Allowed: {', '.join(sorted(allowed_set))}",
         )
     return ext
 
 
-def read_upload(file: UploadFile) -> bytes:
+def read_upload(file: UploadFile, allowed: set[str] | None = None) -> bytes:
     if not file.filename:
         raise HTTPException(status_code=400, detail="Filename is required.")
-    validate_extension(file.filename)
+    validate_extension(file.filename, allowed)
     content = file.file.read()
     if not content:
         raise HTTPException(status_code=400, detail="Uploaded file is empty.")
@@ -170,10 +173,13 @@ async def upload_files(files: Annotated[list[UploadFile], File(...)]):
 
 
 def read_pdf_upload(file: UploadFile) -> bytes:
-    ext = validate_extension(file.filename or "")
-    if ext != ".pdf":
-        raise HTTPException(status_code=400, detail="Only PDF files are supported for this action.")
-    return read_upload(file)
+    validate_extension(file.filename or "", {".pdf"})
+    return read_upload(file, {".pdf"})
+
+
+def read_image_upload(file: UploadFile) -> bytes:
+    validate_extension(file.filename or "", IMAGE_EXTENSIONS)
+    return read_upload(file, IMAGE_EXTENSIONS)
 
 
 def pdf_error_response(exc: Exception, action: str) -> HTTPException:
@@ -404,11 +410,20 @@ async def extract_pages_endpoint(
 
 
 @app.post("/api/extract-images")
-async def extract_images_endpoint(file: Annotated[UploadFile, File(...)]):
+async def extract_images_endpoint(
+    file: Annotated[UploadFile, File(...)],
+    output_format: Annotated[str | None, Form()] = None,
+):
     content = read_pdf_upload(file)
 
     try:
         image_files = extract_images(content)
+        if output_format:
+            converted: list[tuple[str, bytes]] = []
+            for filename, data in image_files:
+                converted_bytes, _ = convert_image(data, output_format)
+                converted.append((convert_image_filename(filename, output_format), converted_bytes))
+            image_files = converted
     except Exception as exc:
         raise pdf_error_response(exc, "extract images") from exc
 
@@ -482,4 +497,52 @@ async def lock(
         content=result,
         media_type="application/pdf",
         headers=attachment_header(base_name),
+    )
+
+
+@app.post("/api/convert/image")
+async def convert_image_endpoint(
+    files: Annotated[list[UploadFile], File(...)],
+    output_format: Annotated[str, Form(...)],
+):
+    if not files:
+        raise HTTPException(status_code=400, detail="Upload at least one image to convert.")
+
+    try:
+        converted_files: list[tuple[str, bytes]] = []
+        for file in files:
+            content = read_image_upload(file)
+            converted_bytes, extension = convert_image(content, output_format)
+            filename = convert_image_filename(file.filename or f"converted.{extension}", output_format)
+            converted_files.append((filename, converted_bytes))
+    except HTTPException:
+        raise
+    except Exception as exc:
+        raise pdf_error_response(exc, "convert image") from exc
+
+    if len(converted_files) == 1:
+        filename, data = converted_files[0]
+        ext = filename.rsplit(".", 1)[-1].lower()
+        media_types = {
+            "png": "image/png",
+            "jpg": "image/jpeg",
+            "jpeg": "image/jpeg",
+            "webp": "image/webp",
+        }
+        return Response(
+            content=data,
+            media_type=media_types.get(ext, "application/octet-stream"),
+            headers=attachment_header(filename),
+        )
+
+    zip_buffer = io.BytesIO()
+    with zipfile.ZipFile(zip_buffer, "w", zipfile.ZIP_DEFLATED) as zip_file:
+        for filename, data in converted_files:
+            write_zip_entry(zip_file, filename, data)
+    zip_buffer.seek(0)
+
+    return StreamingResponse(
+        zip_buffer,
+        media_type="application/zip",
+        headers=attachment_header("converted_images.zip"),
     )

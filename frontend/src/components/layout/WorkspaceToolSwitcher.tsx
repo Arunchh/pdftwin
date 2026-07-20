@@ -1,43 +1,34 @@
 import type { ToolId } from "../../config/tools";
-import { TOOLS } from "../../config/tools";
+import { TOOLS, toolPath } from "../../config/tools";
 
 interface WorkspaceToolSwitcherProps {
   activeTool: ToolId;
-  onSelectTool: (toolId: ToolId) => void;
-  onBrowseAll?: () => void;
 }
 
-export default function WorkspaceToolSwitcher({
-  activeTool,
-  onSelectTool,
-  onBrowseAll,
-}: WorkspaceToolSwitcherProps) {
+export default function WorkspaceToolSwitcher({ activeTool }: WorkspaceToolSwitcherProps) {
   return (
-    <div className="workspace-tool-switcher" role="tablist" aria-label="PDF tools">
+    <div className="workspace-tool-switcher" role="tablist" aria-label="Business file tools">
       {TOOLS.map((tool) => {
         const Icon = tool.icon;
         const isActive = tool.id === activeTool;
 
         return (
-          <button
+          <a
             key={tool.id}
-            type="button"
+            href={toolPath(tool.id)}
             role="tab"
             aria-selected={isActive}
             className={`workspace-tool-tab workspace-tool-tab--${tool.category} ${isActive ? "active" : ""}`}
-            onClick={() => onSelectTool(tool.id)}
             title={tool.description}
           >
             <Icon size={16} />
             <span className="workspace-tool-tab-label">{tool.shortLabel}</span>
-          </button>
+          </a>
         );
       })}
-      {onBrowseAll && (
-        <button type="button" className="workspace-tool-browse" onClick={onBrowseAll}>
-          All tools
-        </button>
-      )}
+      <a href="/#tools" className="workspace-tool-browse">
+        All tools
+      </a>
     </div>
   );
 }

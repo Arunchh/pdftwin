@@ -2,15 +2,13 @@ import { useEffect, useState } from "react";
 import { Check, Sparkles } from "lucide-react";
 import { SUBSCRIPTION_FAQ } from "../../config/faq";
 import { PRICING_PLANS } from "../../config/pricing";
-interface PricingSectionProps {
-  onUpgrade: () => void;
-}
+import { openCheckout } from "../../utils/checkoutEvents";
 
-export default function PricingSection({ onUpgrade }: PricingSectionProps) {
+export default function PricingSection() {
   const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.hash.split("?")[1] ?? "");
+    const params = new URLSearchParams(window.location.search);
     const subscription = params.get("subscription");
 
     if (subscription === "success") {
@@ -23,10 +21,10 @@ export default function PricingSection({ onUpgrade }: PricingSectionProps) {
   return (
     <section className="pricing-section" id="pricing">
       <div className="section-heading">
-        <h2>Simple, honest pricing</h2>
+        <h2>Pricing built for business teams</h2>
         <p>
-          Start free with every core tool. Upgrade to Pro when you need bigger files and faster
-          processing — billed securely through PayPal.
+          Start free with every conversion tool. Upgrade to Pro when you need bigger files, batch
+          image exports, and faster processing — billed securely through PayPal.
         </p>
       </div>
 
@@ -60,11 +58,11 @@ export default function PricingSection({ onUpgrade }: PricingSectionProps) {
             </ul>
 
             {plan.id === "pro" ? (
-              <button type="button" className="btn btn-primary" onClick={onUpgrade}>
+              <button type="button" className="btn btn-primary" onClick={openCheckout}>
                 {plan.cta}
               </button>
             ) : (
-              <a className="btn btn-secondary" href="#tools">
+              <a className="btn btn-secondary" href="/tools/convert">
                 {plan.cta}
               </a>
             )}
@@ -82,7 +80,7 @@ export default function PricingSection({ onUpgrade }: PricingSectionProps) {
       <section className="pricing-faq" id="faq" aria-labelledby="pricing-faq-heading">
         <div className="section-heading">
           <h2 id="pricing-faq-heading">Frequently asked questions</h2>
-          <p>Everything you need to know about PDFTwin Free and Pro before you subscribe.</p>
+          <p>Everything you need to know about PDFTwin Free and Pro for your team.</p>
         </div>
         <div className="pricing-faq-list">
           {SUBSCRIPTION_FAQ.map((item) => (

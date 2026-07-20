@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToolWorkspace from "../../components/ToolWorkspace";
+import { TOOLS } from "../../config/tools";
+import type { ToolId } from "../../config/tools";
+
+export function getStaticPaths() {
+  return TOOLS.map((tool) => ({
+    params: { tool: tool.path },
+    props: {
+      toolId: tool.id as ToolId,
+      title: `${tool.name} | PDFTwin`,
+      description: tool.description,
+      activeToolLabel: tool.name,
+    },
+  }));
+}
+
+const { toolId, title, description, activeToolLabel } = Astro.props;
+---
+
+<BaseLayout title={title} description={description} activeToolLabel={activeToolLabel}>
+  <ToolWorkspace client:only="react" toolId={toolId} />
+</BaseLayout>

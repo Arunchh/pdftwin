@@ -2,6 +2,12 @@ export function getPdfFiles(files: File[]): File[] {
   return files.filter((file) => file.name.toLowerCase().endsWith(".pdf"));
 }
 
+const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tiff", ".tif"];
+
+export function getImageFiles(files: File[]): File[] {
+  return files.filter((file) => IMAGE_EXTENSIONS.some((ext) => file.name.toLowerCase().endsWith(ext)));
+}
+
 export function fileKey(file: File): string {
   return `${file.name}::${file.size}::${file.lastModified}`;
 }

@@ -1,27 +1,21 @@
-import type { ToolId } from "../../config/tools";
-import { TOOL_CATEGORIES, TOOLS, type ToolCategory } from "../../config/tools";
-
-interface ToolGridProps {
-  activeTool: ToolId;
-  onSelectTool: (toolId: ToolId) => void;
-}
+import { TOOL_CATEGORIES, TOOLS, toolPath, type ToolCategory } from "../../config/tools";
 
 const CATEGORY_ORDER: ToolCategory[] = ["convert", "organize", "security"];
 
 const CATEGORY_HINTS: Record<ToolCategory, string> = {
-  convert: "Export content from PDFs into editable formats",
-  organize: "Restructure pages and combine documents",
-  security: "Control who can open your files",
+  convert: "Turn PDFs and images into the formats your team delivers to clients",
+  organize: "Combine, split, compare, and pull pages from business documents",
+  security: "Protect confidential contracts and financial files",
 };
 
-export default function ToolGrid({ activeTool, onSelectTool }: ToolGridProps) {
+export default function ToolGrid() {
   return (
     <section className="tool-grid-section" id="tools">
       <div className="section-heading">
-        <h2>Pick a tool, upload once</h2>
+        <h2>One upload, every business format</h2>
         <p>
-          Every tool shares the same upload area below. Switch tasks without re-uploading your
-          files.
+          Pick a tool below and upload once. Switch between PDF and image tasks without starting
+          over.
         </p>
       </div>
 
@@ -34,14 +28,12 @@ export default function ToolGrid({ activeTool, onSelectTool }: ToolGridProps) {
           <div className="tool-grid">
             {TOOLS.filter((tool) => tool.category === category).map((tool) => {
               const Icon = tool.icon;
-              const isActive = tool.id === activeTool;
 
               return (
-                <button
+                <a
                   key={tool.id}
-                  type="button"
-                  className={`tool-card tool-card--${tool.category} ${isActive ? "active" : ""}`}
-                  onClick={() => onSelectTool(tool.id)}
+                  href={toolPath(tool.id)}
+                  className={`tool-card tool-card--${tool.category}`}
                 >
                   <span className="tool-card-icon">
                     <Icon size={22} />
@@ -50,7 +42,7 @@ export default function ToolGrid({ activeTool, onSelectTool }: ToolGridProps) {
                     <strong>{tool.name}</strong>
                     <span>{tool.description}</span>
                   </span>
-                </button>
+                </a>
               );
             })}
           </div>

@@ -30,7 +30,7 @@ export const CHECKOUT_TRUST_ITEMS = [
   },
   {
     title: "Private by design",
-    description: "Your PDFs are still processed in memory and never stored on our servers.",
+    description: "Your documents and images are still processed in memory and never stored on our servers.",
     icon: "lock" as const,
   },
 ] as const;

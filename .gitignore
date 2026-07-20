@@ -1,6 +1,7 @@
 backend/venv/
 frontend/node_modules/
 frontend/dist/
+frontend/.astro/
 .vercel/
 __pycache__/
 *.py[cod]

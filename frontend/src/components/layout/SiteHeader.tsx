@@ -1,54 +1,37 @@
 import { Sparkles } from "lucide-react";
+import { BUSINESS_TAGLINE } from "../../config/formats";
+import { openCheckout } from "../../utils/checkoutEvents";
 import BrandLogo from "../BrandLogo";
 
 interface SiteHeaderProps {
-  onLogoClick: () => void;
-  onPricingClick: () => void;
-  onUpgradeClick: () => void;
   activeToolLabel?: string;
 }
 
-export default function SiteHeader({
-  onLogoClick,
-  onPricingClick,
-  onUpgradeClick,
-  activeToolLabel,
-}: SiteHeaderProps) {
+export default function SiteHeader({ activeToolLabel }: SiteHeaderProps) {
   return (
     <header className="site-header">
       <div className="site-header-inner">
-        <button type="button" className="brand" onClick={onLogoClick}>
+        <a className="brand" href="/">
           <BrandLogo size={36} className="brand-logo" />
           <span className="brand-text">
             PDFTwin
-            <small>Your PDF workspace</small>
+            <small>{BUSINESS_TAGLINE}</small>
           </span>
-        </button>
+        </a>
 
         <nav className="site-nav" aria-label="Main">
-          <a
-            href="#tools"
-            onClick={(event) => {
-              event.preventDefault();
-              onLogoClick();
-            }}
-          >
-            Tools
-          </a>
-          <button type="button" className="site-nav-link" onClick={onPricingClick}>
-            Pricing
-          </button>
+          <a href="/#tools">Tools</a>
+          <a href="/formats">Formats</a>
+          <a href="/pricing">Pricing</a>
         </nav>
 
         <div className="site-header-actions">
-          {activeToolLabel && (
-            <span className="active-tool-pill">{activeToolLabel}</span>
-          )}
+          {activeToolLabel && <span className="active-tool-pill">{activeToolLabel}</span>}
           <span className="plan-badge">
             <Sparkles size={14} />
             Free plan
           </span>
-          <button type="button" className="btn btn-primary btn-sm" onClick={onUpgradeClick}>
+          <button type="button" className="btn btn-primary btn-sm" onClick={openCheckout}>
             Upgrade to Pro
           </button>
         </div>

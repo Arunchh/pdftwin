@@ -1,10 +1,8 @@
+import { BUSINESS_TAGLINE } from "../../config/formats";
+import { openCheckout } from "../../utils/checkoutEvents";
 import BrandLogo from "../BrandLogo";
 
-interface SiteFooterProps {
-  onUpgradeClick: () => void;
-}
-
-export default function SiteFooter({ onUpgradeClick }: SiteFooterProps) {
+export default function SiteFooter() {
   return (
     <footer className="site-footer">
       <div className="site-footer-inner">
@@ -12,14 +10,15 @@ export default function SiteFooter({ onUpgradeClick }: SiteFooterProps) {
           <BrandLogo size={32} />
           <div>
             <strong>PDFTwin</strong>
-            <p>Fast, private PDF tools for everyday document work.</p>
+            <p>{BUSINESS_TAGLINE}</p>
           </div>
         </div>
         <div className="site-footer-links">
-          <a href="#tools">Tools</a>
-          <a href="#pricing">Pricing</a>
-          <a href="#faq">FAQ</a>
-          <button type="button" className="site-footer-link-btn" onClick={onUpgradeClick}>
+          <a href="/#tools">Tools</a>
+          <a href="/formats">Formats</a>
+          <a href="/pricing">Pricing</a>
+          <a href="/pricing#faq">FAQ</a>
+          <button type="button" className="site-footer-link-btn" onClick={openCheckout}>
             Upgrade to Pro
           </button>
           <span>Privacy</span>

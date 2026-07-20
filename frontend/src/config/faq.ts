@@ -14,7 +14,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   {
     question: "Can I keep using the Free plan?",
     answer:
-      "Yes. Every core PDF tool stays free with no signup. Pro is optional when you need bigger files or faster processing.",
+      "Yes. All seven conversion and PDF tools stay free with no signup. Pro is optional when you need bigger files, WebP batch exports, or faster processing.",
   },
   {
     question: "How do I cancel my subscription?",
@@ -33,7 +33,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   },
   {
     question: "What is included in Pro compared to Free?",
-    answer: `Free includes all five tools with up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file. Pro raises the limit to ${formatFileLimit(PRO_FILE_LIMIT_MB)}, adds priority processing, batch-friendly workflows, and email support.`,
+    answer: `Free includes all seven tools — PDF conversion, image conversion, side-by-side compare, merge, split, extract, and protect — with up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file. Pro raises the limit to ${formatFileLimit(PRO_FILE_LIMIT_MB)}, adds priority processing, batch-friendly workflows, and email support.`,
   },
   {
     question: "Is there a free trial for Pro?",
@@ -69,6 +69,16 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
     question: "Is checkout secure?",
     answer:
       "Yes. Payment is completed on PayPal's encrypted site. PDFTwin never receives or stores your card number or bank credentials.",
+  },
+  {
+    question: "How does PDF compare work?",
+    answer:
+      "Upload two PDFs on the Compare tool page. PDFTwin renders them side by side in your browser. Toggle linked scroll to keep both panes aligned as you read, and linked zoom to inspect details at the same magnification.",
+  },
+  {
+    question: "Which image formats can I convert?",
+    answer:
+      "Upload PNG, JPG, WebP, GIF, BMP, or TIFF and export as WebP, PNG, or JPEG. You can also extract embedded images from PDFs and choose the same output formats.",
   },
   {
     question: "Which browsers and devices are supported?",

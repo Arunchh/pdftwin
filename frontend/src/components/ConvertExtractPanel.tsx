@@ -13,6 +13,8 @@ import { fileKey, getPdfFiles } from "../utils/files";
 
 type OutputFormat = "word" | "excel" | "images";
 
+type ImageExportFormat = "original" | "webp" | "png" | "jpeg";
+
 interface ConvertExtractPanelProps {
   files: File[];
 }
@@ -41,8 +43,8 @@ const OUTPUT_OPTIONS: {
   {
     id: "images",
     title: "Embedded Images",
-    description: "All images saved as PNG/JPG or ZIP",
-    extension: ".zip / image",
+    description: "Extract assets as PNG, JPG, WebP, or ZIP for web and marketing",
+    extension: ".webp / .png / .jpg / .zip",
     icon: ImagesIcon,
   },
 ];
@@ -56,6 +58,7 @@ function formatSize(bytes: number): string {
 export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps) {
   const [selectedPdfKey, setSelectedPdfKey] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState<OutputFormat | null>(null);
+  const [imageExportFormat, setImageExportFormat] = useState<ImageExportFormat>("webp");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
 
@@ -103,7 +106,12 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
     };
 
     try {
-      const response = await postFiles(endpoints[outputFormat], [selectedFile]);
+      const extra =
+        outputFormat === "images" && imageExportFormat !== "original"
+          ? { output_format: imageExportFormat }
+          : undefined;
+
+      const response = await postFiles(endpoints[outputFormat], [selectedFile], extra);
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
         throw new Error(data.detail ?? "Export failed.");
@@ -139,9 +147,10 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
 
   return (
     <div className="panel tool-panel">
-      <h2>Convert &amp; Extract</h2>
+      <h2>Document Conversion</h2>
       <p className="description">
-        Turn a PDF into Word, Excel, or embedded images using one guided export flow.
+        Turn business PDFs into editable Word or Excel files, or export embedded images as WebP,
+        PNG, or JPEG for your website and campaigns.
       </p>
 
       <div className="workflow-rail">
@@ -238,6 +247,31 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
                 );
               })}
             </div>
+
+            {outputFormat === "images" && (
+              <div className="image-export-options">
+                <p className="order-section-title">Image export format</p>
+                <div className="image-export-chips">
+                  {(
+                    [
+                      ["original", "Keep original"],
+                      ["webp", "WebP"],
+                      ["png", "PNG"],
+                      ["jpeg", "JPEG"],
+                    ] as const
+                  ).map(([id, label]) => (
+                    <button
+                      key={id}
+                      type="button"
+                      className={`image-export-chip ${imageExportFormat === id ? "active" : ""}`}
+                      onClick={() => setImageExportFormat(id)}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
           </section>
 
           <section className="workflow-panel workflow-panel-export">

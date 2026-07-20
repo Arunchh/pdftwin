@@ -1,6 +1,7 @@
 import { useCallback, useRef, useState } from "react";
 import { AlertCircle, FileUp, X } from "lucide-react";
 import { formatBytes, formatFileLimit, FREE_FILE_LIMIT_BYTES, FREE_FILE_LIMIT_MB } from "../config/limits";
+import { acceptLabel, fileMatchesAccept } from "../utils/fileTypes";
 import IconButton from "./IconButton";
 
 interface FileDropzoneProps {
@@ -17,7 +18,7 @@ export default function FileDropzone({
   onFilesChange,
   accept = ".pdf",
   multiple = true,
-  label = "Drop PDFs here or click to browse",
+  label = "Drop files here or click to browse",
   hint = `PDF only · up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file on Free`,
 }: FileDropzoneProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -27,10 +28,10 @@ export default function FileDropzone({
   const addFiles = useCallback(
     (incoming: FileList | File[]) => {
       const list = Array.from(incoming);
-      const nonPdf = list.filter((file) => !file.name.toLowerCase().endsWith(".pdf"));
+      const invalid = list.filter((file) => !fileMatchesAccept(file, accept));
 
-      if (nonPdf.length) {
-        setError("Only PDF files are supported. Please upload .pdf documents.");
+      if (invalid.length) {
+        setError(`Unsupported file type. Accepted formats: ${acceptLabel(accept)}.`);
         return;
       }
 
@@ -50,7 +51,7 @@ export default function FileDropzone({
         onFilesChange(list.slice(0, 1));
       }
     },
-    [files, multiple, onFilesChange]
+    [accept, files, multiple, onFilesChange]
   );
 
   const handleDrop = (event: React.DragEvent) => {
