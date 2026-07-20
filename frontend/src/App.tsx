@@ -14,16 +14,19 @@ import TrustBar from "./components/layout/TrustBar";
 import ToolGrid from "./components/layout/ToolGrid";
 import WorkspaceToolSwitcher from "./components/layout/WorkspaceToolSwitcher";
 import PricingSection from "./components/layout/PricingSection";
-import PayPalConnectPanel from "./components/payments/PayPalConnectPanel";
+import ProCheckoutModal from "./components/payments/ProCheckoutModal";
+import SeoStructuredData from "./components/SeoStructuredData";
 import { toolById } from "./config/tools";
 import { formatFileLimit, FREE_FILE_LIMIT_MB } from "./config/limits";
 import { useHashRoute } from "./hooks/useHashRoute";
+import { useProCheckout } from "./hooks/useProCheckout";
 import { defaultPdfOrder, reconcilePdfOrder } from "./utils/files";
 
 export type { ToolId } from "./config/tools";
 
 export default function App() {
   const { tool, section, selectTool, goHome, goPricing } = useHashRoute();
+  const checkout = useProCheckout();
   const workspaceRef = useRef<HTMLElement>(null);
   const [files, setFiles] = useState<File[]>([]);
   const [pdfOrder, setPdfOrder] = useState<File[]>([]);
@@ -44,6 +47,13 @@ export default function App() {
       document.getElementById("pricing")?.scrollIntoView({ behavior: "smooth" });
     }
   }, [section]);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.hash.split("?")[1] ?? "");
+    if (params.get("checkout") === "pro") {
+      checkout.openCheckout();
+    }
+  }, [checkout.openCheckout]);
 
   const scrollToWorkspace = () => {
     workspaceRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -68,25 +78,30 @@ export default function App() {
     }
   };
 
+  const handleUpgrade = () => {
+    goPricing();
+    requestAnimationFrame(() => checkout.openCheckout());
+  };
+
   const activeTool = toolById(tool);
 
   return (
     <div className={`site ${inWorkspace ? "site--focused" : ""}`}>
+      <SeoStructuredData />
       <SiteHeader
         onLogoClick={() => {
           goHome();
           window.scrollTo({ top: 0, behavior: "smooth" });
         }}
         onPricingClick={goPricing}
+        onUpgradeClick={handleUpgrade}
         activeToolLabel={inWorkspace ? activeTool.name : undefined}
       />
 
       <main className="site-main">
         {!inWorkspace && (
           <>
-            <HeroSection
-              onGetStarted={() => document.getElementById("tools")?.scrollIntoView({ behavior: "smooth" })}
-            />
+            <HeroSection onGetStarted={() => document.getElementById("tools")?.scrollIntoView({ behavior: "smooth" })} />
             <TrustBar />
           </>
         )}
@@ -160,11 +175,26 @@ export default function App() {
           {tool === "lock-unlock" && <LockUnlockPanel files={files} />}
         </section>
 
-        <PricingSection />
-        <PayPalConnectPanel />
+        <PricingSection onUpgrade={handleUpgrade} />
       </main>
 
-      <SiteFooter />
+      <SiteFooter onUpgradeClick={handleUpgrade} />
+
+      <ProCheckoutModal
+        open={checkout.open}
+        step={checkout.step}
+        termsAccepted={checkout.termsAccepted}
+        error={checkout.error}
+        onClose={checkout.closeCheckout}
+        onTermsChange={checkout.setTermsAccepted}
+        onContinueToConfirm={checkout.goToConfirm}
+        onContinueToPay={checkout.goToPay}
+        onPayWithPayPal={checkout.startPayPalCheckout}
+        onCancelCheckout={checkout.handleCancelCheckout}
+        onBackFromConfirm={() => checkout.setStep("plan")}
+        onBackFromPay={() => checkout.setStep("confirm")}
+        onRetryCheckout={() => checkout.setStep("plan")}
+      />
     </div>
   );
 }

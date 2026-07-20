@@ -4,12 +4,14 @@ import BrandLogo from "../BrandLogo";
 interface SiteHeaderProps {
   onLogoClick: () => void;
   onPricingClick: () => void;
+  onUpgradeClick: () => void;
   activeToolLabel?: string;
 }
 
 export default function SiteHeader({
   onLogoClick,
   onPricingClick,
+  onUpgradeClick,
   activeToolLabel,
 }: SiteHeaderProps) {
   return (
@@ -36,7 +38,6 @@ export default function SiteHeader({
           <button type="button" className="site-nav-link" onClick={onPricingClick}>
             Pricing
           </button>
-          <a href="#admin-payments">Payments</a>
         </nav>
 
         <div className="site-header-actions">
@@ -47,8 +48,8 @@ export default function SiteHeader({
             <Sparkles size={14} />
             Free plan
           </span>
-          <button type="button" className="btn btn-secondary btn-sm" disabled title="Coming soon">
-            Sign in
+          <button type="button" className="btn btn-primary btn-sm" onClick={onUpgradeClick}>
+            Upgrade to Pro
           </button>
         </div>
       </div>
