@@ -1,79 +1,77 @@
 :root {
-  /* Warm neutral foundation */
-  --bg: #f4f6f9;
-  --bg-warm: #f9f8f6;
+  /* Paper & Ink — Editorial (A) + Forest (B) foundation */
+  --bg: #f7f5f0;
+  --bg-warm: #fafaf8;
   --surface: #ffffff;
-  --surface-hover: #f8fafc;
-  --surface-muted: #f1f4f8;
-  --surface-subtle: #f8fafc;
-  --border: #e2e8f0;
-  --border-soft: #eef2f6;
-  --border-strong: #94a3b8;
-  --text: #0f172a;
-  --text-muted: #5c6b7f;
-  --text-subtle: #94a3b8;
+  --surface-hover: #f9f7f4;
+  --surface-muted: #f3f0ea;
+  --surface-subtle: #fbf9f6;
+  --border: #e7e2da;
+  --border-soft: #ede8e0;
+  --border-strong: #a8a29e;
+  --text: #1c1917;
+  --text-muted: #57534e;
+  --text-subtle: #78716c;
 
-  /* Sapphire — primary & convert */
-  --sapphire-50: #eef3ff;
-  --sapphire-100: #dce6ff;
-  --sapphire-200: #c2d4ff;
-  --sapphire-500: #4f6ef7;
-  --sapphire-600: #3b5bdb;
-  --sapphire-700: #2f4ac4;
+  /*
+   * Pastel trio (legacy token names retained for compatibility)
+   * sage   → convert  | peach → organize | wheat → protect
+   */
+  --sapphire-50: #e8f0ea;
+  --sapphire-100: #c5d9cc;
+  --sapphire-200: #a8c4b0;
+  --sapphire-500: #40916c;
+  --sapphire-600: #1b4332;
+  --sapphire-700: #1b4332;
 
-  /* Amethyst — organize & compare */
-  --amethyst-50: #f5f2ff;
-  --amethyst-100: #ebe4ff;
-  --amethyst-200: #ddd0ff;
-  --amethyst-500: #8b5cf6;
-  --amethyst-600: #7c3aed;
-  --amethyst-700: #6d28d9;
+  --amethyst-50: #faede4;
+  --amethyst-100: #edd5c4;
+  --amethyst-200: #e0bfa8;
+  --amethyst-500: #ea580c;
+  --amethyst-600: #c2410c;
+  --amethyst-700: #9a3412;
 
-  /* Emerald — security & success */
-  --emerald-50: #ecfdf5;
-  --emerald-100: #d1fae5;
-  --emerald-200: #a7f3d0;
-  --emerald-500: #10b981;
-  --emerald-600: #059669;
-  --emerald-700: #047857;
+  --emerald-50: #f3ede4;
+  --emerald-100: #e7ddd0;
+  --emerald-200: #d6c9b8;
+  --emerald-500: #52796f;
+  --emerald-600: #52796f;
+  --emerald-700: #44403c;
 
-  /* Rose — formats & media */
-  --rose-50: #fff1f3;
-  --rose-100: #ffe4e8;
-  --rose-200: #fecdd3;
-  --rose-500: #f43f5e;
-  --rose-600: #e11d48;
+  --rose-50: #faede4;
+  --rose-100: #edd5c4;
+  --rose-200: #e0bfa8;
+  --rose-500: #c2410c;
+  --rose-600: #9a3412;
 
-  /* Amber — pricing & highlights */
-  --amber-50: #fffbeb;
-  --amber-100: #fef3c7;
-  --amber-200: #fde68a;
-  --amber-500: #f59e0b;
-  --amber-600: #d97706;
+  --amber-50: #f5efe6;
+  --amber-100: #e8dcc8;
+  --amber-200: #d9c9ae;
+  --amber-500: #b45309;
+  --amber-600: #92400e;
 
-  /* Teal — trust & workflow */
-  --teal-50: #f0fdfa;
-  --teal-100: #ccfbf1;
-  --teal-200: #99f6e4;
-  --teal-500: #14b8a6;
-  --teal-600: #0d9488;
+  --teal-50: #e8f0ea;
+  --teal-100: #c5d9cc;
+  --teal-200: #a8c4b0;
+  --teal-500: #52796f;
+  --teal-600: #2d6a4f;
 
-  /* Sky — info & links */
-  --sky-50: #f0f9ff;
-  --sky-100: #e0f2fe;
-  --sky-600: #0284c7;
+  --sky-50: #f3f0ea;
+  --sky-100: #e7e2da;
+  --sky-600: #57534e;
 
-  /* Brand aliases */
+  /* Brand — forest primary, copper secondary */
   --accent: var(--sapphire-600);
-  --accent-hover: var(--sapphire-700);
+  --accent-hover: #2d6a4f;
   --accent-soft: var(--sapphire-50);
   --accent-border: var(--sapphire-100);
   --accent-text: var(--sapphire-700);
+  --accent-secondary: var(--amethyst-600);
   --selected-bg: var(--sapphire-50);
   --selected-border: var(--sapphire-600);
   --focus-border: var(--sapphire-600);
 
-  /* Tool category system */
+  /* Tool categories — pastel trio */
   --cat-convert-bg: var(--sapphire-50);
   --cat-convert-text: var(--sapphire-700);
   --cat-convert-border: var(--sapphire-100);
@@ -81,32 +79,37 @@
   --cat-organize-bg: var(--amethyst-50);
   --cat-organize-text: var(--amethyst-700);
   --cat-organize-border: var(--amethyst-100);
-  --cat-organize-accent: var(--amethyst-500);
+  --cat-organize-accent: var(--amethyst-600);
   --cat-security-bg: var(--emerald-50);
   --cat-security-text: var(--emerald-700);
   --cat-security-border: var(--emerald-100);
-  --cat-security-accent: var(--emerald-500);
+  --cat-security-accent: var(--emerald-600);
 
   /* Feedback */
-  --success: var(--emerald-600);
-  --success-bg: var(--emerald-50);
-  --success-text: var(--emerald-700);
-  --success-border: var(--emerald-200);
-  --error: #dc2626;
+  --success: #2d6a4f;
+  --success-bg: var(--sapphire-50);
+  --success-text: var(--sapphire-700);
+  --success-border: var(--sapphire-100);
+  --error: #b91c1c;
   --error-bg: #fef2f2;
-  --error-text: #b91c1c;
+  --error-text: #991b1b;
   --error-border: #fecaca;
-  --warning-bg: var(--amber-50);
-  --warning-text: var(--amber-600);
-  --warning-border: var(--amber-200);
-  --info-bg: var(--sky-50);
-  --info-text: var(--sky-600);
-  --info-border: var(--sky-100);
+  --warning-bg: var(--amethyst-50);
+  --warning-text: var(--amethyst-700);
+  --warning-border: var(--amethyst-100);
+  --info-bg: var(--emerald-50);
+  --info-text: var(--emerald-700);
+  --info-border: var(--emerald-100);
 
-  --radius: 10px;
-  --radius-lg: 14px;
-  --shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 14px rgba(15, 23, 42, 0.05);
-  --shadow-lg: 0 10px 32px rgba(15, 23, 42, 0.08);
+  --radius: 8px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --shadow: 0 1px 2px rgba(28, 25, 23, 0.04), 0 2px 10px rgba(28, 25, 23, 0.05);
+  --shadow-lg: 0 8px 28px rgba(28, 25, 23, 0.08);
+
+  --font-display: "Fraunces", Georgia, "Times New Roman", serif;
+  --font-body: "IBM Plex Sans", "Noto Sans", "Noto Sans Devanagari", "Noto Sans Arabic",
+    "Noto Sans JP", "Noto Sans Greek", system-ui, sans-serif;
 }
 
 * {
@@ -116,22 +119,24 @@
 }
 
 body {
-  font-family:
-    "DM Sans",
-    "Noto Sans",
-    "Noto Sans Devanagari",
-    "Noto Sans Arabic",
-    "Noto Sans JP",
-    "Noto Sans Greek",
-    system-ui,
-    sans-serif;
+  font-family: var(--font-body);
   background: var(--bg);
-  background-image:
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(79, 110, 247, 0.07), transparent),
-    radial-gradient(ellipse 60% 40% at 100% 0%, rgba(139, 92, 246, 0.05), transparent);
   color: var(--text);
   min-height: 100vh;
-  line-height: 1.5;
+  line-height: 1.55;
+}
+
+h1,
+h2,
+h3,
+.section-heading h2,
+.hero h1,
+.brand-text,
+.checkout-header h2,
+.legal-page h1 {
+  font-family: var(--font-display);
+  font-weight: 600;
+  letter-spacing: -0.02em;
 }
 
 #root {
@@ -405,13 +410,13 @@ textarea {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, var(--sapphire-600), var(--sapphire-500));
+  background: var(--accent);
   color: white;
-  box-shadow: 0 2px 8px rgba(59, 91, 219, 0.28);
+  box-shadow: 0 1px 2px rgba(27, 67, 50, 0.15);
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: linear-gradient(135deg, var(--sapphire-700), var(--sapphire-600));
+  background: var(--accent-hover);
 }
 
 .btn-primary:disabled {
@@ -427,7 +432,7 @@ textarea {
 
 .btn-secondary:hover {
   background: var(--surface-hover);
-  border-color: #c5ced9;
+  border-color: var(--border-strong);
 }
 
 .message {
@@ -718,7 +723,7 @@ textarea {
   flex: 1;
   min-width: 1.5rem;
   height: 2px;
-  background: linear-gradient(90deg, var(--border), var(--accent-border), var(--border));
+  background: var(--accent-border);
   opacity: 0.85;
 }
 
@@ -972,7 +977,7 @@ textarea {
   border-bottom: 1px solid var(--border-soft);
   background: rgba(255, 255, 255, 0.92);
   backdrop-filter: blur(14px);
-  box-shadow: 0 1px 0 rgba(79, 110, 247, 0.06);
+  box-shadow: 0 1px 0 rgba(28, 25, 23, 0.06);
 }
 
 .site-header-inner {
@@ -997,7 +1002,7 @@ textarea {
   width: 2.25rem;
   height: 2.25rem;
   border-radius: 8px;
-  background: linear-gradient(135deg, var(--sapphire-500), var(--amethyst-600));
+  background: var(--accent);
   color: #ffffff;
   display: inline-flex;
   align-items: center;
@@ -1104,19 +1109,19 @@ textarea {
   height: 3px;
   margin-top: 0.5rem;
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--sapphire-500), var(--amethyst-500));
+  background: var(--accent);
 }
 
 .tool-grid-section .section-heading h2::after {
-  background: linear-gradient(90deg, var(--sapphire-500), var(--amethyst-500), var(--emerald-500));
+  background: var(--amethyst-600);
 }
 
 .format-support-section .section-heading h2::after {
-  background: linear-gradient(90deg, var(--teal-500), var(--rose-500));
+  background: var(--emerald-600);
 }
 
 .pricing-section .section-heading h2::after {
-  background: linear-gradient(90deg, var(--amber-500), var(--sapphire-500));
+  background: var(--amethyst-600);
 }
 
 .hero {
@@ -1126,7 +1131,7 @@ textarea {
   padding: 2.75rem 1.25rem 2rem;
   margin-bottom: 0.5rem;
   border-radius: var(--radius-lg);
-  background: linear-gradient(135deg, var(--sapphire-50) 0%, var(--amethyst-50) 52%, #fff 100%);
+  background: var(--surface);
   border: 1px solid var(--border-soft);
   box-shadow: var(--shadow);
 }
@@ -1146,7 +1151,7 @@ textarea {
   margin-bottom: 0.85rem;
   padding: 0.35rem 0.75rem;
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.72);
+  background: var(--sapphire-50);
   border: 1px solid var(--sapphire-100);
 }
 
@@ -1158,10 +1163,7 @@ textarea {
 }
 
 .hero h1 span {
-  background: linear-gradient(135deg, var(--sapphire-600), var(--amethyst-600));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+  color: var(--amethyst-700);
 }
 
 .hero-description {
@@ -1203,17 +1205,17 @@ textarea {
 
 .hero-stat-card--sapphire {
   border-color: var(--sapphire-100);
-  background: linear-gradient(160deg, #fff 0%, var(--sapphire-50) 100%);
+  background: var(--sapphire-50);
 }
 
 .hero-stat-card--amethyst {
   border-color: var(--amethyst-100);
-  background: linear-gradient(160deg, #fff 0%, var(--amethyst-50) 100%);
+  background: var(--amethyst-50);
 }
 
 .hero-stat-card--emerald {
   border-color: var(--emerald-100);
-  background: linear-gradient(160deg, #fff 0%, var(--emerald-50) 100%);
+  background: var(--emerald-50);
 }
 
 .hero-stat-icon {
@@ -1370,21 +1372,21 @@ textarea {
 }
 
 .tool-category--convert {
-  background: linear-gradient(135deg, var(--sapphire-50) 0%, #fff 72%);
+  background: var(--sapphire-50);
   border-color: var(--sapphire-100);
-  border-left: 4px solid var(--sapphire-500);
+  border-left: 3px solid var(--sapphire-600);
 }
 
 .tool-category--organize {
-  background: linear-gradient(135deg, var(--amethyst-50) 0%, #fff 72%);
+  background: var(--amethyst-50);
   border-color: var(--amethyst-100);
-  border-left: 4px solid var(--amethyst-500);
+  border-left: 3px solid var(--amethyst-600);
 }
 
 .tool-category--security {
-  background: linear-gradient(135deg, var(--emerald-50) 0%, #fff 72%);
+  background: var(--emerald-50);
   border-color: var(--emerald-100);
-  border-left: 4px solid var(--emerald-500);
+  border-left: 3px solid var(--emerald-600);
 }
 
 .tool-category h3 {
@@ -1484,12 +1486,12 @@ textarea {
 }
 
 .tool-card-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 10px;
-  background: var(--accent-soft);
-  color: var(--accent-text);
-  border: 1px solid var(--accent-border);
+  width: 2rem;
+  height: 2rem;
+  border-radius: 6px;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -1497,21 +1499,15 @@ textarea {
 }
 
 .tool-card--convert .tool-card-icon {
-  background: var(--cat-convert-bg);
-  color: var(--cat-convert-text);
-  border-color: var(--cat-convert-border);
+  color: var(--cat-convert-accent);
 }
 
 .tool-card--organize .tool-card-icon {
-  background: var(--cat-organize-bg);
-  color: var(--cat-organize-text);
-  border-color: var(--cat-organize-border);
+  color: var(--cat-organize-accent);
 }
 
 .tool-card--security .tool-card-icon {
-  background: var(--cat-security-bg);
-  color: var(--cat-security-text);
-  border-color: var(--cat-security-border);
+  color: var(--cat-security-accent);
 }
 
 .tool-card-body {
@@ -1541,18 +1537,21 @@ textarea {
 }
 
 .workspace--convert {
-  background: linear-gradient(180deg, var(--sapphire-50) 0%, var(--surface) 18%);
+  background: var(--surface);
   border-color: var(--sapphire-100);
+  border-top: 3px solid var(--sapphire-600);
 }
 
 .workspace--organize {
-  background: linear-gradient(180deg, var(--amethyst-50) 0%, var(--surface) 18%);
+  background: var(--surface);
   border-color: var(--amethyst-100);
+  border-top: 3px solid var(--amethyst-600);
 }
 
 .workspace--security {
-  background: linear-gradient(180deg, var(--emerald-50) 0%, var(--surface) 18%);
+  background: var(--surface);
   border-color: var(--emerald-100);
+  border-top: 3px solid var(--emerald-600);
 }
 
 .site--focused .workspace {
@@ -1669,8 +1668,8 @@ textarea {
   padding: 2rem 1.25rem;
   margin-bottom: 2rem;
   border-radius: var(--radius-lg);
-  background: linear-gradient(180deg, var(--amber-50) 0%, var(--bg-warm) 100%);
-  border: 1px solid var(--amber-100);
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
   box-shadow: var(--shadow);
 }
 
@@ -1690,14 +1689,14 @@ textarea {
 }
 
 .pricing-card.highlighted {
-  border-color: var(--sapphire-200);
-  background: linear-gradient(160deg, #fff 0%, var(--sapphire-50) 100%);
+  border-color: var(--sapphire-100);
+  background: var(--sapphire-50);
   box-shadow: var(--shadow-lg);
 }
 
 .pricing-card:not(.highlighted) {
   border-color: var(--border);
-  background: linear-gradient(160deg, #fff 0%, var(--surface-muted) 100%);
+  background: var(--surface);
 }
 
 .pricing-badge {
@@ -1774,7 +1773,7 @@ textarea {
 
 .site-footer {
   border-top: 1px solid var(--border-soft);
-  background: linear-gradient(180deg, var(--surface) 0%, var(--sapphire-50) 100%);
+  background: var(--bg-warm);
 }
 
 .site-footer-inner {
@@ -2401,8 +2400,8 @@ textarea {
   margin: 0 0 2rem;
   padding: 2rem 1.25rem;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--teal-100);
-  background: linear-gradient(180deg, var(--teal-50) 0%, var(--rose-50) 48%, #fff 100%);
+  border: 1px solid var(--border-soft);
+  background: var(--surface-muted);
   box-shadow: var(--shadow);
 }
 
@@ -2583,7 +2582,7 @@ textarea {
   padding: 0.85rem 1rem;
   border: 1px solid var(--amethyst-100);
   border-radius: var(--radius);
-  background: linear-gradient(135deg, var(--amethyst-50), #fff);
+  background: var(--amethyst-50);
 }
 
 .compare-toolbar-group {
@@ -2782,8 +2781,9 @@ textarea {
 }
 
 .plan-badge--pro {
-  background: linear-gradient(135deg, var(--accent), var(--accent-strong, #6366f1));
-  color: #fff;
+  background: var(--amethyst-50);
+  border: 1px solid var(--amethyst-100);
+  color: var(--amethyst-700);
 }
 
 .account-link {
@@ -2908,7 +2908,7 @@ textarea {
 
 .account-card--plan {
   border-color: var(--sapphire-100);
-  background: linear-gradient(160deg, #fff 0%, var(--sapphire-50) 100%);
+  background: var(--sapphire-50);
 }
 
 .account-field {

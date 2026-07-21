@@ -1,23 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" fill="none">
-  <rect width="1200" height="630" fill="#f8fafc"/>
-  <rect x="72" y="72" width="1056" height="486" rx="32" fill="#ffffff" stroke="#d7dee8" stroke-width="2"/>
-  <rect x="120" y="120" width="96" height="96" rx="24" fill="url(#og-gradient)"/>
-  <path d="M144 150h36c6 0 11 5 11 11v45H159c-6 0-11-5-11-11v-45z" fill="#fff" fill-opacity="0.96"/>
-  <path d="M168 150h36c6 0 11 5 11 11v45H183c-6 0-11-5-11-11v-45z" fill="#bfdbfe" fill-opacity="0.95"/>
-  <path d="M150 168h18v4h-18v-4zm0 12h24v4h-24v-4zm0 12h16v4h-16v-4z" fill="#1d4ed8"/>
-  <text x="248" y="188" fill="#1e293b" font-family="DM Sans, Arial, sans-serif" font-size="56" font-weight="700">PDFTwin</text>
-  <text x="248" y="238" fill="#64748b" font-family="DM Sans, Arial, sans-serif" font-size="30">Merge · Split · Convert · Protect PDFs online</text>
-  <rect x="248" y="286" width="220" height="56" rx="12" fill="#eff6ff" stroke="#bfdbfe"/>
-  <text x="272" y="323" fill="#1d4ed8" font-family="DM Sans, Arial, sans-serif" font-size="24" font-weight="600">Free · 30 MB per file</text>
-  <rect x="488" y="286" width="220" height="56" rx="12" fill="#eff6ff" stroke="#bfdbfe"/>
-  <text x="512" y="323" fill="#1d4ed8" font-family="DM Sans, Arial, sans-serif" font-size="24" font-weight="600">No signup required</text>
-  <rect x="728" y="286" width="220" height="56" rx="12" fill="#eff6ff" stroke="#bfdbfe"/>
-  <text x="752" y="323" fill="#1d4ed8" font-family="DM Sans, Arial, sans-serif" font-size="24" font-weight="600">Secure processing</text>
-  <text x="120" y="430" fill="#64748b" font-family="DM Sans, Arial, sans-serif" font-size="28">Your complete PDF workspace  fast, private, and browser-based.</text>
-  <defs>
-    <linearGradient id="og-gradient" x1="132" y1="132" x2="204" y2="204" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#2563eb"/>
-      <stop offset="1" stop-color="#1e3a8a"/>
-    </linearGradient>
-  </defs>
+  <rect width="1200" height="630" fill="#F7F5F0"/>
+  <rect x="72" y="72" width="1056" height="486" rx="32" fill="#FFFFFF" stroke="#E7E2DA" stroke-width="2"/>
+  <rect x="120" y="120" width="96" height="96" rx="24" fill="#1B4332"/>
+  <path d="M144 150h36c6 0 11 5 11 11v45H159c-6 0-11-5-11-11v-45z" fill="#FAFAF8"/>
+  <path d="M168 150h36c6 0 11 5 11 11v45H183c-6 0-11-5-11-11v-45z" fill="#E8F0EA"/>
+  <path d="M150 168h18v4h-18v-4zm0 12h24v4h-24v-4zm0 12h16v4h-16v-4z" fill="#1B4332"/>
+  <text x="248" y="188" fill="#1C1917" font-family="Georgia, Fraunces, serif" font-size="56" font-weight="700">PDFTwin</text>
+  <text x="248" y="238" fill="#57534E" font-family="Arial, IBM Plex Sans, sans-serif" font-size="30">Merge · Split · Convert · Protect PDFs online</text>
+  <rect x="248" y="286" width="220" height="56" rx="12" fill="#E8F0EA" stroke="#C5D9CC"/>
+  <text x="272" y="323" fill="#1B4332" font-family="Arial, IBM Plex Sans, sans-serif" font-size="24" font-weight="600">Free · 30 MB per file</text>
+  <rect x="488" y="286" width="220" height="56" rx="12" fill="#FAEDE4" stroke="#EDD5C4"/>
+  <text x="512" y="323" fill="#9A3412" font-family="Arial, IBM Plex Sans, sans-serif" font-size="24" font-weight="600">No signup required</text>
+  <rect x="728" y="286" width="220" height="56" rx="12" fill="#F3EDE4" stroke="#E7DDD0"/>
+  <text x="752" y="323" fill="#44403C" font-family="Arial, IBM Plex Sans, sans-serif" font-size="24" font-weight="600">Secure processing</text>
+  <text x="120" y="430" fill="#57534E" font-family="Arial, IBM Plex Sans, sans-serif" font-size="28">Your complete PDF workspace — fast, private, and browser-based.</text>
 </svg>

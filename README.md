@@ -84,6 +84,26 @@ Mock auth persists session in `localStorage` and syncs across React islands via 
 - **Backend:** Python FastAPI (Vercel serverless)
 - **Libraries:** pypdf, pdf2docx, pdfplumber, openpyxl, PyMuPDF, Pillow
 
+## Visual Design
+
+PDFTwin uses a **Paper & Ink** palette — warm editorial surfaces with forest-green brand accents and a trio of pastel category colors.
+
+| Role | Token / value | Usage |
+|------|---------------|--------|
+| Page background | `--bg` (`#F7F5F0`) | Warm paper tone |
+| Surfaces | `--surface`, `--surface-muted` | Cards, panels, hero |
+| Primary brand | `--accent` (`#1B4332`) | Buttons, links, logo mark |
+| Secondary accent | `--amethyst-600` (`#C2410C`) | Editorial highlights, organize category |
+| Convert category | Sage (`--sapphire-*`) | Convert & export tools |
+| Organize category | Peach (`--amethyst-*`) | Merge, split, compare, rotate |
+| Protect category | Wheat (`--emerald-*`) | Watermark, lock/unlock |
+
+**Typography:** [Fraunces](https://fonts.google.com/specimen/Fraunces) for headings, [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans) for body text (loaded in `BaseLayout.astro`).
+
+**Brand assets:** Forest + cream twin-pages mark in `BrandLogo.tsx`, `public/favicon.svg`, `public/apple-touch-icon.svg`, and `public/og-image.svg`. Theme color is `#1b4332`.
+
+Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names (`--sapphire-*`, `--amethyst-*`, `--emerald-*`) are retained for compatibility but map to the sage / peach / wheat palette.
+
 ## Prerequisites
 
 - Python 3.10+
