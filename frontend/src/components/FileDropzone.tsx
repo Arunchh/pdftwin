@@ -42,6 +42,7 @@ export default function FileDropzone({
   const [error, setError] = useState<string | null>(null);
   const [proGate, setProGate] = useState<ProGateState | null>(null);
 
+  const defaultHint = entitlements.isPro
     ? `${acceptLabel(accept)} · up to ${formatFileLimit(entitlements.fileLimitMb)} on Pro`
     : `${acceptLabel(accept)} · up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} without an account`;
 
