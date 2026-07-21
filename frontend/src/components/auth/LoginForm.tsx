@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import { readNextPath } from "../../utils/authRedirect";
 
 export default function LoginForm() {
   const { signIn } = useAuth();
@@ -14,7 +15,7 @@ export default function LoginForm() {
     setError(null);
     try {
       await signIn(email, password);
-      window.location.href = "/account";
+      window.location.href = readNextPath();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign in failed.");
     } finally {

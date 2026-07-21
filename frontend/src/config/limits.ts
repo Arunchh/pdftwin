@@ -1,4 +1,4 @@
-export const FREE_FILE_LIMIT_MB = 30;
+export const FREE_FILE_LIMIT_MB = 24;
 export const PRO_FILE_LIMIT_MB = 200;
 
 export const FREE_FILE_LIMIT_BYTES = FREE_FILE_LIMIT_MB * 1024 * 1024;

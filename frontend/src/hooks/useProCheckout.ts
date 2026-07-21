@@ -47,6 +47,11 @@ export function useProCheckout() {
       setError("Please confirm the subscription terms to continue.");
       return;
     }
+    const { user } = readSession();
+    if (!user) {
+      setError("Sign in or create an account before subscribing to Pro.");
+      return;
+    }
     setError(null);
     setStep("pay");
   }, [termsAccepted]);

@@ -31,7 +31,7 @@ export const PRICING_PLANS: PricingPlan[] = [
   {
     id: "pro",
     name: "Pro",
-    price: "$9",
+    price: "$7",
     period: "per month",
     description: "For businesses that process large documents and image assets every day.",
     features: [

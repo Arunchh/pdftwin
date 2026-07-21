@@ -1,7 +1,8 @@
 import { Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
-import { formatFileLimit } from "../../config/limits";
+import { formatFileLimit, FREE_FILE_LIMIT_MB } from "../../config/limits";
+import { AUTH_PROVIDER } from "../../config/providers";
 import { openCheckout } from "../../utils/checkoutEvents";
 import {
   readWorkspaceUsage,
@@ -45,7 +46,11 @@ export default function AccountPanel() {
   return (
     <div className="account-panel panel">
       <h1>Your account</h1>
-      <p className="description">Preview account — ready to connect to Supabase when you are.</p>
+      <p className="description">
+        {AUTH_PROVIDER === "supabase"
+          ? "Manage your PDFTwin account, plan, and upload limits."
+          : "Preview account — ready to connect to Supabase when you are."}
+      </p>
 
       <div className="account-grid">
         <section className="account-card">
@@ -67,6 +72,9 @@ export default function AccountPanel() {
           <p className="account-plan-badge">{entitlements.label} plan</p>
           <p className="account-field">
             File limit: <strong>{formatFileLimit(entitlements.fileLimitMb)}</strong> per upload
+            {!entitlements.isPro && (
+              <span className="muted"> · Free uploads up to {formatFileLimit(FREE_FILE_LIMIT_MB)} without signing in</span>
+            )}
           </p>
           {entitlements.isPro ? (
             <button

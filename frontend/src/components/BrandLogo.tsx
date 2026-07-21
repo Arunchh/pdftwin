@@ -14,17 +14,17 @@ export default function BrandLogo({ size = 36, className }: BrandLogoProps) {
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
     >
-      <rect width="36" height="36" rx="10" fill="#1B4332" />
+      <rect width="36" height="36" rx="10" fill="#3D9A78" />
       <path
         d="M10 11h10c2.2 0 4 1.8 4 4v10H14c-2.2 0-4-1.8-4-4V11z"
-        fill="#FAFAF8"
+        fill="#FDFCFE"
       />
       <path
         d="M16 11h10c2.2 0 4 1.8 4 4v10H20c-2.2 0-4-1.8-4-4V11z"
-        fill="#E8F0EA"
+        fill="#ECFDF5"
       />
-      <path d="M12 15h6v1.5h-6V15zm0 3.5h8v1.5h-8V18.5zm0 3.5h5v1.5h-5V22z" fill="#1B4332" />
-      <path d="M20 15h6v1.5h-6V15zm0 3.5h8v1.5h-8V18.5z" fill="#52796F" fillOpacity="0.7" />
+      <path d="M12 15h6v1.5h-6V15zm0 3.5h8v1.5h-8V18.5zm0 3.5h5v1.5h-5V22z" fill="#2D7A5E" />
+      <path d="M20 15h6v1.5h-6V15zm0 3.5h8v1.5h-8V18.5z" fill="#5CB896" fillOpacity="0.7" />
     </svg>
   );
 }

@@ -1,8 +1,15 @@
 import { useCallback, useRef, useState } from "react";
 import { AlertCircle, FileUp } from "lucide-react";
-import { formatBytes, formatFileLimit } from "../config/limits";
+import {
+  formatBytes,
+  formatFileLimit,
+  FREE_FILE_LIMIT_BYTES,
+  FREE_FILE_LIMIT_MB,
+  PRO_FILE_LIMIT_BYTES,
+} from "../config/limits";
 import { acceptLabel, fileMatchesAccept } from "../utils/fileTypes";
 import { useAuth } from "../hooks/useAuth";
+import UploadProGate from "./UploadProGate";
 
 interface FileDropzoneProps {
   files: File[];
@@ -13,6 +20,11 @@ interface FileDropzoneProps {
   hint?: string;
   /** When true, only new files are passed to onFilesChange and the list is shown elsewhere. */
   append?: boolean;
+}
+
+interface ProGateState {
+  fileName: string;
+  fileSize: number;
 }
 
 export default function FileDropzone({
@@ -28,9 +40,10 @@ export default function FileDropzone({
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [proGate, setProGate] = useState<ProGateState | null>(null);
 
-  const limitBytes = entitlements.fileLimitBytes;
-  const defaultHint = `${acceptLabel(accept)} · up to ${formatFileLimit(entitlements.fileLimitMb)} on ${entitlements.label}`;
+    ? `${acceptLabel(accept)} · up to ${formatFileLimit(entitlements.fileLimitMb)} on Pro`
+    : `${acceptLabel(accept)} · up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} without an account`;
 
   const addFiles = useCallback(
     (incoming: FileList | File[]) => {
@@ -38,19 +51,30 @@ export default function FileDropzone({
       const invalid = list.filter((file) => !fileMatchesAccept(file, accept));
 
       if (invalid.length) {
+        setProGate(null);
         setError(`Unsupported file type. Accepted formats: ${acceptLabel(accept)}.`);
         return;
       }
 
-      const oversized = list.filter((file) => file.size > limitBytes);
-
-      if (oversized.length) {
-        setError(
-          `${oversized[0].name} exceeds your ${entitlements.label} plan limit of ${formatFileLimit(entitlements.fileLimitMb)} (${formatBytes(oversized[0].size)}).`
-        );
-        return;
+      if (!entitlements.isPro) {
+        const needsPro = list.find((file) => file.size > FREE_FILE_LIMIT_BYTES);
+        if (needsPro) {
+          setError(null);
+          setProGate({ fileName: needsPro.name, fileSize: needsPro.size });
+          return;
+        }
+      } else {
+        const oversized = list.filter((file) => file.size > PRO_FILE_LIMIT_BYTES);
+        if (oversized.length) {
+          setProGate(null);
+          setError(
+            `${oversized[0].name} exceeds your Pro plan limit of ${formatFileLimit(entitlements.fileLimitMb)} (${formatBytes(oversized[0].size)}).`
+          );
+          return;
+        }
       }
 
+      setProGate(null);
       setError(null);
       if (append) {
         onFilesChange(list);
@@ -60,7 +84,7 @@ export default function FileDropzone({
         onFilesChange(list.slice(0, 1));
       }
     },
-    [accept, append, entitlements.label, entitlements.fileLimitMb, files, limitBytes, multiple, onFilesChange]
+    [accept, append, entitlements.fileLimitMb, entitlements.isPro, files, multiple, onFilesChange]
   );
 
   const handleDrop = (event: React.DragEvent) => {
@@ -89,6 +113,14 @@ export default function FileDropzone({
         <p>{label}</p>
         <p className="hint">{hint ?? defaultHint}</p>
       </div>
+
+      {proGate && (
+        <UploadProGate
+          fileName={proGate.fileName}
+          fileSize={proGate.fileSize}
+          onDismiss={() => setProGate(null)}
+        />
+      )}
 
       {error && (
         <p className="dropzone-error">

@@ -1,7 +1,7 @@
 import os
 from contextvars import ContextVar
 
-FREE_FILE_LIMIT_MB = int(os.environ.get("FREE_FILE_LIMIT_MB", "30"))
+FREE_FILE_LIMIT_MB = int(os.environ.get("FREE_FILE_LIMIT_MB", "24"))
 PRO_FILE_LIMIT_MB = int(os.environ.get("PRO_FILE_LIMIT_MB", "200"))
 
 FREE_FILE_LIMIT_BYTES = FREE_FILE_LIMIT_MB * 1024 * 1024
@@ -30,6 +30,6 @@ def plan_payload(plan: str, user_id: str | None = None) -> dict:
         "user_id": user_id,
         "plan": plan,
         "file_limit_mb": file_limit_mb(plan),
-        "auth_provider": "mock",
+        "auth_provider": os.environ.get("AUTH_PROVIDER", "mock"),
         "billing_provider": "mock",
     }

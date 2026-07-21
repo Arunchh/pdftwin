@@ -43,7 +43,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   {
     question: "How much does Pro cost and how often am I billed?",
     answer:
-      "PDFTwin Pro is $9 USD per month. PayPal bills you automatically each month until you cancel from your PayPal account.",
+      "PDFTwin Pro is $7 USD per month. PayPal bills you automatically each month until you cancel from your PayPal account.",
   },
   {
     question: "Can I get a refund?",

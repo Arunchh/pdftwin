@@ -1,5 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
+import { readNextPath } from "../../utils/authRedirect";
+import { AUTH_PROVIDER } from "../../config/providers";
 
 export default function SignupForm() {
   const { signUp } = useAuth();
@@ -14,7 +16,7 @@ export default function SignupForm() {
     setError(null);
     try {
       await signUp(email, password);
-      window.location.href = "/account";
+      window.location.href = readNextPath();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Sign up failed.");
     } finally {
@@ -26,7 +28,9 @@ export default function SignupForm() {
     <form className="auth-form panel" onSubmit={handleSubmit}>
       <h1>Create account</h1>
       <p className="description">
-        Start free today. Your account is stored locally in this preview — Supabase connects later.
+        {AUTH_PROVIDER === "supabase"
+          ? "Create your PDFTwin account to upgrade to Pro and upload files larger than 24 MB."
+          : "Start free today. Your account is stored locally in this preview."}
       </p>
 
       <label className="auth-field">

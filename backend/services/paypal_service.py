@@ -12,7 +12,7 @@ PAYPAL_API_BASE = {
 
 PRO_PRODUCT_NAME = "PDFTwin Pro"
 PRO_PRODUCT_DESCRIPTION = "Higher file limits, priority processing, and batch tools."
-PRO_PLAN_PRICE = "9.00"
+PRO_PLAN_PRICE = "7.00"
 PRO_PLAN_CURRENCY = "USD"
 
 

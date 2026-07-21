@@ -1,6 +1,7 @@
 ---
 import SiteHeader from "../components/layout/SiteHeader";
 import SiteFooter from "../components/layout/SiteFooter";
+import AuthProvider from "../components/auth/AuthProvider";
 import CheckoutHost from "../components/CheckoutHost";
 import SeoStructuredData from "../components/SeoStructuredData";
 import VercelAnalytics from "../components/VercelAnalytics";
@@ -31,7 +32,7 @@ const canonical = new URL(Astro.url.pathname, "https://pdftwin.com/").href;
     <meta name="author" content="PDFTwin" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonical} />
-    <meta name="theme-color" content="#1b4332" />
+    <meta name="theme-color" content="#3d9a78" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -89,6 +90,7 @@ const canonical = new URL(Astro.url.pathname, "https://pdftwin.com/").href;
       </main>
       <SiteFooter client:load />
       <CheckoutHost client:load />
+      <AuthProvider client:load />
       <VercelAnalytics client:load />
     </div>
   </body>

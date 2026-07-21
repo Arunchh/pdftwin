@@ -73,10 +73,12 @@ Environment variables:
 
 | Variable | Values | Purpose |
 |----------|--------|---------|
-| `VITE_AUTH_PROVIDER` | `mock` (default) | Sign-in, sign-up, plan |
+| `VITE_AUTH_PROVIDER` | `mock` \| `supabase` | Sign-in, sign-up, plan |
 | `VITE_BILLING_PROVIDER` | `mock` (default) | Checkout and subscription |
+| `VITE_SUPABASE_URL` | Supabase project URL | Required when `VITE_AUTH_PROVIDER=supabase` |
+| `VITE_SUPABASE_ANON_KEY` | Supabase anon key | Required when `VITE_AUTH_PROVIDER=supabase` |
 
-Mock auth persists session in `localStorage` and syncs across React islands via a custom event. API requests include `X-PDFTwin-Plan` and `X-PDFTwin-User-Id` headers so the backend can enforce file-size limits per plan.
+Supabase auth uses the **PDF Twin** project with a `profiles` table for plan state (`free` / `pro`). Free users can upload up to **24 MB** without signing in; larger files require an account and **Pro** ($7/month).
 
 ## Tech Stack
 
@@ -86,25 +88,33 @@ Mock auth persists session in `localStorage` and syncs across React islands via 
 
 ## Visual Design
 
-PDFTwin uses a **Paper & Ink** palette — warm editorial surfaces with forest-green brand accents and a trio of pastel category colors.
+PDFTwin uses a **Soft Spring** pastel palette — airy lilac-white surfaces with mint brand accents and a trio of category colors.
 
 | Role | Token / value | Usage |
 |------|---------------|--------|
-| Page background | `--bg` (`#F7F5F0`) | Warm paper tone |
+| Page background | `--bg` (`#FAF8FC`) | Airy lilac-white base |
 | Surfaces | `--surface`, `--surface-muted` | Cards, panels, hero |
-| Primary brand | `--accent` (`#1B4332`) | Buttons, links, logo mark |
-| Secondary accent | `--amethyst-600` (`#C2410C`) | Editorial highlights, organize category |
-| Convert category | Sage (`--sapphire-*`) | Convert & export tools |
-| Organize category | Peach (`--amethyst-*`) | Merge, split, compare, rotate |
-| Protect category | Wheat (`--emerald-*`) | Watermark, lock/unlock |
+| Primary brand | `--accent` (`#3D9A78`) | Buttons, links, logo mark |
+| Secondary accent | `--accent-secondary` (`#7C6AE0`) | Editorial highlights, organize category |
+| Convert category | Mint (`--sapphire-*`) | Convert & export tools |
+| Organize category | Lavender (`--amethyst-*`) | Merge, split, compare, rotate |
+| Protect category | Peach (`--emerald-*`) | Watermark, lock/unlock, compress |
+
+**Category color reference**
+
+| Category | Background | Accent | Text |
+|----------|------------|--------|------|
+| Convert | `#ECFDF5` | `#5CB896` | `#2D7A5E` |
+| Organize | `#F3F0FF` | `#7C6AE0` | `#5E4FC4` |
+| Protect | `#FFF4ED` | `#E08855` | `#C46D3A` |
 
 **Typography:** [Fraunces](https://fonts.google.com/specimen/Fraunces) for headings, [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans) for body text (loaded in `BaseLayout.astro`).
 
-**Brand assets:** Forest + cream twin-pages mark in `BrandLogo.tsx`, `public/favicon.svg`, `public/apple-touch-icon.svg`, and `public/og-image.svg`. Theme color is `#1b4332`.
+**Brand assets:** Mint + cream twin-pages mark in `BrandLogo.tsx`, `public/favicon.svg`, `public/apple-touch-icon.svg`, and `public/og-image.svg`. Theme color is `#3d9a78`.
 
-Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names (`--sapphire-*`, `--amethyst-*`, `--emerald-*`) are retained for compatibility but map to the sage / peach / wheat palette.
+Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names (`--sapphire-*`, `--amethyst-*`, `--emerald-*`) are retained for compatibility but map to the mint / lavender / peach palette.
 
-**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (Convert, Organize, Protect), inspired by tool-directory sites but styled with PDFTwin’s forest palette and pastel category headers. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
+**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (Convert, Organize, Protect), inspired by tool-directory sites but styled with PDFTwin’s mint palette and pastel category headers. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
 
 ## Prerequisites
 
@@ -133,10 +143,12 @@ npm run dev
 
 Open [http://localhost:4321](http://localhost:4321). API requests proxy to `http://localhost:8000` during development.
 
-Optional frontend env (see `.env.example`):
+Optional frontend env (see `frontend/.env.example`):
 
 ```bash
-VITE_AUTH_PROVIDER=mock
+VITE_AUTH_PROVIDER=supabase
+VITE_SUPABASE_URL=https://tcwvrdykeojriwsxglbn.supabase.co
+VITE_SUPABASE_ANON_KEY=your-anon-key
 VITE_BILLING_PROVIDER=mock
 ```
 
@@ -191,7 +203,7 @@ Use comma-separated ranges in the split form:
 
 See `.env.example`:
 
-- `FREE_FILE_LIMIT_MB` — Free plan per-file limit (default 30)
+- `FREE_FILE_LIMIT_MB` — Free plan per-file limit (default 24)
 - `PRO_FILE_LIMIT_MB` — Pro plan per-file limit (default 200)
 - `VITE_AUTH_PROVIDER` / `VITE_BILLING_PROVIDER` — Frontend provider selection (default `mock`)
 - PayPal credentials for live Pro checkout
