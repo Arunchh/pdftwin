@@ -8,7 +8,9 @@ from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 
+from services.docx_to_pdf import docx_to_pdf
 from services.image_convert import convert_image, convert_image_filename
+from services.image_resize import resize_image, resize_image_filename
 from services.pdf_arrange_merge import arrange_and_merge
 from services.pdf_compress import compress_pdf, compression_stats
 from services.pdf_convert import pdf_to_excel, pdf_to_word
@@ -21,6 +23,7 @@ from services.pdf_reorder import reorder_pdf
 from services.pdf_rotate import rotate_pdf
 from services.pdf_split import split_pdf
 from services.pdf_unlock import unlock_pdf
+from services.pdf_watermark import add_pdf_watermark
 from services import entitlements as entitlements_service
 from services import paypal_service
 from utils import attachment_header, normalize_filename, output_filename, write_zip_entry
@@ -626,5 +629,83 @@ async def rotate(
     return Response(
         content=rotated,
         media_type="application/pdf",
+        headers=attachment_header(filename),
+    )
+
+
+@app.post("/api/watermark")
+async def watermark(
+    file: Annotated[UploadFile, File(...)],
+    text: Annotated[str, Form(...)],
+    opacity: Annotated[float, Form()] = 0.25,
+):
+    content = read_pdf_upload(file)
+
+    try:
+        stamped = add_pdf_watermark(content, text, opacity)
+    except Exception as exc:
+        raise pdf_error_response(exc, "add watermark") from exc
+
+    filename = output_filename(file.filename, ".pdf")
+    base = filename.rsplit(".", 1)[0]
+    filename = f"{base}_watermarked.pdf"
+
+    return Response(
+        content=stamped,
+        media_type="application/pdf",
+        headers=attachment_header(filename),
+    )
+
+
+@app.post("/api/convert/word-to-pdf")
+async def convert_word_to_pdf(file: Annotated[UploadFile, File(...)]):
+    validate_extension(file.filename or "", {".docx"})
+    content = read_upload(file, {".docx"})
+
+    try:
+        pdf_bytes = docx_to_pdf(content)
+    except Exception as exc:
+        raise pdf_error_response(exc, "convert Word to PDF") from exc
+
+    filename = output_filename(file.filename, ".pdf")
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers=attachment_header(filename),
+    )
+
+
+@app.post("/api/convert/image-resize")
+async def convert_image_resize(
+    file: Annotated[UploadFile, File(...)],
+    max_width: Annotated[int, Form(...)],
+    max_height: Annotated[int, Form(...)],
+    quality: Annotated[int, Form()] = 85,
+    output_format: Annotated[str, Form()] = "",
+):
+    content = read_image_upload(file)
+
+    try:
+        data, extension = resize_image(
+            content,
+            max_width,
+            max_height,
+            quality,
+            output_format or None,
+        )
+    except Exception as exc:
+        raise pdf_error_response(exc, "resize image") from exc
+
+    filename = resize_image_filename(normalize_filename(file.filename), extension)
+    media_types = {
+        "png": "image/png",
+        "jpg": "image/jpeg",
+        "jpeg": "image/jpeg",
+        "webp": "image/webp",
+    }
+
+    return Response(
+        content=data,
+        media_type=media_types.get(extension, "application/octet-stream"),
         headers=attachment_header(filename),
     )

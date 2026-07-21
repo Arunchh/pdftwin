@@ -30,6 +30,18 @@ export const TOOL_UPLOAD_CONFIG: Record<ToolId, ToolUploadConfig> = {
     label: "Drop PDFs here or click to browse",
     hint: `PDF · ${limitHint}`,
   },
+  "word-to-pdf": {
+    accept: ".docx",
+    title: "Upload Word documents",
+    label: "Drop DOCX files here or click to browse",
+    hint: `DOCX · ${limitHint}`,
+  },
+  "image-resize": {
+    accept: IMAGE_ACCEPT,
+    title: "Upload images to resize",
+    label: "Drop images here or click to browse",
+    hint: `PNG, JPG, WebP, GIF, BMP, TIFF · ${limitHint}`,
+  },
   "arrange-merge": {
     accept: ".pdf",
     title: "Upload PDFs to combine",
@@ -51,6 +63,12 @@ export const TOOL_UPLOAD_CONFIG: Record<ToolId, ToolUploadConfig> = {
   "rotate-pdf": {
     accept: ".pdf",
     title: "Upload PDFs to rotate",
+    label: "Drop PDFs here or click to browse",
+    hint: `PDF · ${limitHint}`,
+  },
+  "watermark-pdf": {
+    accept: ".pdf",
+    title: "Upload PDFs to watermark",
     label: "Drop PDFs here or click to browse",
     hint: `PDF · ${limitHint}`,
   },

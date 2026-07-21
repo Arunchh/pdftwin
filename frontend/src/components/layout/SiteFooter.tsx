@@ -19,12 +19,12 @@ export default function SiteFooter() {
           <a href="/pricing">Pricing</a>
           <a href="/login">Sign in</a>
           <a href="/account">Account</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
           <a href="/pricing#faq">FAQ</a>
           <button type="button" className="site-footer-link-btn" onClick={openCheckout}>
             Upgrade to Pro
           </button>
-          <span>Privacy</span>
-          <span>Terms</span>
         </div>
         <p className="site-footer-note">
           Files are processed in memory and never stored permanently. Pro subscriptions are billed

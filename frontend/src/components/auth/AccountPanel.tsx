@@ -1,10 +1,29 @@
 import { Sparkles } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { formatFileLimit } from "../../config/limits";
 import { openCheckout } from "../../utils/checkoutEvents";
+import {
+  readWorkspaceUsage,
+  type WorkspaceUsage,
+} from "../../stores/workspaceUsageStore";
+
+function formatLastActive(iso: string | null): string {
+  if (!iso) return "Not yet";
+  try {
+    return new Date(iso).toLocaleString();
+  } catch {
+    return "Not yet";
+  }
+}
 
 export default function AccountPanel() {
   const { user, isAuthenticated, entitlements, signOut, setPlan } = useAuth();
+  const [usage, setUsage] = useState<WorkspaceUsage>(() => readWorkspaceUsage());
+
+  useEffect(() => {
+    setUsage(readWorkspaceUsage());
+  }, []);
 
   if (!isAuthenticated || !user) {
     return (
@@ -31,7 +50,7 @@ export default function AccountPanel() {
       <div className="account-grid">
         <section className="account-card">
           <h2>Profile</h2>
-          <p>
+          <p className="account-field">
             <strong>Email</strong>
             <span>{user.email}</span>
           </p>
@@ -46,7 +65,7 @@ export default function AccountPanel() {
             Plan
           </h2>
           <p className="account-plan-badge">{entitlements.label} plan</p>
-          <p>
+          <p className="account-field">
             File limit: <strong>{formatFileLimit(entitlements.fileLimitMb)}</strong> per upload
           </p>
           {entitlements.isPro ? (
@@ -75,9 +94,17 @@ export default function AccountPanel() {
 
         <section className="account-card">
           <h2>Workspace</h2>
-          <p>
-            Uploaded files are saved in your browser (IndexedDB) so you can switch tools without
-            re-uploading.
+          <p className="account-field">
+            <strong>Files in tray</strong>
+            <span>{usage.filesInTray}</span>
+          </p>
+          <p className="account-field">
+            <strong>Last tool used</strong>
+            <span>{usage.lastToolLabel ?? "None yet"}</span>
+          </p>
+          <p className="account-field">
+            <strong>Last active</strong>
+            <span>{formatLastActive(usage.lastActiveAt)}</span>
           </p>
           <a className="btn btn-secondary btn-sm" href="/tools/convert">
             Open workspace

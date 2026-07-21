@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import IconButton from "./IconButton";
 import { formatFileLimit } from "../config/limits";
-import { fileMatchesAccept } from "../utils/fileTypes";
+import { fileKey } from "../utils/files";
 import { useAuth } from "../hooks/useAuth";
 
 const MIN_SCALE = 0.5;
@@ -34,28 +34,19 @@ async function getPdfJs(): Promise<PdfJsModule> {
   return pdfjsPromise;
 }
 
-function PdfSlot({
+function CompareSlotPicker({
   label,
   file,
-  onFile,
+  pdfFiles,
+  onSelect,
   onClear,
 }: {
   label: string;
   file: File | null;
-  onFile: (file: File) => void;
+  pdfFiles: File[];
+  onSelect: (file: File) => void;
   onClear: () => void;
 }) {
-  const { entitlements } = useAuth();
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleFiles = (list: FileList | null) => {
-    const next = list?.[0];
-    if (!next) return;
-    if (!fileMatchesAccept(next, ".pdf")) return;
-    if (next.size > entitlements.fileLimitBytes) return;
-    onFile(next);
-  };
-
   return (
     <div className="compare-upload-slot">
       <div className="compare-upload-slot-header">
@@ -67,24 +58,28 @@ function PdfSlot({
           </button>
         )}
       </div>
+
       {file ? (
         <p className="compare-file-name">{file.name}</p>
+      ) : pdfFiles.length === 0 ? (
+        <p className="file-hint muted">Add PDFs to the workspace tray above.</p>
       ) : (
-        <button
-          type="button"
-          className="compare-upload-btn"
-          onClick={() => inputRef.current?.click()}
-        >
-          Choose PDF
-        </button>
+        <div className="compare-tray-picker">
+          {pdfFiles.map((candidate) => {
+            const key = fileKey(candidate);
+            return (
+              <button
+                key={key}
+                type="button"
+                className="compare-tray-pick-btn"
+                onClick={() => onSelect(candidate)}
+              >
+                {candidate.name}
+              </button>
+            );
+          })}
+        </div>
       )}
-      <input
-        ref={inputRef}
-        type="file"
-        accept=".pdf"
-        hidden
-        onChange={(event) => handleFiles(event.target.files)}
-      />
     </div>
   );
 }
@@ -161,7 +156,11 @@ function PageCanvas({
   );
 }
 
-export default function ComparePanel() {
+interface ComparePanelProps {
+  pdfFiles: File[];
+}
+
+export default function ComparePanel({ pdfFiles }: ComparePanelProps) {
   const { entitlements } = useAuth();
   const [leftFile, setLeftFile] = useState<File | null>(null);
   const [rightFile, setRightFile] = useState<File | null>(null);
@@ -183,6 +182,24 @@ export default function ComparePanel() {
     const data = await file.arrayBuffer();
     return pdfjs.getDocument({ data }).promise;
   }, []);
+
+  useEffect(() => {
+    if (leftFile && !pdfFiles.some((file) => fileKey(file) === fileKey(leftFile))) {
+      setLeftFile(null);
+    }
+    if (rightFile && !pdfFiles.some((file) => fileKey(file) === fileKey(rightFile))) {
+      setRightFile(null);
+    }
+  }, [pdfFiles, leftFile, rightFile]);
+
+  useEffect(() => {
+    if (!leftFile && pdfFiles[0]) {
+      setLeftFile(pdfFiles[0]);
+    }
+    if (!rightFile && pdfFiles[1]) {
+      setRightFile(pdfFiles[1]);
+    }
+  }, [pdfFiles, leftFile, rightFile]);
 
   useEffect(() => {
     let cancelled = false;
@@ -271,21 +288,23 @@ export default function ComparePanel() {
     <div className="panel tool-panel compare-panel">
       <h2>Compare PDFs</h2>
       <p className="description">
-        Review two versions of a contract, proposal, or report side by side. Link scroll and zoom
-        to keep both panes aligned while you inspect changes.
+        Pick two PDFs from your workspace tray to review contract or proposal changes side by side.
+        Link scroll and zoom to keep both panes aligned.
       </p>
 
       <div className="compare-upload-row">
-        <PdfSlot
+        <CompareSlotPicker
           label="Left PDF"
           file={leftFile}
-          onFile={setLeftFile}
+          pdfFiles={pdfFiles}
+          onSelect={setLeftFile}
           onClear={() => setLeftFile(null)}
         />
-        <PdfSlot
+        <CompareSlotPicker
           label="Right PDF"
           file={rightFile}
-          onFile={setRightFile}
+          pdfFiles={pdfFiles}
+          onSelect={setRightFile}
           onClear={() => setRightFile(null)}
         />
       </div>

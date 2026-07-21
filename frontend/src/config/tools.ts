@@ -4,22 +4,28 @@ import {
   Columns2,
   FileOutput,
   FileSpreadsheet,
+  FileText,
   Image,
   Layers,
   LockKeyhole,
+  Maximize2,
   RotateCw,
   Shrink,
+  Stamp,
 } from "lucide-react";
 
 export type ToolId =
   | "convert-extract"
   | "image-convert"
+  | "image-resize"
   | "compress-pdf"
+  | "word-to-pdf"
   | "arrange-merge"
   | "split"
   | "extract-pages"
   | "rotate-pdf"
   | "pdf-compare"
+  | "watermark-pdf"
   | "lock-unlock";
 
 export type ToolCategory = "convert" | "organize" | "security";
@@ -75,6 +81,26 @@ export const TOOLS: ToolDefinition[] = [
     path: "compress",
   },
   {
+    id: "word-to-pdf",
+    name: "Word to PDF",
+    shortLabel: "Word→PDF",
+    description: "Convert DOCX proposals and contracts into share-ready PDF files",
+    category: "convert",
+    icon: FileText,
+    hash: "word-to-pdf",
+    path: "word-to-pdf",
+  },
+  {
+    id: "image-resize",
+    name: "Resize Images",
+    shortLabel: "Resize",
+    description: "Resize and compress images for email, web, and slide decks",
+    category: "convert",
+    icon: Maximize2,
+    hash: "resize",
+    path: "resize",
+  },
+  {
     id: "pdf-compare",
     name: "Compare PDFs",
     shortLabel: "Compare",
@@ -123,6 +149,16 @@ export const TOOLS: ToolDefinition[] = [
     icon: RotateCw,
     hash: "rotate",
     path: "rotate",
+  },
+  {
+    id: "watermark-pdf",
+    name: "Watermark PDF",
+    shortLabel: "Watermark",
+    description: "Add a confidential or draft watermark across every page",
+    category: "security",
+    icon: Stamp,
+    hash: "watermark",
+    path: "watermark",
   },
   {
     id: "lock-unlock",

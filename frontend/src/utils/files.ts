@@ -8,6 +8,10 @@ export function getImageFiles(files: File[]): File[] {
   return files.filter((file) => IMAGE_EXTENSIONS.some((ext) => file.name.toLowerCase().endsWith(ext)));
 }
 
+export function getDocxFiles(files: File[]): File[] {
+  return files.filter((file) => file.name.toLowerCase().endsWith(".docx"));
+}
+
 export function fileKey(file: File): string {
   return `${file.name}::${file.size}::${file.lastModified}`;
 }

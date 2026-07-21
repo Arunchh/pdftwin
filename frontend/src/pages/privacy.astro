@@ -1,0 +1,68 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout
+  title="Privacy Policy | PDFTwin"
+  description="How PDFTwin handles your files, account data, and browser storage."
+>
+  <article class="legal-page">
+    <h1>Privacy Policy</h1>
+    <p class="legal-updated">Last updated: July 2026</p>
+
+    <section>
+      <h2>Overview</h2>
+      <p>
+        PDFTwin is a browser-based file conversion workspace. We designed the service so routine
+        document processing does not require storing your files on our servers permanently.
+      </p>
+    </section>
+
+    <section>
+      <h2>Files you upload</h2>
+      <p>
+        Server-side tools process files in memory and discard them after the request completes.
+        We do not use uploaded documents to train AI models or build marketing lists.
+      </p>
+      <p>
+        The Compare PDF tool renders documents locally in your browser using PDF.js. Those files
+        are not uploaded for viewing.
+      </p>
+    </section>
+
+    <section>
+      <h2>Browser workspace storage</h2>
+      <p>
+        The workspace file tray stores files in your browser using IndexedDB so you can switch
+        tools without re-uploading. This data stays on your device until you clear it or remove
+        site data from your browser.
+      </p>
+    </section>
+
+    <section>
+      <h2>Account preview data</h2>
+      <p>
+        Preview sign-in stores account details in your browser localStorage. When live account
+        services are enabled, authentication will move to a dedicated provider with proper
+        security controls.
+      </p>
+    </section>
+
+    <section>
+      <h2>Analytics</h2>
+      <p>
+        We may use privacy-focused analytics on the production site to understand traffic and
+        improve reliability. Analytics providers do not receive the contents of your uploaded
+        files.
+      </p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>
+        Questions about this policy can be sent through the contact options listed on
+        <a href="https://pdftwin.com">pdftwin.com</a>.
+      </p>
+    </section>
+  </article>
+</BaseLayout>

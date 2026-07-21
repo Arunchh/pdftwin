@@ -30,7 +30,7 @@ const structuredData = {
           name: "PDFTwin Free",
           price: "0",
           priceCurrency: "USD",
-          description: "All nine business conversion tools with a 30 MB per-file limit.",
+          description: "All twelve business conversion tools with a 30 MB per-file limit.",
         },
         {
           "@type": "Offer",
@@ -50,6 +50,9 @@ const structuredData = {
         "Lock and unlock PDF passwords",
         "Compress PDF file size",
         "Rotate PDF pages",
+        "Convert Word to PDF",
+        "Resize and compress images",
+        "Add PDF watermarks",
       ],
     },
     {

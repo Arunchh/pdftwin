@@ -1,54 +1,59 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  addStagedFile,
-  clearStagedFiles,
-  listStagedFiles,
-  loadWorkspaceFiles,
-  removeStagedFile,
-  subscribeWorkspace,
-  type StagedFileRecord,
-} from "../stores/workspaceStore";
+import { getStorageAdapter } from "../adapters/storage";
+import type { StagedFileRecord } from "../adapters/storage";
+import { recordTrayCount } from "../stores/workspaceUsageStore";
 
 export function useWorkspaceFiles() {
+  const storage = getStorageAdapter();
   const [records, setRecords] = useState<StagedFileRecord[]>([]);
   const [files, setFiles] = useState<File[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    const nextRecords = await listStagedFiles();
+    const nextRecords = await storage.listFiles();
     setRecords(nextRecords);
-    const nextFiles = await loadWorkspaceFiles();
+    const nextFiles = await storage.loadAllFiles();
     setFiles(nextFiles);
+    recordTrayCount(nextFiles.length);
     setLoading(false);
-  }, []);
+  }, [storage]);
 
   useEffect(() => {
     refresh();
-    return subscribeWorkspace(() => {
+    return storage.subscribe(() => {
       refresh();
     });
-  }, [refresh]);
+  }, [refresh, storage]);
 
-  const addFiles = useCallback(async (incoming: File[]) => {
-    for (const file of incoming) {
-      await addStagedFile(file);
-    }
-  }, []);
+  const addFiles = useCallback(
+    async (incoming: File[]) => {
+      for (const file of incoming) {
+        await storage.addFile(file);
+      }
+    },
+    [storage]
+  );
 
-  const replaceFiles = useCallback(async (incoming: File[]) => {
-    await clearStagedFiles();
-    for (const file of incoming) {
-      await addStagedFile(file);
-    }
-  }, []);
+  const replaceFiles = useCallback(
+    async (incoming: File[]) => {
+      await storage.clearAll();
+      for (const file of incoming) {
+        await storage.addFile(file);
+      }
+    },
+    [storage]
+  );
 
-  const removeFile = useCallback(async (id: string) => {
-    await removeStagedFile(id);
-  }, []);
+  const removeFile = useCallback(
+    async (id: string) => {
+      await storage.removeFile(id);
+    },
+    [storage]
+  );
 
   const clearAll = useCallback(async () => {
-    await clearStagedFiles();
-  }, []);
+    await storage.clearAll();
+  }, [storage]);
 
   return {
     records,

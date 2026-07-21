@@ -8,23 +8,27 @@ Live site: [pdftwin.com](https://pdftwin.com)
 
 ### Convert & Export
 - **Document conversion** — PDF to Word (.docx) or Excel (.xlsx); extract embedded images as WebP, PNG, or JPEG
+- **Word to PDF** — Convert DOCX proposals and contracts into share-ready PDFs
 - **Image conversion** — PNG, JPG, WebP, GIF, BMP, TIFF → WebP, PNG, or JPEG
+- **Resize images** — Shrink photos and brand assets with quality and dimension controls
+- **Compress PDF** — Reduce file size with quality presets
 
 ### Organize Documents
 - **Compare PDFs** — Side-by-side viewer with linked scroll and linked/independent zoom (client-side, powered by PDF.js)
 - **Merge & arrange** — Combine multiple PDFs and reorder pages before export
 - **Split PDF** — Split by page ranges (e.g. `1-3, 5-7`)
 - **Extract pages** — Pull selected pages into a new PDF
-- **Compress PDF** — Reduce file size with quality presets
 - **Rotate PDF** — Rotate all pages or selected pages by 90°, 180°, or 270°
 
 ### Protect Files
+- **Watermark PDF** — Add confidential or draft watermarks across every page
 - **Lock & unlock** — Add password protection or remove restrictions when permitted
 
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
 - **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads
 - **Workspace file tray** — Files stay in IndexedDB while you switch between tools — no re-upload needed
+- **Compare + tray** — Pick left/right PDFs directly from the workspace tray
 
 ## Architecture
 
@@ -37,27 +41,40 @@ PDFTwin is **not a single-page app**. It uses **Astro** to pre-render real URLs;
 | `/pricing` | Plans, FAQ, Pro checkout |
 | `/login` | Sign in |
 | `/signup` | Create account |
-| `/account` | Plan, profile, workspace |
+| `/account` | Plan, profile, workspace usage |
+| `/privacy` | Privacy policy |
+| `/terms` | Terms of use |
 | `/tools/convert` | Document conversion |
 | `/tools/images` | Image conversion |
+| `/tools/resize` | Resize & compress images |
+| `/tools/word-to-pdf` | Word to PDF |
+| `/tools/compress` | Compress PDF |
 | `/tools/compare` | Side-by-side PDF compare |
 | `/tools/merge` | Merge & arrange |
 | `/tools/split` | Split PDF |
 | `/tools/extract` | Extract pages |
-| `/tools/protect` | Lock & unlock |
-| `/tools/compress` | Compress PDF |
 | `/tools/rotate` | Rotate PDF pages |
+| `/tools/watermark` | Watermark PDF |
+| `/tools/protect` | Lock & unlock |
 
 Legacy hash URLs (`#convert`, `#merge`, etc.) redirect to the matching path automatically.
 
-### Auth & billing adapters
+### Adapter pattern
 
-The frontend uses a small adapter layer so mock and live providers can be swapped via env vars:
+The frontend uses swappable adapters so mock and live providers can be connected later:
+
+| Adapter | Now | Later |
+|---------|-----|-------|
+| `AuthAdapter` | Mock (localStorage) | Supabase Auth |
+| `BillingAdapter` | Mock (Pro preview) | PayPal subscriptions |
+| `StorageAdapter` | IndexedDB workspace tray | Supabase Storage (Pro cloud workspace) |
+
+Environment variables:
 
 | Variable | Values | Purpose |
 |----------|--------|---------|
-| `VITE_AUTH_PROVIDER` | `mock` (default), `supabase` (future) | Sign-in, sign-up, plan |
-| `VITE_BILLING_PROVIDER` | `mock` (default), `paypal` (future) | Checkout and subscription |
+| `VITE_AUTH_PROVIDER` | `mock` (default) | Sign-in, sign-up, plan |
+| `VITE_BILLING_PROVIDER` | `mock` (default) | Checkout and subscription |
 
 Mock auth persists session in `localStorage` and syncs across React islands via a custom event. API requests include `X-PDFTwin-Plan` and `X-PDFTwin-User-Id` headers so the backend can enforce file-size limits per plan.
 
@@ -123,11 +140,14 @@ Output is written to `frontend/dist/`. Vercel runs the Astro build and serves st
 | POST | `/api/convert/pdf-to-word` | PDF → Word |
 | POST | `/api/convert/pdf-to-excel` | PDF → Excel |
 | POST | `/api/convert/image` | Convert image formats |
+| POST | `/api/convert/word-to-pdf` | DOCX → PDF |
+| POST | `/api/convert/image-resize` | Resize/compress an image |
 | POST | `/api/pdf-info` | Page count for a PDF |
 | POST | `/api/extract-pages` | Extract pages into one PDF |
 | POST | `/api/extract-images` | Extract embedded images (optional output format) |
 | POST | `/api/compress` | Compress PDF (quality preset) |
 | POST | `/api/rotate` | Rotate pages in a PDF |
+| POST | `/api/watermark` | Add text watermark to a PDF |
 | POST | `/api/lock` | Password-protect a PDF |
 | POST | `/api/unlock` | Remove PDF restrictions/password when possible |
 | POST | `/api/payments/*` | PayPal subscription (Pro) |
@@ -160,6 +180,7 @@ Set `VITE_CHECKOUT_LIVE=true` in the frontend environment when PayPal billing is
 
 - PDF-to-Excel extracts structured table data; product images are placed in cells where detected.
 - PDF-to-Word uses layout-preserving conversion; complex PDFs may need manual cleanup.
+- Word-to-PDF uses PyMuPDF; complex DOCX layouts may need review after conversion.
 - Server-side tools process files in memory and do not store them permanently.
 - **Compare** renders locally with PDF.js — files never leave the device for viewing.
 - **Unlock** works for restriction-only PDFs and empty passwords; encrypted files need the correct password.
