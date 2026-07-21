@@ -7,16 +7,20 @@ import {
   Image,
   Layers,
   LockKeyhole,
+  RotateCw,
+  Shrink,
 } from "lucide-react";
 
 export type ToolId =
   | "convert-extract"
   | "image-convert"
+  | "compress-pdf"
   | "arrange-merge"
   | "split"
   | "extract-pages"
-  | "lock-unlock"
-  | "pdf-compare";
+  | "rotate-pdf"
+  | "pdf-compare"
+  | "lock-unlock";
 
 export type ToolCategory = "convert" | "organize" | "security";
 
@@ -61,6 +65,16 @@ export const TOOLS: ToolDefinition[] = [
     path: "images",
   },
   {
+    id: "compress-pdf",
+    name: "Compress PDF",
+    shortLabel: "Compress",
+    description: "Reduce PDF file size for email attachments and faster client downloads",
+    category: "convert",
+    icon: Shrink,
+    hash: "compress",
+    path: "compress",
+  },
+  {
     id: "pdf-compare",
     name: "Compare PDFs",
     shortLabel: "Compare",
@@ -99,6 +113,16 @@ export const TOOLS: ToolDefinition[] = [
     icon: FileOutput,
     hash: "extract",
     path: "extract",
+  },
+  {
+    id: "rotate-pdf",
+    name: "Rotate Pages",
+    shortLabel: "Rotate",
+    description: "Rotate all pages or selected pages by 90°, 180°, or 270°",
+    category: "organize",
+    icon: RotateCw,
+    hash: "rotate",
+    path: "rotate",
   },
   {
     id: "lock-unlock",

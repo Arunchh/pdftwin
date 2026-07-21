@@ -14,7 +14,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   {
     question: "Can I keep using the Free plan?",
     answer:
-      "Yes. All seven conversion and PDF tools stay free with no signup. Pro is optional when you need bigger files, WebP batch exports, or faster processing.",
+      "Yes. All nine conversion and PDF tools stay free with no signup. Pro is optional when you need bigger files, WebP batch exports, or faster processing.",
   },
   {
     question: "How do I cancel my subscription?",
@@ -33,7 +33,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   },
   {
     question: "What is included in Pro compared to Free?",
-    answer: `Free includes all seven tools — PDF conversion, image conversion, side-by-side compare, merge, split, extract, and protect — with up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file. Pro raises the limit to ${formatFileLimit(PRO_FILE_LIMIT_MB)}, adds priority processing, batch-friendly workflows, and email support.`,
+    answer: `Free includes all nine tools — PDF conversion, image conversion, compress, rotate, side-by-side compare, merge, split, extract, and protect — with up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file. Pro raises the limit to ${formatFileLimit(PRO_FILE_LIMIT_MB)}, adds priority processing, batch-friendly workflows, and email support.`,
   },
   {
     question: "Is there a free trial for Pro?",

@@ -1,3 +1,5 @@
+import { getAuthHeaders } from "./stores/authStore";
+
 export interface UploadedFileInfo {
   filename: string;
   size: number;
@@ -82,6 +84,7 @@ export async function postFiles(
 
   return fetch(endpoint, {
     method: "POST",
+    headers: getAuthHeaders(),
     body: formData,
   });
 }

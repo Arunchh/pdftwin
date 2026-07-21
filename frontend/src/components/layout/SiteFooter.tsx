@@ -17,6 +17,8 @@ export default function SiteFooter() {
           <a href="/#tools">Tools</a>
           <a href="/formats">Formats</a>
           <a href="/pricing">Pricing</a>
+          <a href="/login">Sign in</a>
+          <a href="/account">Account</a>
           <a href="/pricing#faq">FAQ</a>
           <button type="button" className="site-footer-link-btn" onClick={openCheckout}>
             Upgrade to Pro

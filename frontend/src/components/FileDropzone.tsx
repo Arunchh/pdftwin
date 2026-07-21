@@ -1,8 +1,8 @@
 import { useCallback, useRef, useState } from "react";
-import { AlertCircle, FileUp, X } from "lucide-react";
-import { formatBytes, formatFileLimit, FREE_FILE_LIMIT_BYTES, FREE_FILE_LIMIT_MB } from "../config/limits";
+import { AlertCircle, FileUp } from "lucide-react";
+import { formatBytes, formatFileLimit } from "../config/limits";
 import { acceptLabel, fileMatchesAccept } from "../utils/fileTypes";
-import IconButton from "./IconButton";
+import { useAuth } from "../hooks/useAuth";
 
 interface FileDropzoneProps {
   files: File[];
@@ -11,6 +11,8 @@ interface FileDropzoneProps {
   multiple?: boolean;
   label?: string;
   hint?: string;
+  /** When true, only new files are passed to onFilesChange and the list is shown elsewhere. */
+  append?: boolean;
 }
 
 export default function FileDropzone({
@@ -19,11 +21,16 @@ export default function FileDropzone({
   accept = ".pdf",
   multiple = true,
   label = "Drop files here or click to browse",
-  hint = `PDF only · up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file on Free`,
+  hint,
+  append = false,
 }: FileDropzoneProps) {
+  const { entitlements } = useAuth();
   const inputRef = useRef<HTMLInputElement>(null);
   const [dragging, setDragging] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const limitBytes = entitlements.fileLimitBytes;
+  const defaultHint = `${acceptLabel(accept)} · up to ${formatFileLimit(entitlements.fileLimitMb)} on ${entitlements.label}`;
 
   const addFiles = useCallback(
     (incoming: FileList | File[]) => {
@@ -35,23 +42,25 @@ export default function FileDropzone({
         return;
       }
 
-      const oversized = list.filter((file) => file.size > FREE_FILE_LIMIT_BYTES);
+      const oversized = list.filter((file) => file.size > limitBytes);
 
       if (oversized.length) {
         setError(
-          `${oversized[0].name} exceeds the ${formatFileLimit(FREE_FILE_LIMIT_MB)} Free plan limit (${formatBytes(oversized[0].size)}).`
+          `${oversized[0].name} exceeds your ${entitlements.label} plan limit of ${formatFileLimit(entitlements.fileLimitMb)} (${formatBytes(oversized[0].size)}).`
         );
         return;
       }
 
       setError(null);
-      if (multiple) {
+      if (append) {
+        onFilesChange(list);
+      } else if (multiple) {
         onFilesChange([...files, ...list]);
       } else {
         onFilesChange(list.slice(0, 1));
       }
     },
-    [accept, files, multiple, onFilesChange]
+    [accept, append, entitlements.label, entitlements.fileLimitMb, files, limitBytes, multiple, onFilesChange]
   );
 
   const handleDrop = (event: React.DragEvent) => {
@@ -60,11 +69,6 @@ export default function FileDropzone({
     if (event.dataTransfer.files.length) {
       addFiles(event.dataTransfer.files);
     }
-  };
-
-  const removeFile = (index: number) => {
-    setError(null);
-    onFilesChange(files.filter((_, i) => i !== index));
   };
 
   return (
@@ -83,7 +87,7 @@ export default function FileDropzone({
           <FileUp size={40} strokeWidth={1.5} />
         </div>
         <p>{label}</p>
-        <p className="hint">{hint}</p>
+        <p className="hint">{hint ?? defaultHint}</p>
       </div>
 
       {error && (
@@ -107,24 +111,8 @@ export default function FileDropzone({
         }}
       />
 
-      {files.length > 0 && (
-        <div className="file-list">
-          {files.map((file, index) => (
-            <div key={`${file.name}-${index}`} className="file-item">
-              <div>
-                <div className="name">{file.name}</div>
-                <div className="meta">{formatBytes(file.size)}</div>
-              </div>
-              <IconButton
-                icon={<X size={18} />}
-                label="Remove file"
-                variant="ghost"
-                iconOnly
-                onClick={() => removeFile(index)}
-              />
-            </div>
-          ))}
-        </div>
+      {!append && files.length > 0 && (
+        <p className="file-hint">{files.length} file(s) ready in workspace.</p>
       )}
     </div>
   );

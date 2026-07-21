@@ -9,8 +9,9 @@ import {
   ZoomOut,
 } from "lucide-react";
 import IconButton from "./IconButton";
-import { formatFileLimit, FREE_FILE_LIMIT_BYTES, FREE_FILE_LIMIT_MB } from "../config/limits";
+import { formatFileLimit } from "../config/limits";
 import { fileMatchesAccept } from "../utils/fileTypes";
+import { useAuth } from "../hooks/useAuth";
 
 const MIN_SCALE = 0.5;
 const MAX_SCALE = 3;
@@ -44,13 +45,14 @@ function PdfSlot({
   onFile: (file: File) => void;
   onClear: () => void;
 }) {
+  const { entitlements } = useAuth();
   const inputRef = useRef<HTMLInputElement>(null);
 
   const handleFiles = (list: FileList | null) => {
     const next = list?.[0];
     if (!next) return;
     if (!fileMatchesAccept(next, ".pdf")) return;
-    if (next.size > FREE_FILE_LIMIT_BYTES) return;
+    if (next.size > entitlements.fileLimitBytes) return;
     onFile(next);
   };
 
@@ -160,6 +162,7 @@ function PageCanvas({
 }
 
 export default function ComparePanel() {
+  const { entitlements } = useAuth();
   const [leftFile, setLeftFile] = useState<File | null>(null);
   const [rightFile, setRightFile] = useState<File | null>(null);
   const [leftDoc, setLeftDoc] = useState<PDFDocumentProxy | null>(null);
@@ -288,8 +291,8 @@ export default function ComparePanel() {
       </div>
 
       <p className="file-hint muted">
-        PDF only · up to {formatFileLimit(FREE_FILE_LIMIT_MB)} per file on Free · rendered locally in
-        your browser
+        PDF only · up to {formatFileLimit(entitlements.fileLimitMb)} per file on {entitlements.label} ·
+        rendered locally in your browser
       </p>
 
       {(leftDoc || rightDoc) && (

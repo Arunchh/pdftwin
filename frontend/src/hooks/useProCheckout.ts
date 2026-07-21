@@ -1,6 +1,8 @@
 import { useCallback, useState } from "react";
 import type { CheckoutStep } from "../config/checkout";
 import { CHECKOUT_LIVE } from "../config/checkout";
+import { readSession } from "../stores/authStore";
+import { getAuthAdapter } from "../adapters/auth";
 import { createPayPalSubscription } from "../services/payments";
 
 const PREVIEW_COMPLETE_KEY = "pdftwin_pro_checkout_preview";
@@ -55,6 +57,10 @@ export function useProCheckout() {
     await new Promise((resolve) => window.setTimeout(resolve, 1800));
     try {
       sessionStorage.setItem(PREVIEW_COMPLETE_KEY, "1");
+      const { user } = readSession();
+      if (user) {
+        await getAuthAdapter().setPlan("pro");
+      }
     } catch {
       /* ignore storage errors */
     }

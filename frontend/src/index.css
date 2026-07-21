@@ -2734,3 +2734,152 @@ textarea {
   }
 }
 
+/* Auth & account */
+.auth-page {
+  max-width: 28rem;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+}
+
+.auth-form,
+.account-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.auth-form label,
+.account-panel label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.auth-form input,
+.account-panel input {
+  padding: 0.6rem 0.75rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+
+.auth-form-error {
+  color: var(--danger, #c0392b);
+  font-size: 0.875rem;
+}
+
+.account-panel-plan {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.plan-badge--pro {
+  background: linear-gradient(135deg, var(--accent), var(--accent-strong, #6366f1));
+  color: #fff;
+}
+
+.account-link {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.account-link a {
+  color: var(--accent);
+}
+
+/* Workspace file tray */
+.workspace-tray {
+  margin-bottom: 1.25rem;
+  padding: 1rem;
+  border-radius: var(--radius-lg);
+  border: 1px dashed var(--border);
+  background: var(--surface);
+}
+
+.workspace-tray-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.workspace-tray-title {
+  font-weight: 600;
+  font-size: 0.9375rem;
+}
+
+.workspace-tray-limit {
+  font-size: 0.8125rem;
+  color: var(--text-muted);
+}
+
+.workspace-limit--pro {
+  color: var(--accent);
+}
+
+.workspace-tray-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.workspace-tray-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-md);
+  background: var(--bg);
+  font-size: 0.875rem;
+}
+
+.workspace-tray-item-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.workspace-tray-empty {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Compress & rotate tool options */
+.compress-options,
+.rotate-options {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.compress-options label,
+.rotate-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  font-size: 0.875rem;
+}
+
+.rotate-field select,
+.compress-options select {
+  padding: 0.5rem 0.65rem;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  background: var(--bg);
+}
+

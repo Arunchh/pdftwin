@@ -1,16 +1,16 @@
 import io
 import json
-import os
 import zipfile
 from typing import Annotated
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, Header, HTTPException, Request, UploadFile
 from pydantic import BaseModel, Field
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response, StreamingResponse
 
 from services.image_convert import convert_image, convert_image_filename
 from services.pdf_arrange_merge import arrange_and_merge
+from services.pdf_compress import compress_pdf, compression_stats
 from services.pdf_convert import pdf_to_excel, pdf_to_word
 from services.pdf_extract import extract_pages
 from services.pdf_images import extract_images
@@ -18,16 +18,19 @@ from services.pdf_info import get_pdf_page_count
 from services.pdf_lock import lock_pdf
 from services.pdf_merge import merge_pdfs
 from services.pdf_reorder import reorder_pdf
+from services.pdf_rotate import rotate_pdf
 from services.pdf_split import split_pdf
 from services.pdf_unlock import unlock_pdf
+from services import entitlements as entitlements_service
 from services import paypal_service
 from utils import attachment_header, normalize_filename, output_filename, write_zip_entry
 
 app = FastAPI(title="PDFTwin API")
 
-FREE_FILE_LIMIT_MB = int(os.environ.get("FREE_FILE_LIMIT_MB", "30"))
-FREE_FILE_LIMIT_BYTES = FREE_FILE_LIMIT_MB * 1024 * 1024
-PRO_FILE_LIMIT_MB = int(os.environ.get("PRO_FILE_LIMIT_MB", "200"))
+FREE_FILE_LIMIT_MB = entitlements_service.FREE_FILE_LIMIT_MB
+FREE_FILE_LIMIT_BYTES = entitlements_service.FREE_FILE_LIMIT_BYTES
+PRO_FILE_LIMIT_MB = entitlements_service.PRO_FILE_LIMIT_MB
+PRO_FILE_LIMIT_BYTES = entitlements_service.PRO_FILE_LIMIT_BYTES
 
 
 class PayPalConnectRequest(BaseModel):
@@ -45,6 +48,8 @@ app.add_middleware(
     allow_origins=[
         "http://localhost:5173",
         "http://127.0.0.1:5173",
+        "http://localhost:4321",
+        "http://127.0.0.1:4321",
         "http://localhost:5174",
         "http://127.0.0.1:5174",
         "https://pdftwin.com",
@@ -78,12 +83,39 @@ def read_upload(file: UploadFile, allowed: set[str] | None = None) -> bytes:
     content = file.file.read()
     if not content:
         raise HTTPException(status_code=400, detail="Uploaded file is empty.")
-    if len(content) > FREE_FILE_LIMIT_BYTES:
+    if len(content) > entitlements_service.file_limit_bytes():
+        limit_mb = entitlements_service.file_limit_mb()
+        plan_label = entitlements_service.current_plan.get()
         raise HTTPException(
             status_code=413,
-            detail=f"File exceeds the {FREE_FILE_LIMIT_MB} MB free plan limit.",
+            detail=f"File exceeds the {limit_mb} MB {plan_label} plan limit.",
         )
     return content
+
+
+@app.middleware("http")
+async def apply_plan_entitlements(request: Request, call_next):
+    plan = entitlements_service.normalize_plan(request.headers.get("x-pdftwin-plan"))
+    token = entitlements_service.current_plan.set(plan)
+    try:
+        return await call_next(request)
+    finally:
+        entitlements_service.current_plan.reset(token)
+
+
+@app.get("/api/me")
+def get_me(
+    x_pdftwin_plan: Annotated[str | None, Header()] = None,
+    x_pdftwin_user_id: Annotated[str | None, Header()] = None,
+):
+    plan = entitlements_service.normalize_plan(x_pdftwin_plan)
+    return entitlements_service.plan_payload(plan, x_pdftwin_user_id)
+
+
+@app.post("/api/webhooks/paypal")
+async def paypal_webhook_stub():
+    """Placeholder for PayPal subscription webhooks — wire up when billing goes live."""
+    return {"received": True, "status": "stub"}
 
 
 @app.get("/api/health")
@@ -545,4 +577,54 @@ async def convert_image_endpoint(
         zip_buffer,
         media_type="application/zip",
         headers=attachment_header("converted_images.zip"),
+    )
+
+
+@app.post("/api/compress")
+async def compress(
+    file: Annotated[UploadFile, File(...)],
+    level: Annotated[str, Form()] = "medium",
+):
+    content = read_pdf_upload(file)
+    normalized_level = level if level in {"medium", "high"} else "medium"
+
+    try:
+        compressed = compress_pdf(content, normalized_level)
+        stats = compression_stats(content, compressed)
+    except Exception as exc:
+        raise pdf_error_response(exc, "compress PDF") from exc
+
+    filename = output_filename(file.filename, ".pdf")
+    if not filename.lower().startswith("compressed"):
+        base = filename.rsplit(".", 1)[0]
+        filename = f"{base}_compressed.pdf"
+
+    return Response(
+        content=compressed,
+        media_type="application/pdf",
+        headers={
+            **attachment_header(filename),
+            "X-Compression-Saved-Percent": str(stats["saved_percent"]),
+        },
+    )
+
+
+@app.post("/api/rotate")
+async def rotate(
+    file: Annotated[UploadFile, File(...)],
+    pages: Annotated[str, Form(...)],
+    angle: Annotated[int, Form(...)],
+):
+    content = read_pdf_upload(file)
+
+    try:
+        rotated = rotate_pdf(content, pages, angle)
+    except Exception as exc:
+        raise pdf_error_response(exc, "rotate PDF") from exc
+
+    filename = output_filename(file.filename, ".pdf")
+    return Response(
+        content=rotated,
+        media_type="application/pdf",
+        headers=attachment_header(filename),
     )

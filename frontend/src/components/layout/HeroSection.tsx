@@ -3,7 +3,7 @@ import { formatFileLimit, FREE_FILE_LIMIT_MB } from "../../config/limits";
 import { BUSINESS_TAGLINE } from "../../config/formats";
 
 const HERO_STATS = [
-  { icon: Layers3, value: "7", label: "Business tools", tone: "sapphire" },
+  { icon: Layers3, value: "9", label: "Business tools", tone: "sapphire" },
   { icon: Gauge, value: formatFileLimit(FREE_FILE_LIMIT_MB), label: "Free per file", tone: "amethyst" },
   { icon: Zap, value: "0", label: "Install required", tone: "emerald" },
 ] as const;

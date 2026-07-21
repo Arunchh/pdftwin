@@ -20,7 +20,7 @@ export const PRICING_PLANS: PricingPlan[] = [
     period: "forever",
     description: "Everything a small team needs to convert, organize, and protect business files.",
     features: [
-      "All 7 conversion and PDF tools",
+      "All 9 conversion and PDF tools",
       `Up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file`,
       "PDF, Word, Excel, and image exports",
       "Secure in-memory processing",

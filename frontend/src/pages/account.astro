@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import AccountPanel from "../components/auth/AccountPanel";
+---
+
+<BaseLayout title="Account | PDFTwin" description="Manage your PDFTwin account and plan.">
+  <div class="auth-page auth-page-wide">
+    <AccountPanel client:load />
+  </div>
+</BaseLayout>

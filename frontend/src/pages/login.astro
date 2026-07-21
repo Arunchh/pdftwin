@@ -1,0 +1,10 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import LoginForm from "../components/auth/LoginForm";
+---
+
+<BaseLayout title="Sign in | PDFTwin" description="Sign in to your PDFTwin account.">
+  <div class="auth-page">
+    <LoginForm client:load />
+  </div>
+</BaseLayout>

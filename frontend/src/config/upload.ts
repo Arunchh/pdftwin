@@ -24,6 +24,12 @@ export const TOOL_UPLOAD_CONFIG: Record<ToolId, ToolUploadConfig> = {
     label: "Drop images here or click to browse",
     hint: `PNG, JPG, WebP, GIF, BMP, TIFF · ${limitHint}`,
   },
+  "compress-pdf": {
+    accept: ".pdf",
+    title: "Upload PDFs to compress",
+    label: "Drop PDFs here or click to browse",
+    hint: `PDF · ${limitHint}`,
+  },
   "arrange-merge": {
     accept: ".pdf",
     title: "Upload PDFs to combine",
@@ -39,6 +45,12 @@ export const TOOL_UPLOAD_CONFIG: Record<ToolId, ToolUploadConfig> = {
   "extract-pages": {
     accept: ".pdf",
     title: "Upload PDFs",
+    label: "Drop PDFs here or click to browse",
+    hint: `PDF · ${limitHint}`,
+  },
+  "rotate-pdf": {
+    accept: ".pdf",
+    title: "Upload PDFs to rotate",
     label: "Drop PDFs here or click to browse",
     hint: `PDF · ${limitHint}`,
   },
