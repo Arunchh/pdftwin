@@ -34,14 +34,12 @@ export default function ToolGrid() {
                   key={tool.id}
                   href={toolPath(tool.id)}
                   className={`tool-card tool-card--${tool.category}`}
+                  title={tool.description}
                 >
                   <span className="tool-card-icon">
-                    <Icon size={22} />
+                    <Icon size={28} strokeWidth={1.75} />
                   </span>
-                  <span className="tool-card-body">
-                    <strong>{tool.name}</strong>
-                    <span>{tool.description}</span>
-                  </span>
+                  <span className="tool-card-label">{tool.shortLabel}</span>
                 </a>
               );
             })}
