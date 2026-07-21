@@ -1,69 +1,69 @@
 :root {
-  /* Soft Spring — airy cream base with mint, lavender, peach trio */
-  --bg: #faf8fc;
-  --bg-warm: #fdfcfe;
+  /* Neon Pastel — bright fluorescent trio on luminous white base */
+  --bg: #f5f8ff;
+  --bg-warm: #fafbff;
   --surface: #ffffff;
-  --surface-hover: #f9f7fc;
-  --surface-muted: #f5f3f8;
-  --surface-subtle: #faf9fd;
-  --border: #e8e4ef;
-  --border-soft: #eeeaf5;
-  --border-strong: #9d96ab;
-  --text: #2d2a35;
-  --text-muted: #6b6578;
-  --text-subtle: #8a8494;
+  --surface-hover: #f0f4ff;
+  --surface-muted: #eef2ff;
+  --surface-subtle: #f8faff;
+  --border: #dce4ff;
+  --border-soft: #e8eeff;
+  --border-strong: #8b94c9;
+  --text: #1e1b2e;
+  --text-muted: #5c5678;
+  --text-subtle: #7a7494;
 
   /*
-   * Pastel trio (legacy token names retained for compatibility)
-   * mint → convert | lavender → organize | peach → protect
+   * Fluorescent pastel trio (legacy token names retained for compatibility)
+   * mint → convert | violet → organize | coral → protect
    */
-  --sapphire-50: #ecfdf5;
-  --sapphire-100: #c6f6e0;
-  --sapphire-200: #9ee8c8;
-  --sapphire-500: #5cb896;
-  --sapphire-600: #3d9a78;
-  --sapphire-700: #2d7a5e;
+  --sapphire-50: #dffff8;
+  --sapphire-100: #a8ffeb;
+  --sapphire-200: #5cffdb;
+  --sapphire-500: #00e5b4;
+  --sapphire-600: #00c49a;
+  --sapphire-700: #009973;
 
-  --amethyst-50: #f3f0ff;
-  --amethyst-100: #e4deff;
-  --amethyst-200: #cfc4ff;
-  --amethyst-500: #9b87f5;
-  --amethyst-600: #7c6ae0;
-  --amethyst-700: #5e4fc4;
+  --amethyst-50: #f0e5ff;
+  --amethyst-100: #ddb8ff;
+  --amethyst-200: #c88aff;
+  --amethyst-500: #b24dff;
+  --amethyst-600: #9d2eff;
+  --amethyst-700: #7c00e5;
 
-  --emerald-50: #fff4ed;
-  --emerald-100: #ffe4d4;
-  --emerald-200: #ffcdb0;
-  --emerald-500: #f4a574;
-  --emerald-600: #e08855;
-  --emerald-700: #c46d3a;
+  --emerald-50: #ffe8dc;
+  --emerald-100: #ffc9b0;
+  --emerald-200: #ffa878;
+  --emerald-500: #ff7847;
+  --emerald-600: #ff5722;
+  --emerald-700: #e04412;
 
-  --rose-50: #fff0f3;
-  --rose-100: #ffd8e4;
-  --rose-200: #ffb8cc;
-  --rose-500: #f088a8;
-  --rose-600: #d86888;
+  --rose-50: #ffe5f2;
+  --rose-100: #ffb8dc;
+  --rose-200: #ff8fc8;
+  --rose-500: #ff4da6;
+  --rose-600: #e6007a;
 
-  --amber-50: #fff8ed;
-  --amber-100: #ffeccd;
-  --amber-200: #ffddb0;
-  --amber-500: #f0b86a;
-  --amber-600: #d99848;
-  --amber-700: #b87a30;
+  --amber-50: #fffce0;
+  --amber-100: #fff5a0;
+  --amber-200: #ffec60;
+  --amber-500: #ffd600;
+  --amber-600: #e6b800;
+  --amber-700: #cc9900;
 
-  --teal-50: #ecfdf5;
-  --teal-100: #c6f6e0;
-  --teal-200: #9ee8c8;
-  --teal-500: #5cb896;
-  --teal-600: #3d9a78;
+  --teal-50: #dffff8;
+  --teal-100: #a8ffeb;
+  --teal-200: #5cffdb;
+  --teal-500: #00e5b4;
+  --teal-600: #00c49a;
 
-  --sky-50: #eef6ff;
-  --sky-100: #d4e8ff;
-  --sky-600: #5a96b8;
+  --sky-50: #e0f4ff;
+  --sky-100: #a8e0ff;
+  --sky-600: #0099ff;
 
-  /* Brand — mint primary, lavender secondary */
+  /* Brand — fluorescent mint primary, violet secondary */
   --accent: var(--sapphire-600);
-  --accent-hover: #2d7a5e;
+  --accent-hover: #009973;
   --accent-soft: var(--sapphire-50);
   --accent-border: var(--sapphire-100);
   --accent-text: var(--sapphire-700);
@@ -72,7 +72,7 @@
   --selected-border: var(--sapphire-600);
   --focus-border: var(--sapphire-600);
 
-  /* Tool categories — pastel trio */
+  /* Tool categories — fluorescent pastel trio */
   --cat-convert-bg: var(--sapphire-50);
   --cat-convert-text: var(--sapphire-700);
   --cat-convert-border: var(--sapphire-100);
@@ -87,14 +87,14 @@
   --cat-security-accent: var(--emerald-600);
 
   /* Feedback */
-  --success: #3d9a78;
+  --success: #00c49a;
   --success-bg: var(--sapphire-50);
   --success-text: var(--sapphire-700);
   --success-border: var(--sapphire-100);
-  --error: #e05555;
-  --error-bg: #fff0f0;
-  --error-text: #c84848;
-  --error-border: #ffc8c8;
+  --error: #ff3366;
+  --error-bg: #ffe5ee;
+  --error-text: #e6004c;
+  --error-border: #ffb8cc;
   --warning-bg: var(--amber-50);
   --warning-text: var(--amber-700);
   --warning-border: var(--amber-200);
@@ -105,8 +105,8 @@
   --radius: 8px;
   --radius-md: 8px;
   --radius-lg: 12px;
-  --shadow: 0 1px 2px rgba(45, 42, 53, 0.04), 0 2px 10px rgba(45, 42, 53, 0.05);
-  --shadow-lg: 0 8px 28px rgba(45, 42, 53, 0.08);
+  --shadow: 0 1px 2px rgba(30, 27, 46, 0.05), 0 2px 10px rgba(30, 27, 46, 0.06);
+  --shadow-lg: 0 8px 28px rgba(30, 27, 46, 0.09);
 
   --font-display: "Fraunces", Georgia, "Times New Roman", serif;
   --font-body: "IBM Plex Sans", "Noto Sans", "Noto Sans Devanagari", "Noto Sans Arabic",
@@ -413,7 +413,7 @@ textarea {
 .btn-primary {
   background: var(--accent);
   color: white;
-  box-shadow: 0 1px 2px rgba(61, 154, 120, 0.15);
+  box-shadow: 0 1px 2px rgba(0, 196, 154, 0.2);
 }
 
 .btn-primary:hover:not(:disabled) {
@@ -977,7 +977,7 @@ textarea {
   z-index: 100;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
-  box-shadow: 0 1px 3px rgba(45, 42, 53, 0.04);
+  box-shadow: 0 1px 3px rgba(30, 27, 46, 0.05);
 }
 
 .site-header-inner {
@@ -2005,8 +2005,8 @@ textarea {
   margin-top: 0.85rem;
   padding: 1rem 1.1rem;
   border-radius: 10px;
-  border: 1px solid var(--accent-border, rgba(61, 154, 120, 0.18));
-  background: linear-gradient(135deg, rgba(61, 154, 120, 0.06), rgba(124, 106, 224, 0.08));
+  border: 1px solid var(--accent-border, rgba(0, 196, 154, 0.25));
+  background: linear-gradient(135deg, rgba(0, 196, 154, 0.08), rgba(157, 46, 255, 0.1));
 }
 
 .upload-pro-gate-icon {
@@ -2017,8 +2017,8 @@ textarea {
   height: 2.25rem;
   margin-bottom: 0.65rem;
   border-radius: 999px;
-  background: rgba(61, 154, 120, 0.12);
-  color: var(--accent, #3d9a78);
+  background: rgba(0, 196, 154, 0.15);
+  color: var(--accent, #00c49a);
 }
 
 .upload-pro-gate-copy h3 {
@@ -2948,7 +2948,7 @@ textarea {
     position: fixed;
     inset: 3.5rem 0 0;
     border: none;
-    background: rgba(45, 42, 53, 0.35);
+    background: rgba(30, 27, 46, 0.35);
     z-index: 90;
   }
 

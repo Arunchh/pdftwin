@@ -88,33 +88,33 @@ Supabase auth uses the **PDF Twin** project with a `profiles` table for plan sta
 
 ## Visual Design
 
-PDFTwin uses a **Soft Spring** pastel palette — airy lilac-white surfaces with mint brand accents and a trio of category colors.
+PDFTwin uses a **Neon Pastel** palette — bright fluorescent pastels (mint, violet, coral) on a luminous white base.
 
 | Role | Token / value | Usage |
 |------|---------------|--------|
-| Page background | `--bg` (`#FAF8FC`) | Airy lilac-white base |
+| Page background | `--bg` (`#F5F8FF`) | Cool luminous white |
 | Surfaces | `--surface`, `--surface-muted` | Cards, panels, hero |
-| Primary brand | `--accent` (`#3D9A78`) | Buttons, links, logo mark |
-| Secondary accent | `--accent-secondary` (`#7C6AE0`) | Editorial highlights, organize category |
-| Convert category | Mint (`--sapphire-*`) | Convert & export tools |
-| Organize category | Lavender (`--amethyst-*`) | Merge, split, compare, rotate |
-| Protect category | Peach (`--emerald-*`) | Watermark, lock/unlock, compress |
+| Primary brand | `--accent` (`#00C49A`) | Buttons, links, logo mark |
+| Secondary accent | `--accent-secondary` (`#9D2EFF`) | Editorial highlights, organize category |
+| Convert category | Fluorescent mint (`--sapphire-*`) | Convert & export tools |
+| Organize category | Fluorescent violet (`--amethyst-*`) | Merge, split, compare, rotate |
+| Protect category | Fluorescent coral (`--emerald-*`) | Watermark, lock/unlock, compress |
 
 **Category color reference**
 
 | Category | Background | Accent | Text |
 |----------|------------|--------|------|
-| Convert | `#ECFDF5` | `#5CB896` | `#2D7A5E` |
-| Organize | `#F3F0FF` | `#7C6AE0` | `#5E4FC4` |
-| Protect | `#FFF4ED` | `#E08855` | `#C46D3A` |
+| Convert | `#DFFFF8` | `#00E5B4` | `#009973` |
+| Organize | `#F0E5FF` | `#9D2EFF` | `#7C00E5` |
+| Protect | `#FFE8DC` | `#FF5722` | `#E04412` |
 
 **Typography:** [Fraunces](https://fonts.google.com/specimen/Fraunces) for headings, [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans) for body text (loaded in `BaseLayout.astro`).
 
-**Brand assets:** Mint + cream twin-pages mark in `BrandLogo.tsx`, `public/favicon.svg`, `public/apple-touch-icon.svg`, and `public/og-image.svg`. Theme color is `#3d9a78`.
+**Brand assets:** Fluorescent mint + cream twin-pages mark in `BrandLogo.tsx`, `public/favicon.svg`, `public/apple-touch-icon.svg`, and `public/og-image.svg`. Theme color is `#00c49a`.
 
-Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names (`--sapphire-*`, `--amethyst-*`, `--emerald-*`) are retained for compatibility but map to the mint / lavender / peach palette.
+Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names (`--sapphire-*`, `--amethyst-*`, `--emerald-*`) are retained for compatibility but map to the fluorescent mint / violet / coral palette.
 
-**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (Convert, Organize, Protect), inspired by tool-directory sites but styled with PDFTwin’s mint palette and pastel category headers. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
+**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (Convert, Organize, Protect), inspired by tool-directory sites but styled with PDFTwin’s fluorescent mint palette and bright pastel category headers. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
 
 ## Prerequisites
 
