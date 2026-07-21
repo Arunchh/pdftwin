@@ -104,6 +104,8 @@ PDFTwin uses a **Paper & Ink** palette — warm editorial surfaces with forest-g
 
 Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names (`--sapphire-*`, `--amethyst-*`, `--emerald-*`) are retained for compatibility but map to the sage / peach / wheat palette.
 
+**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (Convert, Organize, Protect), inspired by tool-directory sites but styled with PDFTwin’s forest palette and pastel category headers. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
+
 ## Prerequisites
 
 - Python 3.10+
