@@ -20,5 +20,5 @@ const { toolId, title, description, activeToolLabel } = Astro.props;
 ---
 
 <BaseLayout title={title} description={description} activeToolLabel={activeToolLabel}>
-  <ToolWorkspace client:only="react" toolId={toolId} />
+  <ToolWorkspace client:load toolId={toolId} />
 </BaseLayout>

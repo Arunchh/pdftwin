@@ -1063,7 +1063,7 @@ textarea {
 }
 
 .active-tool-pill {
-  display: none;
+  display: inline-flex;
   font-size: 0.78rem;
   color: var(--text-muted);
   padding: 0.35rem 0.65rem;
