@@ -48,7 +48,7 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
   };
 
   return (
-    <section className="workspace site--focused" id="workspace">
+    <section className={`workspace site--focused workspace--${activeTool.category}`} id="workspace">
       <div className="section-heading workspace-heading">
         <h2>{activeTool.name}</h2>
         <p>{activeTool.description}</p>

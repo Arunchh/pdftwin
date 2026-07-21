@@ -20,7 +20,7 @@ export default function ToolGrid() {
       </div>
 
       {CATEGORY_ORDER.map((category) => (
-        <div key={category} className="tool-category">
+        <div key={category} className={`tool-category tool-category--${category}`}>
           <div className="tool-category-heading">
             <h3>{TOOL_CATEGORIES[category]}</h3>
             <p>{CATEGORY_HINTS[category]}</p>

@@ -3,9 +3,9 @@ import { formatFileLimit, FREE_FILE_LIMIT_MB } from "../../config/limits";
 import { BUSINESS_TAGLINE } from "../../config/formats";
 
 const HERO_STATS = [
-  { icon: Layers3, value: "7", label: "Business tools" },
-  { icon: Gauge, value: formatFileLimit(FREE_FILE_LIMIT_MB), label: "Free per file" },
-  { icon: Zap, value: "0", label: "Install required" },
+  { icon: Layers3, value: "7", label: "Business tools", tone: "sapphire" },
+  { icon: Gauge, value: formatFileLimit(FREE_FILE_LIMIT_MB), label: "Free per file", tone: "amethyst" },
+  { icon: Zap, value: "0", label: "Install required", tone: "emerald" },
 ] as const;
 
 export default function HeroSection() {
@@ -40,8 +40,8 @@ export default function HeroSection() {
       </div>
 
       <div className="hero-stats">
-        {HERO_STATS.map(({ icon: Icon, value, label }) => (
-          <div key={label} className="hero-stat-card">
+        {HERO_STATS.map(({ icon: Icon, value, label, tone }) => (
+          <div key={label} className={`hero-stat-card hero-stat-card--${tone}`}>
             <span className="hero-stat-icon">
               <Icon size={18} />
             </span>
