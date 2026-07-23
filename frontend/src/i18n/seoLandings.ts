@@ -1,6 +1,6 @@
 import type { ToolId } from "../config/tools";
 import type { Locale } from "./types";
-import { localizePath, stripLocalePrefix } from "./utils";
+import { localizePath, stripLocalePrefix, isLocalizablePath } from "./utils";
 
 export interface SeoLanding {
   slug: string;
@@ -683,10 +683,17 @@ export function seoHreflangAlternates(landing: SeoLanding): Array<{ locale: Loca
 }
 
 export function resolveLocaleSwitchPath(pathname: string, nextLocale: Locale): string {
-  const current = getSeoLandingByPath(pathname.replace(/\/+$/, "") || "/");
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+  const current = getSeoLandingByPath(normalized);
   if (current) {
     const target = getSeoLandingForTool(nextLocale, current.toolId);
     if (target) return seoLandingPath(target);
   }
-  return localizePath(stripLocalePrefix(pathname), nextLocale);
+
+  const base = stripLocalePrefix(normalized);
+  if (!isLocalizablePath(base)) {
+    return base;
+  }
+
+  return localizePath(base, nextLocale);
 }

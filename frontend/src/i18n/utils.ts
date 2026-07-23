@@ -24,16 +24,41 @@ export function getLocaleFromPathname(pathname: string): Locale {
 }
 
 export function stripLocalePrefix(pathname: string): string {
-  const match = pathname.match(LOCALE_PREFIX_RE);
-  if (!match) return pathname || "/";
-  const rest = pathname.slice(match[0].length - 1) || "/";
-  return rest.startsWith("/") ? rest : `/${rest}`;
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+
+  for (const locale of NON_DEFAULT_LOCALES) {
+    if (normalized === `/${locale}`) return "/";
+    if (normalized.startsWith(`/${locale}/`)) {
+      const rest = normalized.slice(`/${locale}`.length);
+      return rest.startsWith("/") ? rest : `/${rest}`;
+    }
+  }
+
+  return normalized;
+}
+
+const LOCALIZED_PREFIXES = ["/pricing", "/formats", "/tools", "/guides"];
+
+export function isLocalizablePath(pathname: string): boolean {
+  const base = stripLocalePrefix(pathname.replace(/\/+$/, "") || "/");
+  if (base === "/") return true;
+  return LOCALIZED_PREFIXES.some(
+    (prefix) => base === prefix || base.startsWith(`${prefix}/`)
+  );
 }
 
 export function localizePath(path: string, locale: Locale): string {
   const normalized = path.startsWith("/") ? path : `/${path}`;
-  const base = stripLocalePrefix(normalized);
-  if (locale === DEFAULT_LOCALE) return base;
+  const base = stripLocalePrefix(normalized.replace(/\/+$/, "") || "/");
+
+  if (locale === DEFAULT_LOCALE) {
+    return base;
+  }
+
+  if (!isLocalizablePath(base)) {
+    return base;
+  }
+
   if (base === "/") return `/${locale}`;
   return `/${locale}${base}`;
 }
