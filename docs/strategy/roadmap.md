@@ -27,13 +27,15 @@ Priority changes from competitive review:
 - [x] **Merge batch gate** — free: up to 5 PDFs; 6+ requires Pro (`MergeBatchGate`)  
 - [x] i18n tool names for new tools (EN/ES/FR/NL)  
 - [x] Pricing/FAQ copy updated for merge limit and tool count  
+- [x] **SEO landings for new 6 tools** — rotate, extract, sign, OCR, images→PDF, remove pages (24 pages; **48 total** with first batch) — see [i18n doc](../product/i18n.md#seo-landing-pages-48-total)
 
 ### Still open
 
 | Item | Priority | Notes |
 |------|----------|-------|
 | ~~SEO landing content (first 6 tools)~~ | ~~High~~ | **Done** — see [i18n doc](../product/i18n.md) |
-| SEO landings for **new 6 tools** | High | rotate, extract, sign, OCR, images→PDF, remove pages |
+| ~~SEO landings for new 6 tools~~ | ~~High~~ | **Done** — rotate, extract, sign, OCR, images→PDF, remove pages |
+| SEO landings for **remaining 6 tools** | Medium | PDF→JPG, PDF→text, image convert/resize, watermark, protect |
 | Translate **tool panel UI** | High | Panels still English-only — see [i18n doc](../product/i18n.md#next-phases) |
 | “PDFTwin vs iLovePDF” comparison page | High | Capture frustrated searchers |
 | Product Hunt / Peerlist launch | Medium | One spike + backlinks |

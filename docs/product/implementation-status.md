@@ -163,13 +163,42 @@ Still upload to FastAPI (in-memory, discarded):
 
 ---
 
+## SEO landing pages (48 total)
+
+Long-tail guides in [`frontend/src/i18n/seoLandings.ts`](../../frontend/src/i18n/seoLandings.ts). English at `/guides/{slug}`; ES/FR/NL at `/{locale}/{slug}`. All URLs in [`frontend/public/sitemap.xml`](../../frontend/public/sitemap.xml).
+
+| Tool ID | EN slug | Tool route |
+|---------|---------|------------|
+| `arrange-merge` | `merge-pdf-free` | `/tools/merge` |
+| `split` | `split-pdf-online` | `/tools/split` |
+| `compress-pdf` | `compress-pdf-free` | `/tools/compress` |
+| `convert-extract` | `pdf-to-word-free` | `/tools/convert` |
+| `pdf-compare` | `compare-pdf-online` | `/tools/compare` |
+| `word-to-pdf` | `word-to-pdf-free` | `/tools/word-to-pdf` |
+| `rotate-pdf` | `rotate-pdf-online` | `/tools/rotate` |
+| `extract-pages` | `extract-pdf-pages` | `/tools/extract` |
+| `remove-pages` | `remove-pdf-pages` | `/tools/remove-pages` |
+| `sign-pdf` | `sign-pdf-online` | `/tools/sign` |
+| `images-to-pdf` | `images-to-pdf-free` | `/tools/images-to-pdf` |
+| `ocr-pdf` | `ocr-pdf-online` | `/tools/ocr` |
+
+**Coverage:** 12 tools × 4 locales = **48 pages**. Static build generates 137 total pages (was 113 before 2026-07-23 batch).
+
+**Not yet covered:** `pdf-to-jpg`, `pdf-to-text`, `image-convert`, `image-resize`, `watermark-pdf`, `lock-unlock` (6 tools × 4 locales = 24 potential pages).
+
+**Copy notes:** Client-side landings (rotate, remove, sign, images→PDF, OCR) emphasize browser processing and privacy. Extract pages landing notes secure server processing and 50 MB free limit. Sign landing includes e-signature disclaimer.
+
+See [i18n doc — SEO landings](./i18n.md#seo-landing-pages-48-total).
+
+---
+
 ## Deferred (see [roadmap](../strategy/roadmap.md))
 
 - Cloud workspace sync (Supabase Storage)  
 - Business tier  
 - Annual Pro plan  
 - Move extract pages, watermark, lock/unlock client-side  
-- SEO landings for new tools (rotate, extract, sign, OCR, etc.)  
+- SEO landings for remaining 6 tools (PDF→JPG, PDF→text, images, resize, watermark, protect)  
 - “PDFTwin vs iLovePDF” comparison page  
 - Tool panel UI translation (Phase 1.5 i18n)  
 - Priority queue differentiation  
@@ -195,7 +224,7 @@ PDF → text, OCR (Tesseract.js)           Extract pages, extract images
 
 English is the default at `/`. Spanish, French, and Dutch use prefixed routes (`/es/`, `/fr/`, `/nl/`).
 
-- **Translated:** home, nav, footer, pricing, tool names/descriptions in grid, 24 SEO landings (6 tools × 4 locales)  
+- **Translated:** home, nav, footer, pricing, tool names/descriptions in grid, **48 SEO landings** (12 tools × 4 locales)  
 - **Not yet translated:** in-tool panel UI, login/account/privacy/terms  
 
 See [docs/product/i18n.md](../product/i18n.md).

@@ -27,6 +27,8 @@ Living docs for product strategy, competitive research, and implementation statu
 | Merge batch gate (5 free, 6+ Pro) | [Implementation status](./product/implementation-status.md#merge-batch-gate-5--pro) |
 | Client-side tools (10) | [Implementation status](./product/implementation-status.md#client-side-tools) |
 | New tools: OCR, sign, images→PDF | [Roadmap — Phase 1.5 shipped](./strategy/roadmap.md#shipped-2026-07-23) |
+| SEO landing pages (48 total) | [i18n — SEO landings](./product/i18n.md#seo-landing-pages-48-total) |
+| SEO slug inventory (12 tools × 4 locales) | [Implementation status — SEO landings](./product/implementation-status.md#seo-landing-pages-48-total) |
 | Cloud workspace (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
 | Business tier (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
 | Revenue target ($3–5K/mo) | [Monetization plan](./strategy/monetization-plan.md#revenue-target) |
