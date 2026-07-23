@@ -27,17 +27,23 @@ Priority changes from competitive review:
 - [x] **Merge batch gate** — free: up to 5 PDFs; 6+ requires Pro (`MergeBatchGate`)  
 - [x] i18n tool names for new tools (EN/ES/FR/NL)  
 - [x] Pricing/FAQ copy updated for merge limit and tool count  
-- [x] **SEO landings for new 6 tools** — rotate, extract, sign, OCR, images→PDF, remove pages (24 pages; **48 total** with first batch) — see [i18n doc](../product/i18n.md#seo-landing-pages-48-total)
+- [x] **SEO landings batch 1** — first 6 tools (24 pages)  
+- [x] **SEO landings batch 2** — rotate, extract, remove, sign, images→PDF, OCR (24 pages)  
+- [x] **SEO landings batch 3** — PDF→JPG, PDF→text, image convert/resize, watermark, protect (24 pages) → **72 total**  
+- [x] **Comparison page** — `/compare/ilovepdf` vs iLovePDF, Smallpdf, Sejda, PDF24, ihatepdf  
+- [x] **Resources page** — `/resources` hybrid architecture & privacy  
+- [x] **FAQ hub** — `/faq` with 28 categorized questions + schema  
+- [x] **Blog** — `/blog` with 6 starter posts (product + long-form how-tos)  
 
 ### Still open
 
 | Item | Priority | Notes |
 |------|----------|-------|
-| ~~SEO landing content (first 6 tools)~~ | ~~High~~ | **Done** — see [i18n doc](../product/i18n.md) |
-| ~~SEO landings for new 6 tools~~ | ~~High~~ | **Done** — rotate, extract, sign, OCR, images→PDF, remove pages |
-| SEO landings for **remaining 6 tools** | Medium | PDF→JPG, PDF→text, image convert/resize, watermark, protect |
+| ~~SEO landing content (all 18 tools)~~ | ~~High~~ | **Done** — 72 pages — see [i18n doc](../product/i18n.md) |
+| ~~Comparison page~~ | ~~High~~ | **Done** — `/compare/ilovepdf` |
+| ~~FAQ hub + blog starter content~~ | ~~High~~ | **Done** — `/faq`, `/blog` |
 | Translate **tool panel UI** | High | Panels still English-only — see [i18n doc](../product/i18n.md#next-phases) |
-| “PDFTwin vs iLovePDF” comparison page | High | Capture frustrated searchers |
+| Localize growth pages (compare, resources, FAQ, blog) | Medium | English only today |
 | Product Hunt / Peerlist launch | Medium | One spike + backlinks |
 | Differentiate priority queue | Low | Only if free users see wait times |
 | Annual billing ($79/yr) | Medium | Needs PayPal plan |

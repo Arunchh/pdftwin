@@ -1,0 +1,9 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import ResourcesPage from "../components/content/ResourcesPage";
+import { RESOURCES_META } from "../content/resources";
+---
+
+<BaseLayout title={RESOURCES_META.title} description={RESOURCES_META.description}>
+  <ResourcesPage client:load />
+</BaseLayout>

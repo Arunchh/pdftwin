@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { SUBSCRIPTION_FAQ } from "../config/faq";
+import { ALL_FAQ } from "../config/faq";
 import { BUSINESS_TAGLINE } from "../config/formats";
 import { formatFileLimit, FREE_FILE_LIMIT_MB } from "../config/limits";
 import { TOOL_COUNT } from "../config/tools";
@@ -59,8 +59,9 @@ const structuredData = {
     },
     {
       "@type": "FAQPage",
-      "@id": `${SITE_URL}/#faq`,
-      mainEntity: SUBSCRIPTION_FAQ.map((item) => ({
+      "@id": `${SITE_URL}/faq#faq`,
+      url: `${SITE_URL}/faq`,
+      mainEntity: ALL_FAQ.map((item) => ({
         "@type": "Question",
         name: item.question,
         acceptedAnswer: {

@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import FaqPage from "../components/content/FaqPage";
+import { ALL_FAQ } from "../config/faq";
+---
+
+<BaseLayout
+  title="FAQ — PDF Tools, Privacy & Pro Billing | PDFTwin"
+  description="Answers about PDFTwin privacy, free limits, client vs server tools, Compare PDF, OCR, and Pro subscription billing."
+>
+  <FaqPage client:load />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: ALL_FAQ.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  })} />
+</BaseLayout>

@@ -71,7 +71,9 @@ From ihatepdf’s public playbook:
 - AI tool directory listings  
 - Long-tail keywords: “merge PDF no watermark”, “compare two PDFs free”
 
-See [roadmap](./roadmap.md) for phased rollout.
+**Shipped (2026-07-23):** 72 locale SEO landings (18 tools × 4 langs), `/compare/ilovepdf`, `/resources`, `/faq`, `/blog` with 6 starter posts. See [implementation status](../product/implementation-status.md#growth--help-content-english--shipped-2026-07-23).
+
+See [roadmap](./roadmap.md) for remaining items (Product Hunt, panel i18n).
 
 ---
 

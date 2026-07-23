@@ -97,6 +97,9 @@ export interface Messages {
     privacy: string;
     terms: string;
     faq: string;
+    resources: string;
+    blog: string;
+    compare: string;
     upgradePro: string;
     note: string;
     tagline: string;

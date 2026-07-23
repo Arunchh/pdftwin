@@ -23,7 +23,10 @@ export default function SiteFooter() {
           <a href={localizePath("/account")}>{messages.footer.account}</a>
           <a href={localizePath("/privacy")}>{messages.footer.privacy}</a>
           <a href={localizePath("/terms")}>{messages.footer.terms}</a>
-          <a href={`${localizePath("/pricing")}#faq`}>{messages.footer.faq}</a>
+          <a href="/faq">{messages.footer.faq}</a>
+          <a href="/resources">{messages.footer.resources}</a>
+          <a href="/blog">{messages.footer.blog}</a>
+          <a href="/compare/ilovepdf">{messages.footer.compare}</a>
           <button type="button" className="site-footer-link-btn" onClick={openCheckout}>
             {messages.footer.upgradePro}
           </button>

@@ -163,7 +163,7 @@ Still upload to FastAPI (in-memory, discarded):
 
 ---
 
-## SEO landing pages (48 total)
+## SEO landing pages (72 total — complete)
 
 Long-tail guides in [`frontend/src/i18n/seoLandings.ts`](../../frontend/src/i18n/seoLandings.ts). English at `/guides/{slug}`; ES/FR/NL at `/{locale}/{slug}`. All URLs in [`frontend/public/sitemap.xml`](../../frontend/public/sitemap.xml).
 
@@ -181,14 +181,32 @@ Long-tail guides in [`frontend/src/i18n/seoLandings.ts`](../../frontend/src/i18n
 | `sign-pdf` | `sign-pdf-online` | `/tools/sign` |
 | `images-to-pdf` | `images-to-pdf-free` | `/tools/images-to-pdf` |
 | `ocr-pdf` | `ocr-pdf-online` | `/tools/ocr` |
+| `pdf-to-jpg` | `pdf-to-jpg-free` | `/tools/pdf-to-jpg` |
+| `pdf-to-text` | `pdf-to-text-free` | `/tools/pdf-to-text` |
+| `image-convert` | `convert-images-online` | `/tools/images` |
+| `image-resize` | `resize-images-online` | `/tools/resize` |
+| `watermark-pdf` | `watermark-pdf-free` | `/tools/watermark` |
+| `lock-unlock` | `protect-pdf-password` | `/tools/protect` |
 
-**Coverage:** 12 tools × 4 locales = **48 pages**. Static build generates 137 total pages (was 113 before 2026-07-23 batch).
+**Coverage:** 18 tools × 4 locales = **72 pages**. Static build generates **171 total pages** (as of 2026-07-23 growth batch).
 
-**Not yet covered:** `pdf-to-jpg`, `pdf-to-text`, `image-convert`, `image-resize`, `watermark-pdf`, `lock-unlock` (6 tools × 4 locales = 24 potential pages).
+Full slug inventory (all locales): [i18n doc — SEO landings](./i18n.md#seo-landing-pages-72-total--complete).
 
-**Copy notes:** Client-side landings (rotate, remove, sign, images→PDF, OCR) emphasize browser processing and privacy. Extract pages landing notes secure server processing and 50 MB free limit. Sign landing includes e-signature disclaimer.
+---
 
-See [i18n doc — SEO landings](./i18n.md#seo-landing-pages-48-total).
+## Growth & help content (English — shipped 2026-07-23)
+
+Competitive-inspired content for traffic and trust. English-only routes (not yet mirrored under `/es/` etc.).
+
+| Page | Route | Content source |
+|------|-------|----------------|
+| Comparison | `/compare/ilovepdf` | [`frontend/src/content/comparison.ts`](../../frontend/src/content/comparison.ts) — PDFTwin vs iLovePDF, Smallpdf, Sejda, PDF24, ihatepdf |
+| How it works | `/resources` | [`frontend/src/content/resources.ts`](../../frontend/src/content/resources.ts) — hybrid architecture, privacy, limits |
+| FAQ hub | `/faq` | [`frontend/src/config/faq.ts`](../../frontend/src/config/faq.ts) — 28 questions in 5 categories + `FAQPage` schema |
+| Blog index | `/blog` | [`frontend/src/content/blogPosts.ts`](../../frontend/src/content/blogPosts.ts) |
+| Blog posts (6) | `/blog/{slug}` | 3 product guides + 3 long-form how-tos (compare, merge, Word, compress, sign, client vs server) |
+
+Footer links (all locales): FAQ, How it works, Blog, Compare — see [`SiteFooter.tsx`](../../frontend/src/components/layout/SiteFooter.tsx).
 
 ---
 
@@ -198,9 +216,9 @@ See [i18n doc — SEO landings](./i18n.md#seo-landing-pages-48-total).
 - Business tier  
 - Annual Pro plan  
 - Move extract pages, watermark, lock/unlock client-side  
-- SEO landings for remaining 6 tools (PDF→JPG, PDF→text, images, resize, watermark, protect)  
-- “PDFTwin vs iLovePDF” comparison page  
+- Localize comparison, resources, blog, FAQ (EN only today)  
 - Tool panel UI translation (Phase 1.5 i18n)  
+- Product Hunt / Peerlist launch  
 - Priority queue differentiation  
 - Client-side compress (Ghostscript WASM or light preset)
 
@@ -224,8 +242,9 @@ PDF → text, OCR (Tesseract.js)           Extract pages, extract images
 
 English is the default at `/`. Spanish, French, and Dutch use prefixed routes (`/es/`, `/fr/`, `/nl/`).
 
-- **Translated:** home, nav, footer, pricing, tool names/descriptions in grid, **48 SEO landings** (12 tools × 4 locales)  
-- **Not yet translated:** in-tool panel UI, login/account/privacy/terms  
+- **Translated:** home, nav, footer (incl. growth links), pricing, tool names/descriptions in grid, **72 SEO landings** (18 tools × 4 locales)  
+- **English only:** `/compare/ilovepdf`, `/resources`, `/faq`, `/blog/*`  
+- **Not yet translated:** in-tool panel UI, login/account/privacy/terms, growth content pages  
 
 See [docs/product/i18n.md](../product/i18n.md).
 

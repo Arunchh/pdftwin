@@ -1,0 +1,21 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ComparisonPage from "../../components/content/ComparisonPage";
+import { COMPARISON_FAQ, COMPARISON_META } from "../../content/comparison";
+---
+
+<BaseLayout
+  title={COMPARISON_META.title}
+  description={COMPARISON_META.description}
+>
+  <ComparisonPage client:load />
+  <script type="application/ld+json" is:inline set:html={JSON.stringify({
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: COMPARISON_FAQ.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: { "@type": "Answer", text: item.answer },
+    })),
+  })} />
+</BaseLayout>
