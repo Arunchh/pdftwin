@@ -1,4 +1,4 @@
-import { formatFileLimit, FREE_DAILY_DOC_CONVERT_LIMIT, FREE_FILE_LIMIT_MB, PRO_FILE_LIMIT_MB } from "../../config/limits";
+import { formatFileLimit, FREE_DAILY_DOC_CONVERT_LIMIT, FREE_FILE_LIMIT_MB, FREE_MERGE_FILE_LIMIT, PRO_FILE_LIMIT_MB } from "../../config/limits";
 import type { Messages } from "../types";
 
 const freeLimit = formatFileLimit(FREE_FILE_LIMIT_MB);
@@ -12,7 +12,7 @@ export const en: Messages = {
       "PDFTwin is the one-stop file conversion workspace for businesses. Convert PDFs, images, merge documents, compare revisions, and protect files in your browser.",
     pricingTitle: "Pricing | PDFTwin",
     pricingDescription:
-      "Start free with all twelve business file tools. Upgrade to PDFTwin Pro for larger files and unlimited PDF exports.",
+      "Start free with all business file tools. Upgrade to PDFTwin Pro for larger files and unlimited PDF exports.",
     formatsTitle: "Supported Formats | PDFTwin",
     formatsDescription:
       "See every document and image format PDFTwin converts for business teams — PDF, Word, Excel, WebP, and more.",
@@ -125,10 +125,11 @@ export const en: Messages = {
         description: "Everything a small team needs to convert, organize, and protect business files.",
         cta: "Start for free",
         features: [
-          "All 12 conversion and PDF tools",
+          "All conversion and PDF tools",
           `Up to ${freeLimit} per file`,
+          `Merge up to ${FREE_MERGE_FILE_LIMIT} PDFs at once`,
           `${FREE_DAILY_DOC_CONVERT_LIMIT} PDF → Word or Excel exports per day`,
-          "Merge, split & rotate on your device — no upload",
+          "Client-side tools run on your device — no upload",
           "No watermark, no account required",
         ],
       },
@@ -139,6 +140,7 @@ export const en: Messages = {
         features: [
           "Everything in Free",
           `Up to ${proLimit} per file`,
+          "Unlimited merge batch size",
           "Unlimited PDF → Word & Excel exports",
           "Priority processing queue",
           "Batch conversions & saved presets",
@@ -149,7 +151,7 @@ export const en: Messages = {
       {
         question: "Which tools run on my device vs. your servers?",
         answer:
-          "Merge, split, rotate, and compare run entirely in your browser — files never leave your device. PDF → Word, PDF → Excel, compress, watermark, lock/unlock, and image tools use secure server processing and are discarded immediately after.",
+          "Merge, split, rotate, compare, sign, images-to-PDF, PDF-to-image, text extract, and OCR run entirely in your browser — files never leave your device. PDF → Word, PDF → Excel, compress, watermark, lock/unlock, and image convert/resize use secure server processing and are discarded immediately after.",
       },
       {
         question: "What happens when I hit the daily Word/Excel export limit?",
@@ -186,6 +188,26 @@ export const en: Messages = {
       shortLabel: "Images",
       description: "Convert PNG, JPG, GIF, and BMP files to WebP, PNG, or JPEG in one step",
     },
+    "images-to-pdf": {
+      name: "Images to PDF",
+      shortLabel: "Img→PDF",
+      description: "Combine JPG, PNG, and other images into one share-ready PDF document",
+    },
+    "pdf-to-jpg": {
+      name: "PDF to JPG",
+      shortLabel: "PDF→JPG",
+      description: "Export PDF pages as JPG or PNG images for slides, email, and social posts",
+    },
+    "pdf-to-text": {
+      name: "PDF to Text",
+      shortLabel: "PDF→Text",
+      description: "Extract selectable text from PDFs into an editable .txt file",
+    },
+    "ocr-pdf": {
+      name: "OCR Text Extract",
+      shortLabel: "OCR",
+      description: "Turn scanned PDFs and photos into editable text with optical character recognition",
+    },
     "compress-pdf": {
       name: "Compress PDF",
       shortLabel: "Compress",
@@ -221,6 +243,11 @@ export const en: Messages = {
       shortLabel: "Extract",
       description: "Pull only the pages you need into a new PDF for sharing or approval",
     },
+    "remove-pages": {
+      name: "Remove Pages",
+      shortLabel: "Remove",
+      description: "Delete unwanted pages from a PDF without splitting the whole file",
+    },
     "rotate-pdf": {
       name: "Rotate Pages",
       shortLabel: "Rotate",
@@ -235,6 +262,11 @@ export const en: Messages = {
       name: "Lock & Unlock",
       shortLabel: "Protect",
       description: "Add password protection to confidential files or remove restrictions securely",
+    },
+    "sign-pdf": {
+      name: "Sign PDF",
+      shortLabel: "Sign",
+      description: "Add your handwritten or uploaded signature to PDF pages",
     },
   },
   seoLanding: {

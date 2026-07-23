@@ -1,15 +1,21 @@
 import type { LucideIcon } from "lucide-react";
 import {
+  AlignLeft,
+  BookImage,
   Combine,
   Columns2,
+  FileMinus,
   FileOutput,
   FileSpreadsheet,
   FileText,
   Image,
+  ImageDown,
   Layers,
   LockKeyhole,
   Maximize2,
+  PenLine,
   RotateCw,
+  ScanText,
   Shrink,
   Stamp,
 } from "lucide-react";
@@ -20,13 +26,19 @@ export type ToolId =
   | "image-resize"
   | "compress-pdf"
   | "word-to-pdf"
+  | "images-to-pdf"
+  | "pdf-to-jpg"
+  | "pdf-to-text"
+  | "ocr-pdf"
   | "arrange-merge"
   | "split"
   | "extract-pages"
+  | "remove-pages"
   | "rotate-pdf"
   | "pdf-compare"
   | "watermark-pdf"
-  | "lock-unlock";
+  | "lock-unlock"
+  | "sign-pdf";
 
 export type ToolCategory = "convert" | "organize" | "security";
 
@@ -42,6 +54,8 @@ export interface ToolDefinition {
   /** URL segment under /tools/ */
   path: string;
 }
+
+export const TOOL_COUNT = 18;
 
 export const TOOL_CATEGORIES: Record<ToolCategory, string> = {
   convert: "Convert & Export",
@@ -69,6 +83,46 @@ export const TOOLS: ToolDefinition[] = [
     icon: Image,
     hash: "images",
     path: "images",
+  },
+  {
+    id: "images-to-pdf",
+    name: "Images to PDF",
+    shortLabel: "Img→PDF",
+    description: "Combine JPG, PNG, and other images into one share-ready PDF document",
+    category: "convert",
+    icon: BookImage,
+    hash: "images-to-pdf",
+    path: "images-to-pdf",
+  },
+  {
+    id: "pdf-to-jpg",
+    name: "PDF to JPG",
+    shortLabel: "PDF→JPG",
+    description: "Export PDF pages as JPG or PNG images for slides, email, and social posts",
+    category: "convert",
+    icon: ImageDown,
+    hash: "pdf-to-jpg",
+    path: "pdf-to-jpg",
+  },
+  {
+    id: "pdf-to-text",
+    name: "PDF to Text",
+    shortLabel: "PDF→Text",
+    description: "Extract selectable text from PDFs into an editable .txt file",
+    category: "convert",
+    icon: AlignLeft,
+    hash: "pdf-to-text",
+    path: "pdf-to-text",
+  },
+  {
+    id: "ocr-pdf",
+    name: "OCR Text Extract",
+    shortLabel: "OCR",
+    description: "Turn scanned PDFs and photos into editable text with optical character recognition",
+    category: "convert",
+    icon: ScanText,
+    hash: "ocr",
+    path: "ocr",
   },
   {
     id: "compress-pdf",
@@ -141,6 +195,16 @@ export const TOOLS: ToolDefinition[] = [
     path: "extract",
   },
   {
+    id: "remove-pages",
+    name: "Remove Pages",
+    shortLabel: "Remove",
+    description: "Delete unwanted pages from a PDF without splitting the whole file",
+    category: "organize",
+    icon: FileMinus,
+    hash: "remove-pages",
+    path: "remove-pages",
+  },
+  {
     id: "rotate-pdf",
     name: "Rotate Pages",
     shortLabel: "Rotate",
@@ -169,6 +233,16 @@ export const TOOLS: ToolDefinition[] = [
     icon: LockKeyhole,
     hash: "protect",
     path: "protect",
+  },
+  {
+    id: "sign-pdf",
+    name: "Sign PDF",
+    shortLabel: "Sign",
+    description: "Add your handwritten or uploaded signature to PDF pages",
+    category: "security",
+    icon: PenLine,
+    hash: "sign",
+    path: "sign",
   },
 ];
 

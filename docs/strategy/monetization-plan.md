@@ -28,11 +28,12 @@ ihatepdf reached ~65K users in 6 months with **$0 revenue**. We trade some pure-
 Designed to beat iLovePDF/Smallpdf on trust:
 
 - **No watermarks** on any output  
-- **No daily limits** on merge, split, rotate, compare (client-side)  
+- **No daily limits** on client-side tools (merge, split, rotate, compare, sign, OCR, etc.)  
 - **No account** required for basic use  
 - **50 MB** per file ([limits.ts](../../frontend/src/config/limits.ts))  
 - **3 PDF → Word/Excel exports per day** (server-enforced)  
-- All 12 tools accessible  
+- **Merge up to 5 PDFs** at once ([`FREE_MERGE_FILE_LIMIT`](../../frontend/src/config/limits.ts))  
+- All **18 tools** accessible  
 
 ### Pro tier ($9/month)
 
@@ -42,6 +43,7 @@ Pay for **time, volume, and server-heavy work**:
 |---------|--------|
 | **200 MB** per file | ✅ Live |
 | **Unlimited** PDF → Word & Excel | ✅ Live |
+| **Unlimited merge batch size** (6+ PDFs) | ✅ Live |
 | Priority processing queue | 🔜 Marketing copy; queue not differentiated yet |
 | Batch conversions & presets | 🔜 Planned |
 | Cloud workspace sync | ⏸ Deferred — see [roadmap](./roadmap.md) |
@@ -62,7 +64,7 @@ Upgrade moments — never block mid-download or watermark:
 
 1. File **> 50 MB** → Pro supports up to 200 MB (`UploadProGate`)  
 2. **4th Word/Excel export** of the day → `ConvertLimitGate`  
-3. *(Future)* Batch merge 5+ files → Pro  
+3. **6th PDF in merge queue** → `MergeBatchGate` (free allows 5)  
 4. *(Future)* Cloud sync across devices → Pro  
 
 ---
@@ -71,12 +73,14 @@ Upgrade moments — never block mid-download or watermark:
 
 | Tool type | Processing | Free cost to us |
 |-----------|------------|-----------------|
-| Merge, split, rotate, compare | Browser (pdf-lib / PDF.js) | ~$0 |
+| Merge, split, rotate, compare, sign, remove pages | Browser (pdf-lib / PDF.js) | ~$0 |
+| Images→PDF, PDF→JPG, PDF→text | Browser (pdf-lib / PDF.js) | ~$0 |
+| OCR | Browser (Tesseract.js WASM) | ~$0 (user’s CPU) |
 | PDF → Word/Excel | Python serverless | High — **daily cap** |
 | Compress, watermark, lock | Python serverless | Medium — file size gate |
-| Image convert/resize | Python serverless | Medium |
+| Image convert/resize, extract pages | Python serverless | Medium |
 
-Moving organize tools client-side reduces COGS as traffic grows.
+New client-side tools (2026-07-23) expand the zero-COGS surface without watermarks. Server tools remain the Pro value anchor for layout-heavy conversion.
 
 ---
 
@@ -95,6 +99,7 @@ Moving organize tools client-side reduces COGS as traffic grows.
 | Organic clicks/day | 50–100 | 500+ |
 | Free → Pro conversion | — | 0.5–1.5% |
 | Word/Excel exports/day (free) | — | Monitor cap hit rate |
+| Merge batch gate hits (6+ PDFs) | — | Monitor Pro upgrade rate |
 | Client vs server tool usage | — | Client should dominate sessions |
 
 ---

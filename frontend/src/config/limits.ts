@@ -4,6 +4,9 @@ export const PRO_FILE_LIMIT_MB = 200;
 /** Free-plan PDF → Word / Excel exports per calendar day (server-enforced). */
 export const FREE_DAILY_DOC_CONVERT_LIMIT = 3;
 
+/** Free-plan merge: up to this many PDFs per merge. More requires Pro. */
+export const FREE_MERGE_FILE_LIMIT = 5;
+
 export const FREE_FILE_LIMIT_BYTES = FREE_FILE_LIMIT_MB * 1024 * 1024;
 export const PRO_FILE_LIMIT_BYTES = PRO_FILE_LIMIT_MB * 1024 * 1024;
 

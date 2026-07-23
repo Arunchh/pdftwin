@@ -1,6 +1,6 @@
 # PDFTwin
 
-**PDFTwin** is a multi-page business file conversion workspace. Convert PDFs and images, compare documents side by side, merge and split files, compress and rotate PDFs, and protect confidential documents — all in the browser with no install.
+**PDFTwin** is a multi-page business file conversion workspace — **18 tools** for converting PDFs and images, comparing documents, merging and splitting files, signing and protecting documents, and extracting text — all in the browser with no install.
 
 Live site: [pdftwin.com](https://pdftwin.com)
 
@@ -13,22 +13,28 @@ PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`
 ## Features
 
 ### Convert & Export
-- **Document conversion** — PDF to Word (.docx) or Excel (.xlsx); extract embedded images as WebP, PNG, or JPEG
-- **Word to PDF** — Convert DOCX proposals and contracts into share-ready PDFs
-- **Image conversion** — PNG, JPG, WebP, GIF, BMP, TIFF → WebP, PNG, or JPEG
-- **Resize images** — Shrink photos and brand assets with quality and dimension controls
-- **Compress PDF** — Reduce file size with quality presets
+- **Document conversion** — PDF to Word (.docx) or Excel (.xlsx); extract embedded images as WebP, PNG, or JPEG *(server)*
+- **Word to PDF** — Convert DOCX proposals and contracts into share-ready PDFs *(server)*
+- **Image conversion** — PNG, JPG, WebP, GIF, BMP, TIFF → WebP, PNG, or JPEG *(server)*
+- **Images to PDF** — Combine JPG, PNG, and other images into one PDF *(client-side)*
+- **PDF to JPG/PNG** — Export PDF pages as image files; multi-page downloads as ZIP *(client-side)*
+- **PDF to Text** — Extract selectable text to a `.txt` file *(client-side)*
+- **OCR text extract** — Turn scanned PDFs and photos into editable text with Tesseract.js *(client-side)*
+- **Resize images** — Shrink photos and brand assets with quality and dimension controls *(server)*
+- **Compress PDF** — Reduce file size with quality presets *(server)*
 
 ### Organize Documents
-- **Compare PDFs** — Side-by-side viewer with linked scroll and linked/independent zoom (client-side, powered by PDF.js)
-- **Merge & arrange** — Combine multiple PDFs and reorder pages before export
-- **Split PDF** — Split by page ranges (e.g. `1-3, 5-7`)
-- **Extract pages** — Pull selected pages into a new PDF
-- **Rotate PDF** — Rotate all pages or selected pages by 90°, 180°, or 270°
+- **Compare PDFs** — Side-by-side viewer with linked scroll and linked/independent zoom *(client-side, PDF.js)*
+- **Merge & arrange** — Combine multiple PDFs and reorder pages; free tier merges up to **5 PDFs** at once *(client-side)*
+- **Split PDF** — Split by page ranges (e.g. `1-3, 5-7`) *(client-side)*
+- **Extract pages** — Pull selected pages into a new PDF *(server)*
+- **Remove pages** — Delete unwanted pages from a PDF *(client-side)*
+- **Rotate PDF** — Rotate all pages or selected pages by 90°, 180°, or 270° *(client-side)*
 
 ### Protect Files
-- **Watermark PDF** — Add confidential or draft watermarks across every page
-- **Lock & unlock** — Add password protection or remove restrictions when permitted
+- **Watermark PDF** — Add confidential or draft watermarks across every page *(server)*
+- **Lock & unlock** — Add password protection or remove restrictions when permitted *(server)*
+- **Sign PDF** — Draw a signature or upload a PNG and place it on selected pages *(client-side)*
 
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
@@ -52,6 +58,10 @@ PDFTwin is **not a single-page app**. It uses **Astro** to pre-render real URLs;
 | `/terms` | Terms of use |
 | `/tools/convert` | Document conversion |
 | `/tools/images` | Image conversion |
+| `/tools/images-to-pdf` | Images to PDF |
+| `/tools/pdf-to-jpg` | PDF to JPG/PNG |
+| `/tools/pdf-to-text` | PDF to text |
+| `/tools/ocr` | OCR text extract |
 | `/tools/resize` | Resize & compress images |
 | `/tools/word-to-pdf` | Word to PDF |
 | `/tools/compress` | Compress PDF |
@@ -59,9 +69,11 @@ PDFTwin is **not a single-page app**. It uses **Astro** to pre-render real URLs;
 | `/tools/merge` | Merge & arrange |
 | `/tools/split` | Split PDF |
 | `/tools/extract` | Extract pages |
+| `/tools/remove-pages` | Remove pages |
 | `/tools/rotate` | Rotate PDF pages |
 | `/tools/watermark` | Watermark PDF |
 | `/tools/protect` | Lock & unlock |
+| `/tools/sign` | Sign PDF |
 
 Legacy hash URLs (`#convert`, `#merge`, etc.) redirect to the matching path automatically.
 
@@ -84,11 +96,11 @@ Environment variables:
 | `VITE_SUPABASE_URL` | Supabase project URL | Required when `VITE_AUTH_PROVIDER=supabase` |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon key | Required when `VITE_AUTH_PROVIDER=supabase` |
 
-Supabase auth uses the **PDF Twin** project with a `profiles` table for plan state (`free` / `pro`). Free users can upload up to **50 MB** without signing in; larger files require an account and **Pro** ($9/month). Free users get **3 PDF → Word/Excel exports per day**; Pro is unlimited.
+Supabase auth uses the **PDF Twin** project with a `profiles` table for plan state (`free` / `pro`). Free users can upload up to **50 MB** without signing in; larger files require an account and **Pro** ($9/month). Free users get **3 PDF → Word/Excel exports per day** and can merge up to **5 PDFs** at once; Pro removes both caps.
 
 ## Tech Stack
 
-- **Frontend:** Astro 5 + React 19 (islands) + TypeScript + PDF.js + IndexedDB
+- **Frontend:** Astro 5 + React 19 (islands) + TypeScript + PDF.js + pdf-lib + Tesseract.js + IndexedDB
 - **Backend:** Python FastAPI (Vercel serverless)
 - **Libraries:** pypdf, pdf2docx, pdfplumber, openpyxl, PyMuPDF, Pillow
 
@@ -113,6 +125,18 @@ PDFTwin uses a **Neon Pastel** palette — bright fluorescent pastels (mint, vio
 | Convert | `#DFFFF8` | `#00E5B4` | `#009973` |
 | Organize | `#F0E5FF` | `#9D2EFF` | `#7C00E5` |
 | Protect | `#FFE8DC` | `#FF5722` | `#E04412` |
+
+### Client-side vs server-side
+
+| Client-side (no upload) | Server-side (HTTPS upload, discarded after) |
+|-------------------------|---------------------------------------------|
+| Merge, split, rotate, compare | PDF → Word, PDF → Excel |
+| Remove pages, sign PDF | Word → PDF, compress |
+| Images → PDF, PDF → JPG/PNG | Watermark, lock/unlock |
+| PDF → text, OCR | Extract pages, extract images |
+| | Image convert, image resize |
+
+Client-side tools show a **“Processed on your device”** badge. See [implementation status](docs/product/implementation-status.md) for the full matrix.
 
 **Typography:** [Fraunces](https://fonts.google.com/specimen/Fraunces) for headings, [IBM Plex Sans](https://fonts.google.com/specimen/IBM+Plex+Sans) for body text (loaded in `BaseLayout.astro`).
 
@@ -212,6 +236,7 @@ See `.env.example`:
 - `FREE_FILE_LIMIT_MB` — Free plan per-file limit (default 50)
 - `PRO_FILE_LIMIT_MB` — Pro plan per-file limit (default 200)
 - `FREE_DAILY_DOC_CONVERT_LIMIT` — Free PDF → Word/Excel exports per day (default 3)
+- `FREE_MERGE_FILE_LIMIT` — Free merge batch size (default 5; 6+ requires Pro)
 - `VITE_AUTH_PROVIDER` / `VITE_BILLING_PROVIDER` — Frontend provider selection (default `mock`)
 - PayPal credentials for live Pro checkout
 
@@ -224,7 +249,14 @@ Set `VITE_CHECKOUT_LIVE=true` in the frontend environment when PayPal billing is
 - Word-to-PDF uses PyMuPDF; complex DOCX layouts may need review after conversion.
 - Server-side tools process files in memory and do not store them permanently.
 - **Compare** renders locally with PDF.js — files never leave the device for viewing.
-- **Merge, split, and rotate** run in the browser via pdf-lib — no server upload for these tools.
+
+**Client-side tools** (merge, split, rotate, compare, sign, remove pages, images↔PDF, PDF→text, OCR) run in the browser via pdf-lib, PDF.js, or Tesseract.js — no server upload.
+
+**Merge batch limit:** Free accounts merge up to 5 PDFs at once; 6+ requires Pro (`MergeBatchGate`).
+
+**OCR** uses Tesseract.js (WASM). First run downloads language models; large scans may take a minute in-browser.
+
+**PDF to text** extracts the text layer only — for scanned PDFs, use the OCR tool instead.
 - **Unlock** works for restriction-only PDFs and empty passwords; encrypted files need the correct password.
 - **Workspace tray** stores files in the browser only; clearing site data removes them.
 - **Mock auth** is for development and UX preview — not suitable for production security.

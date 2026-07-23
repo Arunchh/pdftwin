@@ -6,14 +6,20 @@ import ConvertExtractPanel from "./ConvertExtractPanel";
 import ArrangeMergePanel from "./ArrangeMergePanel";
 import SplitPanel from "./SplitPanel";
 import ExtractPagesPanel from "./ExtractPagesPanel";
+import RemovePagesPanel from "./RemovePagesPanel";
 import LockUnlockPanel from "./LockUnlockPanel";
 import ImageConvertPanel from "./ImageConvertPanel";
 import ImageResizePanel from "./ImageResizePanel";
+import ImagesToPdfPanel from "./ImagesToPdfPanel";
+import PdfToJpgPanel from "./PdfToJpgPanel";
+import PdfToTextPanel from "./PdfToTextPanel";
+import OcrPanel from "./OcrPanel";
 import ComparePanel from "./ComparePanel";
 import CompressPanel from "./CompressPanel";
 import RotatePanel from "./RotatePanel";
 import WatermarkPanel from "./WatermarkPanel";
 import WordToPdfPanel from "./WordToPdfPanel";
+import SignPdfPanel from "./SignPdfPanel";
 import WorkspaceFileTray from "./WorkspaceFileTray";
 import WorkspaceToolSwitcher from "./layout/WorkspaceToolSwitcher";
 import type { ToolId } from "../config/tools";
@@ -112,6 +118,10 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
       {toolId === "convert-extract" && <ConvertExtractPanel files={files} />}
       {toolId === "image-convert" && <ImageConvertPanel files={files} />}
       {toolId === "image-resize" && <ImageResizePanel files={files} />}
+      {toolId === "images-to-pdf" && <ImagesToPdfPanel files={files} />}
+      {toolId === "pdf-to-jpg" && <PdfToJpgPanel files={files} />}
+      {toolId === "pdf-to-text" && <PdfToTextPanel files={files} />}
+      {toolId === "ocr-pdf" && <OcrPanel files={files} />}
       {toolId === "compress-pdf" && <CompressPanel files={files} />}
       {toolId === "word-to-pdf" && <WordToPdfPanel files={files} />}
       {toolId === "pdf-compare" && <ComparePanel pdfFiles={pdfFiles} />}
@@ -130,9 +140,11 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
       )}
       {toolId === "split" && <SplitPanel files={files} />}
       {toolId === "extract-pages" && <ExtractPagesPanel files={files} />}
+      {toolId === "remove-pages" && <RemovePagesPanel files={files} />}
       {toolId === "rotate-pdf" && <RotatePanel files={files} />}
       {toolId === "watermark-pdf" && <WatermarkPanel files={files} />}
       {toolId === "lock-unlock" && <LockUnlockPanel files={files} />}
+      {toolId === "sign-pdf" && <SignPdfPanel files={files} />}
     </section>
   );
 }

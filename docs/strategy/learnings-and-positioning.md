@@ -17,7 +17,7 @@ PDFTwin takes a **hybrid** path: generous free tier + sustainable monetization o
 | Learning | PDFTwin response |
 |----------|------------------|
 | Never watermark free output | Policy: no watermarks ever |
-| No daily task limits on organize tools | Merge, split, rotate unlimited (client-side) |
+| No daily task limits on organize tools | Merge, split, rotate, compare, sign, remove pages unlimited (client-side) |
 | Privacy as trust signal | Badge: “Processed on your device” on client tools |
 | Generous free file size | Raised 24 MB → **50 MB** (see [limits](../../frontend/src/config/limits.ts)) |
 | Frictionless entry | No account for free tier |
@@ -31,7 +31,7 @@ PDFTwin takes a **hybrid** path: generous free tier + sustainable monetization o
 |----------|---------|
 | 100% client-side | Hybrid: client organize + server convert |
 | No monetization | Pro at **$9/mo** for heavy use |
-| 46 tools, broad | 12 tools, business-focused |
+| 46 tools, broad | **18 tools**, business-focused (expanded 2026-07) |
 | No accounts | Supabase auth + PayPal Pro (optional) |
 | Compare not emphasized | **Compare PDFs** as differentiator |
 
@@ -48,7 +48,7 @@ Not competing on “100% client-side.” Competing on:
 1. Better **PDF → Word/Excel** for business documents  
 2. **Compare** workflow for contract review  
 3. Honest free tier (no watermarks, no trick downloads)  
-4. Clear upgrade path when users hit real limits (file size, daily exports)
+4. Clear upgrade path when users hit real limits (file size, daily exports, large merges)
 
 ---
 
@@ -82,4 +82,6 @@ See [roadmap](./roadmap.md) for phased rollout.
 | 2026-07 | Free limit 50 MB, Pro $9/mo | More generous than old 24 MB; price reflects conversion value |
 | 2026-07 | 3/day Word/Excel cap on free | Protect server COGS; clear Pro reason |
 | 2026-07 | Client-side merge/split/rotate | Lower cost, privacy story, unlimited use |
+| 2026-07-23 | Six new client-side tools (18 total) | Tier A/B/C: images↔PDF, sign, remove, text, OCR |
+| 2026-07-23 | Merge batch gate (5 free, 6+ Pro) | Light monetization without watermarks |
 | 2026-07 | Defer cloud workspace & Business tier | Needs traffic (50–100 clicks/day) before investment |

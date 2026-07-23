@@ -3,13 +3,16 @@ import { Combine, Download, Pin, PinOff } from "lucide-react";
 import DraggableOrderList, { type OrderListItem } from "./DraggableOrderList";
 import OrderActions from "./OrderActions";
 import ClientProcessedBadge from "./ClientProcessedBadge";
+import MergeBatchGate from "./MergeBatchGate";
 import { downloadBlob } from "../api";
+import { FREE_MERGE_FILE_LIMIT } from "../config/limits";
 import {
   arrangeAndMergePdfs,
   getPdfPageCount,
   PdfClientError,
   reorderPdf,
 } from "../services/pdfClient";
+import { useAuth } from "../hooks/useAuth";
 import { defaultPdfOrder, fileKey } from "../utils/files";
 
 interface ArrangeMergePanelProps {
@@ -46,8 +49,10 @@ export default function ArrangeMergePanel({
   onMergedFile,
   onConvertMerged,
 }: ArrangeMergePanelProps) {
+  const { entitlements } = useAuth();
   const [selectedPdfKey, setSelectedPdfKey] = useState<string | null>(null);
   const [pageOrders, setPageOrders] = useState<Record<string, number[]>>({});
+  const [showMergeGate, setShowMergeGate] = useState(false);
   const [pageItems, setPageItems] = useState<OrderListItem[]>([]);
   const [loadingPages, setLoadingPages] = useState(false);
   const [loading, setLoading] = useState<"merge" | "download" | null>(null);
@@ -191,8 +196,14 @@ export default function ArrangeMergePanel({
       return;
     }
 
+    if (pdfOrder.length > FREE_MERGE_FILE_LIMIT && !entitlements.isPro) {
+      setShowMergeGate(true);
+      return;
+    }
+
     setLoading("merge");
     setMessage(null);
+    setShowMergeGate(false);
 
     try {
       const mergedBlob = await arrangeAndMergePdfs(pdfOrder, buildPageOrdersPayload());
@@ -259,6 +270,10 @@ export default function ArrangeMergePanel({
       </p>
       <ClientProcessedBadge />
 
+      {showMergeGate && (
+        <MergeBatchGate fileCount={pdfOrder.length} onDismiss={() => setShowMergeGate(false)} />
+      )}
+
       <div className="workflow-rail">
         <div className={`workflow-step ${pdfOrder.length >= 2 ? "active" : ""}`}>
           <span className="workflow-step-number">1</span>
@@ -289,9 +304,15 @@ export default function ArrangeMergePanel({
                 <h3>Step 1 · Document order</h3>
                 <p>Drag PDFs into merge order. Click a document to edit its pages in step 2.</p>
               </div>
-              <span className={`workflow-status ${orderFrozen ? "done" : "pending"}`}>
-                {orderFrozen ? "Confirmed" : "Required"}
-              </span>
+              <div className="workflow-panel-badges">
+                <span className={`workflow-status ${orderFrozen ? "done" : "pending"}`}>
+                  {orderFrozen ? "Confirmed" : "Required"}
+                </span>
+                <span className="merge-file-count">
+                  {pdfOrder.length}
+                  {entitlements.isPro ? " PDFs" : ` / ${FREE_MERGE_FILE_LIMIT} PDFs`}
+                </span>
+              </div>
             </div>
 
             {orderFrozen ? (

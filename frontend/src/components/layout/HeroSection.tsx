@@ -1,12 +1,13 @@
 import { ArrowRight, Building2, Gauge, Layers3, Sparkles, Zap } from "lucide-react";
 import { formatFileLimit, FREE_FILE_LIMIT_MB } from "../../config/limits";
+import { TOOL_COUNT } from "../../config/tools";
 import { useI18n } from "../../i18n/I18nProvider";
 
 export default function HeroSection() {
   const { messages, localizePath } = useI18n();
 
   const heroStats = [
-    { icon: Layers3, value: "12", label: messages.hero.statTools, tone: "sapphire" },
+    { icon: Layers3, value: String(TOOL_COUNT), label: messages.hero.statTools, tone: "sapphire" },
     {
       icon: Gauge,
       value: formatFileLimit(FREE_FILE_LIMIT_MB),

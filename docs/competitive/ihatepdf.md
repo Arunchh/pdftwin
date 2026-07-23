@@ -58,7 +58,7 @@ Growth is the product strategy: SEO landing pages per tool, comparison blogs, AI
 
 ## Tool breadth
 
-~46 tools including merge, split, compress, edit, OCR, AI summarizer, P2P share, niche business generators (GST bills, etc.). PDFTwin currently ships **12 focused business tools** — narrower scope, different monetization path.
+~46 tools including merge, split, compress, edit, OCR, AI summarizer, P2P share, niche business generators (GST bills, etc.). PDFTwin ships **18 focused business tools** — narrower scope, hybrid monetization path.
 
 ---
 

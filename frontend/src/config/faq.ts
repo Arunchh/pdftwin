@@ -2,8 +2,10 @@ import {
   formatFileLimit,
   FREE_DAILY_DOC_CONVERT_LIMIT,
   FREE_FILE_LIMIT_MB,
+  FREE_MERGE_FILE_LIMIT,
   PRO_FILE_LIMIT_MB,
 } from "./limits";
+import { TOOL_COUNT } from "./tools";
 
 export interface FaqItem {
   question: string;
@@ -19,7 +21,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   {
     question: "Can I keep using the Free plan?",
     answer:
-      "Yes. All twelve tools stay free with no signup and no watermarks. Pro is optional when you need larger files, unlimited PDF → Word/Excel exports, or faster server processing.",
+      "Yes. All tools stay free with no signup and no watermarks. Pro is optional when you need larger files, merges with more than five PDFs, unlimited PDF → Word/Excel exports, or faster server processing.",
   },
   {
     question: "How do I cancel my subscription?",
@@ -38,7 +40,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   },
   {
     question: "What is included in Pro compared to Free?",
-    answer: `Free includes all twelve tools with up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file, ${FREE_DAILY_DOC_CONVERT_LIMIT} PDF → Word or Excel exports per day, and unlimited merge, split, and rotate (processed on your device). Pro raises the file limit to ${formatFileLimit(PRO_FILE_LIMIT_MB)}, removes the daily export cap, and adds priority processing plus batch-friendly workflows.`,
+    answer: `Free includes all ${TOOL_COUNT} tools with up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file, merge up to ${FREE_MERGE_FILE_LIMIT} PDFs at once, ${FREE_DAILY_DOC_CONVERT_LIMIT} PDF → Word or Excel exports per day, and unlimited split and rotate on your device. Pro raises the file limit to ${formatFileLimit(PRO_FILE_LIMIT_MB)}, removes merge and daily export caps, and adds priority processing plus batch-friendly workflows.`,
   },
   {
     question: "Is there a free trial for Pro?",
@@ -88,7 +90,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   {
     question: "Which tools run on my device vs. your servers?",
     answer:
-      "Merge, split, rotate, and compare run entirely in your browser — files never leave your device. PDF → Word, PDF → Excel, compress, watermark, lock/unlock, and image tools use secure server processing and are discarded immediately after.",
+      "Merge, split, rotate, compare, sign, images-to-PDF, PDF-to-image, text extract, and OCR run entirely in your browser — files never leave your device. PDF → Word, PDF → Excel, compress, watermark, lock/unlock, and image convert/resize use secure server processing and are discarded immediately after.",
   },
   {
     question: "What happens when I hit the daily Word/Excel export limit?",

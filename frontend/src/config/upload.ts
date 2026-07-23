@@ -24,6 +24,30 @@ export const TOOL_UPLOAD_CONFIG: Record<ToolId, ToolUploadConfig> = {
     label: "Drop images here or click to browse",
     hint: `PNG, JPG, WebP, GIF, BMP, TIFF · ${limitHint}`,
   },
+  "images-to-pdf": {
+    accept: IMAGE_ACCEPT,
+    title: "Upload images to combine",
+    label: "Drop images here or click to browse",
+    hint: `PNG, JPG, WebP, GIF, BMP, TIFF · ${limitHint}`,
+  },
+  "pdf-to-jpg": {
+    accept: ".pdf",
+    title: "Upload PDFs to export as images",
+    label: "Drop PDFs here or click to browse",
+    hint: `PDF · ${limitHint}`,
+  },
+  "pdf-to-text": {
+    accept: ".pdf",
+    title: "Upload PDFs to extract text",
+    label: "Drop PDFs here or click to browse",
+    hint: `PDF · ${limitHint}`,
+  },
+  "ocr-pdf": {
+    accept: `.pdf,${IMAGE_ACCEPT}`,
+    title: "Upload scans or photos",
+    label: "Drop PDFs or images here or click to browse",
+    hint: `PDF and images · ${limitHint}`,
+  },
   "compress-pdf": {
     accept: ".pdf",
     title: "Upload PDFs to compress",
@@ -60,6 +84,12 @@ export const TOOL_UPLOAD_CONFIG: Record<ToolId, ToolUploadConfig> = {
     label: "Drop PDFs here or click to browse",
     hint: `PDF · ${limitHint}`,
   },
+  "remove-pages": {
+    accept: ".pdf",
+    title: "Upload PDFs to edit",
+    label: "Drop PDFs here or click to browse",
+    hint: `PDF · ${limitHint}`,
+  },
   "rotate-pdf": {
     accept: ".pdf",
     title: "Upload PDFs to rotate",
@@ -75,6 +105,12 @@ export const TOOL_UPLOAD_CONFIG: Record<ToolId, ToolUploadConfig> = {
   "lock-unlock": {
     accept: ".pdf",
     title: "Upload PDFs to protect",
+    label: "Drop PDFs here or click to browse",
+    hint: `PDF · ${limitHint}`,
+  },
+  "sign-pdf": {
+    accept: ".pdf",
+    title: "Upload PDFs to sign",
     label: "Drop PDFs here or click to browse",
     hint: `PDF · ${limitHint}`,
   },

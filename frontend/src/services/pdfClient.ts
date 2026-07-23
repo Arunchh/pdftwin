@@ -218,3 +218,138 @@ export async function rotatePdf(file: File, pages: string, angle: 90 | 180 | 270
   const saved = await source.save();
   return new Blob([saved], { type: "application/pdf" });
 }
+
+async function imageFileToEmbedBytes(file: File): Promise<{ bytes: Uint8Array; type: "jpg" | "png" }> {
+  const lower = file.name.toLowerCase();
+  if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) {
+    return { bytes: new Uint8Array(await file.arrayBuffer()), type: "jpg" };
+  }
+  if (lower.endsWith(".png")) {
+    return { bytes: new Uint8Array(await file.arrayBuffer()), type: "png" };
+  }
+
+  const bitmap = await createImageBitmap(file);
+  const canvas = document.createElement("canvas");
+  canvas.width = bitmap.width;
+  canvas.height = bitmap.height;
+  const context = canvas.getContext("2d");
+  if (!context) {
+    bitmap.close();
+    throw new PdfClientError(`Could not read image "${file.name}".`);
+  }
+  context.drawImage(bitmap, 0, 0);
+  bitmap.close();
+
+  const blob = await new Promise<Blob>((resolve, reject) => {
+    canvas.toBlob(
+      (result) => (result ? resolve(result) : reject(new PdfClientError(`Could not convert "${file.name}".`))),
+      "image/jpeg",
+      0.92
+    );
+  });
+
+  return { bytes: new Uint8Array(await blob.arrayBuffer()), type: "jpg" };
+}
+
+export async function imagesToPdf(files: File[]): Promise<Blob> {
+  if (!files.length) {
+    throw new PdfClientError("Add at least one image file to create a PDF.");
+  }
+
+  const pdf = await PDFDocument.create();
+
+  for (const file of files) {
+    const { bytes, type } = await imageFileToEmbedBytes(file);
+    const image = type === "png" ? await pdf.embedPng(bytes) : await pdf.embedJpg(bytes);
+    const page = pdf.addPage([image.width, image.height]);
+    page.drawImage(image, {
+      x: 0,
+      y: 0,
+      width: image.width,
+      height: image.height,
+    });
+  }
+
+  const saved = await pdf.save();
+  return new Blob([saved], { type: "application/pdf" });
+}
+
+export async function removePdfPages(file: File, pagesToRemove: string): Promise<Blob> {
+  const removeSet = new Set(parsePageSelection(pagesToRemove));
+  const bytes = await file.arrayBuffer();
+  const source = await loadPdf(bytes);
+  const totalPages = source.getPageCount();
+
+  for (const pageNum of removeSet) {
+    if (pageNum < 1 || pageNum > totalPages) {
+      throw new PdfClientError(`Invalid page ${pageNum}. PDF has ${totalPages} page(s).`);
+    }
+  }
+
+  if (removeSet.size >= totalPages) {
+    throw new PdfClientError("You cannot remove every page from a PDF.");
+  }
+
+  const keepIndices = Array.from({ length: totalPages }, (_, index) => index).filter(
+    (index) => !removeSet.has(index + 1)
+  );
+
+  const output = await PDFDocument.create();
+  const copied = await output.copyPages(source, keepIndices);
+  copied.forEach((page) => output.addPage(page));
+  const saved = await output.save();
+  return new Blob([saved], { type: "application/pdf" });
+}
+
+export type SignaturePosition = "bottom-right" | "bottom-left" | "center";
+
+function resolveSignaturePages(pages: string, totalPages: number): number[] {
+  if (pages.trim().toLowerCase() === "all") {
+    return Array.from({ length: totalPages }, (_, index) => index + 1);
+  }
+  return parsePageSelection(pages);
+}
+
+export async function signPdf(
+  file: File,
+  signatureBytes: Uint8Array,
+  pages: string,
+  position: SignaturePosition
+): Promise<Blob> {
+  const bytes = await file.arrayBuffer();
+  const doc = await loadPdf(bytes);
+  const signatureImage = await doc.embedPng(signatureBytes);
+  const totalPages = doc.getPageCount();
+  const targetPages = resolveSignaturePages(pages, totalPages);
+
+  for (const pageNum of targetPages) {
+    if (pageNum < 1 || pageNum > totalPages) {
+      throw new PdfClientError(`Invalid page ${pageNum}. PDF has ${totalPages} page(s).`);
+    }
+
+    const page = doc.getPage(pageNum - 1);
+    const { width, height } = page.getSize();
+    const sigWidth = width * 0.22;
+    const sigHeight = sigWidth * (signatureImage.height / signatureImage.width);
+    const margin = width * 0.05;
+
+    let x = margin;
+    let y = margin;
+
+    if (position === "bottom-right") {
+      x = width - sigWidth - margin;
+      y = margin;
+    } else if (position === "bottom-left") {
+      x = margin;
+      y = margin;
+    } else {
+      x = (width - sigWidth) / 2;
+      y = (height - sigHeight) / 2;
+    }
+
+    page.drawImage(signatureImage, { x, y, width: sigWidth, height: sigHeight });
+  }
+
+  const saved = await doc.save();
+  return new Blob([saved], { type: "application/pdf" });
+}

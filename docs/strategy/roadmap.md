@@ -18,17 +18,29 @@ Priority changes from competitive review:
 
 ---
 
-## Phase 1.5 — near term (no cloud workspace)
+## Phase 1.5 — shipped & near term (no cloud workspace)
+
+### Shipped (2026-07-23)
+
+- [x] **Six new client-side tools** — images→PDF, PDF→JPG, sign PDF, remove pages, PDF→text, OCR  
+- [x] Tool count **12 → 18**  
+- [x] **Merge batch gate** — free: up to 5 PDFs; 6+ requires Pro (`MergeBatchGate`)  
+- [x] i18n tool names for new tools (EN/ES/FR/NL)  
+- [x] Pricing/FAQ copy updated for merge limit and tool count  
+
+### Still open
 
 | Item | Priority | Notes |
 |------|----------|-------|
-| ~~SEO landing content per tool~~ | ~~High~~ | **Done** — locale landings at `/guides/*` and `/es|fr|nl/*` — see [i18n doc](../product/i18n.md) |
+| ~~SEO landing content (first 6 tools)~~ | ~~High~~ | **Done** — see [i18n doc](../product/i18n.md) |
+| SEO landings for **new 6 tools** | High | rotate, extract, sign, OCR, images→PDF, remove pages |
+| Translate **tool panel UI** | High | Panels still English-only — see [i18n doc](../product/i18n.md#next-phases) |
 | “PDFTwin vs iLovePDF” comparison page | High | Capture frustrated searchers |
 | Product Hunt / Peerlist launch | Medium | One spike + backlinks |
 | Differentiate priority queue | Low | Only if free users see wait times |
-| Batch merge gate (5+ files → Pro) | Medium | After usage data |
 | Annual billing ($79/yr) | Medium | Needs PayPal plan |
-| Move **extract pages** client-side | Low | Same pattern as split |
+| Move **extract pages** client-side | Low | Same pattern as split/remove |
+| Move watermark / lock client-side | Low | pdf-lib supports both |
 | Update PayPal plan to $9 in dashboard | **Required** if old $7 plan exists |
 
 ---
@@ -58,17 +70,18 @@ Priority changes from competitive review:
 
 ## Phase 3 — toward $3–5K/mo
 
-- Expand tool count based on search demand  
+- Expand tool count based on search demand (avoid 46-tool scatter)  
 - Build in public (weekly stats)  
 - AI tool directory listings  
-- Consider client-side compress (lighter preset) to match ihatepdf privacy story on more tools  
+- Client-side compress (lighter preset or Ghostscript WASM)  
+- Hybrid PDF→Word (simple text PDFs client-side, complex server-side)  
 
 ---
 
 ## Out of scope (for now)
 
 - Watermarks on free tier — **never**  
-- Daily limits on client-side organize tools  
+- Daily limits on client-side organize/convert tools (except merge batch on free)  
 - Business tier before traction gate  
 - Full ihatepdf-style 46-tool breadth — focus beats scatter  
 
@@ -77,4 +90,5 @@ Priority changes from competitive review:
 ## Related
 
 - [Learnings & positioning](./learnings-and-positioning.md)  
-- [ihatepdf competitive profile](../competitive/ihatepdf.md)
+- [ihatepdf competitive profile](../competitive/ihatepdf.md)  
+- [Implementation status](../product/implementation-status.md)

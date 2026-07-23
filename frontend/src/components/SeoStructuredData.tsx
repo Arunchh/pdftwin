@@ -1,6 +1,8 @@
 import { useEffect } from "react";
 import { SUBSCRIPTION_FAQ } from "../config/faq";
 import { BUSINESS_TAGLINE } from "../config/formats";
+import { formatFileLimit, FREE_FILE_LIMIT_MB } from "../config/limits";
+import { TOOL_COUNT } from "../config/tools";
 
 const SITE_URL = "https://pdftwin.com";
 const SITE_NAME = "PDFTwin";
@@ -30,12 +32,12 @@ const structuredData = {
           name: "PDFTwin Free",
           price: "0",
           priceCurrency: "USD",
-          description: "All twelve business conversion tools with a 24 MB per-file limit — no account required.",
+          description: `All ${TOOL_COUNT} business conversion tools with a ${formatFileLimit(FREE_FILE_LIMIT_MB)} per-file limit — no account required.`,
         },
         {
           "@type": "Offer",
           name: "PDFTwin Pro",
-          price: "7",
+          price: "9",
           priceCurrency: "USD",
           description: "Larger files, priority processing, and team support — billed monthly via PayPal.",
         },

@@ -1,4 +1,4 @@
-import { formatFileLimit, FREE_DAILY_DOC_CONVERT_LIMIT, FREE_FILE_LIMIT_MB, PRO_FILE_LIMIT_MB } from "../../config/limits";
+import { formatFileLimit, FREE_DAILY_DOC_CONVERT_LIMIT, FREE_FILE_LIMIT_MB, FREE_MERGE_FILE_LIMIT, PRO_FILE_LIMIT_MB } from "../../config/limits";
 import type { Messages } from "../types";
 
 const freeLimit = formatFileLimit(FREE_FILE_LIMIT_MB);
@@ -125,10 +125,11 @@ export const es: Messages = {
         description: "Todo lo que un equipo pequeño necesita para convertir, organizar y proteger archivos.",
         cta: "Empezar gratis",
         features: [
-          "Las 12 herramientas de conversión y PDF",
+          "Todas las herramientas de conversión y PDF",
           `Hasta ${freeLimit} por archivo`,
+          `Combinar hasta ${FREE_MERGE_FILE_LIMIT} PDFs a la vez`,
           `${FREE_DAILY_DOC_CONVERT_LIMIT} exportaciones PDF → Word o Excel al día`,
-          "Combinar, dividir y rotar en tu dispositivo — sin subida",
+          "Herramientas locales en tu dispositivo — sin subida",
           "Sin marca de agua ni cuenta obligatoria",
         ],
       },
@@ -139,6 +140,7 @@ export const es: Messages = {
         features: [
           "Todo lo incluido en Gratis",
           `Hasta ${proLimit} por archivo`,
+          "Combinaciones PDF ilimitadas",
           "Exportaciones PDF → Word y Excel ilimitadas",
           "Cola de procesamiento prioritario",
           "Conversiones por lotes y ajustes guardados",
@@ -186,6 +188,26 @@ export const es: Messages = {
       shortLabel: "Imágenes",
       description: "Convierte PNG, JPG, GIF y BMP a WebP, PNG o JPEG en un paso",
     },
+    "images-to-pdf": {
+      name: "Imágenes a PDF",
+      shortLabel: "Img→PDF",
+      description: "Combina JPG, PNG y otras imágenes en un PDF listo para compartir",
+    },
+    "pdf-to-jpg": {
+      name: "PDF a JPG",
+      shortLabel: "PDF→JPG",
+      description: "Exporta páginas PDF como JPG o PNG para correo y presentaciones",
+    },
+    "pdf-to-text": {
+      name: "PDF a texto",
+      shortLabel: "PDF→Texto",
+      description: "Extrae texto seleccionable de PDFs a un archivo .txt editable",
+    },
+    "ocr-pdf": {
+      name: "OCR — extraer texto",
+      shortLabel: "OCR",
+      description: "Convierte PDFs escaneados y fotos en texto editable con OCR",
+    },
     "compress-pdf": {
       name: "Comprimir PDF",
       shortLabel: "Comprimir",
@@ -221,6 +243,11 @@ export const es: Messages = {
       shortLabel: "Extraer",
       description: "Obtén solo las páginas que necesitas en un PDF nuevo",
     },
+    "remove-pages": {
+      name: "Eliminar páginas",
+      shortLabel: "Eliminar",
+      description: "Elimina páginas no deseadas de un PDF sin dividir todo el archivo",
+    },
     "rotate-pdf": {
       name: "Rotar páginas",
       shortLabel: "Rotar",
@@ -235,6 +262,11 @@ export const es: Messages = {
       name: "Bloquear y desbloquear",
       shortLabel: "Proteger",
       description: "Protege con contraseña o elimina restricciones de forma segura",
+    },
+    "sign-pdf": {
+      name: "Firmar PDF",
+      shortLabel: "Firmar",
+      description: "Añade tu firma manuscrita o una imagen PNG a las páginas del PDF",
     },
   },
   seoLanding: {

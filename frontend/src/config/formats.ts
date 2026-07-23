@@ -14,10 +14,11 @@ export const SUPPORTED_INPUT_FORMATS = [
 
 export const CONVERSION_HIGHLIGHTS = [
   "PDF → Word, Excel, or image assets",
+  "Images → PDF and PDF → JPG/PNG export",
   "Word (DOCX) → PDF for client-ready delivery",
   "PNG, JPG, GIF, BMP → WebP, PNG, or JPEG",
-  "Compress, watermark, merge, split, and rotate PDFs",
-  "Side-by-side PDF compare with linked scroll & zoom",
+  "Sign PDF, merge, split, compare, and remove pages",
+  "OCR and PDF-to-text for scanned documents",
   "Password-protect sensitive business files",
 ] as const;
 

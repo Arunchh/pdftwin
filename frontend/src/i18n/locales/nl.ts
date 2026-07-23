@@ -1,4 +1,4 @@
-import { formatFileLimit, FREE_DAILY_DOC_CONVERT_LIMIT, FREE_FILE_LIMIT_MB, PRO_FILE_LIMIT_MB } from "../../config/limits";
+import { formatFileLimit, FREE_DAILY_DOC_CONVERT_LIMIT, FREE_FILE_LIMIT_MB, FREE_MERGE_FILE_LIMIT, PRO_FILE_LIMIT_MB } from "../../config/limits";
 import type { Messages } from "../types";
 
 const freeLimit = formatFileLimit(FREE_FILE_LIMIT_MB);
@@ -125,10 +125,11 @@ export const nl: Messages = {
         description: "Alles wat een klein team nodig heeft om bestanden te converteren, organiseren en beveiligen.",
         cta: "Gratis starten",
         features: [
-          "Alle 12 conversie- en PDF-tools",
+          "Alle conversie- en PDF-tools",
           `Tot ${freeLimit} per bestand`,
+          `Tot ${FREE_MERGE_FILE_LIMIT} PDF's tegelijk samenvoegen`,
           `${FREE_DAILY_DOC_CONVERT_LIMIT} PDF → Word- of Excel-export per dag`,
-          "Samenvoegen, splitsen en roteren op uw apparaat — geen upload",
+          "Lokale tools op uw apparaat — geen upload",
           "Geen watermerk, geen account vereist",
         ],
       },
@@ -139,6 +140,7 @@ export const nl: Messages = {
         features: [
           "Alles in Gratis",
           `Tot ${proLimit} per bestand`,
+          "Onbeperkte samenvoegbatchgrootte",
           "Onbeperkte PDF → Word- en Excel-export",
           "Prioriteitsverwerkingswachtrij",
           "Batchconversies en opgeslagen presets",
@@ -186,6 +188,26 @@ export const nl: Messages = {
       shortLabel: "Afbeeldingen",
       description: "Converteer PNG, JPG, GIF en BMP naar WebP, PNG of JPEG in één stap",
     },
+    "images-to-pdf": {
+      name: "Afbeeldingen naar PDF",
+      shortLabel: "Img→PDF",
+      description: "Combineer JPG, PNG en andere afbeeldingen in één deelbare PDF",
+    },
+    "pdf-to-jpg": {
+      name: "PDF naar JPG",
+      shortLabel: "PDF→JPG",
+      description: "Exporteer PDF-pagina's als JPG of PNG voor e-mail en presentaties",
+    },
+    "pdf-to-text": {
+      name: "PDF naar tekst",
+      shortLabel: "PDF→Tekst",
+      description: "Haal selecteerbare tekst uit PDF's naar een bewerkbaar .txt-bestand",
+    },
+    "ocr-pdf": {
+      name: "OCR — tekstextractie",
+      shortLabel: "OCR",
+      description: "Zet gescande PDF's en foto's om in bewerkbare tekst met OCR",
+    },
     "compress-pdf": {
       name: "PDF comprimeren",
       shortLabel: "Comprimeren",
@@ -221,6 +243,11 @@ export const nl: Messages = {
       shortLabel: "Extraheren",
       description: "Haal alleen de pagina's op die u nodig heeft in een nieuwe PDF",
     },
+    "remove-pages": {
+      name: "Pagina's verwijderen",
+      shortLabel: "Verwijderen",
+      description: "Verwijder ongewenste pagina's uit een PDF zonder het hele bestand te splitsen",
+    },
     "rotate-pdf": {
       name: "Pagina's roteren",
       shortLabel: "Roteren",
@@ -235,6 +262,11 @@ export const nl: Messages = {
       name: "Vergrendelen en ontgrendelen",
       shortLabel: "Beveiligen",
       description: "Beveilig met wachtwoord of verwijder beperkingen veilig",
+    },
+    "sign-pdf": {
+      name: "PDF ondertekenen",
+      shortLabel: "Ondertekenen",
+      description: "Voeg uw handtekening of een PNG-afbeelding toe aan PDF-pagina's",
     },
   },
   seoLanding: {
