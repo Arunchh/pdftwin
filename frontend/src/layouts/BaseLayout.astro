@@ -1,11 +1,5 @@
 ---
-import SiteHeader from "../components/layout/SiteHeader";
-import SiteFooter from "../components/layout/SiteFooter";
-import AuthProvider from "../components/auth/AuthProvider";
-import CheckoutHost from "../components/CheckoutHost";
-import SeoStructuredData from "../components/SeoStructuredData";
-import VercelAnalytics from "../components/VercelAnalytics";
-import { I18nProvider } from "../i18n/I18nProvider";
+import AppShell from "../components/layout/AppShell";
 import { DEFAULT_LOCALE, LOCALE_HTML_LANG, LOCALE_OG } from "../i18n/config";
 import type { Locale } from "../i18n/types";
 import { getMessages, hreflangAlternates, localizePath } from "../i18n/utils";
@@ -99,18 +93,8 @@ const alternates = hreflangOverride ?? hreflangAlternates(Astro.url.pathname);
     </script>
   </head>
   <body data-locale={locale}>
-    <I18nProvider client:load locale={locale}>
-      <div class="site">
-        <SeoStructuredData client:load />
-        <SiteHeader client:load activeToolLabel={activeToolLabel} />
-        <main class="site-main">
-          <slot />
-        </main>
-        <SiteFooter client:load />
-        <CheckoutHost client:load />
-        <AuthProvider client:load />
-        <VercelAnalytics client:load />
-      </div>
-    </I18nProvider>
+    <AppShell client:load locale={locale} activeToolLabel={activeToolLabel}>
+      <slot />
+    </AppShell>
   </body>
 </html>

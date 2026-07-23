@@ -1,7 +1,7 @@
 import { createContext, useContext, useMemo, type ReactNode } from "react";
 import type { Locale, Messages } from "./types";
 import { DEFAULT_LOCALE } from "./config";
-import { getMessages, localizePath } from "./utils";
+import { getMessages, localizePath, resolvePageLocale } from "./utils";
 
 interface I18nContextValue {
   locale: Locale;
@@ -34,5 +34,15 @@ export function I18nProvider({ locale = DEFAULT_LOCALE, children }: I18nProvider
 }
 
 export function useI18n() {
-  return useContext(I18nContext);
+  const context = useContext(I18nContext);
+  const locale = resolvePageLocale(context.locale);
+
+  return useMemo<I18nContextValue>(
+    () => ({
+      locale,
+      messages: getMessages(locale),
+      localizePath: (path: string) => localizePath(path, locale),
+    }),
+    [locale]
+  );
 }

@@ -128,6 +128,8 @@ export function hreflangAlternates(pathname: string): Array<{ locale: Locale; hr
   }));
 }
 
-export function t(locale: Locale) {
-  return getMessages(locale);
+export function resolvePageLocale(fallback: Locale = DEFAULT_LOCALE): Locale {
+  if (typeof document === "undefined") return fallback;
+  const domLocale = document.body?.dataset?.locale;
+  return domLocale && isLocale(domLocale) ? domLocale : fallback;
 }
