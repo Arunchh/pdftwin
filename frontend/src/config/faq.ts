@@ -1,4 +1,9 @@
-import { formatFileLimit, FREE_FILE_LIMIT_MB, PRO_FILE_LIMIT_MB } from "./limits";
+import {
+  formatFileLimit,
+  FREE_DAILY_DOC_CONVERT_LIMIT,
+  FREE_FILE_LIMIT_MB,
+  PRO_FILE_LIMIT_MB,
+} from "./limits";
 
 export interface FaqItem {
   question: string;
@@ -14,7 +19,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   {
     question: "Can I keep using the Free plan?",
     answer:
-      "Yes. All twelve conversion and PDF tools stay free with no signup. Pro is optional when you need bigger files, WebP batch exports, or faster processing.",
+      "Yes. All twelve tools stay free with no signup and no watermarks. Pro is optional when you need larger files, unlimited PDF → Word/Excel exports, or faster server processing.",
   },
   {
     question: "How do I cancel my subscription?",
@@ -33,7 +38,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   },
   {
     question: "What is included in Pro compared to Free?",
-    answer: `Free includes all twelve tools — PDF conversion, image conversion, Word to PDF, resize, compress, watermark, rotate, side-by-side compare, merge, split, extract, and protect — with up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file. Pro raises the limit to ${formatFileLimit(PRO_FILE_LIMIT_MB)}, adds priority processing, batch-friendly workflows, and email support.`,
+    answer: `Free includes all twelve tools with up to ${formatFileLimit(FREE_FILE_LIMIT_MB)} per file, ${FREE_DAILY_DOC_CONVERT_LIMIT} PDF → Word or Excel exports per day, and unlimited merge, split, and rotate (processed on your device). Pro raises the file limit to ${formatFileLimit(PRO_FILE_LIMIT_MB)}, removes the daily export cap, and adds priority processing plus batch-friendly workflows.`,
   },
   {
     question: "Is there a free trial for Pro?",
@@ -43,7 +48,7 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
   {
     question: "How much does Pro cost and how often am I billed?",
     answer:
-      "PDFTwin Pro is $7 USD per month. PayPal bills you automatically each month until you cancel from your PayPal account.",
+      "PDFTwin Pro is $9 USD per month. PayPal bills you automatically each month until you cancel from your PayPal account.",
   },
   {
     question: "Can I get a refund?",
@@ -79,6 +84,15 @@ export const SUBSCRIPTION_FAQ: FaqItem[] = [
     question: "Which image formats can I convert?",
     answer:
       "Upload PNG, JPG, WebP, GIF, BMP, or TIFF and export as WebP, PNG, or JPEG. You can also extract embedded images from PDFs and choose the same output formats.",
+  },
+  {
+    question: "Which tools run on my device vs. your servers?",
+    answer:
+      "Merge, split, rotate, and compare run entirely in your browser — files never leave your device. PDF → Word, PDF → Excel, compress, watermark, lock/unlock, and image tools use secure server processing and are discarded immediately after.",
+  },
+  {
+    question: "What happens when I hit the daily Word/Excel export limit?",
+    answer: `Free users can export ${FREE_DAILY_DOC_CONVERT_LIMIT} PDFs to Word or Excel per day. Image extraction and other tools are not capped. Upgrade to Pro for unlimited document exports.`,
   },
   {
     question: "Which browsers and devices are supported?",

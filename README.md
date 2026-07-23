@@ -4,6 +4,8 @@
 
 Live site: [pdftwin.com](https://pdftwin.com)
 
+**Internal docs:** [docs/README.md](docs/README.md) — competitive research (ihatepdf), monetization plan, roadmap, implementation status.
+
 ## Features
 
 ### Convert & Export
@@ -26,7 +28,7 @@ Live site: [pdftwin.com](https://pdftwin.com)
 
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
-- **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads
+- **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads and unlimited PDF → Word/Excel exports
 - **Workspace file tray** — Files stay in IndexedDB while you switch between tools — no re-upload needed
 - **Compare + tray** — Pick left/right PDFs directly from the workspace tray
 
@@ -78,7 +80,7 @@ Environment variables:
 | `VITE_SUPABASE_URL` | Supabase project URL | Required when `VITE_AUTH_PROVIDER=supabase` |
 | `VITE_SUPABASE_ANON_KEY` | Supabase anon key | Required when `VITE_AUTH_PROVIDER=supabase` |
 
-Supabase auth uses the **PDF Twin** project with a `profiles` table for plan state (`free` / `pro`). Free users can upload up to **24 MB** without signing in; larger files require an account and **Pro** ($7/month).
+Supabase auth uses the **PDF Twin** project with a `profiles` table for plan state (`free` / `pro`). Free users can upload up to **50 MB** without signing in; larger files require an account and **Pro** ($9/month). Free users get **3 PDF → Word/Excel exports per day**; Pro is unlimited.
 
 ## Tech Stack
 
@@ -203,8 +205,9 @@ Use comma-separated ranges in the split form:
 
 See `.env.example`:
 
-- `FREE_FILE_LIMIT_MB` — Free plan per-file limit (default 24)
+- `FREE_FILE_LIMIT_MB` — Free plan per-file limit (default 50)
 - `PRO_FILE_LIMIT_MB` — Pro plan per-file limit (default 200)
+- `FREE_DAILY_DOC_CONVERT_LIMIT` — Free PDF → Word/Excel exports per day (default 3)
 - `VITE_AUTH_PROVIDER` / `VITE_BILLING_PROVIDER` — Frontend provider selection (default `mock`)
 - PayPal credentials for live Pro checkout
 
@@ -217,6 +220,7 @@ Set `VITE_CHECKOUT_LIVE=true` in the frontend environment when PayPal billing is
 - Word-to-PDF uses PyMuPDF; complex DOCX layouts may need review after conversion.
 - Server-side tools process files in memory and do not store them permanently.
 - **Compare** renders locally with PDF.js — files never leave the device for viewing.
+- **Merge, split, and rotate** run in the browser via pdf-lib — no server upload for these tools.
 - **Unlock** works for restriction-only PDFs and empty passwords; encrypted files need the correct password.
 - **Workspace tray** stores files in the browser only; clearing site data removes them.
 - **Mock auth** is for development and UX preview — not suitable for production security.

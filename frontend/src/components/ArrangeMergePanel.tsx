@@ -2,7 +2,14 @@ import { useEffect, useMemo, useState } from "react";
 import { Combine, Download, Pin, PinOff } from "lucide-react";
 import DraggableOrderList, { type OrderListItem } from "./DraggableOrderList";
 import OrderActions from "./OrderActions";
-import { downloadBlob, downloadResponse, postFiles, responseToFile } from "../api";
+import ClientProcessedBadge from "./ClientProcessedBadge";
+import { downloadBlob } from "../api";
+import {
+  arrangeAndMergePdfs,
+  getPdfPageCount,
+  PdfClientError,
+  reorderPdf,
+} from "../services/pdfClient";
 import { defaultPdfOrder, fileKey } from "../utils/files";
 
 interface ArrangeMergePanelProps {
@@ -85,16 +92,10 @@ export default function ArrangeMergePanel({
     let cancelled = false;
     setLoadingPages(true);
 
-    postFiles("/api/pdf-info", [selectedFile])
-      .then(async (response) => {
-        const data = await response.json();
+    getPdfPageCount(selectedFile)
+      .then((count) => {
         if (cancelled) return;
 
-        if (!response.ok) {
-          throw new Error(data.detail ?? "Could not read PDF pages.");
-        }
-
-        const count = data.page_count as number;
         const existing = pageOrders[key];
         const pageNumbers = existing?.length === count ? existing : defaultPageNumbers(count);
 
@@ -114,7 +115,7 @@ export default function ArrangeMergePanel({
           setPageItems([]);
           setMessage({
             type: "error",
-            text: err instanceof Error ? err.message : "Could not read PDF pages.",
+            text: err instanceof PdfClientError || err instanceof Error ? err.message : "Could not read PDF pages.",
           });
         }
       })
@@ -194,16 +195,8 @@ export default function ArrangeMergePanel({
     setMessage(null);
 
     try {
-      const response = await postFiles("/api/arrange-merge", pdfOrder, {
-        page_orders: JSON.stringify(buildPageOrdersPayload()),
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.detail ?? "Merge failed.");
-      }
-
-      const mergedFile = await responseToFile(response, "merged.pdf");
+      const mergedBlob = await arrangeAndMergePdfs(pdfOrder, buildPageOrdersPayload());
+      const mergedFile = new File([mergedBlob], "merged.pdf", { type: "application/pdf" });
       downloadBlob(mergedFile, mergedFile.name);
       onMergedFile?.(mergedFile);
       setMessage({
@@ -213,7 +206,7 @@ export default function ArrangeMergePanel({
     } catch (err) {
       setMessage({
         type: "error",
-        text: err instanceof Error ? err.message : "Merge failed.",
+        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Merge failed.",
       });
     } finally {
       setLoading(null);
@@ -237,16 +230,8 @@ export default function ArrangeMergePanel({
     setMessage(null);
 
     try {
-      const response = await postFiles("/api/reorder", [selectedFile], {
-        order: pages.join(", "),
-      });
-
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.detail ?? "Download failed.");
-      }
-
-      await downloadResponse(response, "reordered.pdf");
+      const reorderedBlob = await reorderPdf(selectedFile, pages.join(", "));
+      downloadBlob(reorderedBlob, "reordered.pdf");
       setMessage({
         type: "success",
         text: "Reordered PDF downloaded. You can still merge all documents afterward.",
@@ -254,7 +239,7 @@ export default function ArrangeMergePanel({
     } catch (err) {
       setMessage({
         type: "error",
-        text: err instanceof Error ? err.message : "Download failed.",
+        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Download failed.",
       });
     } finally {
       setLoading(null);
@@ -272,6 +257,7 @@ export default function ArrangeMergePanel({
         One workflow for organizing PDFs: set document order, optionally adjust pages inside any
         file, then merge everything together.
       </p>
+      <ClientProcessedBadge />
 
       <div className="workflow-rail">
         <div className={`workflow-step ${pdfOrder.length >= 2 ? "active" : ""}`}>

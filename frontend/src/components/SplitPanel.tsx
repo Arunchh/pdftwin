@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Scissors } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
-import { downloadResponse, postFiles } from "../api";
+import ClientProcessedBadge from "./ClientProcessedBadge";
+import { downloadBlob } from "../api";
+import { PdfClientError, splitPdfDownload } from "../services/pdfClient";
 import { fileKey, getPdfFiles } from "../utils/files";
 
 interface SplitPanelProps {
@@ -47,15 +49,8 @@ export default function SplitPanel({ files }: SplitPanelProps) {
     setMessage(null);
 
     try {
-      const response = await postFiles("/api/split", [targetFile], { ranges });
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.detail ?? "Split failed.");
-      }
-
-      const contentType = response.headers.get("Content-Type") ?? "";
-      const fallback = contentType.includes("zip") ? "split_pdfs.zip" : "split.pdf";
-      await downloadResponse(response, fallback);
+      const { blob, filename } = await splitPdfDownload(targetFile, ranges);
+      downloadBlob(blob, filename);
 
       setMessage({
         type: "success",
@@ -64,7 +59,7 @@ export default function SplitPanel({ files }: SplitPanelProps) {
     } catch (err) {
       setMessage({
         type: "error",
-        text: err instanceof Error ? err.message : "Split failed.",
+        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Split failed.",
       });
     } finally {
       setLoading(false);
@@ -77,6 +72,7 @@ export default function SplitPanel({ files }: SplitPanelProps) {
       <p className="description">
         Break one PDF into separate files by page range. Multiple ranges download as a ZIP.
       </p>
+      <ClientProcessedBadge />
 
       <div className="workflow-rail">
         <div className={`workflow-step ${targetFile ? "active" : ""}`}>

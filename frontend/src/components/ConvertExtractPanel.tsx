@@ -8,7 +8,17 @@ import {
   ZipIcon,
 } from "./FileTypeIcons";
 import IconButton from "./IconButton";
+import ConvertLimitGate from "./ConvertLimitGate";
 import { downloadResponse, postFiles } from "../api";
+import { FREE_DAILY_DOC_CONVERT_LIMIT } from "../config/limits";
+import { useAuth } from "../hooks/useAuth";
+import { entitlementsForUser } from "../services/entitlements";
+import {
+  docConvertLimitReached,
+  recordDocConvert,
+  remainingDocConverts,
+  syncDocConvertRemaining,
+} from "../services/dailyUsage";
 import { fileKey, getPdfFiles } from "../utils/files";
 
 type OutputFormat = "word" | "excel" | "images";
@@ -56,10 +66,16 @@ function formatSize(bytes: number): string {
 }
 
 export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps) {
+  const { user } = useAuth();
+  const entitlements = entitlementsForUser(user);
   const [selectedPdfKey, setSelectedPdfKey] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState<OutputFormat | null>(null);
   const [imageExportFormat, setImageExportFormat] = useState<ImageExportFormat>("webp");
   const [loading, setLoading] = useState(false);
+  const [showLimitGate, setShowLimitGate] = useState(false);
+  const [remainingConverts, setRemainingConverts] = useState<number | null>(
+    remainingDocConverts(entitlements.isPro)
+  );
   const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
 
   const pdfFiles = getPdfFiles(files);
@@ -79,6 +95,12 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
     }
   }, [pdfFiles, selectedPdfKey]);
 
+  useEffect(() => {
+    setRemainingConverts(remainingDocConverts(entitlements.isPro));
+  }, [entitlements.isPro]);
+
+  const isDocConvert = outputFormat === "word" || outputFormat === "excel";
+
   const handleExport = async () => {
     if (!selectedFile) {
       setMessage({ type: "error", text: "Upload at least one PDF file above." });
@@ -90,8 +112,14 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
       return;
     }
 
+    if (isDocConvert && docConvertLimitReached(entitlements.isPro)) {
+      setShowLimitGate(true);
+      return;
+    }
+
     setLoading(true);
     setMessage(null);
+    setShowLimitGate(false);
 
     const endpoints: Record<OutputFormat, string> = {
       word: "/api/convert/pdf-to-word",
@@ -114,7 +142,24 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
       const response = await postFiles(endpoints[outputFormat], [selectedFile], extra);
       if (!response.ok) {
         const data = await response.json().catch(() => ({}));
+        if (response.status === 429 && isDocConvert) {
+          setShowLimitGate(true);
+        }
         throw new Error(data.detail ?? "Export failed.");
+      }
+
+      if (isDocConvert) {
+        recordDocConvert(entitlements.isPro);
+        const remainingHeader = response.headers.get("X-Daily-Convert-Remaining");
+        if (remainingHeader !== null) {
+          const remaining = Number(remainingHeader);
+          if (!Number.isNaN(remaining)) {
+            syncDocConvertRemaining(remaining);
+            setRemainingConverts(remaining);
+          }
+        } else if (!entitlements.isPro) {
+          setRemainingConverts(remainingDocConverts(false));
+        }
       }
 
       let fallback = fallbacks[outputFormat];
@@ -248,6 +293,13 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
               })}
             </div>
 
+            {isDocConvert && !entitlements.isPro && remainingConverts !== null && (
+              <p className="file-hint muted">
+                Free plan: {remainingConverts} of {FREE_DAILY_DOC_CONVERT_LIMIT} PDF → Word/Excel
+                exports remaining today. Pro includes unlimited exports.
+              </p>
+            )}
+
             {outputFormat === "images" && (
               <div className="image-export-options">
                 <p className="order-section-title">Image export format</p>
@@ -338,6 +390,8 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
           </section>
         </>
       )}
+
+      {showLimitGate && <ConvertLimitGate onDismiss={() => setShowLimitGate(false)} />}
 
       {message && <div className={`message ${message.type}`}>{message.text}</div>}
     </div>

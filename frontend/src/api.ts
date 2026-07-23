@@ -85,6 +85,7 @@ export async function postFiles(
   return fetch(endpoint, {
     method: "POST",
     headers: getAuthHeaders(),
+    credentials: "include",
     body: formData,
   });
 }

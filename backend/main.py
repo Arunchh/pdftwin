@@ -26,6 +26,7 @@ from services.pdf_unlock import unlock_pdf
 from services.pdf_watermark import add_pdf_watermark
 from services import entitlements as entitlements_service
 from services import paypal_service
+from services.daily_usage import assert_doc_convert_allowed, mark_doc_convert, remaining_doc_converts
 from utils import attachment_header, normalize_filename, output_filename, write_zip_entry
 
 app = FastAPI(title="PDFTwin API")
@@ -34,6 +35,7 @@ FREE_FILE_LIMIT_MB = entitlements_service.FREE_FILE_LIMIT_MB
 FREE_FILE_LIMIT_BYTES = entitlements_service.FREE_FILE_LIMIT_BYTES
 PRO_FILE_LIMIT_MB = entitlements_service.PRO_FILE_LIMIT_MB
 PRO_FILE_LIMIT_BYTES = entitlements_service.PRO_FILE_LIMIT_BYTES
+FREE_DAILY_DOC_CONVERT_LIMIT = entitlements_service.FREE_DAILY_DOC_CONVERT_LIMIT
 
 
 class PayPalConnectRequest(BaseModel):
@@ -132,6 +134,7 @@ def app_config():
     return {
         "free_file_limit_mb": FREE_FILE_LIMIT_MB,
         "pro_file_limit_mb": PRO_FILE_LIMIT_MB,
+        "free_daily_doc_convert_limit": FREE_DAILY_DOC_CONVERT_LIMIT,
         "payments": {
             "configured": payment["configured"],
             "mode": payment["mode"],
@@ -351,7 +354,13 @@ async def split(
 
 
 @app.post("/api/convert/pdf-to-word")
-async def convert_pdf_to_word(file: Annotated[UploadFile, File(...)]):
+async def convert_pdf_to_word(
+    request: Request,
+    file: Annotated[UploadFile, File(...)],
+):
+    plan = entitlements_service.current_plan.get()
+    assert_doc_convert_allowed(request, plan)
+
     ext = validate_extension(file.filename or "")
     if ext != ".pdf":
         raise HTTPException(status_code=400, detail="Only PDF files can be converted to Word.")
@@ -364,15 +373,23 @@ async def convert_pdf_to_word(file: Annotated[UploadFile, File(...)]):
         raise HTTPException(status_code=500, detail=f"Failed to convert PDF to Word: {exc}") from exc
 
     base_name = output_filename(file.filename, ".docx")
-    return Response(
+    response = Response(
         content=docx_bytes,
         media_type="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
         headers=attachment_header(base_name),
     )
+    mark_doc_convert(request, response, plan)
+    return response
 
 
 @app.post("/api/convert/pdf-to-excel")
-async def convert_pdf_to_excel(file: Annotated[UploadFile, File(...)]):
+async def convert_pdf_to_excel(
+    request: Request,
+    file: Annotated[UploadFile, File(...)],
+):
+    plan = entitlements_service.current_plan.get()
+    assert_doc_convert_allowed(request, plan)
+
     ext = validate_extension(file.filename or "")
     if ext != ".pdf":
         raise HTTPException(status_code=400, detail="Only PDF files can be converted to Excel.")
@@ -385,11 +402,13 @@ async def convert_pdf_to_excel(file: Annotated[UploadFile, File(...)]):
         raise HTTPException(status_code=500, detail=f"Failed to convert PDF to Excel: {exc}") from exc
 
     base_name = output_filename(file.filename, ".xlsx")
-    return Response(
+    response = Response(
         content=xlsx_bytes,
         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
         headers=attachment_header(base_name),
     )
+    mark_doc_convert(request, response, plan)
+    return response
 
 
 @app.post("/api/pdf-info")

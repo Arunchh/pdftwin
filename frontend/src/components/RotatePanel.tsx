@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { RotateCw } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
-import { downloadResponse, postFiles } from "../api";
+import ClientProcessedBadge from "./ClientProcessedBadge";
+import { downloadBlob } from "../api";
+import { PdfClientError, rotatePdf } from "../services/pdfClient";
 import { fileKey, getPdfFiles } from "../utils/files";
 
 interface RotatePanelProps {
@@ -47,21 +49,13 @@ export default function RotatePanel({ files }: RotatePanelProps) {
     setMessage(null);
 
     try {
-      const response = await postFiles("/api/rotate", [targetFile], {
-        pages: pages.trim(),
-        angle: String(angle),
-      });
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.detail ?? "Rotation failed.");
-      }
-
-      await downloadResponse(response, "rotated.pdf");
+      const rotatedBlob = await rotatePdf(targetFile, pages.trim(), angle);
+      downloadBlob(rotatedBlob, "rotated.pdf");
       setMessage({ type: "success", text: "PDF rotated. Download started." });
     } catch (err) {
       setMessage({
         type: "error",
-        text: err instanceof Error ? err.message : "Rotation failed.",
+        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Rotation failed.",
       });
     } finally {
       setLoading(false);
@@ -74,6 +68,7 @@ export default function RotatePanel({ files }: RotatePanelProps) {
       <p className="description">
         Fix scanned pages or deck slides — rotate all pages or just the ones you specify.
       </p>
+      <ClientProcessedBadge />
 
       {pdfFiles.length === 0 ? (
         <p className="file-hint muted">Upload a PDF above to rotate pages.</p>
