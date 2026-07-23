@@ -3,22 +3,27 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import ToolWorkspace from "../../components/ToolWorkspace";
 import { TOOLS } from "../../config/tools";
 import type { ToolId } from "../../config/tools";
+import { getMessages } from "../../i18n/utils";
 
 export function getStaticPaths() {
   return TOOLS.map((tool) => ({
     params: { tool: tool.path },
     props: {
       toolId: tool.id as ToolId,
-      title: `${tool.name} | PDFTwin`,
-      description: tool.description,
-      activeToolLabel: tool.name,
     },
   }));
 }
 
-const { toolId, title, description, activeToolLabel } = Astro.props;
+const { toolId } = Astro.props as { toolId: ToolId };
+const messages = getMessages("en");
+const toolCopy = messages.tools[toolId];
 ---
 
-<BaseLayout title={title} description={description} activeToolLabel={activeToolLabel}>
+<BaseLayout
+  locale="en"
+  title={`${toolCopy.name} | ${messages.meta.toolTitleSuffix}`}
+  description={toolCopy.description}
+  activeToolLabel={toolCopy.name}
+>
   <ToolWorkspace client:load toolId={toolId} />
 </BaseLayout>

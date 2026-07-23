@@ -14,6 +14,7 @@ Priority changes from competitive review:
 - [x] Daily cap: **3 PDF → Word/Excel** exports on free  
 - [x] Client-side **merge, split, rotate** (pdf-lib)  
 - [x] Internal documentation hub  
+- [x] **i18n:** English + Spanish, French, Dutch with auto-detection — see [i18n doc](../product/i18n.md)
 
 ---
 
@@ -21,7 +22,7 @@ Priority changes from competitive review:
 
 | Item | Priority | Notes |
 |------|----------|-------|
-| SEO landing content per tool | High | Long-tail like ihatepdf |
+| ~~SEO landing content per tool~~ | ~~High~~ | **Done** — locale landings at `/guides/*` and `/es|fr|nl/*` — see [i18n doc](../product/i18n.md) |
 | “PDFTwin vs iLovePDF” comparison page | High | Capture frustrated searchers |
 | Product Hunt / Peerlist launch | Medium | One spike + backlinks |
 | Differentiate priority queue | Low | Only if free users see wait times |

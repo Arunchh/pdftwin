@@ -172,8 +172,11 @@ export const TOOLS: ToolDefinition[] = [
   },
 ];
 
-export function toolPath(id: ToolId): string {
-  return `/tools/${toolById(id).path}`;
+/** URL segment under /tools/ (optionally prefixed with /es, /fr, /nl). */
+export function toolPath(id: ToolId, locale?: "en" | "es" | "fr" | "nl"): string {
+  const segment = `/tools/${toolById(id).path}`;
+  if (!locale || locale === "en") return segment;
+  return `/${locale}${segment}`;
 }
 
 export function toolByPath(segment: string): ToolDefinition | undefined {

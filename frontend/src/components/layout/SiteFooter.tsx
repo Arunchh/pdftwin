@@ -1,8 +1,10 @@
-import { BUSINESS_TAGLINE } from "../../config/formats";
 import { openCheckout } from "../../utils/checkoutEvents";
+import { useI18n } from "../../i18n/I18nProvider";
 import BrandLogo from "../BrandLogo";
 
 export default function SiteFooter() {
+  const { messages, localizePath } = useI18n();
+
   return (
     <footer className="site-footer">
       <div className="site-footer-inner">
@@ -10,26 +12,23 @@ export default function SiteFooter() {
           <BrandLogo size={32} />
           <div>
             <strong>PDFTwin</strong>
-            <p>{BUSINESS_TAGLINE}</p>
+            <p>{messages.footer.tagline}</p>
           </div>
         </div>
         <div className="site-footer-links">
-          <a href="/#tools">Tools</a>
-          <a href="/formats">Formats</a>
-          <a href="/pricing">Pricing</a>
-          <a href="/login">Sign in</a>
-          <a href="/account">Account</a>
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-          <a href="/pricing#faq">FAQ</a>
+          <a href={`${localizePath("/")}#tools`}>{messages.footer.tools}</a>
+          <a href={localizePath("/formats")}>{messages.footer.formats}</a>
+          <a href={localizePath("/pricing")}>{messages.footer.pricing}</a>
+          <a href={localizePath("/login")}>{messages.footer.signIn}</a>
+          <a href={localizePath("/account")}>{messages.footer.account}</a>
+          <a href={localizePath("/privacy")}>{messages.footer.privacy}</a>
+          <a href={localizePath("/terms")}>{messages.footer.terms}</a>
+          <a href={`${localizePath("/pricing")}#faq`}>{messages.footer.faq}</a>
           <button type="button" className="site-footer-link-btn" onClick={openCheckout}>
-            Upgrade to Pro
+            {messages.footer.upgradePro}
           </button>
         </div>
-        <p className="site-footer-note">
-          Files are processed in memory and never stored permanently. Pro subscriptions are billed
-          securely through PayPal — cancel anytime from your PayPal account.
-        </p>
+        <p className="site-footer-note">{messages.footer.note}</p>
       </div>
     </footer>
   );

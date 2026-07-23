@@ -106,6 +106,10 @@ Compare                 →      Compress, watermark, lock
                                In-memory only, no storage
 ```
 
+## Internationalization
+
+English is the default at `/`. Spanish, French, and Dutch use prefixed routes (`/es/`, `/fr/`, `/nl/`). See [docs/product/i18n.md](../product/i18n.md).
+
 ---
 
 ## Related

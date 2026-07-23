@@ -1,11 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import PricingSection from "../components/layout/PricingSection";
+import { getMessages } from "../i18n/utils";
+
+const messages = getMessages("en");
 ---
 
 <BaseLayout
-  title="Pricing | PDFTwin"
-  description="Start free with all seven business file tools. Upgrade to PDFTwin Pro for larger files and priority processing."
+  locale="en"
+  title={messages.meta.pricingTitle}
+  description={messages.meta.pricingDescription}
 >
   <PricingSection client:load />
 </BaseLayout>

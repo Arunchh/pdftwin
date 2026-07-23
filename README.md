@@ -4,7 +4,11 @@
 
 Live site: [pdftwin.com](https://pdftwin.com)
 
-**Internal docs:** [docs/README.md](docs/README.md) — competitive research (ihatepdf), monetization plan, roadmap, implementation status.
+**Internal docs:** [docs/README.md](docs/README.md) — competitive research (ihatepdf), monetization plan, roadmap, implementation status, [i18n](docs/product/i18n.md).
+
+## Languages
+
+PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`), and **Dutch** (`/nl/`). On Vercel, first-time visitors from matching regions are redirected based on country and browser language. Use the globe menu in the header to switch manually.
 
 ## Features
 

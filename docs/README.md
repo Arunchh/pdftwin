@@ -15,6 +15,7 @@ Living docs for product strategy, competitive research, and implementation statu
 ## Product
 
 - [Implementation status](./product/implementation-status.md)
+- [Internationalization (i18n)](./product/i18n.md)
 
 ## Quick links
 

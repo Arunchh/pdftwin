@@ -4,9 +4,12 @@ import HeroSection from "../components/layout/HeroSection";
 import TrustBar from "../components/layout/TrustBar";
 import ToolGrid from "../components/layout/ToolGrid";
 import FormatSupportSection from "../components/layout/FormatSupportSection";
+import { getMessages } from "../i18n/utils";
+
+const messages = getMessages("en");
 ---
 
-<BaseLayout>
+<BaseLayout locale="en" title={messages.meta.homeTitle} description={messages.meta.homeDescription}>
   <HeroSection client:visible />
   <TrustBar client:visible />
   <ToolGrid client:visible />

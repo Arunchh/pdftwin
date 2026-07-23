@@ -1,45 +1,40 @@
-import { TOOL_CATEGORIES, TOOLS, toolPath, type ToolCategory } from "../../config/tools";
+import { TOOLS, toolPath, type ToolCategory } from "../../config/tools";
+import { useI18n } from "../../i18n/I18nProvider";
 
 const CATEGORY_ORDER: ToolCategory[] = ["convert", "organize", "security"];
 
-const CATEGORY_HINTS: Record<ToolCategory, string> = {
-  convert: "Turn PDFs and images into the formats your team delivers to clients",
-  organize: "Combine, split, compare, and pull pages from business documents",
-  security: "Protect confidential contracts and financial files",
-};
-
 export default function ToolGrid() {
+  const { locale, messages } = useI18n();
+
   return (
     <section className="tool-grid-section" id="tools">
       <div className="section-heading">
-        <h2>One upload, every business format</h2>
-        <p>
-          Pick a tool below and upload once. Switch between PDF and image tasks without starting
-          over.
-        </p>
+        <h2>{messages.toolGrid.heading}</h2>
+        <p>{messages.toolGrid.subheading}</p>
       </div>
 
       {CATEGORY_ORDER.map((category) => (
         <div key={category} className={`tool-category tool-category--${category}`}>
           <div className="tool-category-heading">
-            <h3>{TOOL_CATEGORIES[category]}</h3>
-            <p>{CATEGORY_HINTS[category]}</p>
+            <h3>{messages.toolGrid.categories[category]}</h3>
+            <p>{messages.toolGrid.categoryHints[category]}</p>
           </div>
           <div className="tool-grid">
             {TOOLS.filter((tool) => tool.category === category).map((tool) => {
               const Icon = tool.icon;
+              const copy = messages.tools[tool.id];
 
               return (
                 <a
                   key={tool.id}
-                  href={toolPath(tool.id)}
+                  href={toolPath(tool.id, locale)}
                   className={`tool-card tool-card--${tool.category}`}
-                  title={tool.description}
+                  title={copy.description}
                 >
                   <span className="tool-card-icon">
                     <Icon size={28} strokeWidth={1.75} />
                   </span>
-                  <span className="tool-card-label">{tool.shortLabel}</span>
+                  <span className="tool-card-label">{copy.shortLabel}</span>
                 </a>
               );
             })}

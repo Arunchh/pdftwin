@@ -1,11 +1,15 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import FormatSupportSection from "../components/layout/FormatSupportSection";
+import { getMessages } from "../i18n/utils";
+
+const messages = getMessages("en");
 ---
 
 <BaseLayout
-  title="Supported Formats | PDFTwin"
-  description="PDFTwin supports PDF, Word, Excel, PNG, JPG, WebP, GIF, BMP, and TIFF — one workspace for everyday business file conversion."
+  locale="en"
+  title={messages.meta.formatsTitle}
+  description={messages.meta.formatsDescription}
 >
   <FormatSupportSection />
 </BaseLayout>

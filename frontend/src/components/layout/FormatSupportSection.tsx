@@ -1,18 +1,17 @@
-import { CONVERSION_HIGHLIGHTS, SUPPORTED_INPUT_FORMATS } from "../../config/formats";
+import { useI18n } from "../../i18n/I18nProvider";
 
 export default function FormatSupportSection() {
+  const { messages } = useI18n();
+
   return (
     <section className="format-support-section" id="formats">
       <div className="section-heading">
-        <h2>Formats your business already uses</h2>
-        <p>
-          PDFTwin covers everyday document and image workflows — so your team stops jumping between
-          single-purpose tools.
-        </p>
+        <h2>{messages.formats.heading}</h2>
+        <p>{messages.formats.subheading}</p>
       </div>
 
       <div className="format-support-grid">
-        {SUPPORTED_INPUT_FORMATS.map((format) => (
+        {messages.formats.inputs.map((format) => (
           <div key={format.ext} className="format-support-card">
             <span className="format-support-ext">{format.ext}</span>
             <span>{format.use}</span>
@@ -21,7 +20,7 @@ export default function FormatSupportSection() {
       </div>
 
       <ul className="format-support-highlights">
-        {CONVERSION_HIGHLIGHTS.map((item) => (
+        {messages.formats.highlights.map((item) => (
           <li key={item}>{item}</li>
         ))}
       </ul>

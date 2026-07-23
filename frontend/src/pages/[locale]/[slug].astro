@@ -1,0 +1,45 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import ToolSeoLanding from "../../components/seo/ToolSeoLanding";
+import { NON_DEFAULT_LOCALES } from "../../i18n/config";
+import type { Locale } from "../../i18n/types";
+import {
+  getSeoLandingsForLocale,
+  seoHreflangAlternates,
+} from "../../i18n/seoLandings";
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.flatMap((locale) =>
+    getSeoLandingsForLocale(locale as Locale).map((landing) => ({
+      params: { locale, slug: landing.slug },
+      props: { landing },
+    }))
+  );
+}
+
+const { landing } = Astro.props;
+const alternates = seoHreflangAlternates(landing);
+---
+
+<BaseLayout
+  locale={landing.locale}
+  title={landing.title}
+  description={landing.metaDescription}
+  hreflangAlternates={alternates}
+>
+  <ToolSeoLanding client:load landing={landing} />
+  {landing.faq.length > 0 && (
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: landing.faq.map((item) => ({
+        "@type": "Question",
+        name: item.question,
+        acceptedAnswer: {
+          "@type": "Answer",
+          text: item.answer,
+        },
+      })),
+    })} />
+  )}
+</BaseLayout>

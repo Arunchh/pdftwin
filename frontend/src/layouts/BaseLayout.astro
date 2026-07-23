@@ -5,44 +5,60 @@ import AuthProvider from "../components/auth/AuthProvider";
 import CheckoutHost from "../components/CheckoutHost";
 import SeoStructuredData from "../components/SeoStructuredData";
 import VercelAnalytics from "../components/VercelAnalytics";
+import { I18nProvider } from "../i18n/I18nProvider";
+import { DEFAULT_LOCALE, LOCALE_HTML_LANG, LOCALE_OG } from "../i18n/config";
+import type { Locale } from "../i18n/types";
+import { getMessages, hreflangAlternates, localizePath } from "../i18n/utils";
 import "../index.css";
 
 interface Props {
+  locale?: Locale;
   title?: string;
   description?: string;
   activeToolLabel?: string;
+  hreflangAlternates?: Array<{ locale: Locale; href: string }>;
 }
 
 const {
-  title = "PDFTwin — Business File Conversion | PDF, Word, Excel & WebP",
-  description = "PDFTwin is the one-stop file conversion workspace for businesses. Convert PDFs, images, merge documents, compare revisions, and protect files in your browser.",
+  locale = DEFAULT_LOCALE,
+  title,
+  description,
   activeToolLabel,
+  hreflangAlternates: hreflangOverride,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, "https://pdftwin.com/").href;
+const messages = getMessages(locale);
+const pageTitle = title ?? messages.meta.homeTitle;
+const pageDescription = description ?? messages.meta.homeDescription;
+const canonical = new URL(localizePath(Astro.url.pathname, locale), "https://pdftwin.com/").href;
+const alternates = hreflangOverride ?? hreflangAlternates(Astro.url.pathname);
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang={LOCALE_HTML_LANG[locale]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>{title}</title>
-    <meta name="description" content={description} />
+    <title>{pageTitle}</title>
+    <meta name="description" content={pageDescription} />
     <meta name="author" content="PDFTwin" />
     <meta name="robots" content="index, follow, max-image-preview:large" />
     <link rel="canonical" href={canonical} />
+    {alternates.map((alt) => (
+      <link rel="alternate" hreflang={alt.locale} href={alt.href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={alternates.find((alt) => alt.locale === "en")?.href} />
     <meta name="theme-color" content="#00c49a" />
-    <meta property="og:title" content={title} />
-    <meta property="og:description" content={description} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={pageDescription} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="PDFTwin" />
-    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale" content={LOCALE_OG[locale]} />
     <meta property="og:image" content="https://pdftwin.com/og-image.svg" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content={title} />
-    <meta name="twitter:description" content={description} />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={pageDescription} />
     <meta name="twitter:image" content="https://pdftwin.com/og-image.svg" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.svg" />
@@ -52,27 +68,28 @@ const canonical = new URL(Astro.url.pathname, "https://pdftwin.com/").href;
       href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,500&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Noto+Sans+Arabic:wght@400;500;600;700&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Noto+Sans+Greek:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;600;700&display=swap"
       rel="stylesheet"
     />
-    <script is:inline>
+    <script is:inline define:vars={{ locale }}>
       (function () {
         var hash = window.location.hash.replace(/^#/, "").split("?")[0].toLowerCase();
         if (!hash) return;
+        var prefix = locale === "en" ? "" : "/" + locale;
         var map = {
-          convert: "/tools/convert",
-          images: "/tools/images",
-          compare: "/tools/compare",
-          compress: "/tools/compress",
-          rotate: "/tools/rotate",
-          watermark: "/tools/watermark",
-          "word-to-pdf": "/tools/word-to-pdf",
-          resize: "/tools/resize",
-          merge: "/tools/merge",
-          split: "/tools/split",
-          extract: "/tools/extract",
-          protect: "/tools/protect",
-          pricing: "/pricing",
-          tools: "/",
-          formats: "/formats",
-          faq: "/pricing#faq",
+          convert: prefix + "/tools/convert",
+          images: prefix + "/tools/images",
+          compare: prefix + "/tools/compare",
+          compress: prefix + "/tools/compress",
+          rotate: prefix + "/tools/rotate",
+          watermark: prefix + "/tools/watermark",
+          "word-to-pdf": prefix + "/tools/word-to-pdf",
+          resize: prefix + "/tools/resize",
+          merge: prefix + "/tools/merge",
+          split: prefix + "/tools/split",
+          extract: prefix + "/tools/extract",
+          protect: prefix + "/tools/protect",
+          pricing: prefix + "/pricing",
+          tools: prefix + "/",
+          formats: prefix + "/formats",
+          faq: prefix + "/pricing#faq",
         };
         var target = map[hash];
         if (target) {
@@ -81,17 +98,19 @@ const canonical = new URL(Astro.url.pathname, "https://pdftwin.com/").href;
       })();
     </script>
   </head>
-  <body>
-    <div class="site">
-      <SeoStructuredData client:load />
-      <SiteHeader client:load activeToolLabel={activeToolLabel} />
-      <main class="site-main">
-        <slot />
-      </main>
-      <SiteFooter client:load />
-      <CheckoutHost client:load />
-      <AuthProvider client:load />
-      <VercelAnalytics client:load />
-    </div>
+  <body data-locale={locale}>
+    <I18nProvider client:load locale={locale}>
+      <div class="site">
+        <SeoStructuredData client:load />
+        <SiteHeader client:load activeToolLabel={activeToolLabel} />
+        <main class="site-main">
+          <slot />
+        </main>
+        <SiteFooter client:load />
+        <CheckoutHost client:load />
+        <AuthProvider client:load />
+        <VercelAnalytics client:load />
+      </div>
+    </I18nProvider>
   </body>
 </html>

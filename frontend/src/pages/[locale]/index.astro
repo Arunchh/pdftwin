@@ -1,0 +1,24 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import HeroSection from "../../components/layout/HeroSection";
+import TrustBar from "../../components/layout/TrustBar";
+import ToolGrid from "../../components/layout/ToolGrid";
+import FormatSupportSection from "../../components/layout/FormatSupportSection";
+import { NON_DEFAULT_LOCALES } from "../../i18n/config";
+import type { Locale } from "../../i18n/types";
+import { getMessages } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return NON_DEFAULT_LOCALES.map((locale) => ({ params: { locale } }));
+}
+
+const locale = Astro.params.locale as Locale;
+const messages = getMessages(locale);
+---
+
+<BaseLayout locale={locale} title={messages.meta.homeTitle} description={messages.meta.homeDescription}>
+  <HeroSection client:visible />
+  <TrustBar client:visible />
+  <ToolGrid client:visible />
+  <FormatSupportSection />
+</BaseLayout>

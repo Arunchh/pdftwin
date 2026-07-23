@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 import { Check, Sparkles } from "lucide-react";
-import { SUBSCRIPTION_FAQ } from "../../config/faq";
-import { PRICING_PLANS } from "../../config/pricing";
+import { CHECKOUT_PRICE } from "../../config/checkout";
+import { useI18n } from "../../i18n/I18nProvider";
 import { openCheckout } from "../../utils/checkoutEvents";
 
 export default function PricingSection() {
+  const { messages, localizePath } = useI18n();
+  const { pricing } = messages;
   const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
 
   useEffect(() => {
@@ -12,26 +14,28 @@ export default function PricingSection() {
     const subscription = params.get("subscription");
 
     if (subscription === "success") {
-      setCheckoutMessage("Thanks! Your PayPal subscription is being activated.");
+      setCheckoutMessage(pricing.checkoutSuccess);
     } else if (subscription === "cancelled") {
-      setCheckoutMessage("Checkout was cancelled. You can try again anytime.");
+      setCheckoutMessage(pricing.checkoutCancelled);
     }
-  }, []);
+  }, [pricing.checkoutCancelled, pricing.checkoutSuccess]);
+
+  const plans = [
+    { id: "free" as const, highlighted: false, ...pricing.plans.free },
+    { id: "pro" as const, highlighted: true, ...pricing.plans.pro },
+  ];
 
   return (
     <section className="pricing-section" id="pricing">
       <div className="section-heading">
-        <h2>Pricing built for business teams</h2>
-        <p>
-          Start free with every conversion tool. Upgrade to Pro when you need bigger files, batch
-          image exports, and faster processing — billed securely through PayPal.
-        </p>
+        <h2>{pricing.heading}</h2>
+        <p>{pricing.subheading}</p>
       </div>
 
       {checkoutMessage && <p className="pricing-banner">{checkoutMessage}</p>}
 
       <div className="pricing-grid">
-        {PRICING_PLANS.map((plan) => (
+        {plans.map((plan) => (
           <article
             key={plan.id}
             className={`pricing-card ${plan.highlighted ? "highlighted" : ""}`}
@@ -39,13 +43,13 @@ export default function PricingSection() {
             {plan.highlighted && (
               <span className="pricing-badge">
                 <Sparkles size={12} />
-                Best for teams
+                {pricing.bestForTeams}
               </span>
             )}
             <h3>{plan.name}</h3>
             <p className="pricing-price">
-              {plan.price}
-              <span>/{plan.period}</span>
+              {plan.id === "pro" ? CHECKOUT_PRICE : "$0"}
+              <span>/{plan.id === "pro" ? pricing.proPeriod : pricing.freePeriod}</span>
             </p>
             <p className="pricing-description">{plan.description}</p>
             <ul className="pricing-features">
@@ -62,7 +66,7 @@ export default function PricingSection() {
                 {plan.cta}
               </button>
             ) : (
-              <a className="btn btn-secondary" href="/tools/convert">
+              <a className="btn btn-secondary" href={localizePath("/tools/convert")}>
                 {plan.cta}
               </a>
             )}
@@ -71,19 +75,15 @@ export default function PricingSection() {
       </div>
 
       <div className="pricing-trust-footer">
-        <p>
-          <strong>Trusted checkout.</strong> PayPal handles payment security, subscription billing,
-          and cancellation — so you stay in control.
-        </p>
+        <p>{pricing.trustFooter}</p>
       </div>
 
       <section className="pricing-faq" id="faq" aria-labelledby="pricing-faq-heading">
         <div className="section-heading">
-          <h2 id="pricing-faq-heading">Frequently asked questions</h2>
-          <p>Everything you need to know about PDFTwin Free and Pro for your team.</p>
+          <h2 id="pricing-faq-heading">{pricing.faqHeading}</h2>
         </div>
         <div className="pricing-faq-list">
-          {SUBSCRIPTION_FAQ.map((item) => (
+          {pricing.faq.map((item) => (
             <details key={item.question} className="pricing-faq-item">
               <summary>{item.question}</summary>
               <p>{item.answer}</p>

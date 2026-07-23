@@ -1,21 +1,16 @@
 import { Globe2, ShieldCheck, Timer, Zap } from "lucide-react";
-import type { TrustIcon } from "../../config/pricing";
-import { TRUST_ITEMS } from "../../config/pricing";
+import { useI18n } from "../../i18n/I18nProvider";
 
-const TRUST_ICONS: Record<TrustIcon, typeof ShieldCheck> = {
-  shield: ShieldCheck,
-  timer: Timer,
-  zap: Zap,
-  globe: Globe2,
-};
-
+const TRUST_ICONS = [ShieldCheck, Timer, Zap, Globe2] as const;
 const TRUST_TONES = ["sapphire", "teal", "amber", "amethyst"] as const;
 
 export default function TrustBar() {
+  const { messages } = useI18n();
+
   return (
     <section className="trust-bar" aria-label="Trust and security">
-      {TRUST_ITEMS.map((item, index) => {
-        const Icon = TRUST_ICONS[item.icon];
+      {messages.trust.map((item, index) => {
+        const Icon = TRUST_ICONS[index] ?? ShieldCheck;
         const tone = TRUST_TONES[index] ?? "sapphire";
         return (
           <div key={item.title} className={`trust-item trust-item--${tone}`}>
