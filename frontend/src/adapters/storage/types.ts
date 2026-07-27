@@ -6,6 +6,11 @@ export interface StagedFileRecord {
   addedAt: number;
 }
 
+export interface WorkspaceEntry {
+  record: StagedFileRecord;
+  file: File;
+}
+
 export interface StorageAdapter {
   listFiles(): Promise<StagedFileRecord[]>;
   addFile(file: File): Promise<StagedFileRecord>;
@@ -13,5 +18,6 @@ export interface StorageAdapter {
   clearAll(): Promise<void>;
   getFile(record: StagedFileRecord): Promise<File>;
   loadAllFiles(): Promise<File[]>;
+  loadEntries(): Promise<WorkspaceEntry[]>;
   subscribe(callback: () => void): () => void;
 }

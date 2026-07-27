@@ -122,9 +122,12 @@ export const TOOL_UPLOAD_CONFIG: Record<ToolId, ToolUploadConfig> = {
   },
 };
 
+/** All formats accepted anywhere in the workspace tray (not gated by active tool). */
+export const WORKSPACE_ACCEPT = `.pdf,.docx,${IMAGE_ACCEPT}`;
+
 export const WORKSPACE_UPLOAD_DEFAULT: ToolUploadConfig = {
-  accept: `.pdf,${IMAGE_ACCEPT}`,
+  accept: WORKSPACE_ACCEPT,
   title: "Upload files",
   label: "Drop files here or click to browse",
-  hint: `PDF and images · ${limitHint}`,
+  hint: `PDF, DOCX, and images · ${limitHint}`,
 };

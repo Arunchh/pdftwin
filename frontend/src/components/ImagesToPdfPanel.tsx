@@ -6,7 +6,7 @@ import DraggableOrderList, { type OrderListItem } from "./DraggableOrderList";
 import ToolPanelFeedback from "./ToolPanelFeedback";
 import { useToolResult } from "../hooks/useToolResult";
 import { imagesToPdf, PdfClientError } from "../services/pdfClient";
-import { fileKey, getImageFiles } from "../utils/files";
+import { fileKey, getImageFiles, reconcileImageOrder } from "../utils/files";
 
 interface ImagesToPdfPanelProps {
   files: File[];
@@ -19,7 +19,7 @@ export default function ImagesToPdfPanel({ files }: ImagesToPdfPanelProps) {
   const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   useEffect(() => {
-    setOrder(getImageFiles(files));
+    setOrder((current) => reconcileImageOrder(current, files));
   }, [files]);
 
   const listItems = useMemo<OrderListItem[]>(

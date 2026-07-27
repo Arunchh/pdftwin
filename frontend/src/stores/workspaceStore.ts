@@ -117,17 +117,30 @@ export async function stagedFileToFile(record: StagedFileRecord): Promise<File> 
   });
 }
 
-export async function loadWorkspaceFiles(): Promise<File[]> {
+export interface WorkspaceEntry {
+  record: StagedFileRecord;
+  file: File;
+}
+
+export async function loadWorkspaceEntries(): Promise<WorkspaceEntry[]> {
   const records = await listStagedFiles();
-  const files: File[] = [];
+  const entries: WorkspaceEntry[] = [];
+
   for (const record of records) {
     try {
-      files.push(await stagedFileToFile(record));
+      const file = await stagedFileToFile(record);
+      entries.push({ record, file });
     } catch {
       await removeStagedFile(record.id);
     }
   }
-  return files;
+
+  return entries;
+}
+
+export async function loadWorkspaceFiles(): Promise<File[]> {
+  const entries = await loadWorkspaceEntries();
+  return entries.map((entry) => entry.file);
 }
 
 export async function syncWorkspaceFiles(files: File[]): Promise<void> {

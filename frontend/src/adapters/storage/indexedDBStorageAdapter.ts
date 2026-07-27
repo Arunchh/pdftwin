@@ -1,8 +1,9 @@
-import type { StorageAdapter, StagedFileRecord } from "./types";
+import type { StorageAdapter } from "./types";
 import {
   addStagedFile,
   clearStagedFiles,
   listStagedFiles,
+  loadWorkspaceEntries,
   loadWorkspaceFiles,
   removeStagedFile,
   stagedFileToFile,
@@ -16,7 +17,8 @@ export const indexedDBStorageAdapter: StorageAdapter = {
   clearAll: clearStagedFiles,
   getFile: stagedFileToFile,
   loadAllFiles: loadWorkspaceFiles,
+  loadEntries: loadWorkspaceEntries,
   subscribe: subscribeWorkspace,
 };
 
-export type { StagedFileRecord };
+export type { StorageAdapter, StagedFileRecord, WorkspaceEntry } from "./types";

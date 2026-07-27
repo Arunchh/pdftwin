@@ -13,6 +13,12 @@ def add_pdf_watermark(content: bytes, text: str, opacity: float = 0.25) -> bytes
     gray = 1.0 - opacity
 
     doc = fitz.open(stream=content, filetype="pdf")
+    if doc.is_encrypted:
+        doc.close()
+        raise ValueError(
+            "This PDF is password-protected. Unlock it first using the Lock / Unlock tab."
+        )
+
     for page in doc:
         rect = page.rect
         font_size = max(24, min(rect.width, rect.height) / 12)

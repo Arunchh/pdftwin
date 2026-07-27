@@ -1,4 +1,5 @@
 import type { ToolId } from "../config/tools";
+import { LOCALES, NON_DEFAULT_LOCALES } from "./config";
 import type { Locale } from "./types";
 import { localizePath, stripLocalePrefix, isLocalizablePath } from "./utils";
 
@@ -1665,11 +1666,482 @@ const NL_LANDINGS: SeoLanding[] = [
   },
 ];
 
+const PT_LANDINGS: SeoLanding[] = [
+  {
+    slug: "juntar-pdf",
+    locale: "pt",
+    toolId: "arrange-merge",
+    title: "Juntar PDF Grátis Online — Sem Marca d'Água | PDFTwin",
+    metaDescription:
+      "Combine vários PDFs em um arquivo grátis no navegador. Sem marca d'água, sem cadastro, até 50 MB. Junção no seu dispositivo para mais privacidade.",
+    h1: "Juntar PDF grátis — sem marca d'água",
+    intro:
+      "Combine contratos, faturas e relatórios em um único PDF sem enviar arquivos a um servidor. O PDFTwin une seus PDFs no navegador — rápido, privado e grátis.",
+    benefits: [
+      "Sem marca d'água no PDF final",
+      "Processado no seu dispositivo — arquivos privados",
+      "Reordene documentos e páginas antes de juntar",
+      "Sem conta nem limites diários",
+    ],
+    steps: [
+      { title: "Envie PDFs", body: "Adicione dois ou mais arquivos PDF." },
+      { title: "Ordene", body: "Arraste os documentos para a ordem desejada e confirme." },
+      { title: "Baixe", body: "Clique em Juntar e salve seu PDF combinado." },
+    ],
+    faq: [
+      {
+        question: "Juntar PDF é realmente grátis?",
+        answer: "Sim. Juntar, dividir e rotacionar são grátis, sem marca d'água nem limites diários.",
+      },
+      {
+        question: "Meus arquivos são enviados a um servidor?",
+        answer: "Não. A junção é feita inteiramente no seu navegador.",
+      },
+    ],
+    ctaLabel: "Juntar PDFs agora",
+    relatedSlugs: ["dividir-pdf", "comprimir-pdf"],
+  },
+  {
+    slug: "dividir-pdf",
+    locale: "pt",
+    toolId: "split",
+    title: "Dividir PDF Online Grátis — Por Páginas | PDFTwin",
+    metaDescription:
+      "Divida um PDF em arquivos separados por intervalo de páginas. Grátis, sem marca d'água, no navegador.",
+    h1: "Dividir PDF online grátis",
+    intro:
+      "Separe um PDF grande em arquivos menores por intervalo de páginas. Informe intervalos como 1-3, 5-7 e baixe — processado localmente.",
+    benefits: [
+      "Divida por intervalos separados por vírgula",
+      "Vários intervalos são baixados em ZIP",
+      "Sem upload para servidores",
+      "Grátis sem marca d'água",
+    ],
+    steps: [
+      { title: "Envie o PDF", body: "Selecione o PDF a dividir." },
+      { title: "Informe intervalos", body: "Formato: 1-3, 5-7, 10" },
+      { title: "Baixe", body: "Obtenha um PDF ou um ZIP com todas as partes." },
+    ],
+    faq: [
+      {
+        question: "Posso dividir em mais de dois arquivos?",
+        answer: "Sim. Cada intervalo separado por vírgula gera seu próprio PDF em um ZIP.",
+      },
+    ],
+    ctaLabel: "Dividir PDF agora",
+    relatedSlugs: ["juntar-pdf", "comprimir-pdf"],
+  },
+  {
+    slug: "comprimir-pdf",
+    locale: "pt",
+    toolId: "compress-pdf",
+    title: "Comprimir PDF Grátis — Reduzir Tamanho | PDFTwin",
+    metaDescription:
+      "Comprima PDF para e-mail e downloads mais rápidos. Plano grátis até 50 MB. Processamento seguro, arquivos excluídos imediatamente.",
+    h1: "Comprimir PDF grátis online",
+    intro:
+      "Reduza o tamanho do PDF para anexos de e-mail. Escolha a qualidade e baixe um PDF mais leve em segundos.",
+    benefits: [
+      "Presets de compressão média e alta",
+      "Até 50 MB grátis por arquivo",
+      "Processado com segurança",
+      "Sem marca d'água",
+    ],
+    steps: [
+      { title: "Envie o PDF", body: "Selecione o arquivo a comprimir." },
+      { title: "Escolha qualidade", body: "Compressão média ou alta." },
+      { title: "Baixe", body: "Salve o PDF reduzido." },
+    ],
+    faq: [
+      {
+        question: "A compressão adiciona marca d'água?",
+        answer: "Nunca. O PDFTwin não adiciona marca d'água na saída gratuita.",
+      },
+    ],
+    ctaLabel: "Comprimir PDF agora",
+    relatedSlugs: ["juntar-pdf", "pdf-para-word"],
+  },
+  {
+    slug: "pdf-para-word",
+    locale: "pt",
+    toolId: "convert-extract",
+    title: "PDF para Word Grátis — Converter para DOCX | PDFTwin",
+    metaDescription:
+      "Converta PDF para Word editável (.docx) online. Plano grátis: 3 exportações por dia. Conversão com layout para documentos empresariais.",
+    h1: "PDF para Word grátis online",
+    intro:
+      "Converta PDFs empresariais em documentos Word editáveis. O PDFTwin preserva layout e tabelas quando possível.",
+    benefits: [
+      "Exporte para formato .docx",
+      "3 conversões grátis por dia",
+      "Pro: exportações ilimitadas",
+      "Nomes de arquivo multilíngues",
+    ],
+    steps: [
+      { title: "Envie o PDF", body: "Selecione o PDF a converter." },
+      { title: "Escolha Word", body: "Formato de saída: documento Word." },
+      { title: "Baixe DOCX", body: "Edite no Word ou Google Docs." },
+    ],
+    faq: [
+      {
+        question: "Quantas conversões PDF para Word grátis por dia?",
+        answer: "Usuários gratuitos: 3 exportações PDF para Word ou Excel por dia. O Pro é ilimitado.",
+      },
+    ],
+    ctaLabel: "Converter para Word agora",
+    relatedSlugs: ["comprimir-pdf", "word-para-pdf"],
+  },
+  {
+    slug: "comparar-pdf",
+    locale: "pt",
+    toolId: "pdf-compare",
+    title: "Comparar PDF Online Grátis — Lado a Lado | PDFTwin",
+    metaDescription:
+      "Compare dois PDFs lado a lado com rolagem e zoom sincronizados. Grátis, no navegador — arquivos não saem do seu dispositivo.",
+    h1: "Comparar PDFs lado a lado grátis",
+    intro:
+      "Revise revisões de contratos com dois PDFs renderizados juntos. A rolagem sincronizada mantém ambos os painéis alinhados.",
+    benefits: [
+      "Visualizador lado a lado no navegador",
+      "Rolagem e zoom sincronizados",
+      "Sem upload para o servidor",
+      "Grátis para revisão de contratos",
+    ],
+    steps: [
+      { title: "Envie dois PDFs", body: "Adicione documento esquerdo e direito." },
+      { title: "Ative rolagem sincronizada", body: "Sincronize ambos os painéis." },
+      { title: "Revise", body: "Amplie detalhes com zoom sincronizado." },
+    ],
+    faq: [
+      {
+        question: "Os arquivos são enviados ao comparar?",
+        answer: "Não. A comparação é renderizada localmente com PDF.js.",
+      },
+    ],
+    ctaLabel: "Comparar PDFs agora",
+    relatedSlugs: ["juntar-pdf", "dividir-pdf"],
+  },
+  {
+    slug: "word-para-pdf",
+    locale: "pt",
+    toolId: "word-to-pdf",
+    title: "Word para PDF Grátis — Converter DOCX | PDFTwin",
+    metaDescription:
+      "Converta Word para PDF pronto para compartilhar. Grátis, processamento seguro, até 50 MB por arquivo.",
+    h1: "Word para PDF grátis online",
+    intro:
+      "Converta propostas e contratos DOCX em PDFs que qualquer cliente pode abrir. Envie Word e baixe PDF em segundos.",
+    benefits: [
+      "Conversão DOCX para PDF",
+      "Grátis até 50 MB",
+      "Processamento seguro na memória",
+      "Sem marca d'água",
+    ],
+    steps: [
+      { title: "Envie DOCX", body: "Selecione seu documento Word." },
+      { title: "Converta", body: "O PDFTwin processa o layout." },
+      { title: "Baixe PDF", body: "Compartilhe por e-mail ou na nuvem." },
+    ],
+    faq: [],
+    ctaLabel: "Converter Word para PDF",
+    relatedSlugs: ["pdf-para-word", "juntar-pdf"],
+  },
+  {
+    slug: "rotacionar-pdf",
+    locale: "pt",
+    toolId: "rotate-pdf",
+    title: "Rotacionar PDF Grátis Online — 90°, 180°, 270° | PDFTwin",
+    metaDescription:
+      "Rotacione páginas PDF grátis no navegador. Gire todas ou páginas selecionadas. Sem marca d'água, sem upload para servidores.",
+    h1: "Rotacionar PDF grátis online",
+    intro:
+      "Corrija digitalizações giradas e slides na horizontal. O PDFTwin rotaciona no seu navegador — os arquivos permanecem no seu dispositivo.",
+    benefits: [
+      "Rotacionar todas as páginas ou uma lista personalizada",
+      "90°, 180° ou 270° em um clique",
+      "Processado localmente",
+      "Grátis sem marca d'água",
+    ],
+    steps: [
+      { title: "Envie o PDF", body: "Selecione o PDF a rotacionar." },
+      { title: "Escolha ângulo", body: "Selecione 90°, 180° ou 270° e quais páginas rotacionar." },
+      { title: "Baixe", body: "Salve o PDF corrigido." },
+    ],
+    faq: [
+      {
+        question: "Posso rotacionar apenas algumas páginas?",
+        answer: "Sim. Informe números de página específicos ou rotacione todo o documento.",
+      },
+    ],
+    ctaLabel: "Rotacionar PDF agora",
+    relatedSlugs: ["dividir-pdf", "juntar-pdf"],
+  },
+  {
+    slug: "extrair-paginas-pdf",
+    locale: "pt",
+    toolId: "extract-pages",
+    title: "Extrair Páginas PDF Grátis — Salvar Páginas | PDFTwin",
+    metaDescription:
+      "Extraia páginas específicas de um PDF para um novo arquivo. Grátis até 50 MB, processamento seguro, sem marca d'água.",
+    h1: "Extrair páginas PDF grátis online",
+    intro:
+      "Obtenha apenas as páginas que precisa — assinaturas, anexos ou seções de aprovação — em um novo PDF sem dividir manualmente o arquivo inteiro.",
+    benefits: [
+      "Extraia por intervalo ou lista de páginas",
+      "Até 50 MB grátis por arquivo",
+      "Processamento seguro na memória",
+      "Sem marca d'água",
+    ],
+    steps: [
+      { title: "Envie o PDF", body: "Selecione o documento de origem." },
+      { title: "Escolha páginas", body: "Informe números ou intervalos a extrair." },
+      { title: "Baixe", body: "Salve o PDF com apenas essas páginas." },
+    ],
+    faq: [
+      {
+        question: "Extrair é diferente de dividir?",
+        answer: "Extrair cria um PDF com páginas selecionadas. Dividir pode gerar vários arquivos por intervalo.",
+      },
+    ],
+    ctaLabel: "Extrair páginas agora",
+    relatedSlugs: ["dividir-pdf", "remover-paginas-pdf"],
+  },
+  {
+    slug: "remover-paginas-pdf",
+    locale: "pt",
+    toolId: "remove-pages",
+    title: "Remover Páginas PDF Grátis Online | PDFTwin",
+    metaDescription:
+      "Remova páginas indesejadas de um PDF no navegador. Grátis, sem marca d'água, processado localmente.",
+    h1: "Remover páginas PDF grátis online",
+    intro:
+      "Remova páginas em branco, capas ou anexos obsoletos sem reexportar todo o documento. A remoção é feita no seu navegador.",
+    benefits: [
+      "Remova por número ou intervalo de páginas",
+      "Processado no seu dispositivo",
+      "Sem conta nem limites diários",
+      "Grátis sem marca d'água",
+    ],
+    steps: [
+      { title: "Envie o PDF", body: "Selecione o PDF a editar." },
+      { title: "Escolha páginas", body: "Informe os números de página a remover." },
+      { title: "Baixe", body: "Salve o PDF recortado." },
+    ],
+    faq: [
+      {
+        question: "Os arquivos são enviados ao remover páginas?",
+        answer: "Não. A remoção é feita inteiramente no seu navegador.",
+      },
+    ],
+    ctaLabel: "Remover páginas agora",
+    relatedSlugs: ["dividir-pdf", "extrair-paginas-pdf"],
+  },
+  {
+    slug: "assinar-pdf",
+    locale: "pt",
+    toolId: "sign-pdf",
+    title: "Assinar PDF Grátis Online — Desenhar ou Enviar Assinatura | PDFTwin",
+    metaDescription:
+      "Adicione assinatura a PDF grátis no navegador. Desenhe na tela ou envie PNG. Sem marca d'água, arquivos no seu dispositivo.",
+    h1: "Assinar PDF grátis online",
+    intro:
+      "Assine contratos, NDAs e formulários sem imprimir nem digitalizar. Desenhe diretamente ou envie uma imagem PNG com fundo transparente.",
+    benefits: [
+      "Desenhe assinatura ou envie PNG",
+      "Coloque a assinatura em qualquer página",
+      "Processado localmente",
+      "Grátis sem marca d'água",
+    ],
+    steps: [
+      { title: "Envie o PDF", body: "Selecione o documento a assinar." },
+      { title: "Crie assinatura", body: "Desenhe na tela ou envie um PNG." },
+      { title: "Posicione e baixe", body: "Posicione a assinatura e salve o PDF assinado." },
+    ],
+    faq: [
+      {
+        question: "É uma assinatura eletrônica legalmente vinculante?",
+        answer: "O PDFTwin adiciona uma imagem de assinatura visual. Para contratos regulamentados, confirme os requisitos da sua jurisdição.",
+      },
+    ],
+    ctaLabel: "Assinar PDF agora",
+    relatedSlugs: ["juntar-pdf", "word-para-pdf"],
+  },
+  {
+    slug: "imagens-para-pdf",
+    locale: "pt",
+    toolId: "images-to-pdf",
+    title: "Imagens para PDF Grátis — JPG, PNG em um PDF | PDFTwin",
+    metaDescription:
+      "Combine JPG, PNG e imagens em um PDF grátis no navegador. Arraste para reordenar. Sem marca d'água.",
+    h1: "Converter imagens para PDF grátis online",
+    intro:
+      "Converta digitalizações, recibos e exportações de slides em um PDF pronto para compartilhar. Reordene imagens antes de exportar.",
+    benefits: [
+      "Vários formatos JPG, PNG e imagens",
+      "Arraste para reordenar páginas",
+      "Processado no navegador",
+      "Grátis sem marca d'água",
+    ],
+    steps: [
+      { title: "Adicione imagens", body: "Envie um ou mais arquivos de imagem." },
+      { title: "Ordene", body: "Arraste as imagens para a ordem desejada." },
+      { title: "Baixe PDF", body: "Exporte um PDF combinado." },
+    ],
+    faq: [
+      {
+        question: "Posso misturar JPG e PNG?",
+        answer: "Sim. Adicione qualquer formato compatível e exporte como um PDF.",
+      },
+    ],
+    ctaLabel: "Criar PDF a partir de imagens",
+    relatedSlugs: ["juntar-pdf", "word-para-pdf"],
+  },
+  {
+    slug: "ocr-pdf",
+    locale: "pt",
+    toolId: "ocr-pdf",
+    title: "OCR PDF Grátis Online — PDF Digitalizado para Texto | PDFTwin",
+    metaDescription:
+      "Extraia texto de PDFs digitalizados e fotos com OCR no navegador. Português, inglês, espanhol, francês, alemão, holandês e mais. Grátis e privado.",
+    h1: "OCR PDF para texto grátis online",
+    intro:
+      "Converta contratos digitalizados e documentos fotografados em texto editável. O PDFTwin usa Tesseract.js no seu navegador.",
+    benefits: [
+      "OCR para PDFs digitalizados e imagens",
+      "7 idiomas incl. PT, EN, ES, FR, DE, NL",
+      "Processado localmente",
+      "Grátis sem limites diários",
+    ],
+    steps: [
+      { title: "Envie arquivo", body: "Adicione um PDF digitalizado ou imagem." },
+      { title: "Escolha idioma", body: "Selecione o idioma do documento." },
+      { title: "Baixe texto", body: "Copie ou salve o .txt extraído." },
+    ],
+    faq: [
+      {
+        question: "Funciona com fotos de documentos?",
+        answer: "Sim. Envie JPG, PNG ou uma página PDF digitalizada e o OCR extrai texto legível.",
+      },
+    ],
+    ctaLabel: "Executar OCR agora",
+    relatedSlugs: ["pdf-para-word", "comprimir-pdf"],
+  },
+  {
+    slug: "pdf-para-jpg",
+    locale: "pt",
+    toolId: "pdf-to-jpg",
+    title: "PDF para JPG Grátis — Exportar Páginas | PDFTwin",
+    metaDescription: "Converta PDF para JPG ou PNG grátis no navegador. ZIP multipágina. Sem marca d'água.",
+    h1: "PDF para JPG grátis online",
+    intro: "Exporte páginas PDF como imagens para slides e e-mail. Processado localmente com PDF.js.",
+    benefits: ["JPG ou PNG", "ZIP multipágina", "No navegador", "Sem marca d'água"],
+    steps: [
+      { title: "Envie PDF", body: "Selecione o arquivo." },
+      { title: "Formato", body: "Escolha JPG ou PNG." },
+      { title: "Baixe", body: "Salve imagens ou ZIP." },
+    ],
+    faq: [],
+    ctaLabel: "Converter para JPG",
+    relatedSlugs: ["imagens-para-pdf", "comprimir-pdf"],
+  },
+  {
+    slug: "pdf-para-texto",
+    locale: "pt",
+    toolId: "pdf-to-text",
+    title: "PDF para Texto Grátis — Extrair Texto | PDFTwin",
+    metaDescription: "Extraia texto de PDF para .txt grátis no navegador. Para digitalizações use OCR.",
+    h1: "PDF para texto grátis online",
+    intro: "Obtenha texto editável de PDFs digitais. Processado no seu dispositivo.",
+    benefits: ["Camada de texto", "No navegador", "Uso ilimitado", "Digitalizações → OCR"],
+    steps: [
+      { title: "Envie PDF", body: "PDF com texto selecionável." },
+      { title: "Extraia", body: "Leia a camada de texto." },
+      { title: "Baixe", body: "Salve o .txt." },
+    ],
+    faq: [],
+    ctaLabel: "Extrair texto",
+    relatedSlugs: ["ocr-pdf", "pdf-para-word"],
+  },
+  {
+    slug: "converter-imagens",
+    locale: "pt",
+    toolId: "image-convert",
+    title: "Converter Imagens Online Grátis | PDFTwin",
+    metaDescription: "Converta PNG, JPG, GIF, BMP ou TIFF para WebP, PNG ou JPEG. Grátis até 50 MB.",
+    h1: "Converter imagens online grátis",
+    intro: "Padronize formatos para web e e-mail.",
+    benefits: ["Vários formatos de entrada", "WebP, PNG, JPEG na saída", "50 MB grátis", "Sem marca d'água"],
+    steps: [
+      { title: "Envie imagem", body: "Selecione arquivo." },
+      { title: "Saída", body: "Escolha formato." },
+      { title: "Baixe", body: "Salve resultado." },
+    ],
+    faq: [],
+    ctaLabel: "Converter imagem",
+    relatedSlugs: ["imagens-para-pdf", "redimensionar-imagens"],
+  },
+  {
+    slug: "redimensionar-imagens",
+    locale: "pt",
+    toolId: "image-resize",
+    title: "Redimensionar Imagens Grátis | PDFTwin",
+    metaDescription: "Redimensione e comprima imagens para e-mail e web. Grátis até 50 MB.",
+    h1: "Redimensionar imagens grátis",
+    intro: "Reduza fotos e capturas de tela para anexos mais leves.",
+    benefits: ["Largura/altura personalizada", "Presets de qualidade", "50 MB grátis", "Sem marca d'água"],
+    steps: [
+      { title: "Envie", body: "Selecione imagem." },
+      { title: "Tamanho", body: "Informe dimensões." },
+      { title: "Baixe", body: "Salve arquivo." },
+    ],
+    faq: [],
+    ctaLabel: "Redimensionar",
+    relatedSlugs: ["converter-imagens", "comprimir-pdf"],
+  },
+  {
+    slug: "marca-dagua-pdf",
+    locale: "pt",
+    toolId: "watermark-pdf",
+    title: "Marca d'Água PDF Grátis | PDFTwin",
+    metaDescription: "Adicione marca d'água de texto ou imagem a PDF. Grátis até 50 MB.",
+    h1: "Marca d'água PDF grátis",
+    intro: "Marque rascunhos e cópias confidenciais em todas as páginas.",
+    benefits: ["Texto ou imagem", "Opacidade ajustável", "50 MB grátis", "Sem nossa logo na saída"],
+    steps: [
+      { title: "Envie PDF", body: "Selecione documento." },
+      { title: "Marca", body: "Texto ou imagem." },
+      { title: "Baixe", body: "Salve PDF." },
+    ],
+    faq: [],
+    ctaLabel: "Adicionar marca d'água",
+    relatedSlugs: ["proteger-pdf", "comprimir-pdf"],
+  },
+  {
+    slug: "proteger-pdf",
+    locale: "pt",
+    toolId: "lock-unlock",
+    title: "Proteger PDF com Senha Grátis | PDFTwin",
+    metaDescription: "Adicione senha a PDF ou remova restrições. Grátis até 50 MB.",
+    h1: "Proteger PDF com senha grátis",
+    intro: "Criptografe PDFs confidenciais ou desbloqueie arquivos próprios.",
+    benefits: ["Criptografar com senha", "Desbloquear PDFs próprios", "50 MB grátis", "Sem marca d'água"],
+    steps: [
+      { title: "Envie PDF", body: "Arquivo a proteger." },
+      { title: "Senha", body: "Informe a chave." },
+      { title: "Baixe", body: "Salve PDF." },
+    ],
+    faq: [],
+    ctaLabel: "Proteger PDF",
+    relatedSlugs: ["marca-dagua-pdf", "assinar-pdf"],
+  },
+];
+
 export const ALL_SEO_LANDINGS: SeoLanding[] = [
   ...EN_LANDINGS,
   ...ES_LANDINGS,
   ...FR_LANDINGS,
   ...NL_LANDINGS,
+  ...PT_LANDINGS,
 ];
 
 export function getSeoLandingsForLocale(locale: Locale): SeoLanding[] {
@@ -1696,7 +2168,7 @@ export function getSeoLandingByPath(pathname: string): SeoLanding | undefined {
   const guideMatch = normalized.match(/^\/guides\/([^/]+)$/);
   if (guideMatch) return getSeoLanding("en", guideMatch[1]);
 
-  const localeMatch = normalized.match(/^\/(es|fr|nl)\/([^/]+)$/);
+  const localeMatch = normalized.match(new RegExp(`^/(${NON_DEFAULT_LOCALES.join("|")})/([^/]+)$`));
   if (localeMatch) {
     const locale = localeMatch[1] as Locale;
     return getSeoLanding(locale, localeMatch[2]);
@@ -1711,8 +2183,7 @@ export function getSeoLandingForTool(locale: Locale, toolId: ToolId): SeoLanding
 
 export function seoHreflangAlternates(landing: SeoLanding): Array<{ locale: Locale; href: string }> {
   const origin = "https://pdftwin.com";
-  return (["en", "es", "fr", "nl"] as Locale[])
-    .map((locale) => getSeoLandingForTool(locale, landing.toolId))
+  return LOCALES.map((locale) => getSeoLandingForTool(locale, landing.toolId))
     .filter((item): item is SeoLanding => Boolean(item))
     .map((item) => ({
       locale: item.locale,

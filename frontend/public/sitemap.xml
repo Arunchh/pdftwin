@@ -21,6 +21,11 @@
     <priority>0.95</priority>
   </url>
   <url>
+    <loc>https://pdftwin.com/pt/</loc>
+    <changefreq>weekly</changefreq>
+    <priority>0.95</priority>
+  </url>
+  <url>
     <loc>https://pdftwin.com/formats/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -41,6 +46,11 @@
     <priority>0.75</priority>
   </url>
   <url>
+    <loc>https://pdftwin.com/pt/formats/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
     <loc>https://pdftwin.com/pricing/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
@@ -57,6 +67,11 @@
   </url>
   <url>
     <loc>https://pdftwin.com/nl/pricing/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.75</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/pricing/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.75</priority>
   </url>
@@ -467,6 +482,96 @@
   </url>
   <url>
     <loc>https://pdftwin.com/nl/pdf-beveiligen/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/juntar-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/dividir-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/comprimir-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/pdf-para-word/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/comparar-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/word-para-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/rotacionar-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/extrair-paginas-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/remover-paginas-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/assinar-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/imagens-para-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/ocr-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/pdf-para-jpg/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/pdf-para-texto/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/converter-imagens/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/redimensionar-imagens/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/marca-dagua-pdf/</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.85</priority>
+  </url>
+  <url>
+    <loc>https://pdftwin.com/pt/proteger-pdf/</loc>
     <changefreq>monthly</changefreq>
     <priority>0.85</priority>
   </url>

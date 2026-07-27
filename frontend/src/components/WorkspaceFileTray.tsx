@@ -1,7 +1,7 @@
 import { ChevronDown, FolderOpen, Trash2, X } from "lucide-react";
 import { formatBytes, formatFileLimit } from "../config/limits";
 import { useMediaQuery } from "../hooks/useMediaQuery";
-import { fileForRecord } from "../utils/files";
+import type { WorkspaceEntry } from "../adapters/storage";
 import FileDropzone from "./FileDropzone";
 import IconButton from "./IconButton";
 import WorkspaceFileThumbnail from "./WorkspaceFileThumbnail";
@@ -10,8 +10,7 @@ interface WorkspaceFileTrayProps {
   accept: string;
   uploadTitle: string;
   uploadLabel: string;
-  files: File[];
-  records: Array<{ id: string; name: string; size: number }>;
+  entries: WorkspaceEntry[];
   loading: boolean;
   entitlementsLabel: string;
   fileLimitMb: number;
@@ -25,8 +24,7 @@ export default function WorkspaceFileTray({
   accept,
   uploadTitle,
   uploadLabel,
-  files,
-  records,
+  entries,
   loading,
   entitlementsLabel,
   fileLimitMb,
@@ -36,7 +34,8 @@ export default function WorkspaceFileTray({
   onClearAll,
 }: WorkspaceFileTrayProps) {
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const showCollapsibleList = isMobile && records.length > 0;
+  const showCollapsibleList = isMobile && entries.length > 0;
+  const trayFiles = entries.map((entry) => entry.file);
 
   return (
     <aside className="workspace-files-column panel">
@@ -45,8 +44,8 @@ export default function WorkspaceFileTray({
           <h3>
             <FolderOpen size={18} aria-hidden="true" />
             Your files
-            {records.length > 0 && (
-              <span className="workspace-files-count">{records.length}</span>
+            {entries.length > 0 && (
+              <span className="workspace-files-count">{entries.length}</span>
             )}
           </h3>
           <p className="description">Saved in your browser — switch tools without re-uploading.</p>
@@ -63,7 +62,7 @@ export default function WorkspaceFileTray({
           <div className="workspace-files-upload">
             <p className="workspace-files-upload-title">{uploadTitle}</p>
             <FileDropzone
-              files={files}
+              files={trayFiles}
               onFilesChange={onFilesChange}
               accept={accept}
               label={uploadLabel}
@@ -71,30 +70,20 @@ export default function WorkspaceFileTray({
             />
           </div>
 
-          {records.length === 0 ? (
+          {entries.length === 0 ? (
             <p className="file-hint muted">No files yet — upload above to get started.</p>
           ) : showCollapsibleList ? (
             <details className="workspace-files-mobile-details" open>
               <summary className="workspace-files-mobile-summary">
                 <span>
-                  {records.length} file{records.length === 1 ? "" : "s"} in workspace
+                  {entries.length} file{entries.length === 1 ? "" : "s"} in workspace
                 </span>
                 <ChevronDown size={18} aria-hidden="true" />
               </summary>
-              <FileList
-                files={files}
-                records={records}
-                onRemoveFile={onRemoveFile}
-                onClearAll={onClearAll}
-              />
+              <FileList entries={entries} onRemoveFile={onRemoveFile} onClearAll={onClearAll} />
             </details>
           ) : (
-            <FileList
-              files={files}
-              records={records}
-              onRemoveFile={onRemoveFile}
-              onClearAll={onClearAll}
-            />
+            <FileList entries={entries} onRemoveFile={onRemoveFile} onClearAll={onClearAll} />
           )}
         </>
       )}
@@ -103,39 +92,34 @@ export default function WorkspaceFileTray({
 }
 
 function FileList({
-  files,
-  records,
+  entries,
   onRemoveFile,
   onClearAll,
 }: {
-  files: File[];
-  records: Array<{ id: string; name: string; size: number }>;
+  entries: WorkspaceEntry[];
   onRemoveFile: (id: string) => void;
   onClearAll: () => void;
 }) {
   return (
     <>
       <ul className="workspace-tray-list">
-        {records.map((record) => {
-          const file = fileForRecord(record, files);
-          return (
-            <li key={record.id} className="workspace-tray-item">
-              <WorkspaceFileThumbnail file={file} name={record.name} />
-              <div className="workspace-tray-item-meta">
-                <strong className="workspace-tray-item-name">{record.name}</strong>
-                <span>{formatBytes(record.size)}</span>
-              </div>
-              <button
-                type="button"
-                className="workspace-tray-remove"
-                aria-label={`Remove ${record.name}`}
-                onClick={() => onRemoveFile(record.id)}
-              >
-                <X size={16} />
-              </button>
-            </li>
-          );
-        })}
+        {entries.map(({ record, file }) => (
+          <li key={record.id} className="workspace-tray-item">
+            <WorkspaceFileThumbnail file={file} name={record.name} />
+            <div className="workspace-tray-item-meta">
+              <strong className="workspace-tray-item-name">{record.name}</strong>
+              <span>{formatBytes(record.size)}</span>
+            </div>
+            <button
+              type="button"
+              className="workspace-tray-remove"
+              aria-label={`Remove ${record.name}`}
+              onClick={() => onRemoveFile(record.id)}
+            >
+              <X size={16} />
+            </button>
+          </li>
+        ))}
       </ul>
 
       <div className="workspace-files-actions">

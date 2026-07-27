@@ -1,20 +1,17 @@
 import { useCallback, useEffect, useState } from "react";
 import { getStorageAdapter } from "../adapters/storage";
-import type { StagedFileRecord } from "../adapters/storage";
+import type { StagedFileRecord, WorkspaceEntry } from "../adapters/storage";
 import { recordTrayCount } from "../stores/workspaceUsageStore";
 
 export function useWorkspaceFiles() {
   const storage = getStorageAdapter();
-  const [records, setRecords] = useState<StagedFileRecord[]>([]);
-  const [files, setFiles] = useState<File[]>([]);
+  const [entries, setEntries] = useState<WorkspaceEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   const refresh = useCallback(async () => {
-    const nextRecords = await storage.listFiles();
-    setRecords(nextRecords);
-    const nextFiles = await storage.loadAllFiles();
-    setFiles(nextFiles);
-    recordTrayCount(nextFiles.length);
+    const nextEntries = await storage.loadEntries();
+    setEntries(nextEntries);
+    recordTrayCount(nextEntries.length);
     setLoading(false);
   }, [storage]);
 
@@ -55,7 +52,11 @@ export function useWorkspaceFiles() {
     await storage.clearAll();
   }, [storage]);
 
+  const files = entries.map((entry) => entry.file);
+  const records: StagedFileRecord[] = entries.map((entry) => entry.record);
+
   return {
+    entries,
     records,
     files,
     loading,

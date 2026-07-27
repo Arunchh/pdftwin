@@ -31,7 +31,7 @@ Living docs for product strategy, competitive research, and implementation statu
 | Merge batch gate (5 free, 6+ Pro) | [Implementation status](./product/implementation-status.md#merge-batch-gate-5--pro) |
 | Client-side tools (10) | [Implementation status](./product/implementation-status.md#client-side-tools) |
 | New tools: OCR, sign, images→PDF | [Roadmap — Phase 1.5 shipped](./strategy/roadmap.md#shipped-2026-07-23) |
-| SEO landing pages (72 total, all 18 tools) | [i18n — SEO landings](./product/i18n.md#seo-landing-pages-72-total--complete) |
+| SEO landing pages (90 total, all 18 tools × 5 locales) | [i18n — SEO landings](./product/i18n.md#seo-landing-pages-90-total--complete) |
 | Comparison vs iLovePDF & others | [Implementation status — growth content](./product/implementation-status.md#growth--help-content-english--shipped-2026-07-23) |
 | FAQ hub (28 questions) | `/faq` · [faq.ts](../frontend/src/config/faq.ts) |
 | Blog & how-to guides | `/blog` · [blogPosts.ts](../frontend/src/content/blogPosts.ts) |

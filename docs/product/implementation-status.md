@@ -193,9 +193,9 @@ Long-tail guides in [`frontend/src/i18n/seoLandings.ts`](../../frontend/src/i18n
 | `watermark-pdf` | `watermark-pdf-free` | `/tools/watermark` |
 | `lock-unlock` | `protect-pdf-password` | `/tools/protect` |
 
-**Coverage:** 18 tools × 4 locales = **72 pages**. Static build generates **171 total pages** (as of 2026-07-23 growth batch).
+**Coverage:** 18 tools × 5 locales = **90 pages**. Static build generates **210 total pages** (as of 2026-07-27 Portuguese locale).
 
-Full slug inventory (all locales): [i18n doc — SEO landings](./i18n.md#seo-landing-pages-72-total--complete).
+Full slug inventory (all locales): [i18n doc — SEO landings](./i18n.md#seo-landing-pages-90-total--complete).
 
 ---
 
@@ -318,9 +318,9 @@ PDF → text, OCR (Tesseract.js)           Extract pages, extract images
 
 ## Internationalization
 
-English is the default at `/`. Spanish, French, and Dutch use prefixed routes (`/es/`, `/fr/`, `/nl/`).
+English is the default at `/`. Spanish, French, Dutch, and Portuguese use prefixed routes (`/es/`, `/fr/`, `/nl/`, `/pt/`).
 
-- **Translated:** home, nav, footer (incl. growth links), pricing, tool names/descriptions in grid, **workspace shell** (headings + category/tool tabs), **72 SEO landings** (18 tools × 4 locales)  
+- **Translated:** home, nav, footer (incl. growth links), pricing, tool names/descriptions in grid, **workspace shell** (headings + category/tool tabs), **90 SEO landings** (18 tools × 5 locales)  
 - **English only:** `/compare/ilovepdf`, `/resources`, `/faq`, `/blog/*`, `/privacy`, `/terms` (legal content updated 2026-07-27)  
 - **Not yet translated:** in-tool panel UI, workspace file-tray chrome, login/account pages
 

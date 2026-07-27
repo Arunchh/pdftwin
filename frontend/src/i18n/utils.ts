@@ -2,6 +2,7 @@ import {
   COUNTRY_LOCALE,
   DEFAULT_LOCALE,
   LOCALE_COOKIE,
+  LOCALES,
   NON_DEFAULT_LOCALES,
 } from "./config";
 import { getMessages } from "./locales";
@@ -14,7 +15,7 @@ export { getMessages };
 const LOCALE_PREFIX_RE = new RegExp(`^/(${NON_DEFAULT_LOCALES.join("|")})(/|$)`);
 
 export function isLocale(value: string): value is Locale {
-  return value === "en" || value === "es" || value === "fr" || value === "nl";
+  return (LOCALES as readonly string[]).includes(value);
 }
 
 export function getLocaleFromPathname(pathname: string): Locale {
@@ -78,7 +79,7 @@ export function parseAcceptLanguage(header: string | null | undefined): Locale {
     .sort((a, b) => b.q - a.q);
 
   for (const { primary } of candidates) {
-    if (primary === "es" || primary === "fr" || primary === "nl") return primary;
+    if (primary === "es" || primary === "fr" || primary === "nl" || primary === "pt") return primary;
     if (primary === "en") return DEFAULT_LOCALE;
   }
 
@@ -122,7 +123,7 @@ export function localeCookieValue(locale: Locale): string {
 export function hreflangAlternates(pathname: string): Array<{ locale: Locale; href: string }> {
   const basePath = stripLocalePrefix(pathname);
   const origin = "https://pdftwin.com";
-  return (["en", "es", "fr", "nl"] as Locale[]).map((locale) => ({
+  return LOCALES.map((locale) => ({
     locale,
     href: `${origin}${localizePath(basePath, locale)}`,
   }));

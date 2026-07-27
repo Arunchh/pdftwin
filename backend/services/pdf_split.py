@@ -1,10 +1,12 @@
 from io import BytesIO
 
-from pypdf import PdfReader, PdfWriter
+from pypdf import PdfWriter
+
+from services.pdf_common import read_pdf_unprotected, write_pdf
 
 
 def split_pdf(content: bytes, ranges: list[tuple[int, int]]) -> list[tuple[str, bytes]]:
-    reader = PdfReader(BytesIO(content))
+    reader = read_pdf_unprotected(content)
     total_pages = len(reader.pages)
     results: list[tuple[str, bytes]] = []
 

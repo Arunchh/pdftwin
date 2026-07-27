@@ -14,7 +14,7 @@ Priority changes from competitive review:
 - [x] Daily cap: **3 PDF → Word/Excel** exports on free  
 - [x] Client-side **merge, split, rotate** (pdf-lib)  
 - [x] Internal documentation hub  
-- [x] **i18n:** English + Spanish, French, Dutch with auto-detection — see [i18n doc](../product/i18n.md)
+- [x] **i18n:** English + Spanish, French, Dutch, Portuguese with auto-detection — see [i18n doc](../product/i18n.md)
 
 ---
 
@@ -29,7 +29,7 @@ Priority changes from competitive review:
 - [x] Pricing/FAQ copy updated for merge limit and tool count  
 - [x] **SEO landings batch 1** — first 6 tools (24 pages)  
 - [x] **SEO landings batch 2** — rotate, extract, remove, sign, images→PDF, OCR (24 pages)  
-- [x] **SEO landings batch 3** — PDF→JPG, PDF→text, image convert/resize, watermark, protect (24 pages) → **72 total**  
+- [x] **SEO landings batch 3** — PDF→JPG, PDF→text, image convert/resize, watermark, protect (24 pages) → **72 total** (EN/ES/FR/NL)  
 - [x] **Comparison page** — `/compare/ilovepdf` vs iLovePDF, Smallpdf, Sejda, PDF24, ihatepdf  
 - [x] **Resources page** — `/resources` hybrid architecture & privacy  
 - [x] **FAQ hub** — `/faq` with 28 categorized questions + schema  
@@ -40,6 +40,7 @@ Priority changes from competitive review:
 - [x] **Tool workspace UI — Phase 1** — two-column layout, category-filtered tool tabs, merged files column — see [tool workspace UI](../product/tool-workspace-ui.md)
 - [x] **Tool workspace UI — Phase 2** — result cards, workflow shell, next-step chips — see [Phase 2](../product/tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27)
 - [x] **Tool workspace UI — Phase 3** — client-side tool switching, file thumbnails, mobile refinements — see [Phase 3](../product/tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27)
+- [x] **Portuguese locale (`pt`)** — UI strings, 18 SEO landings, geo detection (BR, PT, etc.), sitemap — see [i18n doc](../product/i18n.md)
 
 ### Still open
 
@@ -47,7 +48,7 @@ Priority changes from competitive review:
 |------|----------|-------|
 | ~~Tool workspace UI — Phase 2~~ | ~~High~~ | **Done** |
 | ~~Tool workspace UI — Phase 3~~ | ~~High~~ | **Done** — client nav, thumbnails, mobile |
-| ~~SEO landing content (all 18 tools)~~ | ~~High~~ | **Done** — 72 pages — see [i18n doc](../product/i18n.md) |
+| ~~SEO landing content (all 18 tools)~~ | ~~High~~ | **Done** — 90 pages (5 locales) — see [i18n doc](../product/i18n.md) |
 | ~~Comparison page~~ | ~~High~~ | **Done** — `/compare/ilovepdf` |
 | ~~FAQ hub + blog starter content~~ | ~~High~~ | **Done** — `/faq`, `/blog` |
 | Translate **tool panel UI** | High | Panels still English-only — see [i18n doc](../product/i18n.md#next-phases) |

@@ -8,7 +8,7 @@ Live site: [pdftwin.com](https://pdftwin.com) · Operated by **Helios Impex** (I
 
 ## Languages
 
-PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`), and **Dutch** (`/nl/`). On Vercel, first-time visitors from matching regions are redirected based on country and browser language. Use the globe menu in the header to switch manually.
+PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`), **Dutch** (`/nl/`), and **Portuguese** (`/pt/`). On Vercel, first-time visitors from matching regions are redirected based on country and browser language. Use the globe menu in the header to switch manually.
 
 ## Features
 
@@ -285,7 +285,7 @@ Internal docs live in [`docs/`](docs/README.md):
 |-------|-----|
 | Tool inventory, limits, client vs server | [Implementation status](docs/product/implementation-status.md) |
 | Workspace UI (layout, result cards, client nav) | [Tool workspace UI](docs/product/tool-workspace-ui.md) |
-| i18n & SEO landings (72 pages) | [i18n](docs/product/i18n.md) |
+| i18n & SEO landings (90 pages) | [i18n](docs/product/i18n.md) |
 | Supabase auth & production deploy | [Supabase auth guide](docs/product/supabase-auth.md) |
 | Roadmap & deferred items | [Roadmap](docs/strategy/roadmap.md) |
 | Monetization & pricing rationale | [Monetization plan](docs/strategy/monetization-plan.md) |

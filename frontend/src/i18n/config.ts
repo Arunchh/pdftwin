@@ -2,13 +2,14 @@ import type { Locale } from "./types";
 
 export const DEFAULT_LOCALE: Locale = "en";
 
-export const LOCALES: Locale[] = ["en", "es", "fr", "nl"];
+export const LOCALES: Locale[] = ["en", "es", "fr", "nl", "pt"];
 
 export const LOCALE_LABELS: Record<Locale, string> = {
   en: "English",
   es: "Español",
   fr: "Français",
   nl: "Nederlands",
+  pt: "Português",
 };
 
 export const LOCALE_HTML_LANG: Record<Locale, string> = {
@@ -16,6 +17,7 @@ export const LOCALE_HTML_LANG: Record<Locale, string> = {
   es: "es",
   fr: "fr",
   nl: "nl",
+  pt: "pt",
 };
 
 export const LOCALE_OG: Record<Locale, string> = {
@@ -23,6 +25,7 @@ export const LOCALE_OG: Record<Locale, string> = {
   es: "es_ES",
   fr: "fr_FR",
   nl: "nl_NL",
+  pt: "pt_BR",
 };
 
 /** Strong geo signals → locale (used by edge middleware). */
@@ -64,6 +67,14 @@ export const COUNTRY_LOCALE: Record<string, Locale> = {
   NL: "nl",
   AW: "nl",
   SR: "nl",
+  BR: "pt",
+  PT: "pt",
+  AO: "pt",
+  MZ: "pt",
+  CV: "pt",
+  GW: "pt",
+  ST: "pt",
+  TL: "pt",
 };
 
 /** Belgium: prefer Accept-Language between fr and nl. */

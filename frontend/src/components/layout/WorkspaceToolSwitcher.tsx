@@ -1,6 +1,7 @@
 import type { ToolCategory, ToolId } from "../../config/tools";
 import { TOOLS, toolById, toolPath } from "../../config/tools";
 import { useI18n } from "../../i18n/I18nProvider";
+import type { Locale } from "../../i18n/types";
 
 const CATEGORY_ORDER: ToolCategory[] = ["convert", "organize", "security"];
 
@@ -85,6 +86,6 @@ export default function WorkspaceToolSwitcher({
 }
 
 /** Fallback href for no-JS and SEO — kept on tool pages via static routes. */
-export function workspaceToolHref(toolId: ToolId, locale: "en" | "es" | "fr" | "nl" = "en") {
+export function workspaceToolHref(toolId: ToolId, locale: Locale = "en") {
   return toolPath(toolId, locale);
 }

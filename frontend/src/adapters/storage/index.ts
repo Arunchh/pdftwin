@@ -6,4 +6,4 @@ export function getStorageAdapter(): StorageAdapter {
   return indexedDBStorageAdapter;
 }
 
-export type { StorageAdapter, StagedFileRecord } from "./types";
+export type { StorageAdapter, StagedFileRecord, WorkspaceEntry } from "./types";

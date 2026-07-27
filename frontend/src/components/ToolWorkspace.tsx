@@ -20,7 +20,7 @@ import SignPdfPanel from "./SignPdfPanel";
 import WorkspaceFileTray from "./WorkspaceFileTray";
 import WorkspaceToolSwitcher from "./layout/WorkspaceToolSwitcher";
 import type { ToolId } from "../config/tools";
-import { TOOL_UPLOAD_CONFIG } from "../config/upload";
+import { TOOL_UPLOAD_CONFIG, WORKSPACE_ACCEPT } from "../config/upload";
 import { WorkspaceNavProvider } from "../context/WorkspaceNavContext";
 import { useAuth } from "../hooks/useAuth";
 import { useI18n } from "../i18n/I18nProvider";
@@ -36,7 +36,7 @@ interface ToolWorkspaceProps {
 export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspaceProps) {
   const { messages } = useI18n();
   const { entitlements } = useAuth();
-  const { records, files, loading, addFiles, removeFile, clearAll } = useWorkspaceFiles();
+  const { entries, files, loading, addFiles, removeFile, clearAll } = useWorkspaceFiles();
   const { activeToolId, activeTool, navigateToTool } = useWorkspaceNavigation(initialToolId);
   const [pdfOrder, setPdfOrder] = useState<File[]>([]);
   const [mergeOrderFrozen, setMergeOrderFrozen] = useState(false);
@@ -136,11 +136,10 @@ export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspacePr
 
         <div className="workspace-layout">
           <WorkspaceFileTray
-            accept={uploadConfig.accept}
+            accept={WORKSPACE_ACCEPT}
             uploadTitle={uploadConfig.title}
             uploadLabel={uploadConfig.label}
-            files={files}
-            records={records}
+            entries={entries}
             loading={loading}
             entitlementsLabel={entitlements.label}
             fileLimitMb={entitlements.fileLimitMb}

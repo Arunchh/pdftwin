@@ -315,12 +315,15 @@ async def split(
     for part in ranges.replace(" ", "").split(","):
         if not part:
             continue
-        if "-" in part:
-            start_str, end_str = part.split("-", 1)
-            parsed_ranges.append((int(start_str), int(end_str)))
-        else:
-            page = int(part)
-            parsed_ranges.append((page, page))
+        try:
+            if "-" in part:
+                start_str, end_str = part.split("-", 1)
+                parsed_ranges.append((int(start_str), int(end_str)))
+            else:
+                page = int(part)
+                parsed_ranges.append((page, page))
+        except ValueError as exc:
+            raise HTTPException(status_code=400, detail=f'Invalid page range "{part}".') from exc
 
     if not parsed_ranges:
         raise HTTPException(status_code=400, detail="Provide at least one page range.")

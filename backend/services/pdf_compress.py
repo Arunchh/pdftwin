@@ -3,6 +3,11 @@ import fitz
 
 def compress_pdf(content: bytes, level: str = "medium") -> bytes:
     doc = fitz.open(stream=content, filetype="pdf")
+    if doc.is_encrypted:
+        doc.close()
+        raise ValueError(
+            "This PDF is password-protected. Unlock it first using the Lock / Unlock tab."
+        )
     garbage = 4 if level == "high" else 3
     compressed = doc.tobytes(garbage=garbage, deflate=True, clean=True)
     doc.close()

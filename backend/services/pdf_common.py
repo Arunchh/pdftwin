@@ -11,12 +11,18 @@ def parse_page_selection(selection: str) -> list[int]:
             continue
         if "-" in part:
             start_str, end_str = part.split("-", 1)
-            start, end = int(start_str), int(end_str)
+            try:
+                start, end = int(start_str), int(end_str)
+            except ValueError as exc:
+                raise ValueError(f'Invalid range "{part}".') from exc
             if start > end:
                 raise ValueError(f"Invalid range {start}-{end}.")
             pages.extend(range(start, end + 1))
         else:
-            pages.append(int(part))
+            try:
+                pages.append(int(part))
+            except ValueError as exc:
+                raise ValueError(f'Invalid page number "{part}".') from exc
 
     if not pages:
         raise ValueError("Provide at least one page number.")

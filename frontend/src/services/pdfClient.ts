@@ -1,7 +1,7 @@
 import { degrees, PDFDocument, type Rotation } from "pdf-lib";
 import JSZip from "jszip";
 
-const ENCRYPTED_MESSAGE =
+export const ENCRYPTED_PDF_MESSAGE =
   "This PDF is password-protected. Unlock it first using the Lock / Unlock tool.";
 
 export class PdfClientError extends Error {
@@ -12,11 +12,20 @@ export class PdfClientError extends Error {
 }
 
 async function loadPdf(bytes: ArrayBuffer): Promise<PDFDocument> {
+  let doc: PDFDocument;
   try {
-    return await PDFDocument.load(bytes, { ignoreEncryption: false });
+    doc = await PDFDocument.load(bytes, { ignoreEncryption: true });
   } catch {
-    throw new PdfClientError(ENCRYPTED_MESSAGE);
+    throw new PdfClientError(
+      "Could not read this PDF. The file may be corrupt or in an unsupported format."
+    );
   }
+
+  if (doc.isEncrypted) {
+    throw new PdfClientError(ENCRYPTED_PDF_MESSAGE);
+  }
+
+  return doc;
 }
 
 export function parsePageSelection(selection: string): number[] {
@@ -57,9 +66,20 @@ export function parsePageRanges(ranges: string): Array<[number, number]> {
     if (!part) continue;
     if (part.includes("-")) {
       const [startStr, endStr] = part.split("-", 2);
-      parsed.push([Number(startStr), Number(endStr)]);
+      const start = Number(startStr);
+      const end = Number(endStr);
+      if (Number.isNaN(start) || Number.isNaN(end)) {
+        throw new PdfClientError(`Invalid range ${part}.`);
+      }
+      if (start > end) {
+        throw new PdfClientError(`Invalid range ${part}. Start must be ≤ end.`);
+      }
+      parsed.push([start, end]);
     } else {
       const page = Number(part);
+      if (Number.isNaN(page)) {
+        throw new PdfClientError(`Invalid page number "${part}".`);
+      }
       parsed.push([page, page]);
     }
   }

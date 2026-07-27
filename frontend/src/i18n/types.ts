@@ -1,6 +1,6 @@
 import type { ToolId } from "../config/tools";
 
-export type Locale = "en" | "es" | "fr" | "nl";
+export type Locale = "en" | "es" | "fr" | "nl" | "pt";
 
 export interface ToolMessages {
   name: string;
@@ -25,6 +25,7 @@ export interface Messages {
     es: string;
     fr: string;
     nl: string;
+    pt: string;
   };
   nav: {
     allTools: string;

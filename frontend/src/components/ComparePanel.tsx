@@ -10,6 +10,8 @@ import {
 } from "lucide-react";
 import IconButton from "./IconButton";
 import { formatFileLimit } from "../config/limits";
+import { PdfClientError } from "../services/pdfClient";
+import { openPdfFile } from "../services/pdfJsClient";
 import { fileKey } from "../utils/files";
 import { useAuth } from "../hooks/useAuth";
 
@@ -17,21 +19,11 @@ const MIN_SCALE = 0.5;
 const MAX_SCALE = 3;
 const SCALE_STEP = 0.15;
 
-type PdfJsModule = typeof import("pdfjs-dist");
-
-let pdfjsPromise: Promise<PdfJsModule> | null = null;
-
-async function getPdfJs(): Promise<PdfJsModule> {
-  if (!pdfjsPromise) {
-    pdfjsPromise = import("pdfjs-dist").then((pdfjs) => {
-      pdfjs.GlobalWorkerOptions.workerSrc = new URL(
-        "pdfjs-dist/build/pdf.worker.min.mjs",
-        import.meta.url
-      ).toString();
-      return pdfjs;
-    });
+function formatPdfOpenError(err: unknown, side: "left" | "right"): string {
+  if (err instanceof PdfClientError) {
+    return err.message;
   }
-  return pdfjsPromise;
+  return `Could not open the ${side} PDF.`;
 }
 
 function CompareSlotPicker({
@@ -177,11 +169,7 @@ export default function ComparePanel({ pdfFiles }: ComparePanelProps) {
   const rightScrollRef = useRef<HTMLDivElement>(null);
   const syncingScroll = useRef(false);
 
-  const loadPdf = useCallback(async (file: File) => {
-    const pdfjs = await getPdfJs();
-    const data = await file.arrayBuffer();
-    return pdfjs.getDocument({ data }).promise;
-  }, []);
+  const loadPdf = useCallback((file: File) => openPdfFile(file), []);
 
   useEffect(() => {
     if (leftFile && !pdfFiles.some((file) => fileKey(file) === fileKey(leftFile))) {
@@ -214,8 +202,8 @@ export default function ComparePanel({ pdfFiles }: ComparePanelProps) {
       try {
         const doc = await loadPdf(leftFile);
         if (!cancelled) setLeftDoc(doc);
-      } catch {
-        if (!cancelled) setMessage("Could not open the left PDF.");
+      } catch (err) {
+        if (!cancelled) setMessage(formatPdfOpenError(err, "left"));
       } finally {
         if (!cancelled) setLoading(false);
       }
@@ -239,8 +227,8 @@ export default function ComparePanel({ pdfFiles }: ComparePanelProps) {
       try {
         const doc = await loadPdf(rightFile);
         if (!cancelled) setRightDoc(doc);
-      } catch {
-        if (!cancelled) setMessage("Could not open the right PDF.");
+      } catch (err) {
+        if (!cancelled) setMessage(formatPdfOpenError(err, "right"));
       } finally {
         if (!cancelled) setLoading(false);
       }

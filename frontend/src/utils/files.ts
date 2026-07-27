@@ -25,10 +25,42 @@ export function getDocxFiles(files: File[]): File[] {
 }
 
 export function fileForRecord(
-  record: { id: string; name: string; size: number },
+  record: { id: string; name: string; size: number; addedAt?: number },
   files: File[]
 ): File | undefined {
-  return files.find((file) => file.name === record.name && file.size === record.size);
+  const nameSizeMatches = files.filter(
+    (file) => file.name === record.name && file.size === record.size
+  );
+  if (nameSizeMatches.length === 1) {
+    return nameSizeMatches[0];
+  }
+  if (nameSizeMatches.length > 1 && record.addedAt !== undefined) {
+    let best = nameSizeMatches[0];
+    let bestDelta = Math.abs(best.lastModified - record.addedAt);
+    for (const candidate of nameSizeMatches.slice(1)) {
+      const delta = Math.abs(candidate.lastModified - record.addedAt);
+      if (delta < bestDelta) {
+        best = candidate;
+        bestDelta = delta;
+      }
+    }
+    return best;
+  }
+  return nameSizeMatches[0];
+}
+
+export function reconcileImageOrder(currentOrder: File[], allFiles: File[]): File[] {
+  const imageFiles = getImageFiles(allFiles);
+  const byKey = new Map(imageFiles.map((file) => [fileKey(file), file]));
+
+  const ordered = currentOrder
+    .map((file) => byKey.get(fileKey(file)))
+    .filter((file): file is File => Boolean(file));
+
+  const orderedKeys = new Set(ordered.map(fileKey));
+  const added = imageFiles.filter((file) => !orderedKeys.has(fileKey(file)));
+
+  return [...ordered, ...added];
 }
 
 export function fileKey(file: File): string {

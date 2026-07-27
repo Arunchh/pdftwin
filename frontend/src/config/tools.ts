@@ -1,4 +1,5 @@
 import type { LucideIcon } from "lucide-react";
+import type { Locale } from "../i18n/types";
 import {
   AlignLeft,
   BookImage,
@@ -246,8 +247,8 @@ export const TOOLS: ToolDefinition[] = [
   },
 ];
 
-/** URL segment under /tools/ (optionally prefixed with /es, /fr, /nl). */
-export function toolPath(id: ToolId, locale?: "en" | "es" | "fr" | "nl"): string {
+/** URL segment under /tools/ (optionally prefixed with /es, /fr, /nl, /pt). */
+export function toolPath(id: ToolId, locale?: Locale): string {
   const segment = `/tools/${toolById(id).path}`;
   if (!locale || locale === "en") return segment;
   return `/${locale}${segment}`;
@@ -268,10 +269,7 @@ export function toolById(id: ToolId): ToolDefinition {
 }
 
 /** Resolve tool id from a workspace URL pathname (supports localized routes). */
-export function toolIdFromPath(
-  pathname: string,
-  locale: "en" | "es" | "fr" | "nl" = "en"
-): ToolId | null {
+export function toolIdFromPath(pathname: string, locale: Locale = "en"): ToolId | null {
   const normalized = pathname.replace(/\/+$/, "") || "/";
   const prefix = locale === "en" ? "/tools/" : `/${locale}/tools/`;
   if (!normalized.startsWith(prefix)) return null;

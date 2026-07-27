@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import { PdfClientError, parsePageSelection } from "./pdfClient";
+import { ENCRYPTED_PDF_MESSAGE, PdfClientError, parsePageSelection } from "./pdfClient";
 
 type PdfJsModule = typeof import("pdfjs-dist");
 
@@ -18,10 +18,24 @@ export async function getPdfJs(): Promise<PdfJsModule> {
   return pdfjsPromise;
 }
 
-async function loadPdfDocument(file: File) {
+export async function openPdfFile(file: File) {
   const pdfjs = await getPdfJs();
   const bytes = await file.arrayBuffer();
-  return pdfjs.getDocument({ data: bytes }).promise;
+  try {
+    return await pdfjs.getDocument({ data: bytes }).promise;
+  } catch (error) {
+    const name = error instanceof Error ? error.name : "";
+    if (name === "PasswordException") {
+      throw new PdfClientError(ENCRYPTED_PDF_MESSAGE);
+    }
+    throw new PdfClientError(
+      "Could not open this PDF. It may be corrupt, unsupported, or password-protected."
+    );
+  }
+}
+
+async function loadPdfDocument(file: File) {
+  return openPdfFile(file);
 }
 
 function canvasToBlob(canvas: HTMLCanvasElement, type: string, quality?: number): Promise<Blob> {

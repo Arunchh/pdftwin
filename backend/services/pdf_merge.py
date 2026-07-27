@@ -1,16 +1,14 @@
-from io import BytesIO
+from pypdf import PdfWriter
 
-from pypdf import PdfReader, PdfWriter
+from services.pdf_common import read_pdf_unprotected, write_pdf
 
 
 def merge_pdfs(file_contents: list[bytes]) -> bytes:
     writer = PdfWriter()
 
     for content in file_contents:
-        reader = PdfReader(BytesIO(content))
+        reader = read_pdf_unprotected(content)
         for page in reader.pages:
             writer.add_page(page)
 
-    output = BytesIO()
-    writer.write(output)
-    return output.getvalue()
+    return write_pdf(writer)

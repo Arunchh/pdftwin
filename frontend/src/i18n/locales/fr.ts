@@ -24,6 +24,7 @@ export const fr: Messages = {
     es: "Español",
     fr: "Français",
     nl: "Nederlands",
+    pt: "Português",
   },
   nav: {
     allTools: "Tous les outils",
