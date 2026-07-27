@@ -7,9 +7,9 @@ const proLimit = formatFileLimit(PRO_FILE_LIMIT_MB);
 export const nl: Messages = {
   meta: {
     siteName: "PDFTwin",
-    homeTitle: "PDFTwin — Zakelijke bestandsconversie | PDF, Word, Excel en WebP",
+    homeTitle: "PDFTwin — PDF's naast elkaar vergelijken gratis | PDF-tools",
     homeDescription:
-      "PDFTwin is de alles-in-één werkruimte voor zakelijke bestandsconversie. Converteer PDF's en afbeeldingen, voeg documenten samen, vergelijk revisies en beveilig bestanden in de browser.",
+      "Vergelijk twee PDF's online met gekoppeld scrollen en zoom — in uw browser, zonder upload voor weergave. Voeg samen, splits, converteer, onderteken en beveilig documenten in één werkruimte.",
     pricingTitle: "Prijzen | PDFTwin",
     pricingDescription:
       "Start gratis met alle twaalf tools. Upgrade naar PDFTwin Pro voor grotere bestanden en onbeperkte PDF-export.",
@@ -41,16 +41,90 @@ export const nl: Messages = {
     main: "Hoofd",
   },
   hero: {
-    titleLead: "Eén werkruimte voor elk",
-    titleHighlight: " bestandsformaat van uw bedrijf",
+    titleLead: "Vergelijk twee PDF's",
+    titleHighlight: " naast elkaar — gratis in uw browser",
     description:
-      "Converteer PDF naar Word en Excel, exporteer WebP-afbeeldingen, vergelijk contracten naast elkaar, voeg rapporten samen en beveilig vertrouwelijke bestanden zonder van tool te wisselen.",
-    openWorkspace: "Werkruimte openen",
-    seeFormats: "Ondersteunde formaten bekijken",
-    footnote: "Pro voegt hogere limieten en prioriteitsverwerking toe voor groeiende teams.",
-    statTools: "Zakelijke tools",
-    statFreeLimit: "Gratis per bestand",
-    statInstall: "Installatie vereist",
+      "Beoordeel contractrevisies en designproeven met gekoppeld scrollen, echte zoom en enkel-pagina-modus. Daarna pagina's extraheren, goedkeuringen samenvoegen, naar Word converteren en ondertekenen — zonder PDFTwin te verlaten.",
+    compareNow: "PDF's nu vergelijken",
+    seeAllTools: "Alle tools bekijken",
+    seeCompareGuide: "PDF-vergelijkingsgids",
+    footnote: "Vergelijken draait lokaal met PDF.js — weergave uploadt uw bestanden niet. Pro voegt hogere limieten toe voor conversie.",
+    trustChips: [
+      "PDF-vergelijking in de browser",
+      "Gekoppeld scrollen en zoom",
+      "Geen account vereist",
+    ],
+    visualCaption: "Gekoppeld scrollen · Zoom · Enkel-pagina review",
+  },
+  home: {
+    workflow: {
+      heading: "Van concept tot ondertekende PDF",
+      subheading:
+        "Vergelijken is het startpunt. Deze tools ronden de review af zonder van app te wisselen.",
+      steps: [
+        {
+          title: "Revisies vergelijken",
+          description: "Open twee PDF's naast elkaar met gekoppeld scrollen, zoom en pagina-voor-pagina review.",
+          toolId: "pdf-compare",
+        },
+        {
+          title: "Wijzigingen extraheren",
+          description: "Haal alleen de pagina's op die u nodig heeft in een nieuwe PDF voor goedkeuring.",
+          toolId: "extract-pages",
+        },
+        {
+          title: "Het definitieve pakket samenvoegen",
+          description: "Combineer goedgekeurde secties, voorbladen en bijlagen in één klare PDF.",
+          toolId: "arrange-merge",
+        },
+        {
+          title: "Ondertekenen en beveiligen",
+          description: "Voeg uw handtekening toe en beveilig het document met een wachtwoord voor verzending.",
+          toolId: "sign-pdf",
+        },
+      ],
+    },
+    complementary: {
+      heading: "Meer tools voor documentworkflows",
+      subheading: "Conversie, compressie en beveiliging — beschikbaar wanneer u ze nodig heeft.",
+      toolIds: ["convert-extract", "split", "compress-pdf", "lock-unlock", "word-to-pdf", "pdf-to-jpg"],
+    },
+    seoTools: {
+      heading: "Alle PDFTwin-tools",
+      subheading:
+        "Elke zakelijke conversie- en PDF-tool in één werkruimte — samenvoegen, splitsen, OCR, watermerk en meer.",
+    },
+  },
+  compare: {
+    setupTitle: "Kies twee PDF's om te vergelijken",
+    setupDescription:
+      "Upload PDF's naar de werkruimte-bak, wijs links en rechts toe en open de dedicated vergelijkingsviewer.",
+    leftLabel: "PDF links",
+    rightLabel: "PDF rechts",
+    remove: "Verwijderen",
+    addFromTray: "Voeg PDF's toe aan de bak hierboven en kies hier een bestand.",
+    enterReview: "Vergelijkingsviewer openen",
+    changeDocuments: "Documenten wijzigen",
+    scrollLinked: "Scroll gekoppeld",
+    scrollIndependent: "Scroll onafhankelijk",
+    zoomLinked: "Zoom gekoppeld",
+    zoomIndependent: "Zoom onafhankelijk",
+    zoomOut: "Uitzoomen",
+    zoomIn: "Inzoomen",
+    zoomOutRight: "Rechter paneel uitzoomen",
+    zoomInRight: "Rechter paneel inzoomen",
+    fitWidth: "Passend op breedte",
+    viewContinuous: "Doorlopend scrollen",
+    viewSinglePage: "Enkele pagina",
+    pageOf: "Pagina {current} van {total}",
+    prevPage: "Vorige pagina",
+    nextPage: "Volgende pagina",
+    fullscreen: "Volledig scherm",
+    exitFullscreen: "Volledig scherm sluiten",
+    loading: "PDF laden…",
+    pages: "pagina's",
+    privacyHint:
+      "Alleen PDF · tot {limit} per bestand · vergelijken lokaal gerenderd — geen upload voor weergave",
   },
   toolGrid: {
     heading: "Eén upload, elk zakelijk formaat",
@@ -200,7 +274,7 @@ export const nl: Messages = {
     compare: "Vergelijken",
     upgradePro: "Upgrade naar Pro",
     note: "Bestanden worden in het geheugen verwerkt en nooit permanent opgeslagen. Pro-abonnementen worden veilig via PayPal gefactureerd — opzeggen kan altijd.",
-    tagline: "De alles-in-één bestandsconversiewerkruimte voor moderne bedrijven.",
+    tagline: "Vergelijk PDF's naast elkaar en rond documentworkflows af in één browserwerkruimte.",
   },
   tools: {
     "convert-extract": {

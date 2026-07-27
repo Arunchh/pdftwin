@@ -35,6 +35,12 @@ Priority changes from competitive review:
 - [x] **FAQ hub** — `/faq` with 28 categorized questions + schema  
 - [x] **Blog** — `/blog` with 6 starter posts (product + long-form how-tos)  
 
+### Shipped (2026-07-27 — compare-first)
+
+- [x] **Compare-first homepage** — compare hero, 4-step workflow, featured tools, SEO `#tools` index — see [compare-first homepage](../product/compare-first-homepage.md)
+- [x] **PDF compare review mode** — immersive viewer, working zoom, fit-width, single-page nav, fullscreen
+- [x] **Home & compare i18n** — `hero`, `home`, `compare` namespaces in EN/ES/FR/NL/PT
+
 ### Shipped (2026-07-27)
 
 - [x] **Tool workspace UI — Phase 1** — two-column layout, category-filtered tool tabs, merged files column — see [tool workspace UI](../product/tool-workspace-ui.md)
@@ -47,6 +53,10 @@ Priority changes from competitive review:
 
 | Item | Priority | Notes |
 |------|----------|-------|
+| ~~Compare-first homepage~~ | ~~High~~ | **Done** — see [compare-first homepage](../product/compare-first-homepage.md) |
+| ~~PDF compare review viewer~~ | ~~High~~ | **Done** — zoom, fit-width, single-page, fullscreen |
+| Compare visual diff overlay | Medium | Long-term differentiator |
+| Sample PDFs on compare page | Low | Instant demo without upload |
 | ~~Tool workspace UI — Phase 2~~ | ~~High~~ | **Done** |
 | ~~Tool workspace UI — Phase 3~~ | ~~High~~ | **Done** — client nav, thumbnails, mobile |
 | ~~SEO landing content (all 18 tools)~~ | ~~High~~ | **Done** — 90 pages (5 locales) — see [i18n doc](../product/i18n.md) |
@@ -93,7 +103,19 @@ See [tool workspace UI](../product/tool-workspace-ui.md#phase-2-scope-shipped-20
 
 See [tool workspace UI — Phase 3](../product/tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27).
 
-**Workspace UI redesign is complete** (Phases 1–3).
+**Workspace UI redesign is complete** (Phases 1–3). **Compare-first homepage** shipped 2026-07-27.
+
+---
+
+## Compare-first — shipped 2026-07-27
+
+- [x] Homepage restructure — hero, workflow, featured tools, SEO tool index
+- [x] Dedicated compare review mode — hide workspace chrome, full-width viewer
+- [x] Zoom fix + fit-width, single-page / continuous modes, page navigation, fullscreen
+- [x] i18n for home, hero, compare panel (5 locales)
+- [x] SEO meta and structured data updated for compare positioning
+
+See [compare-first homepage](../product/compare-first-homepage.md).
 
 ---
 

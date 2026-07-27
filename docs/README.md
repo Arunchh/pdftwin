@@ -2,7 +2,9 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-27):** Tool taxonomy reorganized by conversion direction and input scope (**One PDF** vs **Multiple PDFs**). Homepage grid, nav, and workspace switcher updated; see [tool workspace UI — tool taxonomy](./product/tool-workspace-ui.md#tool-taxonomy-home-grid--navigation) and [implementation status](./product/implementation-status.md#tool-inventory-18-tools).
+**Latest (2026-07-27):** **Compare-first homepage** and **dedicated PDF compare review viewer** — immersive dual-pane mode with working zoom, fit-width, single-page navigation, and fullscreen. Home restructured: compare hero → workflow → featured tools + SEO tool index (`#tools`). See [compare-first homepage](./product/compare-first-homepage.md).
+
+**Previous (2026-07-27):** Tool taxonomy reorganized by conversion direction and input scope (**One PDF** vs **Multiple PDFs**). Nav and workspace switcher updated; see [tool workspace UI — tool taxonomy](./product/tool-workspace-ui.md#tool-taxonomy-home-grid--navigation).
 
 ## Competitive research
 
@@ -16,6 +18,7 @@ Living docs for product strategy, competitive research, and implementation statu
 
 ## Product
 
+- [Compare-first homepage & PDF compare viewer](./product/compare-first-homepage.md) — hero, workflow, review mode, SEO
 - [Implementation status](./product/implementation-status.md) — **18 tools**, client vs server split, limits
 - [Tool workspace UI](./product/tool-workspace-ui.md) — two-column layout, client navigation, thumbnails, mobile
 - [Internationalization (i18n)](./product/i18n.md)
@@ -25,6 +28,7 @@ Living docs for product strategy, competitive research, and implementation statu
 
 | Topic | Doc |
 |-------|-----|
+| Compare-first home + review viewer | [Compare-first homepage](./product/compare-first-homepage.md) |
 | Full tool list (18) + input scope | [Implementation status — tool inventory](./product/implementation-status.md#tool-inventory-18-tools) |
 | Tool taxonomy (categories + 1 PDF vs 2+ PDFs) | [Tool workspace UI — tool taxonomy](./product/tool-workspace-ui.md#tool-taxonomy-home-grid--navigation) |
 | Why we raised free limit to 50 MB | [Monetization plan](./strategy/monetization-plan.md#free-tier-volume-engine) |

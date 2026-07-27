@@ -7,9 +7,9 @@ const proLimit = formatFileLimit(PRO_FILE_LIMIT_MB);
 export const fr: Messages = {
   meta: {
     siteName: "PDFTwin",
-    homeTitle: "PDFTwin — Conversion de fichiers pro | PDF, Word, Excel et WebP",
+    homeTitle: "PDFTwin — Comparer des PDF côte à côte gratuitement | Outils PDF",
     homeDescription:
-      "PDFTwin est l'espace de conversion tout-en-un pour les entreprises. Convertissez PDF et images, fusionnez des documents, comparez des révisions et protégez vos fichiers dans le navigateur.",
+      "Comparez deux PDF en ligne avec défilement et zoom liés — dans votre navigateur, sans envoi pour la visualisation. Fusionnez, divisez, convertissez, signez et protégez vos documents dans un seul espace.",
     pricingTitle: "Tarifs | PDFTwin",
     pricingDescription:
       "Commencez gratuitement avec les douze outils. Passez à PDFTwin Pro pour des fichiers plus volumineux et des exportations PDF illimitées.",
@@ -41,16 +41,90 @@ export const fr: Messages = {
     main: "Principal",
   },
   hero: {
-    titleLead: "Un espace de travail pour chaque",
-    titleHighlight: " format utilisé par votre entreprise",
+    titleLead: "Comparez deux PDF",
+    titleHighlight: " côte à côte — gratuit dans votre navigateur",
     description:
-      "Convertissez PDF en Word et Excel, exportez des images WebP, comparez des contrats côte à côte, fusionnez des rapports et protégez des fichiers confidentiels sans changer d'outil.",
-    openWorkspace: "Ouvrir l'espace de travail",
-    seeFormats: "Voir les formats pris en charge",
-    footnote: "Pro ajoute des limites plus élevées et un traitement prioritaire pour les équipes en croissance.",
-    statTools: "Outils métier",
-    statFreeLimit: "Gratuit par fichier",
-    statInstall: "Installation requise",
+      "Relisez les révisions de contrats et les épreuves de design avec défilement lié, zoom réel et mode page unique. Ensuite, extrayez des pages, fusionnez les approbations, convertissez en Word et signez — sans quitter PDFTwin.",
+    compareNow: "Comparer des PDF maintenant",
+    seeAllTools: "Parcourir tous les outils",
+    seeCompareGuide: "Guide comparer PDF",
+    footnote: "La comparaison s'exécute localement avec PDF.js — la visualisation n'envoie pas vos fichiers. Pro ajoute des limites plus élevées pour la conversion.",
+    trustChips: [
+      "Comparaison PDF côté client",
+      "Défilement et zoom liés",
+      "Sans compte requis",
+    ],
+    visualCaption: "Défilement lié · Zoom · Relecture page par page",
+  },
+  home: {
+    workflow: {
+      heading: "Du brouillon au PDF signé",
+      subheading:
+        "Comparer est le point de départ. Ces outils terminent la relecture sans changer d'application.",
+      steps: [
+        {
+          title: "Comparer les révisions",
+          description: "Ouvrez deux PDF côte à côte avec défilement, zoom et relecture page par page.",
+          toolId: "pdf-compare",
+        },
+        {
+          title: "Extraire les changements",
+          description: "Récupérez uniquement les pages nécessaires dans un nouveau PDF pour approbation.",
+          toolId: "extract-pages",
+        },
+        {
+          title: "Fusionner le dossier final",
+          description: "Combinez sections approuvées, pages de garde et annexes en un fichier prêt client.",
+          toolId: "arrange-merge",
+        },
+        {
+          title: "Signer et protéger",
+          description: "Ajoutez votre signature et protégez par mot de passe le document final avant envoi.",
+          toolId: "sign-pdf",
+        },
+      ],
+    },
+    complementary: {
+      heading: "Plus d'outils pour les flux documentaires",
+      subheading: "Conversion, compression et protection — disponibles quand vous en avez besoin.",
+      toolIds: ["convert-extract", "split", "compress-pdf", "lock-unlock", "word-to-pdf", "pdf-to-jpg"],
+    },
+    seoTools: {
+      heading: "Tous les outils PDFTwin",
+      subheading:
+        "Chaque outil de conversion et PDF professionnel dans un espace — fusion, division, OCR, filigrane et plus.",
+    },
+  },
+  compare: {
+    setupTitle: "Choisissez deux PDF à comparer",
+    setupDescription:
+      "Téléversez des PDF dans le bac de l'espace de travail, assignez gauche et droite, puis ouvrez le visualiseur dédié.",
+    leftLabel: "PDF gauche",
+    rightLabel: "PDF droit",
+    remove: "Retirer",
+    addFromTray: "Ajoutez des PDF au bac ci-dessus, puis choisissez un fichier ici.",
+    enterReview: "Ouvrir le visualiseur",
+    changeDocuments: "Changer de documents",
+    scrollLinked: "Défilement lié",
+    scrollIndependent: "Défilement indépendant",
+    zoomLinked: "Zoom lié",
+    zoomIndependent: "Zoom indépendant",
+    zoomOut: "Zoom arrière",
+    zoomIn: "Zoom avant",
+    zoomOutRight: "Zoom arrière panneau droit",
+    zoomInRight: "Zoom avant panneau droit",
+    fitWidth: "Ajuster à la largeur",
+    viewContinuous: "Défilement continu",
+    viewSinglePage: "Page unique",
+    pageOf: "Page {current} sur {total}",
+    prevPage: "Page précédente",
+    nextPage: "Page suivante",
+    fullscreen: "Plein écran",
+    exitFullscreen: "Quitter le plein écran",
+    loading: "Chargement du PDF…",
+    pages: "pages",
+    privacyHint:
+      "PDF uniquement · jusqu'à {limit} par fichier · comparaison locale — pas d'envoi pour la visualisation",
   },
   toolGrid: {
     heading: "Un envoi, tous les formats professionnels",
@@ -200,7 +274,7 @@ export const fr: Messages = {
     compare: "Comparer",
     upgradePro: "Passer à Pro",
     note: "Les fichiers sont traités en mémoire et jamais stockés de façon permanente. Les abonnements Pro sont facturés via PayPal — annulez quand vous voulez.",
-    tagline: "L'espace de conversion tout-en-un pour les entreprises modernes.",
+    tagline: "Comparez des PDF côte à côte et terminez vos flux documentaires dans un seul espace navigateur.",
   },
   tools: {
     "convert-extract": {

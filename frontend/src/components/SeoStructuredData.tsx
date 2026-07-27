@@ -43,8 +43,8 @@ const structuredData = {
         },
       ],
       featureList: [
+        "Compare two PDFs side by side with linked scroll and zoom",
         "Convert PDF to Word or Excel",
-        "Compare two PDFs side by side",
         "Convert images to WebP, PNG, or JPEG",
         "Merge and arrange PDFs",
         "Split PDF by page ranges",

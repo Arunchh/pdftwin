@@ -45,12 +45,57 @@ export interface Messages {
     titleLead: string;
     titleHighlight: string;
     description: string;
-    openWorkspace: string;
-    seeFormats: string;
+    compareNow: string;
+    seeAllTools: string;
+    seeCompareGuide: string;
     footnote: string;
-    statTools: string;
-    statFreeLimit: string;
-    statInstall: string;
+    trustChips: string[];
+    visualCaption: string;
+  };
+  home: {
+    workflow: {
+      heading: string;
+      subheading: string;
+      steps: Array<{ title: string; description: string; toolId: ToolId }>;
+    };
+    complementary: {
+      heading: string;
+      subheading: string;
+      toolIds: ToolId[];
+    };
+    seoTools: {
+      heading: string;
+      subheading: string;
+    };
+  };
+  compare: {
+    setupTitle: string;
+    setupDescription: string;
+    leftLabel: string;
+    rightLabel: string;
+    remove: string;
+    addFromTray: string;
+    enterReview: string;
+    changeDocuments: string;
+    scrollLinked: string;
+    scrollIndependent: string;
+    zoomLinked: string;
+    zoomIndependent: string;
+    zoomOut: string;
+    zoomIn: string;
+    zoomOutRight: string;
+    zoomInRight: string;
+    fitWidth: string;
+    viewContinuous: string;
+    viewSinglePage: string;
+    pageOf: string;
+    prevPage: string;
+    nextPage: string;
+    fullscreen: string;
+    exitFullscreen: string;
+    loading: string;
+    pages: string;
+    privacyHint: string;
   };
   toolGrid: {
     heading: string;

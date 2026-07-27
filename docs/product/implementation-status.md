@@ -2,9 +2,15 @@
 
 > Last updated: 2026-07-27 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
-### Shipped (2026-07-27)
+### Shipped (2026-07-27 — compare-first)
 
-- **Tool taxonomy — conversion direction + input scope** — Homepage grid, site nav, and workspace switcher group tools by **PDF → other formats**, **convert → PDF**, and **work with PDFs**. The PDF-ops group splits visually into **One PDF** (single-file tools) and **Multiple PDFs** (merge, compare). Each tool declares `inputScope: "single" | "multi"` in [`tools.ts`](../../frontend/src/config/tools.ts); cards and nav links show **1 PDF** / **2+ PDFs** badges. See [tool workspace UI — tool taxonomy](./tool-workspace-ui.md#tool-taxonomy-home-grid--navigation).
+- **Compare-first homepage** — [`HeroSection`](../../frontend/src/components/layout/HeroSection.tsx), [`HomeWorkflowSection`](../../frontend/src/components/layout/HomeWorkflowSection.tsx), [`HomeToolsSection`](../../frontend/src/components/layout/HomeToolsSection.tsx) replace full `ToolGrid`, `TrustBar`, and `FormatSupportSection` on `/`. Primary CTA → `/tools/compare`. Crawlable `#tools` index preserves internal SEO links. See [compare-first homepage](./compare-first-homepage.md).
+- **PDF compare — review mode** — [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx): setup phase (pick left/right from tray) + immersive viewer (zoom, fit-width, single-page / continuous modes, page nav, fullscreen, keyboard shortcuts). [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) hides file tray and tool switcher in review mode. Canvas zoom fix: removed `max-width: 100%` on `.compare-page-canvas`.
+- **Home & compare i18n** — New `hero`, `home`, and `compare` message namespaces in all 5 locales. Updated `meta.homeTitle` / `meta.homeDescription` with compare keywords. `BUSINESS_TAGLINE` and structured data feature list prioritize compare.
+
+### Shipped (2026-07-27 — taxonomy)
+
+- **Tool taxonomy — conversion direction + input scope** — Nav and workspace switcher group tools by **PDF → other formats**, **convert → PDF**, and **work with PDFs**. The PDF-ops group splits visually into **One PDF** (single-file tools) and **Multiple PDFs** (merge, compare). Each tool declares `inputScope: "single" | "multi"` in [`tools.ts`](../../frontend/src/config/tools.ts); cards and nav links show **1 PDF** / **2+ PDFs** badges. See [tool workspace UI — tool taxonomy](./tool-workspace-ui.md#tool-taxonomy-home-grid--navigation).
 - **Extract pages → client-side** — [`ExtractPagesPanel.tsx`](../../frontend/src/components/ExtractPagesPanel.tsx) uses `extractPdfPages()` in [`pdfClient.ts`](../../frontend/src/services/pdfClient.ts). Organize category is now fully client-side. Split: **11 client / 7 server**.
 
 ## Tool inventory (18 tools)
@@ -136,7 +142,7 @@ Legacy server endpoints (`/api/merge`, `/api/arrange-merge`, `/api/split`, `/api
 
 | Tool | Panel | Notes |
 |------|-------|-------|
-| Compare | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) | Side-by-side render |
+| Compare | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) | Setup + **review mode**: dual panes, zoom, fit-width, single-page / continuous, fullscreen — see [compare-first homepage](./compare-first-homepage.md) |
 | PDF → JPG/PNG | [`PdfToJpgPanel.tsx`](../../frontend/src/components/PdfToJpgPanel.tsx) | Multi-page → ZIP |
 | PDF → Text | [`PdfToTextPanel.tsx`](../../frontend/src/components/PdfToTextPanel.tsx) | Text layer only; scans → use OCR |
 
@@ -302,7 +308,21 @@ Redesigned shell for all `/tools/*` pages. **All three phases complete.** Full s
 | Mobile: action-first + collapsible files | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx), [`index.css`](../../frontend/src/index.css) |
 | Path resolver for back/forward | [`tools.ts`](../../frontend/src/config/tools.ts) — `toolIdFromPath()` |
 
-**Remaining gap:** tool panel UI still English-only — see [i18n next phases](./i18n.md#next-phases).
+**Remaining gap:** tool panel UI still English-only — see [i18n next phases](./i18n.md#next-phases). **Compare panel** uses i18n `compare.*` keys in all 5 locales.
+
+---
+
+## PDF compare — review mode (shipped 2026-07-27)
+
+| Layer | Implementation |
+|-------|----------------|
+| Panel | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) — `reviewMode` state; `onReviewModeChange` callback |
+| Workspace chrome | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) — hides heading, switcher, file tray when `compareReviewMode` |
+| CSS | [`index.css`](../../frontend/src/index.css) — `.compare-panel--review`, `.workspace--compare-review`, canvas zoom fix |
+| i18n | `messages.compare.*` in EN/ES/FR/NL/PT |
+| Home positioning | [Compare-first homepage](./compare-first-homepage.md) |
+
+**Deferred:** visual diff overlay, sample PDFs for instant demo.
 
 ---
 
@@ -339,7 +359,7 @@ PDF → text, OCR (Tesseract.js)           Extract embedded images
 
 English is the default at `/`. Spanish, French, Dutch, and Portuguese use prefixed routes (`/es/`, `/fr/`, `/nl/`, `/pt/`).
 
-- **Translated:** home, nav, footer (incl. growth links), pricing, tool names/descriptions in grid, **workspace shell** (headings + category/tool tabs), **90 SEO landings** (18 tools × 5 locales)  
+- **Translated:** home (compare hero, workflow, featured tools, SEO tool index), nav, footer (incl. growth links), pricing, tool names/descriptions, **compare panel UI**, **workspace shell** (headings + category/tool tabs), **90 SEO landings** (18 tools × 5 locales)  
 - **English only:** `/compare/ilovepdf`, `/resources`, `/faq`, `/blog/*`, `/privacy`, `/terms` (legal content updated 2026-07-27)  
 - **Not yet translated:** in-tool panel UI, workspace file-tray chrome, login/account pages
 

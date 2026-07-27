@@ -58,9 +58,11 @@ Defined in [`tools.ts`](../../frontend/src/config/tools.ts): `CATEGORY_ORDER`, `
 
 Declared on each `ToolDefinition` as `inputScope`. Helpers: `toolsInScope()`, `singlePdfToolsInSubcategory()`.
 
-### Work with PDFs — two-column home layout
+### Work with PDFs — two-column home layout (legacy grid)
 
-The homepage **Work with PDFs** block renders as side-by-side columns:
+> **Note (2026-07-27):** The full `ToolGrid` is **no longer mounted on `/`**. The home page uses a compare-first layout with a crawlable tool index at `#tools`. The taxonomy below still applies to **header nav**, **workspace switcher**, and [`ToolGrid.tsx`](../../frontend/src/components/layout/ToolGrid.tsx) if reused elsewhere.
+
+The former homepage **Work with PDFs** block rendered as side-by-side columns:
 
 ```
 ┌──────────────────────────────┬─────────────────────┐
@@ -126,7 +128,9 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | Component | Path | Role |
 |-----------|------|------|
 | `ToolWorkspace` | [`frontend/src/components/ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | Shell: heading, nav, 2-column grid, dispatches to tool panels |
-| `ToolGrid` | [`frontend/src/components/layout/ToolGrid.tsx`](../../frontend/src/components/layout/ToolGrid.tsx) | Home `#tools` — category sections + PDF-ops scope columns |
+| `ToolGrid` | [`frontend/src/components/layout/ToolGrid.tsx`](../../frontend/src/components/layout/ToolGrid.tsx) | Legacy full catalog grid (not on home since compare-first redesign) |
+| `HomeWorkflowSection` | [`frontend/src/components/layout/HomeWorkflowSection.tsx`](../../frontend/src/components/layout/HomeWorkflowSection.tsx) | Home — 4-step compare workflow |
+| `HomeToolsSection` | [`frontend/src/components/layout/HomeToolsSection.tsx`](../../frontend/src/components/layout/HomeToolsSection.tsx) | Home — featured tools + SEO tool index (`#tools`) |
 | `ToolCardLink` | [`frontend/src/components/layout/ToolCardLink.tsx`](../../frontend/src/components/layout/ToolCardLink.tsx) | Tool card with icon, label, and input-scope badge |
 | `WorkspaceToolSwitcher` | [`frontend/src/components/layout/WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Category tabs + filtered tool tabs (i18n labels, scope grouping for pdf-ops) |
 | `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Left column: dropzone, file list, single “Clear all” |
@@ -379,6 +383,65 @@ See [roadmap — workspace UI](../strategy/roadmap.md#workspace-ui-redesign).
 
 ---
 
+## PDF compare — review mode
+
+> **Shipped:** 2026-07-27 · Full spec: [compare-first homepage](./compare-first-homepage.md)
+
+Compare is the only tool with a **second UI phase** that hides the standard workspace chrome.
+
+### Flow
+
+```
+/tools/compare (setup)
+  → Upload PDFs in file tray
+  → Assign left / right in ComparePanel
+  → Click "Open compare viewer"
+  → reviewMode = true
+       ├─ Hide: workspace heading, WorkspaceToolSwitcher, WorkspaceFileTray
+       ├─ Show: full-width toolbar + dual-pane viewer
+       └─ Classes: workspace--compare-review, compare-panel--review
+  → "Change documents" → back to setup
+```
+
+### ComparePanel ↔ ToolWorkspace contract
+
+| Prop / callback | Direction | Purpose |
+|-----------------|-----------|---------|
+| `pdfFiles` | Workspace → Panel | Files from IndexedDB tray |
+| `onReviewModeChange(active)` | Panel → Workspace | Toggle chrome visibility |
+
+Implementation: [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx), [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx).
+
+### Review toolbar (summary)
+
+| Control | Behavior |
+|---------|----------|
+| Zoom ± | Linked or independent (`linkZoom`) |
+| Fit width | Scale both panes to pane width |
+| Single page / Continuous | Single-page default; continuous enables linked scroll |
+| Page nav | Prev/next + input (single-page mode) |
+| Fullscreen | Native Fullscreen API on `.compare-viewer` |
+| Keyboard | `+`/`-` zoom; arrow keys for pages in single-page mode |
+
+### CSS classes (compare-specific)
+
+| Class | Purpose |
+|-------|---------|
+| `.workspace--compare-review` | Workspace section when review mode active |
+| `.workspace-layout--compare-review` | Single-column full-width layout |
+| `.compare-panel--review` | Panel without setup chrome |
+| `.compare-viewer--review` | Taller min-height viewer |
+| `.compare-page-canvas` | No `max-width: 100%` — zoom renders at visible scale |
+
+### Verification (compare)
+
+1. Setup visible on first load; tray + switcher present
+2. After **Open compare viewer** — chrome hidden, panes use full width
+3. Zoom visibly changes page size
+4. **Change documents** — restores setup + tray
+
+---
+
 ## Related pages
 
 | Route | Workspace |
@@ -406,7 +469,7 @@ After workspace changes, manually verify:
 
 1. Land on `/tools/merge` — correct panel; **Work with PDFs** category tab; tool under **Multiple PDFs** scope
 2. Land on `/tools/split` — **One PDF** scope; pages sub-group in workspace tabs
-3. Home `/#tools` — **Work with PDFs** shows two columns; merge/compare only in right column with **2+ PDFs** badges
+3. Home `/#tools` — SEO tool index lists all 18 tools by category (featured cards + link list)
 4. Click **Compress** tab — panel swaps without reload; URL becomes `/tools/compress`; files remain in tray
 5. Browser **Back** — returns to previous panel and URL
 6. Upload a PDF and an image — thumbnails appear in tray rows

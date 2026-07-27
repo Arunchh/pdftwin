@@ -1,10 +1,12 @@
 # PDFTwin
 
-**PDFTwin** is a multi-page business file conversion workspace — **18 tools** for converting PDFs and images, comparing documents, merging and splitting files, signing and protecting documents, and extracting text — all in the browser with no install.
+**PDFTwin** is a multi-page business file conversion workspace — **18 tools** for comparing PDFs side by side, converting documents, merging and splitting files, signing and protecting PDFs, and extracting text — all in the browser with no install.
+
+**Hero differentiator:** **Compare two PDFs** with linked scroll, real zoom, single-page review, and fullscreen — runs locally in the browser (no upload for viewing). The homepage and product story lead with compare; complementary tools finish the review workflow (extract → merge → sign).
 
 Live site: [pdftwin.com](https://pdftwin.com) · Operated by **Helios Impex** (India)
 
-**Internal docs:** [docs/README.md](docs/README.md) — competitive research (ihatepdf), monetization plan, roadmap, implementation status, [i18n](docs/product/i18n.md).
+**Internal docs:** [docs/README.md](docs/README.md) — competitive research (ihatepdf), monetization plan, roadmap, [compare-first homepage](docs/product/compare-first-homepage.md), implementation status, [i18n](docs/product/i18n.md).
 
 ## Languages
 
@@ -12,7 +14,7 @@ PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`
 
 ## Features
 
-Tools are grouped on the homepage and in navigation by **what you are trying to do**, then by **how many files you need**:
+Tools are grouped in **navigation** and on the home **SEO tool index** (`/#tools`) by **what you are trying to do**, then by **how many files you need**:
 
 | Group | When to use it |
 |-------|----------------|
@@ -46,8 +48,8 @@ Each tool card shows a **1 PDF** or **2+ PDFs** badge so you can tell at a glanc
 - **Lock & unlock** — Add password protection or remove restrictions when permitted *(server)*
 
 ### Work with PDFs — Multiple PDFs
+- **Compare PDFs** — Dedicated setup + **immersive review viewer**: side-by-side panes, linked scroll, working zoom, fit-width, single-page mode, page navigation, fullscreen *(client-side, PDF.js)* — see [compare-first docs](docs/product/compare-first-homepage.md)
 - **Merge & arrange** — Combine multiple PDFs and reorder pages; free tier merges up to **5 PDFs** at once *(client-side)*
-- **Compare PDFs** — Side-by-side viewer with linked scroll and linked/independent zoom *(client-side, PDF.js)*
 
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
@@ -59,7 +61,8 @@ Each tool card shows a **1 PDF** or **2+ PDFs** badge so you can tell at a glanc
 - **Result cards** — After processing, a result card shows filename and an explicit Download button (no silent auto-download)
 - **Next-step suggestions** — Result cards link to related tools (e.g. Merge → Convert, Compress → Protect)
 - **Persistent file tray** — Files stay in IndexedDB while you switch between tools — no re-upload needed
-- **Compare + tray** — Pick left/right PDFs directly from the workspace tray
+- **Compare + tray** — Pick left/right PDFs from the workspace tray; open **compare viewer** for full-width review mode
+- **Compare-first homepage** — Hero, workflow strip, featured tools, and crawlable tool index — see [compare-first homepage](docs/product/compare-first-homepage.md)
 
 ## Architecture
 
@@ -67,7 +70,7 @@ PDFTwin is **not a single-page app**. It uses **Astro** to pre-render real URLs;
 
 | Route | Page |
 |-------|------|
-| `/` | Home — hero, tools, supported formats |
+| `/` | Home — compare hero, review workflow, featured tools, SEO tool index (`#tools`) |
 | `/formats` | Format reference |
 | `/pricing` | Plans, FAQ, Pro checkout |
 | `/login` | Sign in |
@@ -84,7 +87,7 @@ PDFTwin is **not a single-page app**. It uses **Astro** to pre-render real URLs;
 | `/tools/resize` | Resize & compress images |
 | `/tools/word-to-pdf` | Word to PDF |
 | `/tools/compress` | Compress PDF |
-| `/tools/compare` | Side-by-side PDF compare |
+| `/guides/compare-pdf-online` | SEO landing — compare PDFs free (EN) |
 | `/tools/merge` | Merge & arrange |
 | `/tools/split` | Split PDF |
 | `/tools/extract` | Extract pages |
@@ -93,6 +96,7 @@ PDFTwin is **not a single-page app**. It uses **Astro** to pre-render real URLs;
 | `/tools/watermark` | Watermark PDF |
 | `/tools/protect` | Lock & unlock |
 | `/tools/sign` | Sign PDF |
+| `/tools/compare` | Side-by-side PDF compare (setup + immersive review viewer) |
 
 Legacy hash URLs (`#convert`, `#merge`, etc.) redirect to the matching path automatically.
 
@@ -166,9 +170,9 @@ Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names
 
 **Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (**From PDF**, **To PDF**, **Edit PDF**). The **Edit PDF** dropdown splits into **One PDF** and **Multiple PDFs** blocks with scope hints and **1 PDF** / **2+ PDFs** labels on each link. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
 
-**Tool grid (home):** The **Work with PDFs** section uses a **two-column layout** — a wider **One PDF** column (pages, markup, protect sub-headings) beside a narrower **Multiple PDFs** column (merge, compare). Tool cards show input-scope badges.
+**Homepage (compare-first):** The home route leads with a **compare hero** (primary CTA → `/tools/compare`), a **4-step review workflow** section, six **featured complementary tools**, and a crawlable **All PDFTwin tools** index at `#tools`. The former full tool grid, trust bar, and formats section are no longer on `/` — formats live at `/formats`; full taxonomy remains in header nav. See [compare-first homepage](docs/product/compare-first-homepage.md).
 
-**Tool workspace:** Each `/tools/*` page uses a two-column layout — upload and file tray (with thumbnails) on the left, the active tool panel on the right. In-workspace navigation uses three category tabs plus horizontal tool tabs filtered to the current category; **Edit PDF** tabs are grouped under **One PDF** / **Multiple PDFs** scope labels. Tab clicks swap tools client-side via the History API (no full reload). On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
+**Tool workspace:** Each `/tools/*` page uses a two-column layout — upload and file tray (with thumbnails) on the left, the active tool panel on the right. **Compare** adds a second **review mode** that hides workspace chrome for a full-width dual-pane viewer. In-workspace navigation uses three category tabs plus horizontal tool tabs filtered to the current category; **Edit PDF** tabs are grouped under **One PDF** / **Multiple PDFs** scope labels. Tab clicks swap tools client-side via the History API (no full reload). On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
 
 ## Prerequisites
 
@@ -279,7 +283,7 @@ Set frontend env in `frontend/.env` locally and in **Vercel → Environment Vari
 - PDF-to-Word uses layout-preserving conversion; complex PDFs may need manual cleanup.
 - Word-to-PDF uses PyMuPDF; complex DOCX layouts may need review after conversion.
 - Server-side tools process files in memory and do not store them permanently.
-- **Compare** renders locally with PDF.js — files never leave the device for viewing.
+- **Compare** renders locally with PDF.js — files never leave the device for viewing. Review mode supports fit-width zoom, single-page navigation, linked scroll, and fullscreen — see [compare-first homepage](docs/product/compare-first-homepage.md).
 
 **Client-side tools** (merge, split, rotate, compare, extract/remove pages, sign, images↔PDF, PDF→text, OCR) run in the browser via pdf-lib, PDF.js, or Tesseract.js — no server upload.
 
@@ -300,6 +304,7 @@ Internal docs live in [`docs/`](docs/README.md):
 
 | Topic | Doc |
 |-------|-----|
+| Compare-first homepage & compare viewer | [Compare-first homepage](docs/product/compare-first-homepage.md) |
 | Tool inventory, limits, client vs server | [Implementation status](docs/product/implementation-status.md) |
 | Workspace UI (layout, result cards, client nav) | [Tool workspace UI](docs/product/tool-workspace-ui.md) |
 | i18n & SEO landings (90 pages) | [i18n](docs/product/i18n.md) |

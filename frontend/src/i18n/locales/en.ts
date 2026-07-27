@@ -7,9 +7,9 @@ const proLimit = formatFileLimit(PRO_FILE_LIMIT_MB);
 export const en: Messages = {
   meta: {
     siteName: "PDFTwin",
-    homeTitle: "PDFTwin — Business File Conversion | PDF, Word, Excel & WebP",
+    homeTitle: "PDFTwin — Compare PDFs Side by Side Free | PDF Tools for Business",
     homeDescription:
-      "PDFTwin is the one-stop file conversion workspace for businesses. Convert PDFs, images, merge documents, compare revisions, and protect files in your browser.",
+      "Compare two PDFs online with linked scroll, zoom, and single-page review — runs in your browser, files never uploaded for viewing. Merge, split, convert, sign, and protect documents in one workspace.",
     pricingTitle: "Pricing | PDFTwin",
     pricingDescription:
       "Start free with all business file tools. Upgrade to PDFTwin Pro for larger files and unlimited PDF exports.",
@@ -41,16 +41,90 @@ export const en: Messages = {
     main: "Main",
   },
   hero: {
-    titleLead: "One workspace for every",
-    titleHighlight: " file format your business touches",
+    titleLead: "Compare two PDFs",
+    titleHighlight: " side by side — free in your browser",
     description:
-      "Convert PDFs to Word and Excel, export WebP-ready images, compare contract revisions side by side, merge reports, and protect confidential files — without switching tools.",
-    openWorkspace: "Open the workspace",
-    seeFormats: "See supported formats",
-    footnote: "Pro adds higher limits and priority processing for growing teams.",
-    statTools: "Business tools",
-    statFreeLimit: "Free per file",
-    statInstall: "Install required",
+      "Review contract revisions and design proofs with linked scroll, real zoom, and single-page mode. When you are done comparing, extract pages, merge approvals, convert to Word, and sign — without leaving PDFTwin.",
+    compareNow: "Compare PDFs now",
+    seeAllTools: "Browse all tools",
+    seeCompareGuide: "Compare PDF guide",
+    footnote: "Compare runs locally with PDF.js — viewing never uploads your files. Pro adds higher limits for conversion tools.",
+    trustChips: [
+      "Client-side PDF compare",
+      "Linked scroll & zoom",
+      "No account required",
+    ],
+    visualCaption: "Linked scroll · Zoom · Single-page review",
+  },
+  home: {
+    workflow: {
+      heading: "From first draft to signed PDF",
+      subheading:
+        "Compare is the starting point. These tools finish the review workflow without switching apps.",
+      steps: [
+        {
+          title: "Compare revisions",
+          description: "Open two PDFs side by side with linked scroll, zoom, and page-by-page review.",
+          toolId: "pdf-compare",
+        },
+        {
+          title: "Extract what changed",
+          description: "Pull only the pages you need into a new PDF for approval or redlines.",
+          toolId: "extract-pages",
+        },
+        {
+          title: "Merge the final pack",
+          description: "Combine approved sections, cover pages, and appendices into one client-ready file.",
+          toolId: "arrange-merge",
+        },
+        {
+          title: "Sign and protect",
+          description: "Add your signature and password-protect the finished document before sending.",
+          toolId: "sign-pdf",
+        },
+      ],
+    },
+    complementary: {
+      heading: "More tools for document workflows",
+      subheading: "Conversion, compression, and protection — available when you need them.",
+      toolIds: ["convert-extract", "split", "compress-pdf", "lock-unlock", "word-to-pdf", "pdf-to-jpg"],
+    },
+    seoTools: {
+      heading: "All PDFTwin tools",
+      subheading:
+        "Every business conversion and PDF tool in one workspace — merge, split, OCR, watermark, and more.",
+    },
+  },
+  compare: {
+    setupTitle: "Choose two PDFs to compare",
+    setupDescription:
+      "Upload PDFs to the workspace tray, assign left and right documents, then open the dedicated compare viewer.",
+    leftLabel: "Left PDF",
+    rightLabel: "Right PDF",
+    remove: "Remove",
+    addFromTray: "Add PDFs to the workspace tray above, then pick a file here.",
+    enterReview: "Open compare viewer",
+    changeDocuments: "Change documents",
+    scrollLinked: "Scroll linked",
+    scrollIndependent: "Scroll independent",
+    zoomLinked: "Zoom linked",
+    zoomIndependent: "Zoom independent",
+    zoomOut: "Zoom out",
+    zoomIn: "Zoom in",
+    zoomOutRight: "Zoom out right pane",
+    zoomInRight: "Zoom in right pane",
+    fitWidth: "Fit width",
+    viewContinuous: "Continuous scroll",
+    viewSinglePage: "Single page",
+    pageOf: "Page {current} of {total}",
+    prevPage: "Previous page",
+    nextPage: "Next page",
+    fullscreen: "Full screen",
+    exitFullscreen: "Exit full screen",
+    loading: "Loading PDF…",
+    pages: "pages",
+    privacyHint:
+      "PDF only · up to {limit} per file · compare renders locally in your browser — no upload for viewing",
   },
   toolGrid: {
     heading: "One upload, every business format",
@@ -200,7 +274,7 @@ export const en: Messages = {
     compare: "Compare",
     upgradePro: "Upgrade to Pro",
     note: "Files are processed in memory and never stored permanently. Pro subscriptions are billed securely through PayPal — cancel anytime from your PayPal account.",
-    tagline: "The one-stop file conversion workspace for modern businesses.",
+    tagline: "Compare PDFs side by side and finish document workflows in one browser workspace.",
   },
   tools: {
     "convert-extract": {

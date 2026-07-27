@@ -33,7 +33,7 @@ PDFTwin takes a **hybrid** path: generous free tier + sustainable monetization o
 | No monetization | Pro at **$9/mo** for heavy use |
 | 46 tools, broad | **18 tools**, business-focused (expanded 2026-07) |
 | No accounts | Supabase auth + PayPal Pro (optional) |
-| Compare not emphasized | **Compare PDFs** as differentiator |
+| Compare not emphasized | **Compare PDFs** as hero differentiator — homepage, review viewer, SEO |
 
 **Why hybrid:** PDF → Word/Excel needs quality server libraries. Pure browser conversion is weaker for complex business PDFs. That server cost is what Pro pays for.
 
@@ -46,7 +46,7 @@ PDFTwin takes a **hybrid** path: generous free tier + sustainable monetization o
 Not competing on “100% client-side.” Competing on:
 
 1. Better **PDF → Word/Excel** for business documents  
-2. **Compare** workflow for contract review  
+2. **Compare** workflow for contract review — **compare-first homepage**, dedicated review viewer, `/guides/compare-pdf-online`  
 3. Honest free tier (no watermarks, no trick downloads)  
 4. Clear upgrade path when users hit real limits (file size, daily exports, large merges)
 
@@ -73,6 +73,8 @@ From ihatepdf’s public playbook:
 
 **Shipped (2026-07-23):** 72 locale SEO landings (18 tools × 4 langs), `/compare/ilovepdf`, `/resources`, `/faq`, `/blog` with 6 starter posts. See [implementation status](../product/implementation-status.md#growth--help-content-english--shipped-2026-07-23).
 
+**Shipped (2026-07-27):** Compare-first homepage, PDF compare review viewer, updated home meta/structured data. See [compare-first homepage](../product/compare-first-homepage.md).
+
 See [roadmap](./roadmap.md) for remaining items (Product Hunt, panel i18n).
 
 ---
@@ -81,6 +83,7 @@ See [roadmap](./roadmap.md) for remaining items (Product Hunt, panel i18n).
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
+| 2026-07-27 | Compare-first homepage + review viewer | Product led with compare differentiator; SEO preserved via `#tools` index |
 | 2026-07 | Free limit 50 MB, Pro $9/mo | More generous than old 24 MB; price reflects conversion value |
 | 2026-07 | 3/day Word/Excel cap on free | Protect server COGS; clear Pro reason |
 | 2026-07 | Client-side merge/split/rotate | Lower cost, privacy story, unlimited use |

@@ -40,6 +40,10 @@ export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspacePr
   const { activeToolId, activeTool, navigateToTool } = useWorkspaceNavigation(initialToolId);
   const [pdfOrder, setPdfOrder] = useState<File[]>([]);
   const [mergeOrderFrozen, setMergeOrderFrozen] = useState(false);
+  const [compareReviewMode, setCompareReviewMode] = useState(false);
+
+  const isCompareTool = activeToolId === "pdf-compare";
+  const hideWorkspaceChrome = isCompareTool && compareReviewMode;
 
   const uploadConfig = TOOL_UPLOAD_CONFIG[activeToolId];
   const pdfFiles = getPdfFiles(files);
@@ -48,6 +52,12 @@ export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspacePr
   useEffect(() => {
     recordToolVisit(activeToolId);
   }, [activeToolId]);
+
+  useEffect(() => {
+    if (!isCompareTool) {
+      setCompareReviewMode(false);
+    }
+  }, [isCompareTool]);
 
   useEffect(() => {
     setPdfOrder((current) => reconcilePdfOrder(current, files));
@@ -90,7 +100,9 @@ export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspacePr
       case "word-to-pdf":
         return <WordToPdfPanel files={files} />;
       case "pdf-compare":
-        return <ComparePanel pdfFiles={pdfFiles} />;
+        return (
+          <ComparePanel pdfFiles={pdfFiles} onReviewModeChange={setCompareReviewMode} />
+        );
       case "arrange-merge":
         return (
           <ArrangeMergePanel
@@ -124,30 +136,42 @@ export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspacePr
   return (
     <WorkspaceNavProvider navigateToTool={navigateToTool}>
       <section
-        className={`workspace site--focused workspace--${activeTool.category}`}
+        className={`workspace site--focused workspace--${activeTool.category}${
+          isCompareTool ? " workspace--compare" : ""
+        }${hideWorkspaceChrome ? " workspace--compare-review" : ""}`}
         id="workspace"
       >
-        <div className="section-heading workspace-heading">
-          <h2>{toolCopy.name}</h2>
-          <p>{toolCopy.description}</p>
-        </div>
+        {!hideWorkspaceChrome && (
+          <>
+            <div className="section-heading workspace-heading">
+              <h2>{toolCopy.name}</h2>
+              <p>{toolCopy.description}</p>
+            </div>
 
-        <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
+            <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
+          </>
+        )}
 
-        <div className="workspace-layout">
-          <WorkspaceFileTray
-            accept={WORKSPACE_ACCEPT}
-            uploadTitle={uploadConfig.title}
-            uploadLabel={uploadConfig.label}
-            entries={entries}
-            loading={loading}
-            entitlementsLabel={entitlements.label}
-            fileLimitMb={entitlements.fileLimitMb}
-            isPro={entitlements.isPro}
-            onFilesChange={handleIncomingFiles}
-            onRemoveFile={removeFile}
-            onClearAll={handleClearAll}
-          />
+        <div
+          className={`workspace-layout${
+            hideWorkspaceChrome ? " workspace-layout--compare-review" : ""
+          }`}
+        >
+          {!hideWorkspaceChrome && (
+            <WorkspaceFileTray
+              accept={WORKSPACE_ACCEPT}
+              uploadTitle={uploadConfig.title}
+              uploadLabel={uploadConfig.label}
+              entries={entries}
+              loading={loading}
+              entitlementsLabel={entitlements.label}
+              fileLimitMb={entitlements.fileLimitMb}
+              isPro={entitlements.isPro}
+              onFilesChange={handleIncomingFiles}
+              onRemoveFile={removeFile}
+              onClearAll={handleClearAll}
+            />
+          )}
 
           <div className="workspace-action-column">{renderToolPanel()}</div>
         </div>

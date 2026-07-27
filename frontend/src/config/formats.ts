@@ -1,5 +1,5 @@
 export const BUSINESS_TAGLINE =
-  "The one-stop file conversion workspace for modern businesses.";
+  "Compare PDFs side by side and finish document workflows in one browser workspace.";
 
 export const SUPPORTED_INPUT_FORMATS = [
   { ext: "PDF", use: "Documents, reports, contracts" },
