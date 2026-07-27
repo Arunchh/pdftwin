@@ -39,8 +39,9 @@ PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
 - **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads and unlimited PDF → Word/Excel exports
-- **Two-column tool workspace** — Files column (upload + tray) on the left; tool actions on the right — see [tool workspace UI](docs/product/tool-workspace-ui.md)
+- **Two-column tool workspace** — Files column (upload + tray + thumbnails) on the left; tool actions on the right — see [tool workspace UI](docs/product/tool-workspace-ui.md)
 - **Category-filtered tool tabs** — Convert, Organize, and Protect tabs; only tools in the active category shown (not all 18 at once)
+- **Instant tool switching** — Switch tools in the workspace without a full page reload; browser back/forward supported
 - **Result cards** — After processing, a result card shows filename and an explicit Download button (no silent auto-download)
 - **Next-step suggestions** — Result cards link to related tools (e.g. Merge → Convert, Compress → Protect)
 - **Persistent file tray** — Files stay in IndexedDB while you switch between tools — no re-upload needed
@@ -150,7 +151,7 @@ Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names
 
 **Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (Convert, Organize, Protect), inspired by tool-directory sites but styled with PDFTwin’s fluorescent mint palette and bright pastel category headers. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
 
-**Tool workspace:** Each `/tools/*` page uses a two-column layout — upload and file tray on the left, the active tool panel on the right. In-workspace navigation uses category tabs plus horizontal tool tabs filtered to the current category. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
+**Tool workspace:** Each `/tools/*` page uses a two-column layout — upload and file tray (with thumbnails) on the left, the active tool panel on the right. In-workspace navigation uses category tabs plus horizontal tool tabs filtered to the current category; tab clicks swap tools client-side via the History API (no full reload). On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
 
 ## Prerequisites
 

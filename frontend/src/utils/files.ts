@@ -1,15 +1,34 @@
 export function getPdfFiles(files: File[]): File[] {
-  return files.filter((file) => file.name.toLowerCase().endsWith(".pdf"));
+  return files.filter((file) => isPdfFile(file));
 }
 
 const IMAGE_EXTENSIONS = [".png", ".jpg", ".jpeg", ".webp", ".gif", ".bmp", ".tiff", ".tif"];
 
+export function isPdfFile(file: Pick<File, "name">): boolean {
+  return file.name.toLowerCase().endsWith(".pdf");
+}
+
+export function isImageFile(file: Pick<File, "name">): boolean {
+  return IMAGE_EXTENSIONS.some((ext) => file.name.toLowerCase().endsWith(ext));
+}
+
+export function isDocxFile(file: Pick<File, "name">): boolean {
+  return file.name.toLowerCase().endsWith(".docx");
+}
+
 export function getImageFiles(files: File[]): File[] {
-  return files.filter((file) => IMAGE_EXTENSIONS.some((ext) => file.name.toLowerCase().endsWith(ext)));
+  return files.filter((file) => isImageFile(file));
 }
 
 export function getDocxFiles(files: File[]): File[] {
-  return files.filter((file) => file.name.toLowerCase().endsWith(".docx"));
+  return files.filter((file) => isDocxFile(file));
+}
+
+export function fileForRecord(
+  record: { id: string; name: string; size: number },
+  files: File[]
+): File | undefined {
+  return files.find((file) => file.name === record.name && file.size === record.size);
 }
 
 export function fileKey(file: File): string {

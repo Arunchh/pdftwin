@@ -2311,10 +2311,14 @@ textarea {
   align-items: center;
   padding: 0.45rem 0.85rem;
   border-radius: 6px;
+  border: none;
+  background: transparent;
   font-size: 0.82rem;
   font-weight: 600;
+  font-family: inherit;
   color: var(--text-muted);
   text-decoration: none;
+  cursor: pointer;
   transition: background 0.2s, color 0.2s;
 }
 
@@ -2546,10 +2550,12 @@ textarea {
   border-radius: 999px;
   font-size: 0.8125rem;
   font-weight: 600;
+  font-family: inherit;
   color: var(--text);
   background: var(--surface);
   border: 1px solid var(--border);
   text-decoration: none;
+  cursor: pointer;
   transition: background 0.2s, border-color 0.2s;
 }
 
@@ -2557,6 +2563,97 @@ textarea {
   background: var(--surface-hover);
   border-color: var(--accent-border);
   color: var(--accent-text);
+}
+
+.workspace-files-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 1.35rem;
+  height: 1.35rem;
+  margin-left: 0.35rem;
+  padding: 0 0.35rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--surface-muted);
+  color: var(--text-muted);
+}
+
+.workspace-tray-thumb {
+  flex-shrink: 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--radius-md);
+  object-fit: cover;
+  border: 1px solid var(--border-soft);
+  background: var(--surface-muted);
+}
+
+.workspace-tray-thumb--icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+}
+
+.workspace-tray-thumb--loading {
+  background: linear-gradient(
+    90deg,
+    var(--surface-muted) 25%,
+    var(--surface-hover) 50%,
+    var(--surface-muted) 75%
+  );
+  background-size: 200% 100%;
+  animation: workspace-thumb-shimmer 1.2s ease-in-out infinite;
+}
+
+@keyframes workspace-thumb-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  100% {
+    background-position: -100% 0;
+  }
+}
+
+.workspace-tray-item-meta {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.workspace-files-mobile-details {
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+}
+
+.workspace-files-mobile-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.65rem 0.85rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+  list-style: none;
+}
+
+.workspace-files-mobile-summary::-webkit-details-marker {
+  display: none;
+}
+
+.workspace-files-mobile-details[open] .workspace-files-mobile-summary svg {
+  transform: rotate(180deg);
+}
+
+.workspace-files-mobile-body {
+  padding: 0 0.85rem 0.85rem;
+  border-top: 1px solid var(--border-soft);
 }
 
 .workspace-tool-switcher {
@@ -2575,10 +2672,14 @@ textarea {
   align-items: center;
   gap: 0.4rem;
   padding: 0.5rem 0.75rem;
+  border: none;
   border-radius: 6px;
+  background: transparent;
   font-size: 0.85rem;
   font-weight: 500;
+  font-family: inherit;
   color: var(--text-muted);
+  cursor: pointer;
   transition: background 0.2s, color 0.2s;
   text-decoration: none;
 }
@@ -3883,7 +3984,12 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .workspace-action-column {
+    order: 1;
+  }
+
   .workspace-files-column {
+    order: 2;
     position: static;
   }
 
@@ -4016,6 +4122,14 @@ textarea {
 
 .workspace-tray-item > div {
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.workspace-tray-item-meta {
+  min-width: 0;
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.15rem;

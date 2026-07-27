@@ -246,6 +246,23 @@ Result cards, workflow shell, and next-step links. Full spec: [tool-workspace-ui
 
 ---
 
+## Tool workspace UI — Phase 3 (shipped 2026-07-27)
+
+Client navigation, file thumbnails, and mobile refinements. Full spec: [tool-workspace-ui.md](./tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27).
+
+| Change | Implementation |
+|--------|----------------|
+| Client-side tool switching | [`useWorkspaceNavigation.ts`](../../frontend/src/hooks/useWorkspaceNavigation.ts) — History API, no full reload |
+| Nav context + result chips | [`WorkspaceNavContext.tsx`](../../frontend/src/context/WorkspaceNavContext.tsx) |
+| Header tool pill sync | [`workspaceNavStore.ts`](../../frontend/src/stores/workspaceNavStore.ts) + [`SiteHeader.tsx`](../../frontend/src/components/layout/SiteHeader.tsx) |
+| Button-based workspace tabs | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) |
+| File thumbnails in tray | [`WorkspaceFileThumbnail.tsx`](../../frontend/src/components/WorkspaceFileThumbnail.tsx), [`useFileThumbnail.ts`](../../frontend/src/hooks/useFileThumbnail.ts) |
+| PDF thumb rendering | [`pdfJsClient.ts`](../../frontend/src/services/pdfJsClient.ts) — `pdfThumbnailDataUrl()` |
+| Mobile: action-first + collapsible files | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx), [`index.css`](../../frontend/src/index.css) |
+| Path resolver for back/forward | [`tools.ts`](../../frontend/src/config/tools.ts) — `toolIdFromPath()` |
+
+**Workspace UI redesign complete** (Phases 1–3). Remaining i18n gap: tool panel UI still English-only.
+
 ## Deferred (see [roadmap](../strategy/roadmap.md))
 
 - Cloud workspace sync (Supabase Storage)  

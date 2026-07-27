@@ -266,3 +266,18 @@ export function toolByHash(hash: string): ToolDefinition | undefined {
 export function toolById(id: ToolId): ToolDefinition {
   return TOOLS.find((tool) => tool.id === id) ?? TOOLS[0];
 }
+
+/** Resolve tool id from a workspace URL pathname (supports localized routes). */
+export function toolIdFromPath(
+  pathname: string,
+  locale: "en" | "es" | "fr" | "nl" = "en"
+): ToolId | null {
+  const normalized = pathname.replace(/\/+$/, "") || "/";
+  const prefix = locale === "en" ? "/tools/" : `/${locale}/tools/`;
+  if (!normalized.startsWith(prefix)) return null;
+
+  const segment = normalized.slice(prefix.length).split("/")[0];
+  if (!segment) return null;
+
+  return toolByPath(segment)?.id ?? null;
+}

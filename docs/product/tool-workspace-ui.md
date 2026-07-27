@@ -28,16 +28,20 @@ Design tokens and category colors follow the existing **Neon Pastel / PDFTwin** 
 ## User flow
 
 ```
-Land on /tools/{tool}
+Land on /tools/{tool} (direct link, SEO landing, or header nav)
+  → Full page load with correct tool panel (Astro static route)
   → See tool name + category-colored workspace border
   → Category tab matches tool (e.g. Convert for /tools/compress)
   → Tool tabs show siblings in that category
-  → Left: upload or pick from tray (IndexedDB, cross-tool)
-  → Right: configure and run the tool (panel unchanged in Phase 1)
-  → Switch tool tab → full page navigation, files stay in tray
+  → Left: upload or pick from tray (IndexedDB, cross-tool) with thumbnails
+  → Right: configure and run the tool
+  → Switch tool tab → client-side swap (History API, no reload)
+  → Browser back/forward → popstate restores previous tool + URL
+  → Run tool → result card with explicit Download + next-step chips
+  → Next-step chip → client-side nav when already in workspace
 ```
 
-Files uploaded in one tool remain available when switching to another (e.g. merge → convert) without re-uploading.
+Files uploaded in one tool remain available when switching to another (e.g. merge → convert) without re-uploading. Static Astro routes still exist for SEO, direct links, and first paint; in-workspace tab clicks use client navigation.
 
 ---
 
@@ -52,17 +56,23 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `ToolResultCard` | [`frontend/src/components/ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) | Success state: filename, Download, next steps |
 | `ToolPanelFeedback` | [`frontend/src/components/ToolPanelFeedback.tsx`](../../frontend/src/components/ToolPanelFeedback.tsx) | Error + notice + result card wrapper for panels |
 | `ToolWorkflowShell` | [`frontend/src/components/ToolWorkflowShell.tsx`](../../frontend/src/components/ToolWorkflowShell.tsx) | Step rail for multi-step tools |
-| Tool panels | [`frontend/src/components/*Panel.tsx`](../../frontend/src/components/) | Per-tool logic; use `useToolResult` for downloads |
+| `WorkspaceFileThumbnail` | [`frontend/src/components/WorkspaceFileThumbnail.tsx`](../../frontend/src/components/WorkspaceFileThumbnail.tsx) | Tray row preview (image, PDF, or type icon) |
+| Tool panels | [`frontend/src/components/*Panel.tsx`](../../frontend/src/components/) | Per-tool logic; use `useToolResult` for panels |
 
 ### Data & state
 
 | Layer | Path | Notes |
 |-------|------|-------|
 | `useWorkspaceFiles` | [`frontend/src/hooks/useWorkspaceFiles.ts`](../../frontend/src/hooks/useWorkspaceFiles.ts) | IndexedDB via `StorageAdapter`; shared across tools |
+| `useWorkspaceNavigation` | [`frontend/src/hooks/useWorkspaceNavigation.ts`](../../frontend/src/hooks/useWorkspaceNavigation.ts) | Client tool switching via `history.pushState` / `popstate` |
+| `useFileThumbnail` | [`frontend/src/hooks/useFileThumbnail.ts`](../../frontend/src/hooks/useFileThumbnail.ts) | Object URLs for images; PDF.js first-page cache for PDFs |
+| `useMediaQuery` | [`frontend/src/hooks/useMediaQuery.ts`](../../frontend/src/hooks/useMediaQuery.ts) | Breakpoint helpers for mobile tray behavior |
+| `WorkspaceNavProvider` | [`frontend/src/context/WorkspaceNavContext.tsx`](../../frontend/src/context/WorkspaceNavContext.tsx) | Exposes `navigateToTool` to result-card next steps |
+| `workspaceNavStore` | [`frontend/src/stores/workspaceNavStore.ts`](../../frontend/src/stores/workspaceNavStore.ts) | Pub/sub for header tool pill label on client nav |
 | `useToolResult` | [`frontend/src/hooks/useToolResult.ts`](../../frontend/src/hooks/useToolResult.ts) | Pending download blob + error state for panels |
 | Upload config | [`frontend/src/config/upload.ts`](../../frontend/src/config/upload.ts) | Per-tool `accept`, titles, labels |
 | Next-step links | [`frontend/src/config/toolNextSteps.ts`](../../frontend/src/config/toolNextSteps.ts) | Suggested tools on result card |
-| Tool registry | [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts) | 18 tools, categories, routes |
+| Tool registry | [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts) | 18 tools, categories, routes, `toolIdFromPath()` |
 
 ---
 
@@ -96,6 +106,9 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `.workspace-category-tabs` | Top row: Convert / Organize / Protect |
 | `.workspace-category-tab--{category}.active` | Category accent colors |
 | `.workspace-tool-switcher` | Second row: tool tabs for active category only |
+| `.workspace-tray-thumb` | 40×40 file preview in tray rows |
+| `.workspace-files-collapsible` | Mobile `<details>` wrapper for file list |
+| `.workspace-tab-btn` / `.workspace-chip-btn` | Button-based tabs and next-step chips (no full reload) |
 
 Styles live in [`frontend/src/index.css`](../../frontend/src/index.css) under the “Workspace” section.
 
@@ -103,34 +116,61 @@ Styles live in [`frontend/src/index.css`](../../frontend/src/index.css) under th
 
 ## Navigation behavior
 
+### Client-side switching (Phase 3)
+
+In-workspace category and tool tabs are **`<button>` elements**, not `<a href>` links. Clicking a tab calls `navigateToTool(toolId)` from [`useWorkspaceNavigation`](../../frontend/src/hooks/useWorkspaceNavigation.ts):
+
+1. `history.pushState({ toolId }, "", toolPath(toolId, locale))` — URL updates for sharing and back button
+2. React state swaps the active panel without a full page reload
+3. `document.title` and the header tool pill update via i18n copy + [`workspaceNavStore`](../../frontend/src/stores/workspaceNavStore.ts)
+4. Workspace scrolls into view smoothly
+
+**Back/forward:** `popstate` listener resolves the tool from `window.location.pathname` via `toolIdFromPath()` and restores panel + meta.
+
+**Direct loads:** Landing on `/tools/compress` from Google or a bookmark still uses Astro’s static HTML (full page load). Client navigation only applies after the React island hydrates.
+
+**Next-step chips:** [`ToolResultCard`](../../frontend/src/components/ToolResultCard.tsx) uses `useWorkspaceNav()` when inside the workspace; chips call `navigateToTool` instead of following `<a href>`.
+
+**Header pill:** [`SiteHeader`](../../frontend/src/components/layout/SiteHeader.tsx) subscribes to `workspaceNavStore` with `useSyncExternalStore` so the active-tool badge updates on client nav without reload.
+
 ### Category tabs
 
-- **Convert & Export** → first convert tool (`/tools/convert`) when clicked from another category
-- **Organize Documents** → `/tools/compare` (first organize tool in registry order)
-- **Protect Files** → `/tools/watermark`
+- **Convert & Export** → first convert tool (`convert-extract` / `/tools/convert`) when clicked from another category
+- **Organize Documents** → `pdf-compare` (`/tools/compare`)
+- **Protect Files** → `watermark-pdf` (`/tools/watermark`)
 
-Clicking a category tab navigates to the **first tool in that category** (full page load). The active category is always derived from the current tool.
+Clicking a category tab navigates to the **first tool in that category** (client-side). The active category is always derived from the current tool.
 
 ### Tool tabs
 
 - Only tools where `tool.category === activeTool.category` are shown.
 - Labels use i18n `messages.tools[toolId].shortLabel` (locale-aware via `toolPath(id, locale)`).
-- “All tools” links to `/#tools` (or `/{locale}/#tools`).
+- “All tools” links to `/#tools` (or `/{locale}/#tools`) — full navigation to home anchor.
 
 ### Comparison with site header nav
 
-`SiteNav` uses category **dropdowns** on desktop and accordion on mobile. The workspace uses **horizontal tabs** scoped to the active category — fewer choices on screen, same category grouping.
+`SiteNav` uses category **dropdowns** on desktop and accordion on mobile (full page links). The workspace uses **horizontal button tabs** scoped to the active category — fewer choices on screen, same category grouping, instant panel swap.
 
 ---
 
 ## Files column (left)
 
-Merged **upload + tray** into one surface (Phase 1):
+Merged **upload + tray** into one surface (Phase 1), with thumbnails (Phase 3):
 
 1. Header: “Your files” + plan limit badge (`Free` / `Pro` · file size cap)
-2. Tool-specific dropzone (`TOOL_UPLOAD_CONFIG[toolId]`)
-3. File list from IndexedDB (name, size, remove per file)
+2. Tool-specific dropzone (`TOOL_UPLOAD_CONFIG[toolId]`) — always visible, including on mobile
+3. File list from IndexedDB — each row shows a **thumbnail**, name, size, and remove control
 4. Single **Clear all files** action (replaces separate “Clear tray” and “Clear workspace”)
+
+### Thumbnails
+
+[`WorkspaceFileThumbnail`](../../frontend/src/components/WorkspaceFileThumbnail.tsx) + [`useFileThumbnail`](../../frontend/src/hooks/useFileThumbnail.ts):
+
+| File type | Preview |
+|-----------|---------|
+| Images | `URL.createObjectURL` |
+| PDF | PDF.js first-page render via [`pdfThumbnailDataUrl`](../../frontend/src/services/pdfJsClient.ts) (in-memory cache per file) |
+| DOCX / other | Lucide type icon fallback |
 
 Empty state: *“No files yet — upload above to get started.”*
 
@@ -141,9 +181,10 @@ Empty state: *“No files yet — upload above to get started.”*
 | Breakpoint | Behavior |
 |------------|----------|
 | **Desktop (default)** | 2-column grid; files column `position: sticky; top: 5.5rem` |
-| **≤640px** | Single column (files above action); sticky disabled; tool tab labels hidden (icons only) |
+| **≤640px** | Single column; **action column first** (`order: 1`), files second (`order: 2`); sticky disabled; tool tab labels hidden (icons only) |
+| **≤640px + files present** | File list collapses into `<details>` (“Your files (N)”) — dropzone stays visible above the collapsible list |
 
-Mobile is **secondary** for this redesign; desktop layout is the primary target.
+Mobile refinements prioritize reaching the tool panel quickly while keeping upload accessible without scrolling past a long file list.
 
 ---
 
@@ -187,13 +228,28 @@ User runs tool → processing → ToolResultCard appears
 
 ---
 
-## Future phases
+## Phase 3 scope (shipped 2026-07-27)
 
-| Item | Phase | Notes |
-|------|-------|-------|
-| Client-side tool switching (no full reload) | 3 | Astro + React router |
-| File thumbnails in tray | 3 | Optional polish |
-| Tool panel UI translation | 1.5 i18n | Panels still English-only |
+**Included:**
+
+| Feature | Implementation |
+|---------|----------------|
+| Client-side tool switching | [`useWorkspaceNavigation.ts`](../../frontend/src/hooks/useWorkspaceNavigation.ts) — `pushState` / `popstate`, panel swap in `ToolWorkspace` |
+| Nav context for chips | [`WorkspaceNavContext.tsx`](../../frontend/src/context/WorkspaceNavContext.tsx) + [`ToolResultCard`](../../frontend/src/components/ToolResultCard.tsx) |
+| Header pill sync | [`workspaceNavStore.ts`](../../frontend/src/stores/workspaceNavStore.ts) + [`SiteHeader.tsx`](../../frontend/src/components/layout/SiteHeader.tsx) |
+| Button-based tabs | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) — replaces `<a href>` for in-category switches |
+| Path → tool resolver | [`toolIdFromPath()`](../../frontend/src/config/tools.ts) for back/forward and popstate |
+| File thumbnails | [`WorkspaceFileThumbnail.tsx`](../../frontend/src/components/WorkspaceFileThumbnail.tsx), [`useFileThumbnail.ts`](../../frontend/src/hooks/useFileThumbnail.ts) |
+| Mobile layout | Action-first column order; collapsible file list via `<details>`; dropzone always visible |
+| File type helpers | [`utils/files.ts`](../../frontend/src/utils/files.ts) — `isPdfFile`, `isImageFile`, `isDocxFile`, `fileForRecord()` |
+
+**Not included (future):**
+
+| Item | Notes |
+|------|-------|
+| Tool panel UI translation | Phase 1.5 i18n — panels still English-only |
+| Prefetch adjacent tool panels | Optional performance win |
+| Full SPA router | Static Astro routes remain source of truth for SEO |
 
 See [roadmap — workspace UI](../strategy/roadmap.md#workspace-ui-redesign).
 
@@ -215,5 +271,6 @@ Legacy hash URLs (`#merge`, `#convert`, …) redirect via inline script in `Base
 
 - **Adding a new tool:** register in `tools.ts`, add panel + route in `ToolWorkspace`, upload config in `upload.ts`, optional entries in `toolNextSteps.ts`. Category tab and switcher update automatically from `TOOLS`.
 - **Download UX:** panels must use `useToolResult` + `ToolPanelFeedback` — do not call `downloadBlob` / `downloadResponse` directly after processing.
+- **Client navigation:** in-workspace tabs must call `navigateToTool` — do not use `<a href>` for sibling tool switches (breaks instant swap and preserves tray state awkwardly via full reload).
 - **Changing category order:** `CATEGORY_ORDER` in `WorkspaceToolSwitcher.tsx` and `ToolGrid.tsx` should stay in sync.
 - **Do not** re-split upload and tray without updating this doc — the single files column is intentional for scan path and one clear action.

@@ -1,7 +1,12 @@
+import { useSyncExternalStore } from "react";
 import { UserCircle2 } from "lucide-react";
 import { openCheckout } from "../../utils/checkoutEvents";
 import { useAuth } from "../../hooks/useAuth";
 import { useI18n } from "../../i18n/I18nProvider";
+import {
+  getWorkspaceToolLabel,
+  subscribeWorkspaceToolLabel,
+} from "../../stores/workspaceNavStore";
 import BrandLogo from "../BrandLogo";
 import SiteNav from "./SiteNav";
 
@@ -12,6 +17,12 @@ interface SiteHeaderProps {
 export default function SiteHeader({ activeToolLabel }: SiteHeaderProps) {
   const { user, isAuthenticated, entitlements } = useAuth();
   const { messages, localizePath } = useI18n();
+  const dynamicToolLabel = useSyncExternalStore(
+    subscribeWorkspaceToolLabel,
+    getWorkspaceToolLabel,
+    () => null
+  );
+  const toolPillLabel = dynamicToolLabel ?? activeToolLabel;
 
   return (
     <header className="site-header">
@@ -24,8 +35,8 @@ export default function SiteHeader({ activeToolLabel }: SiteHeaderProps) {
         <SiteNav />
 
         <div className="site-header-actions">
-          {activeToolLabel && (
-            <span className="active-tool-pill">{activeToolLabel}</span>
+          {toolPillLabel && (
+            <span className="active-tool-pill">{toolPillLabel}</span>
           )}
           {isAuthenticated && user ? (
             <a className="site-header-signin" href={localizePath("/account")}>

@@ -156,3 +156,12 @@ export async function getPdfPageCountFromJs(file: File): Promise<number> {
   const pdfDoc = await loadPdfDocument(file);
   return pdfDoc.numPages;
 }
+
+export async function pdfThumbnailDataUrl(file: File, maxWidth = 56): Promise<string> {
+  const pdfDoc = await loadPdfDocument(file);
+  const page = await pdfDoc.getPage(1);
+  const baseViewport = page.getViewport({ scale: 1 });
+  const scale = Math.min(1, maxWidth / baseViewport.width);
+  const canvas = await renderPageToCanvas(pdfDoc, 1, scale);
+  return canvas.toDataURL("image/jpeg", 0.72);
+}

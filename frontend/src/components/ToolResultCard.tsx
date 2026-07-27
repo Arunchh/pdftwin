@@ -4,6 +4,7 @@ import { toolPath } from "../config/tools";
 import { TOOL_NEXT_STEPS } from "../config/toolNextSteps";
 import { formatBytes } from "../config/limits";
 import { downloadBlob } from "../api";
+import { useWorkspaceNav } from "../context/WorkspaceNavContext";
 import { useI18n } from "../i18n/I18nProvider";
 import type { ToolResult } from "../types/toolResult";
 
@@ -15,6 +16,7 @@ interface ToolResultCardProps {
 
 export default function ToolResultCard({ toolId, result, onDismiss }: ToolResultCardProps) {
   const { locale } = useI18n();
+  const workspaceNav = useWorkspaceNav();
   const nextSteps = TOOL_NEXT_STEPS[toolId] ?? [];
 
   const handleDownload = () => {
@@ -54,16 +56,28 @@ export default function ToolResultCard({ toolId, result, onDismiss }: ToolResult
         <div className="tool-result-next-steps">
           <p className="tool-result-next-label">Next steps</p>
           <div className="tool-result-next-chips">
-            {nextSteps.map((step) => (
-              <a
-                key={step.toolId}
-                href={toolPath(step.toolId, locale)}
-                className="tool-result-next-chip"
-              >
-                {step.label}
-                <ArrowRight size={14} aria-hidden="true" />
-              </a>
-            ))}
+            {nextSteps.map((step) =>
+              workspaceNav ? (
+                <button
+                  key={step.toolId}
+                  type="button"
+                  className="tool-result-next-chip"
+                  onClick={() => workspaceNav.navigateToTool(step.toolId)}
+                >
+                  {step.label}
+                  <ArrowRight size={14} aria-hidden="true" />
+                </button>
+              ) : (
+                <a
+                  key={step.toolId}
+                  href={toolPath(step.toolId, locale)}
+                  className="tool-result-next-chip"
+                >
+                  {step.label}
+                  <ArrowRight size={14} aria-hidden="true" />
+                </a>
+              )
+            )}
           </div>
         </div>
       )}

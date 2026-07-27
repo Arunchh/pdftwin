@@ -6,13 +6,17 @@ const CATEGORY_ORDER: ToolCategory[] = ["convert", "organize", "security"];
 
 interface WorkspaceToolSwitcherProps {
   activeTool: ToolId;
+  onNavigate: (toolId: ToolId) => void;
 }
 
 function firstToolInCategory(category: ToolCategory): ToolId {
   return TOOLS.find((tool) => tool.category === category)?.id ?? TOOLS[0].id;
 }
 
-export default function WorkspaceToolSwitcher({ activeTool }: WorkspaceToolSwitcherProps) {
+export default function WorkspaceToolSwitcher({
+  activeTool,
+  onNavigate,
+}: WorkspaceToolSwitcherProps) {
   const { locale, messages } = useI18n();
   const active = toolById(activeTool);
   const activeCategory = active.category;
@@ -30,18 +34,19 @@ export default function WorkspaceToolSwitcher({ activeTool }: WorkspaceToolSwitc
       <div className="workspace-category-tabs" role="tablist" aria-label="Tool categories">
         {CATEGORY_ORDER.map((category) => {
           const isActive = category === activeCategory;
-          const href = toolPath(firstToolInCategory(category), locale);
+          const targetTool = firstToolInCategory(category);
 
           return (
-            <a
+            <button
               key={category}
-              href={href}
+              type="button"
               role="tab"
               aria-selected={isActive}
               className={`workspace-category-tab workspace-category-tab--${category} ${isActive ? "active" : ""}`}
+              onClick={() => onNavigate(targetTool)}
             >
               {categoryLabels[category]}
-            </a>
+            </button>
           );
         })}
         <a href={locale === "en" ? "/#tools" : `/${locale}/#tools`} className="workspace-tool-browse">
@@ -49,27 +54,37 @@ export default function WorkspaceToolSwitcher({ activeTool }: WorkspaceToolSwitc
         </a>
       </div>
 
-      <div className="workspace-tool-switcher" role="tablist" aria-label={`${categoryLabels[activeCategory]} tools`}>
+      <div
+        className="workspace-tool-switcher"
+        role="tablist"
+        aria-label={`${categoryLabels[activeCategory]} tools`}
+      >
         {categoryTools.map((tool) => {
           const Icon = tool.icon;
           const isActive = tool.id === activeTool;
           const copy = messages.tools[tool.id];
 
           return (
-            <a
+            <button
               key={tool.id}
-              href={toolPath(tool.id, locale)}
+              type="button"
               role="tab"
               aria-selected={isActive}
               className={`workspace-tool-tab workspace-tool-tab--${tool.category} ${isActive ? "active" : ""}`}
               title={copy.description}
+              onClick={() => onNavigate(tool.id)}
             >
               <Icon size={16} />
               <span className="workspace-tool-tab-label">{copy.shortLabel}</span>
-            </a>
+            </button>
           );
         })}
       </div>
     </nav>
   );
+}
+
+/** Fallback href for no-JS and SEO — kept on tool pages via static routes. */
+export function workspaceToolHref(toolId: ToolId, locale: "en" | "es" | "fr" | "nl" = "en") {
+  return toolPath(toolId, locale);
 }

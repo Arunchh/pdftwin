@@ -20,10 +20,12 @@ import SignPdfPanel from "./SignPdfPanel";
 import WorkspaceFileTray from "./WorkspaceFileTray";
 import WorkspaceToolSwitcher from "./layout/WorkspaceToolSwitcher";
 import type { ToolId } from "../config/tools";
-import { toolById } from "../config/tools";
 import { TOOL_UPLOAD_CONFIG } from "../config/upload";
+import { WorkspaceNavProvider } from "../context/WorkspaceNavContext";
 import { useAuth } from "../hooks/useAuth";
+import { useI18n } from "../i18n/I18nProvider";
 import { useWorkspaceFiles } from "../hooks/useWorkspaceFiles";
+import { useWorkspaceNavigation } from "../hooks/useWorkspaceNavigation";
 import { recordToolVisit } from "../stores/workspaceUsageStore";
 import { defaultPdfOrder, getPdfFiles, reconcilePdfOrder } from "../utils/files";
 
@@ -31,19 +33,21 @@ interface ToolWorkspaceProps {
   toolId: ToolId;
 }
 
-export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
+export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspaceProps) {
+  const { messages } = useI18n();
   const { entitlements } = useAuth();
   const { records, files, loading, addFiles, removeFile, clearAll } = useWorkspaceFiles();
+  const { activeToolId, activeTool, navigateToTool } = useWorkspaceNavigation(initialToolId);
   const [pdfOrder, setPdfOrder] = useState<File[]>([]);
   const [mergeOrderFrozen, setMergeOrderFrozen] = useState(false);
 
-  const activeTool = toolById(toolId);
-  const uploadConfig = TOOL_UPLOAD_CONFIG[toolId];
+  const uploadConfig = TOOL_UPLOAD_CONFIG[activeToolId];
   const pdfFiles = getPdfFiles(files);
+  const toolCopy = messages.tools[activeToolId];
 
   useEffect(() => {
-    recordToolVisit(toolId);
-  }, [toolId]);
+    recordToolVisit(activeToolId);
+  }, [activeToolId]);
 
   useEffect(() => {
     setPdfOrder((current) => reconcilePdfOrder(current, files));
@@ -66,7 +70,7 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
   };
 
   const renderToolPanel = () => {
-    switch (toolId) {
+    switch (activeToolId) {
       case "convert-extract":
         return <ConvertExtractPanel files={files} />;
       case "image-convert":
@@ -95,8 +99,8 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
             onPdfOrderChange={setPdfOrder}
             orderFrozen={mergeOrderFrozen}
             onOrderFrozenChange={setMergeOrderFrozen}
-          onMergedFile={(file) => addFiles([file])}
-        />
+            onMergedFile={(file) => addFiles([file])}
+          />
         );
       case "split":
         return <SplitPanel files={files} />;
@@ -118,32 +122,37 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
   };
 
   return (
-    <section className={`workspace site--focused workspace--${activeTool.category}`} id="workspace">
-      <div className="section-heading workspace-heading">
-        <h2>{activeTool.name}</h2>
-        <p>{activeTool.description}</p>
-      </div>
+    <WorkspaceNavProvider navigateToTool={navigateToTool}>
+      <section
+        className={`workspace site--focused workspace--${activeTool.category}`}
+        id="workspace"
+      >
+        <div className="section-heading workspace-heading">
+          <h2>{toolCopy.name}</h2>
+          <p>{toolCopy.description}</p>
+        </div>
 
-      <WorkspaceToolSwitcher activeTool={toolId} />
+        <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
 
-      <div className="workspace-layout">
-        <WorkspaceFileTray
-          accept={uploadConfig.accept}
-          uploadTitle={uploadConfig.title}
-          uploadLabel={uploadConfig.label}
-          files={files}
-          records={records}
-          loading={loading}
-          entitlementsLabel={entitlements.label}
-          fileLimitMb={entitlements.fileLimitMb}
-          isPro={entitlements.isPro}
-          onFilesChange={handleIncomingFiles}
-          onRemoveFile={removeFile}
-          onClearAll={handleClearAll}
-        />
+        <div className="workspace-layout">
+          <WorkspaceFileTray
+            accept={uploadConfig.accept}
+            uploadTitle={uploadConfig.title}
+            uploadLabel={uploadConfig.label}
+            files={files}
+            records={records}
+            loading={loading}
+            entitlementsLabel={entitlements.label}
+            fileLimitMb={entitlements.fileLimitMb}
+            isPro={entitlements.isPro}
+            onFilesChange={handleIncomingFiles}
+            onRemoveFile={removeFile}
+            onClearAll={handleClearAll}
+          />
 
-        <div className="workspace-action-column">{renderToolPanel()}</div>
-      </div>
-    </section>
+          <div className="workspace-action-column">{renderToolPanel()}</div>
+        </div>
+      </section>
+    </WorkspaceNavProvider>
   );
 }

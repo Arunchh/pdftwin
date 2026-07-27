@@ -38,12 +38,15 @@ Priority changes from competitive review:
 ### Shipped (2026-07-27)
 
 - [x] **Tool workspace UI — Phase 1** — two-column layout, category-filtered tool tabs, merged files column — see [tool workspace UI](../product/tool-workspace-ui.md)
+- [x] **Tool workspace UI — Phase 2** — result cards, workflow shell, next-step chips — see [Phase 2](../product/tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27)
+- [x] **Tool workspace UI — Phase 3** — client-side tool switching, file thumbnails, mobile refinements — see [Phase 3](../product/tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27)
 
 ### Still open
 
 | Item | Priority | Notes |
 |------|----------|-------|
-| **Tool workspace UI — Phase 2** | ~~High~~ | **Done** — result cards, workflow shell, next steps |
+| ~~Tool workspace UI — Phase 2~~ | ~~High~~ | **Done** |
+| ~~Tool workspace UI — Phase 3~~ | ~~High~~ | **Done** — client nav, thumbnails, mobile |
 | ~~SEO landing content (all 18 tools)~~ | ~~High~~ | **Done** — 72 pages — see [i18n doc](../product/i18n.md) |
 | ~~Comparison page~~ | ~~High~~ | **Done** — `/compare/ilovepdf` |
 | ~~FAQ hub + blog starter content~~ | ~~High~~ | **Done** — `/faq`, `/blog` |
@@ -78,11 +81,17 @@ See [tool workspace UI](../product/tool-workspace-ui.md).
 
 See [tool workspace UI](../product/tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27).
 
-### Phase 3 — next
+### Phase 3 — shipped (2026-07-27)
 
-- [ ] Client-side tool switching without full page reload
-- [ ] File thumbnails in tray
-- [ ] Mobile-first refinements (currently secondary)
+- [x] Client-side tool switching without full page reload (History API)
+- [x] File thumbnails in tray (images, PDF first-page, type icons)
+- [x] Mobile refinements — action column first, collapsible file list, dropzone always visible
+- [x] Header tool pill updates on client nav
+- [x] Result-card next-step chips use client nav in workspace
+
+See [tool workspace UI — Phase 3](../product/tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27).
+
+**Workspace UI redesign is complete** (Phases 1–3).
 
 ---
 
