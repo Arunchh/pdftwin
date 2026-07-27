@@ -1,9 +1,15 @@
-import type { ToolCategory, ToolId } from "../../config/tools";
-import { TOOLS, toolById, toolPath } from "../../config/tools";
+import {
+  CATEGORY_ORDER,
+  SUBCATEGORY_ORDER,
+  TOOLS,
+  toolById,
+  toolPath,
+  toolsInSubcategory,
+  type ToolCategory,
+  type ToolId,
+} from "../../config/tools";
 import { useI18n } from "../../i18n/I18nProvider";
 import type { Locale } from "../../i18n/types";
-
-const CATEGORY_ORDER: ToolCategory[] = ["convert", "organize", "security"];
 
 interface WorkspaceToolSwitcherProps {
   activeTool: ToolId;
@@ -23,12 +29,53 @@ export default function WorkspaceToolSwitcher({
   const activeCategory = active.category;
 
   const categoryLabels: Record<ToolCategory, string> = {
-    convert: messages.toolGrid.categories.convert,
-    organize: messages.toolGrid.categories.organize,
-    security: messages.toolGrid.categories.security,
+    "pdf-from": messages.toolGrid.categories["pdf-from"],
+    "to-pdf": messages.toolGrid.categories["to-pdf"],
+    "pdf-ops": messages.toolGrid.categories["pdf-ops"],
   };
 
-  const categoryTools = TOOLS.filter((tool) => tool.category === activeCategory);
+  const renderToolTabs = () => {
+    const subcategories = SUBCATEGORY_ORDER[activeCategory];
+
+    if (!subcategories) {
+      return TOOLS.filter((tool) => tool.category === activeCategory).map((tool) =>
+        renderToolTab(tool),
+      );
+    }
+
+    return subcategories.flatMap((subcategory) => {
+      const tools = toolsInSubcategory(activeCategory, subcategory);
+      if (!tools.length) return [];
+
+      return [
+        <span key={`label-${subcategory}`} className="workspace-tool-subcategory-label">
+          {messages.toolGrid.subcategories[subcategory]}
+        </span>,
+        ...tools.map((tool) => renderToolTab(tool)),
+      ];
+    });
+  };
+
+  const renderToolTab = (tool: (typeof TOOLS)[number]) => {
+    const Icon = tool.icon;
+    const isActive = tool.id === activeTool;
+    const copy = messages.tools[tool.id];
+
+    return (
+      <button
+        key={tool.id}
+        type="button"
+        role="tab"
+        aria-selected={isActive}
+        className={`workspace-tool-tab workspace-tool-tab--${tool.category} ${isActive ? "active" : ""}`}
+        title={copy.description}
+        onClick={() => onNavigate(tool.id)}
+      >
+        <Icon size={16} />
+        <span className="workspace-tool-tab-label">{copy.shortLabel}</span>
+      </button>
+    );
+  };
 
   return (
     <nav className="workspace-nav" aria-label="Tool navigation">
@@ -60,26 +107,7 @@ export default function WorkspaceToolSwitcher({
         role="tablist"
         aria-label={`${categoryLabels[activeCategory]} tools`}
       >
-        {categoryTools.map((tool) => {
-          const Icon = tool.icon;
-          const isActive = tool.id === activeTool;
-          const copy = messages.tools[tool.id];
-
-          return (
-            <button
-              key={tool.id}
-              type="button"
-              role="tab"
-              aria-selected={isActive}
-              className={`workspace-tool-tab workspace-tool-tab--${tool.category} ${isActive ? "active" : ""}`}
-              title={copy.description}
-              onClick={() => onNavigate(tool.id)}
-            >
-              <Icon size={16} />
-              <span className="workspace-tool-tab-label">{copy.shortLabel}</span>
-            </button>
-          );
-        })}
+        {renderToolTabs()}
       </div>
     </nav>
   );

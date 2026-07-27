@@ -28,9 +28,9 @@ export const es: Messages = {
   },
   nav: {
     allTools: "Todas las herramientas",
-    convert: "Convertir",
-    organize: "Organizar",
-    protect: "Proteger",
+    pdfFrom: "Desde PDF",
+    toPdf: "A PDF",
+    pdfOps: "Editar PDF",
     formats: "Formatos",
     pricing: "Precios",
     signIn: "Iniciar sesión",
@@ -57,14 +57,21 @@ export const es: Messages = {
     subheading:
       "Elige una herramienta y sube una vez. Cambia entre tareas PDF e imagen sin empezar de nuevo.",
     categoryHints: {
-      convert: "Convierte PDFs e imágenes a los formatos que entregas a clientes",
-      organize: "Combina, divide, compara y extrae páginas de documentos empresariales",
-      security: "Protege contratos confidenciales y archivos financieros",
+      "pdf-from": "Exporta PDFs a Word, Excel, imágenes o texto plano",
+      "to-pdf": "Convierte documentos Word, imágenes y fotos en archivos PDF",
+      "pdf-ops": "Combina, divide, rota, firma, marca con agua, comprime y protege PDFs",
     },
     categories: {
-      convert: "Convertir y exportar",
-      organize: "Organizar documentos",
-      security: "Proteger archivos",
+      "pdf-from": "PDF a otros formatos",
+      "to-pdf": "Convertir a PDF",
+      "pdf-ops": "Trabajar con PDFs",
+    },
+    subcategories: {
+      documents: "Documentos",
+      images: "Imágenes",
+      pages: "Páginas y diseño",
+      markup: "Marcado y firma",
+      protect: "Optimizar y proteger",
     },
   },
   trust: [

@@ -28,9 +28,9 @@ export const nl: Messages = {
   },
   nav: {
     allTools: "Alle tools",
-    convert: "Converteren",
-    organize: "Organiseren",
-    protect: "Beveiligen",
+    pdfFrom: "Van PDF",
+    toPdf: "Naar PDF",
+    pdfOps: "PDF bewerken",
     formats: "Formaten",
     pricing: "Prijzen",
     signIn: "Inloggen",
@@ -57,14 +57,21 @@ export const nl: Messages = {
     subheading:
       "Kies een tool en upload één keer. Wissel tussen PDF- en afbeeldingstaken zonder opnieuw te beginnen.",
     categoryHints: {
-      convert: "Zet PDF's en afbeeldingen om naar formaten voor uw klanten",
-      organize: "Voeg samen, splits, vergelijk en haal pagina's uit documenten",
-      security: "Beveilig vertrouwelijke contracten en financiële bestanden",
+      "pdf-from": "Exporteer PDF's naar Word, Excel, afbeeldingen of platte tekst",
+      "to-pdf": "Zet Word-documenten, afbeeldingen en foto's om naar PDF-bestanden",
+      "pdf-ops": "Voeg samen, splits, roteer, onderteken, watermerk, comprimeer en beveilig PDF's",
     },
     categories: {
-      convert: "Converteren en exporteren",
-      organize: "Documenten organiseren",
-      security: "Bestanden beveiligen",
+      "pdf-from": "PDF naar andere formaten",
+      "to-pdf": "Converteren naar PDF",
+      "pdf-ops": "Werken met PDF's",
+    },
+    subcategories: {
+      documents: "Documenten",
+      images: "Afbeeldingen",
+      pages: "Pagina's en lay-out",
+      markup: "Markering en ondertekening",
+      protect: "Optimaliseren en beveiligen",
     },
   },
   trust: [

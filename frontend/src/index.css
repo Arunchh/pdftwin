@@ -73,18 +73,18 @@
   --focus-border: var(--sapphire-600);
 
   /* Tool categories — fluorescent pastel trio */
-  --cat-convert-bg: var(--sapphire-50);
-  --cat-convert-text: var(--sapphire-700);
-  --cat-convert-border: var(--sapphire-100);
-  --cat-convert-accent: var(--sapphire-500);
-  --cat-organize-bg: var(--amethyst-50);
-  --cat-organize-text: var(--amethyst-700);
-  --cat-organize-border: var(--amethyst-100);
-  --cat-organize-accent: var(--amethyst-600);
-  --cat-security-bg: var(--emerald-50);
-  --cat-security-text: var(--emerald-700);
-  --cat-security-border: var(--emerald-100);
-  --cat-security-accent: var(--emerald-600);
+  --cat-pdf-from-bg: var(--sapphire-50);
+  --cat-pdf-from-text: var(--sapphire-700);
+  --cat-pdf-from-border: var(--sapphire-100);
+  --cat-pdf-from-accent: var(--sapphire-500);
+  --cat-to-pdf-bg: var(--amber-50);
+  --cat-to-pdf-text: var(--amber-700);
+  --cat-to-pdf-border: var(--amber-100);
+  --cat-to-pdf-accent: var(--amber-600);
+  --cat-pdf-ops-bg: var(--amethyst-50);
+  --cat-pdf-ops-text: var(--amethyst-700);
+  --cat-pdf-ops-border: var(--amethyst-100);
+  --cat-pdf-ops-accent: var(--amethyst-600);
 
   /* Feedback */
   --success: #00c49a;
@@ -552,7 +552,7 @@ textarea {
   display: flex;
   justify-content: center;
   margin-bottom: 0.75rem;
-  color: var(--cat-security-text);
+  color: var(--cat-to-pdf-text);
 }
 
 @keyframes spin {
@@ -715,9 +715,9 @@ textarea {
   font-weight: 600;
   padding: 0.15rem 0.45rem;
   border-radius: 999px;
-  background: var(--cat-organize-bg);
-  color: var(--cat-organize-text);
-  border: 1px solid var(--cat-organize-border);
+  background: var(--cat-pdf-ops-bg);
+  color: var(--cat-pdf-ops-text);
+  border: 1px solid var(--cat-pdf-ops-border);
 }
 
 .workflow-rail {
@@ -787,16 +787,16 @@ textarea {
   border-radius: var(--radius);
 }
 
-.workspace--organize .workflow-panel,
-.workspace--organize .compare-panel {
+.workspace--pdf-ops .workflow-panel,
+.workspace--pdf-ops .compare-panel {
   border-left-color: var(--amethyst-200);
 }
 
-.workspace--security .workflow-panel {
-  border-left-color: var(--emerald-200);
+.workspace--to-pdf .workflow-panel {
+  border-left-color: var(--amber-200);
 }
 
-.workspace--convert .workflow-panel {
+.workspace--pdf-from .workflow-panel {
   border-left-color: var(--sapphire-200);
 }
 
@@ -1190,19 +1190,19 @@ textarea {
   text-transform: uppercase;
 }
 
-.site-nav-dropdown-header--convert {
+.site-nav-dropdown-header--pdf-from {
   background: var(--sapphire-50);
   color: var(--sapphire-700);
 }
 
-.site-nav-dropdown-header--organize {
+.site-nav-dropdown-header--pdf-ops {
   background: var(--amethyst-50);
   color: var(--amethyst-700);
 }
 
-.site-nav-dropdown-header--security {
-  background: var(--emerald-50);
-  color: var(--emerald-700);
+.site-nav-dropdown-header--to-pdf {
+  background: var(--amber-50);
+  color: var(--amber-700);
 }
 
 .site-nav-dropdown-grid {
@@ -1239,19 +1239,19 @@ textarea {
   flex-shrink: 0;
 }
 
-.site-nav-tool-icon--convert {
+.site-nav-tool-icon--pdf-from {
   background: var(--sapphire-50);
   color: var(--sapphire-600);
 }
 
-.site-nav-tool-icon--organize {
+.site-nav-tool-icon--pdf-ops {
   background: var(--amethyst-50);
   color: var(--amethyst-600);
 }
 
-.site-nav-tool-icon--security {
-  background: var(--emerald-50);
-  color: var(--emerald-600);
+.site-nav-tool-icon--to-pdf {
+  background: var(--amber-50);
+  color: var(--amber-600);
 }
 
 .site-nav-tool-copy {
@@ -2104,22 +2104,22 @@ textarea {
   margin-bottom: 0;
 }
 
-.tool-category--convert {
+.tool-category--pdf-from {
   background: var(--sapphire-50);
   border-color: var(--sapphire-100);
   border-left: 3px solid var(--sapphire-600);
 }
 
-.tool-category--organize {
+.tool-category--pdf-ops {
   background: var(--amethyst-50);
   border-color: var(--amethyst-100);
   border-left: 3px solid var(--amethyst-600);
 }
 
-.tool-category--security {
-  background: var(--emerald-50);
-  border-color: var(--emerald-100);
-  border-left: 3px solid var(--emerald-600);
+.tool-category--to-pdf {
+  background: var(--amber-50);
+  border-color: var(--amber-100);
+  border-left: 3px solid var(--amber-600);
 }
 
 .tool-category h3 {
@@ -2129,16 +2129,16 @@ textarea {
   margin-bottom: 0.75rem;
 }
 
-.tool-category--convert .tool-category-heading h3 {
+.tool-category--pdf-from .tool-category-heading h3 {
   color: var(--sapphire-700);
 }
 
-.tool-category--organize .tool-category-heading h3 {
+.tool-category--pdf-ops .tool-category-heading h3 {
   color: var(--amethyst-700);
 }
 
-.tool-category--security .tool-category-heading h3 {
-  color: var(--emerald-700);
+.tool-category--to-pdf .tool-category-heading h3 {
+  color: var(--amber-700);
 }
 
 .tool-category-heading {
@@ -2152,6 +2152,52 @@ textarea {
 .tool-category-heading p {
   color: var(--text-muted);
   font-size: 0.85rem;
+}
+
+.tool-subcategory {
+  margin-top: 1rem;
+}
+
+.tool-subcategory:first-of-type {
+  margin-top: 0;
+}
+
+.tool-subcategory-heading h4 {
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin-bottom: 0.55rem;
+}
+
+.site-nav-subcategory {
+  padding: 0 0.65rem 0.35rem;
+}
+
+.site-nav-subcategory + .site-nav-subcategory {
+  margin-top: 0.35rem;
+  padding-top: 0.35rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.site-nav-subcategory-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  margin: 0.15rem 0 0.45rem;
+}
+
+.workspace-tool-subcategory-label {
+  flex: 0 0 100%;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-muted);
+  padding: 0.35rem 0.25rem 0.1rem;
 }
 
 .tool-grid {
@@ -2182,19 +2228,19 @@ textarea {
   box-shadow: var(--shadow);
 }
 
-.tool-card--convert:hover {
-  border-color: var(--cat-convert-border);
-  background: var(--cat-convert-bg);
+.tool-card--pdf-from:hover {
+  border-color: var(--cat-pdf-from-border);
+  background: var(--cat-pdf-from-bg);
 }
 
-.tool-card--organize:hover {
-  border-color: var(--cat-organize-border);
-  background: var(--cat-organize-bg);
+.tool-card--pdf-ops:hover {
+  border-color: var(--cat-pdf-ops-border);
+  background: var(--cat-pdf-ops-bg);
 }
 
-.tool-card--security:hover {
-  border-color: var(--cat-security-border);
-  background: var(--cat-security-bg);
+.tool-card--to-pdf:hover {
+  border-color: var(--cat-to-pdf-border);
+  background: var(--cat-to-pdf-bg);
 }
 
 .tool-card.active {
@@ -2203,22 +2249,22 @@ textarea {
   box-shadow: inset 0 0 0 1px var(--accent-border);
 }
 
-.tool-card--convert.active {
-  border-color: var(--cat-convert-accent);
-  background: var(--cat-convert-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-convert-border);
+.tool-card--pdf-from.active {
+  border-color: var(--cat-pdf-from-accent);
+  background: var(--cat-pdf-from-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-pdf-from-border);
 }
 
-.tool-card--organize.active {
-  border-color: var(--cat-organize-accent);
-  background: var(--cat-organize-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-organize-border);
+.tool-card--pdf-ops.active {
+  border-color: var(--cat-pdf-ops-accent);
+  background: var(--cat-pdf-ops-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-pdf-ops-border);
 }
 
-.tool-card--security.active {
-  border-color: var(--cat-security-accent);
-  background: var(--cat-security-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-security-border);
+.tool-card--to-pdf.active {
+  border-color: var(--cat-to-pdf-accent);
+  background: var(--cat-to-pdf-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-to-pdf-border);
 }
 
 .tool-card-icon {
@@ -2231,22 +2277,22 @@ textarea {
   flex-shrink: 0;
 }
 
-.tool-card--convert .tool-card-icon {
-  background: var(--cat-convert-bg);
-  color: var(--cat-convert-accent);
-  border: 1px solid var(--cat-convert-border);
+.tool-card--pdf-from .tool-card-icon {
+  background: var(--cat-pdf-from-bg);
+  color: var(--cat-pdf-from-accent);
+  border: 1px solid var(--cat-pdf-from-border);
 }
 
-.tool-card--organize .tool-card-icon {
-  background: var(--cat-organize-bg);
-  color: var(--cat-organize-accent);
-  border: 1px solid var(--cat-organize-border);
+.tool-card--pdf-ops .tool-card-icon {
+  background: var(--cat-pdf-ops-bg);
+  color: var(--cat-pdf-ops-accent);
+  border: 1px solid var(--cat-pdf-ops-border);
 }
 
-.tool-card--security .tool-card-icon {
-  background: var(--cat-security-bg);
-  color: var(--cat-security-accent);
-  border: 1px solid var(--cat-security-border);
+.tool-card--to-pdf .tool-card-icon {
+  background: var(--cat-to-pdf-bg);
+  color: var(--cat-to-pdf-accent);
+  border: 1px solid var(--cat-to-pdf-border);
 }
 
 .tool-card-label {
@@ -2266,22 +2312,22 @@ textarea {
   box-shadow: var(--shadow);
 }
 
-.workspace--convert {
+.workspace--pdf-from {
   background: var(--surface);
   border-color: var(--sapphire-100);
   border-top: 3px solid var(--sapphire-600);
 }
 
-.workspace--organize {
+.workspace--pdf-ops {
   background: var(--surface);
   border-color: var(--amethyst-100);
   border-top: 3px solid var(--amethyst-600);
 }
 
-.workspace--security {
+.workspace--to-pdf {
   background: var(--surface);
-  border-color: var(--emerald-100);
-  border-top: 3px solid var(--emerald-600);
+  border-color: var(--amber-100);
+  border-top: 3px solid var(--amber-600);
 }
 
 .site--focused .workspace {
@@ -2331,22 +2377,22 @@ textarea {
   font-weight: 700;
 }
 
-.workspace-category-tab--convert.active {
-  color: var(--cat-convert-text);
-  background: var(--cat-convert-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-convert-border);
+.workspace-category-tab--pdf-from.active {
+  color: var(--cat-pdf-from-text);
+  background: var(--cat-pdf-from-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-pdf-from-border);
 }
 
-.workspace-category-tab--organize.active {
-  color: var(--cat-organize-text);
-  background: var(--cat-organize-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-organize-border);
+.workspace-category-tab--pdf-ops.active {
+  color: var(--cat-pdf-ops-text);
+  background: var(--cat-pdf-ops-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-pdf-ops-border);
 }
 
-.workspace-category-tab--security.active {
-  color: var(--cat-security-text);
-  background: var(--cat-security-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-security-border);
+.workspace-category-tab--to-pdf.active {
+  color: var(--cat-to-pdf-text);
+  background: var(--cat-to-pdf-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-to-pdf-border);
 }
 
 .workspace-layout {
@@ -2423,19 +2469,19 @@ textarea {
   margin-top: 1.25rem;
   padding: 1.1rem 1.15rem;
   border-radius: var(--radius-lg);
-  border: 1px solid var(--cat-convert-border, rgba(0, 196, 154, 0.35));
-  background: linear-gradient(135deg, var(--cat-convert-bg, rgba(0, 196, 154, 0.08)), var(--surface));
+  border: 1px solid var(--cat-pdf-from-border, rgba(0, 196, 154, 0.35));
+  background: linear-gradient(135deg, var(--cat-pdf-from-bg, rgba(0, 196, 154, 0.08)), var(--surface));
   box-shadow: var(--shadow);
 }
 
-.workspace--organize .tool-result-card {
-  border-color: var(--cat-organize-border);
-  background: linear-gradient(135deg, var(--cat-organize-bg), var(--surface));
+.workspace--pdf-ops .tool-result-card {
+  border-color: var(--cat-pdf-ops-border);
+  background: linear-gradient(135deg, var(--cat-pdf-ops-bg), var(--surface));
 }
 
-.workspace--security .tool-result-card {
-  border-color: var(--cat-security-border);
-  background: linear-gradient(135deg, var(--cat-security-bg), var(--surface));
+.workspace--to-pdf .tool-result-card {
+  border-color: var(--cat-to-pdf-border);
+  background: linear-gradient(135deg, var(--cat-to-pdf-bg), var(--surface));
 }
 
 .tool-result-card-header {
@@ -2450,15 +2496,15 @@ textarea {
   display: flex;
   align-items: flex-start;
   gap: 0.55rem;
-  color: var(--cat-convert-text, var(--accent-text));
+  color: var(--cat-pdf-from-text, var(--accent-text));
 }
 
-.workspace--organize .tool-result-card-title {
-  color: var(--cat-organize-text);
+.workspace--pdf-ops .tool-result-card-title {
+  color: var(--cat-pdf-ops-text);
 }
 
-.workspace--security .tool-result-card-title {
-  color: var(--cat-security-text);
+.workspace--to-pdf .tool-result-card-title {
+  color: var(--cat-to-pdf-text);
 }
 
 .tool-result-card-title strong {
@@ -2696,22 +2742,22 @@ textarea {
   font-weight: 600;
 }
 
-.workspace-tool-tab--convert.active {
-  color: var(--cat-convert-text);
-  background: var(--cat-convert-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-convert-border);
+.workspace-tool-tab--pdf-from.active {
+  color: var(--cat-pdf-from-text);
+  background: var(--cat-pdf-from-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-pdf-from-border);
 }
 
-.workspace-tool-tab--organize.active {
-  color: var(--cat-organize-text);
-  background: var(--cat-organize-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-organize-border);
+.workspace-tool-tab--pdf-ops.active {
+  color: var(--cat-pdf-ops-text);
+  background: var(--cat-pdf-ops-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-pdf-ops-border);
 }
 
-.workspace-tool-tab--security.active {
-  color: var(--cat-security-text);
-  background: var(--cat-security-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-security-border);
+.workspace-tool-tab--to-pdf.active {
+  color: var(--cat-to-pdf-text);
+  background: var(--cat-to-pdf-bg);
+  box-shadow: inset 0 0 0 1px var(--cat-to-pdf-border);
 }
 
 .workspace-tool-tab-label {

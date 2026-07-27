@@ -28,9 +28,9 @@ export const en: Messages = {
   },
   nav: {
     allTools: "All tools",
-    convert: "Convert",
-    organize: "Organize",
-    protect: "Protect",
+    pdfFrom: "From PDF",
+    toPdf: "To PDF",
+    pdfOps: "Edit PDF",
     formats: "Formats",
     pricing: "Pricing",
     signIn: "Sign in",
@@ -57,14 +57,21 @@ export const en: Messages = {
     subheading:
       "Pick a tool below and upload once. Switch between PDF and image tasks without starting over.",
     categoryHints: {
-      convert: "Turn PDFs and images into the formats your team delivers to clients",
-      organize: "Combine, split, compare, and pull pages from business documents",
-      security: "Protect confidential contracts and financial files",
+      "pdf-from": "Export PDFs to Word, Excel, images, or plain text",
+      "to-pdf": "Turn Word documents, images, and photos into PDF files",
+      "pdf-ops": "Merge, split, rotate, sign, watermark, compress, and protect PDFs",
     },
     categories: {
-      convert: "Convert & Export",
-      organize: "Organize Documents",
-      security: "Protect Files",
+      "pdf-from": "PDF to Other Formats",
+      "to-pdf": "Convert to PDF",
+      "pdf-ops": "Work with PDFs",
+    },
+    subcategories: {
+      documents: "Documents",
+      images: "Images",
+      pages: "Pages & layout",
+      markup: "Markup & signing",
+      protect: "Optimize & protect",
     },
   },
   trust: [

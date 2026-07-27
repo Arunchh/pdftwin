@@ -29,9 +29,9 @@ export interface Messages {
   };
   nav: {
     allTools: string;
-    convert: string;
-    organize: string;
-    protect: string;
+    pdfFrom: string;
+    toPdf: string;
+    pdfOps: string;
     formats: string;
     pricing: string;
     signIn: string;
@@ -56,14 +56,21 @@ export interface Messages {
     heading: string;
     subheading: string;
     categoryHints: {
-      convert: string;
-      organize: string;
-      security: string;
+      "pdf-from": string;
+      "to-pdf": string;
+      "pdf-ops": string;
     };
     categories: {
-      convert: string;
-      organize: string;
-      security: string;
+      "pdf-from": string;
+      "to-pdf": string;
+      "pdf-ops": string;
+    };
+    subcategories: {
+      documents: string;
+      images: string;
+      pages: string;
+      markup: string;
+      protect: string;
     };
   };
   trust: Array<{ title: string; description: string }>;

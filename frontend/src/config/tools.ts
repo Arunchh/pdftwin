@@ -41,7 +41,11 @@ export type ToolId =
   | "lock-unlock"
   | "sign-pdf";
 
-export type ToolCategory = "convert" | "organize" | "security";
+/** Top-level grouping shown in the tool grid and navigation. */
+export type ToolCategory = "pdf-from" | "to-pdf" | "pdf-ops";
+
+/** Optional sub-grouping within a category (e.g. pages vs. markup inside PDF ops). */
+export type ToolSubcategory = "documents" | "images" | "pages" | "markup" | "protect";
 
 export interface ToolDefinition {
   id: ToolId;
@@ -49,6 +53,7 @@ export interface ToolDefinition {
   shortLabel: string;
   description: string;
   category: ToolCategory;
+  subcategory?: ToolSubcategory;
   icon: LucideIcon;
   /** Legacy hash — redirected to `path` */
   hash: string;
@@ -58,49 +63,37 @@ export interface ToolDefinition {
 
 export const TOOL_COUNT = 18;
 
+export const CATEGORY_ORDER: ToolCategory[] = ["pdf-from", "to-pdf", "pdf-ops"];
+
+export const SUBCATEGORY_ORDER: Partial<Record<ToolCategory, ToolSubcategory[]>> = {
+  "to-pdf": ["documents", "images"],
+  "pdf-ops": ["pages", "markup", "protect"],
+};
+
 export const TOOL_CATEGORIES: Record<ToolCategory, string> = {
-  convert: "Convert & Export",
-  organize: "Organize Documents",
-  security: "Protect Files",
+  "pdf-from": "PDF to Other Formats",
+  "to-pdf": "Convert to PDF",
+  "pdf-ops": "Work with PDFs",
 };
 
 export const TOOLS: ToolDefinition[] = [
+  // — PDF → other formats —
   {
     id: "convert-extract",
     name: "Document Conversion",
     shortLabel: "Convert",
     description: "Export PDFs to Word, Excel, or web-ready image assets for your team",
-    category: "convert",
+    category: "pdf-from",
     icon: FileSpreadsheet,
     hash: "convert",
     path: "convert",
-  },
-  {
-    id: "image-convert",
-    name: "Image Conversion",
-    shortLabel: "Images",
-    description: "Convert PNG, JPG, GIF, and BMP files to WebP, PNG, or JPEG in one step",
-    category: "convert",
-    icon: Image,
-    hash: "images",
-    path: "images",
-  },
-  {
-    id: "images-to-pdf",
-    name: "Images to PDF",
-    shortLabel: "Img→PDF",
-    description: "Combine JPG, PNG, and other images into one share-ready PDF document",
-    category: "convert",
-    icon: BookImage,
-    hash: "images-to-pdf",
-    path: "images-to-pdf",
   },
   {
     id: "pdf-to-jpg",
     name: "PDF to JPG",
     shortLabel: "PDF→JPG",
     description: "Export PDF pages as JPG or PNG images for slides, email, and social posts",
-    category: "convert",
+    category: "pdf-from",
     icon: ImageDown,
     hash: "pdf-to-jpg",
     path: "pdf-to-jpg",
@@ -110,7 +103,7 @@ export const TOOLS: ToolDefinition[] = [
     name: "PDF to Text",
     shortLabel: "PDF→Text",
     description: "Extract selectable text from PDFs into an editable .txt file",
-    category: "convert",
+    category: "pdf-from",
     icon: AlignLeft,
     hash: "pdf-to-text",
     path: "pdf-to-text",
@@ -120,57 +113,64 @@ export const TOOLS: ToolDefinition[] = [
     name: "OCR Text Extract",
     shortLabel: "OCR",
     description: "Turn scanned PDFs and photos into editable text with optical character recognition",
-    category: "convert",
+    category: "pdf-from",
     icon: ScanText,
     hash: "ocr",
     path: "ocr",
   },
-  {
-    id: "compress-pdf",
-    name: "Compress PDF",
-    shortLabel: "Compress",
-    description: "Reduce PDF file size for email attachments and faster client downloads",
-    category: "convert",
-    icon: Shrink,
-    hash: "compress",
-    path: "compress",
-  },
+  // — Other formats → PDF —
   {
     id: "word-to-pdf",
     name: "Word to PDF",
     shortLabel: "Word→PDF",
     description: "Convert DOCX proposals and contracts into share-ready PDF files",
-    category: "convert",
+    category: "to-pdf",
+    subcategory: "documents",
     icon: FileText,
     hash: "word-to-pdf",
     path: "word-to-pdf",
+  },
+  {
+    id: "images-to-pdf",
+    name: "Images to PDF",
+    shortLabel: "Img→PDF",
+    description: "Combine JPG, PNG, and other images into one share-ready PDF document",
+    category: "to-pdf",
+    subcategory: "documents",
+    icon: BookImage,
+    hash: "images-to-pdf",
+    path: "images-to-pdf",
+  },
+  {
+    id: "image-convert",
+    name: "Image Conversion",
+    shortLabel: "Images",
+    description: "Convert PNG, JPG, GIF, and BMP files to WebP, PNG, or JPEG in one step",
+    category: "to-pdf",
+    subcategory: "images",
+    icon: Image,
+    hash: "images",
+    path: "images",
   },
   {
     id: "image-resize",
     name: "Resize Images",
     shortLabel: "Resize",
     description: "Resize and compress images for email, web, and slide decks",
-    category: "convert",
+    category: "to-pdf",
+    subcategory: "images",
     icon: Maximize2,
     hash: "resize",
     path: "resize",
   },
-  {
-    id: "pdf-compare",
-    name: "Compare PDFs",
-    shortLabel: "Compare",
-    description: "View two PDFs side by side with linked scroll and zoom for contract review",
-    category: "organize",
-    icon: Columns2,
-    hash: "compare",
-    path: "compare",
-  },
+  // — Single-PDF operations —
   {
     id: "arrange-merge",
     name: "Merge & Arrange",
     shortLabel: "Merge",
     description: "Combine proposals, invoices, and reports into a single client-ready PDF",
-    category: "organize",
+    category: "pdf-ops",
+    subcategory: "pages",
     icon: Combine,
     hash: "merge",
     path: "merge",
@@ -180,7 +180,8 @@ export const TOOLS: ToolDefinition[] = [
     name: "Split PDF",
     shortLabel: "Split",
     description: "Break large contracts and decks into separate files by page range",
-    category: "organize",
+    category: "pdf-ops",
+    subcategory: "pages",
     icon: Layers,
     hash: "split",
     path: "split",
@@ -190,7 +191,8 @@ export const TOOLS: ToolDefinition[] = [
     name: "Extract Pages",
     shortLabel: "Extract",
     description: "Pull only the pages you need into a new PDF for sharing or approval",
-    category: "organize",
+    category: "pdf-ops",
+    subcategory: "pages",
     icon: FileOutput,
     hash: "extract",
     path: "extract",
@@ -200,7 +202,8 @@ export const TOOLS: ToolDefinition[] = [
     name: "Remove Pages",
     shortLabel: "Remove",
     description: "Delete unwanted pages from a PDF without splitting the whole file",
-    category: "organize",
+    category: "pdf-ops",
+    subcategory: "pages",
     icon: FileMinus,
     hash: "remove-pages",
     path: "remove-pages",
@@ -210,42 +213,79 @@ export const TOOLS: ToolDefinition[] = [
     name: "Rotate Pages",
     shortLabel: "Rotate",
     description: "Rotate all pages or selected pages by 90°, 180°, or 270°",
-    category: "organize",
+    category: "pdf-ops",
+    subcategory: "pages",
     icon: RotateCw,
     hash: "rotate",
     path: "rotate",
+  },
+  {
+    id: "pdf-compare",
+    name: "Compare PDFs",
+    shortLabel: "Compare",
+    description: "View two PDFs side by side with linked scroll and zoom for contract review",
+    category: "pdf-ops",
+    subcategory: "pages",
+    icon: Columns2,
+    hash: "compare",
+    path: "compare",
   },
   {
     id: "watermark-pdf",
     name: "Watermark PDF",
     shortLabel: "Watermark",
     description: "Add a confidential or draft watermark across every page",
-    category: "security",
+    category: "pdf-ops",
+    subcategory: "markup",
     icon: Stamp,
     hash: "watermark",
     path: "watermark",
-  },
-  {
-    id: "lock-unlock",
-    name: "Lock & Unlock",
-    shortLabel: "Protect",
-    description: "Add password protection to confidential files or remove restrictions securely",
-    category: "security",
-    icon: LockKeyhole,
-    hash: "protect",
-    path: "protect",
   },
   {
     id: "sign-pdf",
     name: "Sign PDF",
     shortLabel: "Sign",
     description: "Add your handwritten or uploaded signature to PDF pages",
-    category: "security",
+    category: "pdf-ops",
+    subcategory: "markup",
     icon: PenLine,
     hash: "sign",
     path: "sign",
   },
+  {
+    id: "compress-pdf",
+    name: "Compress PDF",
+    shortLabel: "Compress",
+    description: "Reduce PDF file size for email attachments and faster client downloads",
+    category: "pdf-ops",
+    subcategory: "protect",
+    icon: Shrink,
+    hash: "compress",
+    path: "compress",
+  },
+  {
+    id: "lock-unlock",
+    name: "Lock & Unlock",
+    shortLabel: "Protect",
+    description: "Add password protection to confidential files or remove restrictions securely",
+    category: "pdf-ops",
+    subcategory: "protect",
+    icon: LockKeyhole,
+    hash: "protect",
+    path: "protect",
+  },
 ];
+
+export function toolsInCategory(category: ToolCategory): ToolDefinition[] {
+  return TOOLS.filter((tool) => tool.category === category);
+}
+
+export function toolsInSubcategory(
+  category: ToolCategory,
+  subcategory: ToolSubcategory,
+): ToolDefinition[] {
+  return TOOLS.filter((tool) => tool.category === category && tool.subcategory === subcategory);
+}
 
 /** URL segment under /tools/ (optionally prefixed with /es, /fr, /nl, /pt). */
 export function toolPath(id: ToolId, locale?: Locale): string {

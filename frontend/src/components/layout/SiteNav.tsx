@@ -1,11 +1,15 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, Menu, X } from "lucide-react";
-import { TOOLS, type ToolCategory } from "../../config/tools";
+import {
+  CATEGORY_ORDER,
+  SUBCATEGORY_ORDER,
+  TOOLS,
+  toolPath,
+  toolsInSubcategory,
+  type ToolCategory,
+} from "../../config/tools";
 import LanguageSwitcher from "../../i18n/LanguageSwitcher";
 import { useI18n } from "../../i18n/I18nProvider";
-import { toolPath } from "../../config/tools";
-
-const CATEGORY_ORDER: ToolCategory[] = ["convert", "organize", "security"];
 
 export default function SiteNav() {
   const { locale, messages, localizePath } = useI18n();
@@ -39,9 +43,77 @@ export default function SiteNav() {
   };
 
   const navLabels = {
-    convert: messages.nav.convert,
-    organize: messages.nav.organize,
-    security: messages.nav.protect,
+    "pdf-from": messages.nav.pdfFrom,
+    "to-pdf": messages.nav.toPdf,
+    "pdf-ops": messages.nav.pdfOps,
+  };
+
+  const renderNavTools = (category: ToolCategory) => {
+    const subcategories = SUBCATEGORY_ORDER[category];
+
+    if (!subcategories) {
+      return (
+        <ul className="site-nav-dropdown-grid">
+          {TOOLS.filter((tool) => tool.category === category).map((tool) => {
+            const Icon = tool.icon;
+            const copy = messages.tools[tool.id];
+
+            return (
+              <li key={tool.id}>
+                <a
+                  href={toolPath(tool.id, locale)}
+                  className="site-nav-tool-link"
+                  onClick={closeMobile}
+                >
+                  <span className={`site-nav-tool-icon site-nav-tool-icon--${category}`}>
+                    <Icon size={18} strokeWidth={1.75} />
+                  </span>
+                  <span className="site-nav-tool-copy">
+                    <strong>{copy.shortLabel}</strong>
+                    <small>{copy.description}</small>
+                  </span>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+      );
+    }
+
+    return subcategories.map((subcategory) => {
+      const tools = toolsInSubcategory(category, subcategory);
+      if (!tools.length) return null;
+
+      return (
+        <div key={subcategory} className="site-nav-subcategory">
+          <p className="site-nav-subcategory-label">{messages.toolGrid.subcategories[subcategory]}</p>
+          <ul className="site-nav-dropdown-grid">
+            {tools.map((tool) => {
+              const Icon = tool.icon;
+              const copy = messages.tools[tool.id];
+
+              return (
+                <li key={tool.id}>
+                  <a
+                    href={toolPath(tool.id, locale)}
+                    className="site-nav-tool-link"
+                    onClick={closeMobile}
+                  >
+                    <span className={`site-nav-tool-icon site-nav-tool-icon--${category}`}>
+                      <Icon size={18} strokeWidth={1.75} />
+                    </span>
+                    <span className="site-nav-tool-copy">
+                      <strong>{copy.shortLabel}</strong>
+                      <small>{copy.description}</small>
+                    </span>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      );
+    });
   };
 
   return (
@@ -76,7 +148,6 @@ export default function SiteNav() {
         </a>
 
         {CATEGORY_ORDER.map((category) => {
-          const tools = TOOLS.filter((tool) => tool.category === category);
           const isExpanded = expandedCategory === category;
 
           return (
@@ -101,30 +172,7 @@ export default function SiteNav() {
                 <div className={`site-nav-dropdown-header site-nav-dropdown-header--${category}`}>
                   <strong>{messages.toolGrid.categories[category]}</strong>
                 </div>
-                <ul className="site-nav-dropdown-grid">
-                  {tools.map((tool) => {
-                    const Icon = tool.icon;
-                    const copy = messages.tools[tool.id];
-
-                    return (
-                      <li key={tool.id}>
-                        <a
-                          href={toolPath(tool.id, locale)}
-                          className="site-nav-tool-link"
-                          onClick={closeMobile}
-                        >
-                          <span className={`site-nav-tool-icon site-nav-tool-icon--${category}`}>
-                            <Icon size={18} strokeWidth={1.75} />
-                          </span>
-                          <span className="site-nav-tool-copy">
-                            <strong>{copy.shortLabel}</strong>
-                            <small>{copy.description}</small>
-                          </span>
-                        </a>
-                      </li>
-                    );
-                  })}
-                </ul>
+                {renderNavTools(category)}
               </div>
             </div>
           );
