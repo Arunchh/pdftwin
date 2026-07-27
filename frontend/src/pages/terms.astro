@@ -4,17 +4,136 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout
   title="Terms of Use | PDFTwin"
-  description="Terms for using PDFTwin's business file conversion tools and workspace."
+  description="Terms for using PDFTwin's online PDF workspace — 18 tools for converting, organizing, comparing, and protecting business documents."
 >
   <article class="legal-page">
     <h1>Terms of Use</h1>
-    <p class="legal-updated">Last updated: July 2026</p>
+    <p class="legal-updated">Last updated: July 27, 2026</p>
+
+    <section>
+      <h2>Agreement</h2>
+      <p>
+        These Terms of Use (&ldquo;Terms&rdquo;) govern your access to and use of PDFTwin at
+        <a href="https://pdftwin.com">pdftwin.com</a> and related pages. PDFTwin is operated by
+        <strong>Helios Impex</strong>, a company based in India (&ldquo;Helios Impex,&rdquo;
+        &ldquo;we,&rdquo; &ldquo;us,&rdquo; or &ldquo;our&rdquo;). By using PDFTwin, you agree to
+        these Terms and to our <a href="/privacy">Privacy Policy</a>. If you do not agree, do not use
+        the service.
+      </p>
+    </section>
 
     <section>
       <h2>Service description</h2>
       <p>
-        PDFTwin provides online tools to convert, organize, compare, and protect business
-        documents. Features and limits may change as the product evolves.
+        PDFTwin is a browser-based document workspace with 18 tools for converting, organizing,
+        comparing, and protecting PDFs and related file formats. Tools are grouped into three
+        categories:
+      </p>
+      <ul>
+        <li>
+          <strong>Convert &amp; export</strong> — PDF to Word or Excel, Word to PDF, image
+          conversion, images to PDF, PDF to JPG/PNG, PDF to text, OCR, compress PDF, and resize
+          images
+        </li>
+        <li>
+          <strong>Organize documents</strong> — compare PDFs, merge and arrange, split, extract
+          pages, remove pages, and rotate pages
+        </li>
+        <li>
+          <strong>Protect files</strong> — watermark PDF, lock and unlock, and sign PDF
+        </li>
+      </ul>
+      <p>
+        Some tools run entirely in your browser; others send files to our servers for processing.
+        See our <a href="/resources">How it works</a> page and the Privacy Policy for details on
+        where each tool processes data. Features, limits, and tool availability may change as the
+        product evolves.
+      </p>
+    </section>
+
+    <section>
+      <h2>Eligibility</h2>
+      <p>
+        You must be at least 13 years old (or the minimum age required in your country) to use
+        PDFTwin. If you use the service on behalf of a business, you represent that you have
+        authority to bind that organization to these Terms.
+      </p>
+    </section>
+
+    <section>
+      <h2>Accounts</h2>
+      <p>
+        Most tools work without an account. Creating an account is optional for the Free plan and
+        may be required for Pro checkout and plan management. When you register, you provide an
+        email address and password through our authentication provider (Supabase). You are
+        responsible for keeping your credentials secure and for activity under your account.
+      </p>
+      <p>
+        Account data includes your email address and plan status (Free or Pro). We do not store
+        your uploaded documents in your account — see the Privacy Policy for how files are handled.
+      </p>
+    </section>
+
+    <section>
+      <h2>Plans, limits, and billing</h2>
+      <h3>Free plan</h3>
+      <p>
+        The Free plan includes access to all 18 tools with no watermark on output. Free limits
+        include:
+      </p>
+      <ul>
+        <li>Up to 50 MB per file</li>
+        <li>Up to 5 PDFs per merge batch</li>
+        <li>3 PDF → Word or Excel exports per calendar day</li>
+        <li>Unlimited use of client-side organize and convert tools (merge, split, compare, OCR,
+          sign, and others that run in your browser)</li>
+      </ul>
+
+      <h3>Pro plan</h3>
+      <p>
+        PDFTwin Pro costs <strong>$9 USD per month</strong> and includes everything in Free, plus:
+      </p>
+      <ul>
+        <li>Up to 200 MB per file</li>
+        <li>Unlimited PDF → Word and Excel exports</li>
+        <li>Unlimited merge batch size (6 or more PDFs in one merge)</li>
+        <li>Priority server processing when available</li>
+      </ul>
+      <p>
+        Pro subscriptions are billed monthly through PayPal until you cancel. Payment details are
+        collected and processed by PayPal — Helios Impex does not receive or store your card number or
+        bank credentials. By subscribing, you authorize recurring monthly charges at the price
+        shown at checkout.
+      </p>
+
+      <h3>Cancellation and refunds</h3>
+      <p>
+        You may cancel Pro at any time through your PayPal account (Settings → Payments → Manage
+        automatic payments). Cancellation stops future billing; Pro access continues until the end
+        of the current paid period. Refunds are handled under PayPal&rsquo;s policies. There is no
+        separate free trial — the Free plan lets you evaluate all tools at no cost before upgrading.
+      </p>
+
+      <h3>Plan enforcement</h3>
+      <p>
+        We enforce Free-plan limits through file-size checks, server-side daily export counters,
+        and client-side merge batch gates. Attempting to bypass these limits or misrepresent your
+        plan status is a violation of these Terms.
+      </p>
+    </section>
+
+    <section>
+      <h2>Your content</h2>
+      <p>
+        You retain ownership of the files you upload and the outputs you download. You are solely
+        responsible for ensuring that you have the right to process, modify, and distribute any
+        documents you submit — including compliance with copyright, confidentiality, employment,
+        and data-protection obligations.
+      </p>
+      <p>
+        You grant Helios Impex a limited, temporary license to process your files solely to provide the
+        service you request. For server-side tools, this license ends when processing completes and
+        the file is discarded from memory. We do not claim ownership of your content.
       </p>
     </section>
 
@@ -22,41 +141,184 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       <h2>Acceptable use</h2>
       <p>You agree not to use PDFTwin to:</p>
       <ul>
-        <li>Upload unlawful, harmful, or infringing content</li>
-        <li>Attempt to disrupt, reverse engineer, or overload the service</li>
-        <li>Circumvent plan limits or security controls</li>
+        <li>Upload or process unlawful, harmful, fraudulent, or infringing content</li>
+        <li>Process documents you do not have permission to access or modify</li>
+        <li>Attempt to disrupt, reverse engineer, scrape, or overload the service or its APIs</li>
+        <li>Circumvent plan limits, security controls, or authentication</li>
+        <li>Use automated means to abuse server-side tools or evade rate limits</li>
+        <li>Resell or repackage PDFTwin as a competing service without written permission</li>
       </ul>
-    </section>
-
-    <section>
-      <h2>Your content</h2>
       <p>
-        You retain ownership of the files you upload. You are responsible for ensuring you have
-        the right to process and download the documents you submit.
+        We may suspend or terminate access if we reasonably believe you have violated these Terms or
+        applicable law.
       </p>
     </section>
 
     <section>
-      <h2>Plans and billing</h2>
+      <h2>Output quality and tool limitations</h2>
       <p>
-        Free and Pro plans may offer different file-size limits and features. Paid subscriptions,
-        when enabled, are billed through PayPal according to the plan selected at checkout.
+        PDFTwin is provided as a productivity tool, not a certified legal, financial, or compliance
+        service. You should review all outputs before relying on them.
+      </p>
+      <ul>
+        <li>
+          <strong>Document conversion</strong> — PDF → Word/Excel and Word → PDF quality depends on
+          source layout complexity. Scanned PDFs may need OCR before conversion; complex designs
+          may require manual cleanup.
+        </li>
+        <li>
+          <strong>OCR</strong> — Optical character recognition runs locally in your browser and may
+          contain errors, especially on low-quality scans or handwriting.
+        </li>
+        <li>
+          <strong>Compare PDF</strong> — Side-by-side viewing helps review differences but is not
+          a substitute for legal redlining or certified document comparison.
+        </li>
+        <li>
+          <strong>Sign PDF</strong> — Adds a visual signature image (drawn or uploaded). It is not
+          a qualified electronic signature under eIDAS, ESIGN, or similar regulations unless your
+          jurisdiction and use case explicitly allow image signatures.
+        </li>
+        <li>
+          <strong>Lock &amp; unlock</strong> — Unlocking works for restriction-only PDFs and empty
+          passwords. Encrypted files require the correct password; we cannot recover lost passwords.
+        </li>
+      </ul>
+      <p>
+        We do not add watermarks to Free or Pro output as a matter of current product design. That
+        practice is not a warranty, guarantee, or contractual commitment of any kind.
       </p>
     </section>
 
     <section>
-      <h2>Disclaimer</h2>
+      <h2>Intellectual property</h2>
       <p>
-        PDFTwin is provided on an &ldquo;as is&rdquo; basis. Conversion quality can vary by source
-        file complexity. Review outputs before sending them to clients or regulators.
+        PDFTwin, its name, logo, site design, and underlying software are owned by Helios Impex or
+        its licensors. These Terms do not grant you any rights to our trademarks or source code
+        except the limited right to use the service as intended.
       </p>
     </section>
 
     <section>
-      <h2>Changes</h2>
+      <h2>Third-party services</h2>
       <p>
-        We may update these terms or the service from time to time. Continued use of PDFTwin
-        after changes are posted constitutes acceptance of the revised terms.
+        PDFTwin relies on third-party providers including Supabase (authentication), PayPal
+        (billing), Vercel (hosting and analytics), and open-source libraries (PDF.js, pdf-lib,
+        Tesseract.js, and others). Your use of those services may be subject to their own terms.
+        OCR language models are downloaded from third-party CDNs on first use when you run the OCR
+        tool in your browser.
+      </p>
+    </section>
+
+    <section>
+      <h2>No warranties or guarantees</h2>
+      <p>
+        <strong>PDFTwin is provided strictly on an &ldquo;as is&rdquo; and &ldquo;as available&rdquo;
+        basis.</strong> To the fullest extent permitted by applicable law, Helios Impex disclaims
+        all warranties and guarantees of every kind — whether express, implied, statutory, or
+        otherwise — including any implied warranties of merchantability, fitness for a particular
+        purpose, title, quiet enjoyment, accuracy, reliability, availability, security, and
+        non-infringement.
+      </p>
+      <p>
+        Without limiting the foregoing, we do not warrant or guarantee that:
+      </p>
+      <ul>
+        <li>The service will be uninterrupted, timely, secure, or error-free</li>
+        <li>Any conversion, OCR, compression, or other output will be accurate or complete</li>
+        <li>Defects will be corrected or that the service will meet your requirements</li>
+        <li>Any particular feature, limit, or pricing will remain available unchanged</li>
+        <li>Client-side or server-side processing will suit confidential, legal, or regulatory use</li>
+      </ul>
+      <p>
+        Any descriptions, marketing copy, FAQs, or product policies on the site describe current
+        intent only. They do not create warranties, service-level commitments, or guarantees unless
+        expressly stated in a separate signed written agreement with Helios Impex.
+      </p>
+    </section>
+
+    <section>
+      <h2>Limitation of liability</h2>
+      <p>
+        To the fullest extent permitted by applicable law:
+      </p>
+      <ul>
+        <li>
+          Helios Impex, its directors, officers, employees, agents, and affiliates will not be
+          liable for any indirect, incidental, special, consequential, exemplary, or punitive
+          damages, or for any loss of profits, revenue, data, goodwill, or business opportunities,
+          whether arising in contract, tort (including negligence), strict liability, or otherwise,
+          even if we have been advised of the possibility of such damages.
+        </li>
+        <li>
+          Helios Impex will not be liable for any damages arising from your content, your reliance
+          on outputs from the service, unauthorized access to your account, third-party services,
+          or events outside our reasonable control.
+        </li>
+        <li>
+          Our aggregate total liability for all claims arising out of or relating to PDFTwin or
+          these Terms is limited to the greater of (a) the amount you paid to Helios Impex for
+          PDFTwin Pro in the twelve (12) months before the event giving rise to the claim, or
+          (b) fifty US dollars (USD $50).
+        </li>
+      </ul>
+      <p>
+        Some jurisdictions do not allow certain exclusions or limitations of liability. In those
+        jurisdictions, our liability is limited to the maximum extent permitted by law.
+      </p>
+    </section>
+
+    <section>
+      <h2>Indemnification</h2>
+      <p>
+        You agree to indemnify, defend, and hold harmless Helios Impex and its directors, officers,
+        employees, and agents from any claims, damages, losses, liabilities, and expenses (including
+        reasonable legal fees) arising from your content, your use of the service, or your violation
+        of these Terms or applicable law.
+      </p>
+    </section>
+
+    <section>
+      <h2>Changes to the service and Terms</h2>
+      <p>
+        We may modify PDFTwin, plan limits, pricing, or these Terms at any time. Material changes
+        will be posted on this page with an updated date. Continued use after changes take effect
+        constitutes acceptance. If you disagree with revised Terms, stop using the service and
+        cancel any active Pro subscription.
+      </p>
+    </section>
+
+    <section>
+      <h2>Termination</h2>
+      <p>
+        You may stop using PDFTwin at any time. We may suspend or terminate your access for
+        violations of these Terms, abuse, or operational reasons. Sections that by their nature
+        should survive (including disclaimers, limitation of liability, and indemnification) will
+        survive termination.
+      </p>
+    </section>
+
+    <section>
+      <h2>General</h2>
+      <p>
+        These Terms, together with the Privacy Policy, constitute the entire agreement between you
+        and Helios Impex regarding PDFTwin. If any provision is found unenforceable, the remaining
+        provisions remain in effect. Our failure to enforce a provision is not a waiver.
+      </p>
+      <p>
+        These Terms are governed by the laws of India, without regard to conflict-of-law principles.
+        You agree that courts located in India have exclusive jurisdiction over disputes arising
+        from these Terms or your use of PDFTwin, except where mandatory consumer protection laws in
+        your country require otherwise.
+      </p>
+    </section>
+
+    <section>
+      <h2>Contact</h2>
+      <p>
+        Questions about these Terms may be directed to Helios Impex through the contact options
+        listed on <a href="https://pdftwin.com">pdftwin.com</a>. A dedicated support email will be
+        published on the site when available.
       </p>
     </section>
   </article>

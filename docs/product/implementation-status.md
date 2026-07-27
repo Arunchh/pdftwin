@@ -2,8 +2,6 @@
 
 > Last updated: 2026-07-27 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
----
-
 ## Tool inventory (18 tools)
 
 Canonical registry: [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts)
@@ -201,6 +199,39 @@ Full slug inventory (all locales): [i18n doc — SEO landings](./i18n.md#seo-lan
 
 ---
 
+## Legal pages — shipped 2026-07-27
+
+Terms and Privacy rewritten to match the live product. English only (not yet localized under `/es/`, etc.).
+
+| Page | Route | Source |
+|------|-------|--------|
+| Terms of Use | `/terms` | [`frontend/src/pages/terms.astro`](../../frontend/src/pages/terms.astro) |
+| Privacy Policy | `/privacy` | [`frontend/src/pages/privacy.astro`](../../frontend/src/pages/privacy.astro) |
+
+**Operator:** Helios Impex (India) — named in both documents.
+
+**Terms highlights:**
+
+- All 18 tools, Free vs Pro limits (50 MB / 200 MB, merge batch, daily Word/Excel cap)
+- PayPal Pro billing ($9/mo), cancellation via PayPal
+- Output disclaimers (conversion, OCR, compare, sign PDF, lock/unlock)
+- **No warranties or guarantees** — site copy and FAQs are intent only, not contractual SLAs
+- **Limited liability** — cap at greater of 12-month Pro fees paid or USD $50
+- Governing law: India; courts in India (subject to mandatory consumer laws elsewhere)
+- Contact via pdftwin.com until dedicated support email is published
+
+**Privacy highlights:**
+
+- Client-side vs server-side tool breakdown (10 browser / 8 server)
+- Supabase auth profiles, PayPal subscription metadata
+- Cookies: `pdftwin_locale`, `pdftwin_doc_convert`, Supabase session, Vercel Analytics
+- IndexedDB workspace tray, localStorage mirrors, OCR Tesseract CDN downloads
+- No permanent server storage of uploaded documents; no AI training on user files
+
+Footer links (all locales): Privacy, Terms — see [`SiteFooter.tsx`](../../frontend/src/components/layout/SiteFooter.tsx).
+
+---
+
 ## Growth & help content (English — shipped 2026-07-23)
 
 Competitive-inspired content for traffic and trust. English-only routes (not yet mirrored under `/es/` etc.).
@@ -290,8 +321,8 @@ PDF → text, OCR (Tesseract.js)           Extract pages, extract images
 English is the default at `/`. Spanish, French, and Dutch use prefixed routes (`/es/`, `/fr/`, `/nl/`).
 
 - **Translated:** home, nav, footer (incl. growth links), pricing, tool names/descriptions in grid, **workspace shell** (headings + category/tool tabs), **72 SEO landings** (18 tools × 4 locales)  
-- **English only:** `/compare/ilovepdf`, `/resources`, `/faq`, `/blog/*`  
-- **Not yet translated:** in-tool panel UI, workspace file-tray chrome, login/account/privacy/terms, growth content pages  
+- **English only:** `/compare/ilovepdf`, `/resources`, `/faq`, `/blog/*`, `/privacy`, `/terms` (legal content updated 2026-07-27)  
+- **Not yet translated:** in-tool panel UI, workspace file-tray chrome, login/account pages
 
 See [docs/product/i18n.md](../product/i18n.md).
 

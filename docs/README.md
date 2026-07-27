@@ -2,7 +2,7 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-27):** Tool workspace UI redesign complete — Phases 1–3 shipped (layout, result cards, client navigation, thumbnails, mobile). See [tool workspace UI](./product/tool-workspace-ui.md).
+**Latest (2026-07-27):** Terms of Use and Privacy Policy rewritten for the hybrid 18-tool product, Helios Impex (India), and no-warranty / limited-liability posture. See [implementation status — legal pages](./product/implementation-status.md#legal-pages--shipped-2026-07-27).
 
 ## Competitive research
 
@@ -42,6 +42,7 @@ Living docs for product strategy, competitive research, and implementation statu
 | Result cards & next steps (Phase 2) | [Tool workspace UI — Phase 2](./product/tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27) |
 | Client nav, thumbnails, mobile (Phase 3) | [Tool workspace UI — Phase 3](./product/tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27) |
 | Workspace UI — full spec & checklist | [Tool workspace UI](./product/tool-workspace-ui.md) |
+| Terms & Privacy (Helios Impex) | `/terms` · `/privacy` · [Implementation status — legal](./product/implementation-status.md#legal-pages--shipped-2026-07-27) |
 | Business tier (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
 | Revenue target ($3–5K/mo) | [Monetization plan](./strategy/monetization-plan.md#revenue-target) |
 

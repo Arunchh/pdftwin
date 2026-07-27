@@ -2,7 +2,7 @@
 
 **PDFTwin** is a multi-page business file conversion workspace — **18 tools** for converting PDFs and images, comparing documents, merging and splitting files, signing and protecting documents, and extracting text — all in the browser with no install.
 
-Live site: [pdftwin.com](https://pdftwin.com)
+Live site: [pdftwin.com](https://pdftwin.com) · Operated by **Helios Impex** (India)
 
 **Internal docs:** [docs/README.md](docs/README.md) — competitive research (ihatepdf), monetization plan, roadmap, implementation status, [i18n](docs/product/i18n.md).
 
@@ -59,8 +59,8 @@ PDFTwin is **not a single-page app**. It uses **Astro** to pre-render real URLs;
 | `/login` | Sign in |
 | `/signup` | Create account |
 | `/account` | Plan, profile, workspace usage |
-| `/privacy` | Privacy policy |
-| `/terms` | Terms of use |
+| `/privacy` | Privacy policy (Helios Impex; client vs server processing, cookies, Supabase) |
+| `/terms` | Terms of use (plans, no warranties, limited liability, India governing law) |
 | `/tools/convert` | Document conversion |
 | `/tools/images` | Image conversion |
 | `/tools/images-to-pdf` | Images to PDF |

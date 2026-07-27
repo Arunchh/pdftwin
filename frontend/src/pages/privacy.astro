@@ -4,64 +4,318 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout
   title="Privacy Policy | PDFTwin"
-  description="How PDFTwin handles your files, account data, and browser storage."
+  description="How PDFTwin handles your files, account data, browser storage, cookies, and analytics across 18 PDF tools."
 >
   <article class="legal-page">
     <h1>Privacy Policy</h1>
-    <p class="legal-updated">Last updated: July 2026</p>
+    <p class="legal-updated">Last updated: July 27, 2026</p>
 
     <section>
       <h2>Overview</h2>
       <p>
-        PDFTwin is a browser-based file conversion workspace. We designed the service so routine
-        document processing does not require storing your files on our servers permanently.
+        PDFTwin is a browser-based document workspace at
+        <a href="https://pdftwin.com">pdftwin.com</a>, operated by <strong>Helios Impex</strong>,
+        a company based in India (&ldquo;Helios Impex,&rdquo; &ldquo;we,&rdquo; &ldquo;us,&rdquo; or
+        &ldquo;our&rdquo;). This Privacy Policy explains what information we collect, how we use it,
+        and the choices you have. It applies when you use our website, tools, and account features.
+      </p>
+      <p>
+        PDFTwin is designed so routine document work does not require permanent storage of your
+        files on our servers. Many tools run entirely in your browser; others use short-lived
+        server processing. See <a href="/resources">How it works</a> for a tool-by-tool breakdown.
       </p>
     </section>
 
     <section>
-      <h2>Files you upload</h2>
+      <h2>How processing works by tool type</h2>
+
+      <h3>Client-side tools (files stay on your device)</h3>
       <p>
-        Server-side tools process files in memory and discard them after the request completes.
-        We do not use uploaded documents to train AI models or build marketing lists.
+        These tools process files locally in your browser using JavaScript libraries (pdf-lib,
+        PDF.js, Tesseract.js, and others). File contents are not uploaded to PDFTwin servers:
       </p>
+      <ul>
+        <li>Merge &amp; arrange, split PDF, rotate pages, remove pages</li>
+        <li>Compare PDFs (rendered with PDF.js)</li>
+        <li>Sign PDF, images to PDF, PDF to JPG/PNG, PDF to text</li>
+        <li>OCR text extract (Tesseract.js runs in your browser)</li>
+      </ul>
       <p>
-        The Compare PDF tool renders documents locally in your browser using PDF.js. Those files
-        are not uploaded for viewing.
+        On these tools, you can verify privacy by opening your browser&rsquo;s developer tools
+        (Network tab) while processing — you should see no file upload to our origin.
+      </p>
+
+      <h3>Server-side tools (temporary upload, then discarded)</h3>
+      <p>
+        These tools send files to our backend over HTTPS for in-memory processing. Files are not
+        written to permanent storage and are discarded when the request completes:
+      </p>
+      <ul>
+        <li>PDF to Word, PDF to Excel, Word to PDF</li>
+        <li>Compress PDF, watermark PDF, lock &amp; unlock</li>
+        <li>Extract pages, extract embedded images</li>
+        <li>Image conversion and image resize</li>
+      </ul>
+      <p>
+        We do not use uploaded documents to train AI models, build marketing lists, or sell data to
+        third parties.
       </p>
     </section>
 
     <section>
-      <h2>Browser workspace storage</h2>
+      <h2>Information we collect</h2>
+
+      <h3>Account information</h3>
+      <p>
+        If you create an account, we collect your email address and authentication credentials
+        through Supabase Auth. We store a profile record linked to your account with your email and
+        plan status (Free or Pro). If you subscribe to Pro, we may store a PayPal subscription
+        identifier to manage your plan.
+      </p>
+      <p>
+        You can sign in, sign out, and update your plan from the Account page. Deleting your
+        account removes your profile from our database; authentication data is managed by Supabase
+        according to their retention policies.
+      </p>
+
+      <h3>Usage and plan enforcement data</h3>
+      <p>
+        To enforce Free-plan limits on PDF → Word and Excel exports, our server sets an HttpOnly
+        cookie (<code>pdftwin_doc_convert</code>) that records how many document conversions you
+        have used today. This cookie expires within 24 hours and does not contain file contents.
+        Pro users bypass this limit.
+      </p>
+      <p>
+        When you use server-side tools while signed in, we may read your plan status from request
+        headers or your profile to apply file-size limits (50 MB Free, 200 MB Pro).
+      </p>
+
+      <h3>Payment information</h3>
+      <p>
+        Pro checkout is handled by PayPal. Helios Impex receives confirmation of your subscription
+        status but does not receive or store your credit card number, bank account details, or
+        PayPal password.
+      </p>
+
+      <h3>Analytics and hosting data</h3>
+      <p>
+        On production deployments hosted on Vercel, we use Vercel Analytics to understand page
+        views and improve reliability. Analytics data is aggregated and does not include the
+        contents of files you upload or process. Vercel and our hosting infrastructure may also
+        log standard request metadata (IP address, browser type, timestamps) for security and
+        operations.
+      </p>
+
+      <h3>Information we do not collect</h3>
+      <ul>
+        <li>Permanent copies of documents you upload for server-side processing</li>
+        <li>Contents of files processed in client-side tools</li>
+        <li>Marketing profiles built from your document content</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Browser storage on your device</h2>
+
+      <h3>Workspace file tray (IndexedDB)</h3>
       <p>
         The workspace file tray stores files in your browser using IndexedDB so you can switch
-        tools without re-uploading. This data stays on your device until you clear it or remove
-        site data from your browser.
+        between tools without re-uploading. This data stays on your device until you clear the
+        tray, clear site data, or uninstall your browser profile. PDFTwin does not sync this tray
+        to the cloud today.
+      </p>
+
+      <h3>Local preferences and mirrors</h3>
+      <p>
+        We may store small amounts of data in your browser&rsquo;s localStorage — for example, a
+        mirror of your daily document-export count for display in the UI, or preview-mode account
+        data when mock authentication is enabled in development. This data is not sent to our
+        servers except where needed to enforce plan limits on server-side tools.
+      </p>
+
+      <h3>Thumbnails and caches</h3>
+      <p>
+        File thumbnails in the workspace use in-memory object URLs and a PDF.js page cache during
+        your session. They are not persisted separately from the file tray.
       </p>
     </section>
 
     <section>
-      <h2>Account preview data</h2>
+      <h2>Cookies</h2>
+      <p>PDFTwin uses a small number of cookies:</p>
+      <ul>
+        <li>
+          <strong><code>pdftwin_locale</code></strong> — Remembers your language preference (English,
+          Spanish, French, or Dutch). Duration: up to one year.
+        </li>
+        <li>
+          <strong><code>pdftwin_doc_convert</code></strong> — Tracks daily PDF → Word/Excel export
+          count for Free-plan enforcement. HttpOnly, not accessible to page scripts. Duration: up
+          to 24 hours.
+        </li>
+        <li>
+          <strong>Supabase session cookies</strong> — When you sign in, Supabase Auth sets session
+          cookies to keep you logged in. See
+          <a href="https://supabase.com/privacy" rel="noopener noreferrer">Supabase&rsquo;s privacy policy</a>
+          for details.
+        </li>
+        <li>
+          <strong>Vercel Analytics</strong> — May use cookies or similar technologies for aggregated
+          traffic measurement on production deployments.
+        </li>
+      </ul>
       <p>
-        Preview sign-in stores account details in your browser localStorage. When live account
-        services are enabled, authentication will move to a dedicated provider with proper
-        security controls.
+        You can block or delete cookies in your browser settings. Blocking essential cookies may
+        prevent sign-in, locale persistence, or accurate enforcement of Free-plan export limits.
       </p>
     </section>
 
     <section>
-      <h2>Analytics</h2>
+      <h2>Third-party downloads (OCR)</h2>
       <p>
-        We may use privacy-focused analytics on the production site to understand traffic and
-        improve reliability. Analytics providers do not receive the contents of your uploaded
-        files.
+        When you first use the OCR tool, Tesseract.js downloads language model files from
+        third-party content delivery networks into your browser. These downloads are initiated by
+        your device for local processing — your document is not sent to those CDNs as part of OCR.
+      </p>
+    </section>
+
+    <section>
+      <h2>How we use information</h2>
+      <p>We use the information described above to:</p>
+      <ul>
+        <li>Provide, operate, and improve PDFTwin&rsquo;s tools and workspace</li>
+        <li>Authenticate accounts and manage Free and Pro plan access</li>
+        <li>Enforce plan limits and prevent abuse</li>
+        <li>Process Pro subscriptions through PayPal</li>
+        <li>Measure site traffic and diagnose reliability issues</li>
+        <li>Respond to support requests and legal obligations</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>How we share information</h2>
+      <p>
+        We do not sell your personal information. We share data only with service providers that
+        help us run PDFTwin, and only as needed:
+      </p>
+      <ul>
+        <li>
+          <strong>Supabase</strong> — Authentication and profile storage (email, plan status)
+        </li>
+        <li>
+          <strong>PayPal</strong> — Subscription billing and payment processing
+        </li>
+        <li>
+          <strong>Vercel</strong> — Hosting, serverless API execution, and analytics
+        </li>
+      </ul>
+      <p>
+        We may also disclose information if required by law, to protect our rights or users, or in
+        connection with a merger or acquisition.
+      </p>
+    </section>
+
+    <section>
+      <h2>Data retention</h2>
+      <ul>
+        <li>
+          <strong>Uploaded files (server tools)</strong> — Held in memory only for the duration of
+          processing, then discarded immediately
+        </li>
+        <li>
+          <strong>Workspace file tray</strong> — Retained on your device until you clear it
+        </li>
+        <li>
+          <strong>Account profile</strong> — Retained while your account is active; deleted when
+          you delete your account
+        </li>
+        <li>
+          <strong>Usage cookies</strong> — Expire automatically (typically within 24 hours to one
+          year depending on the cookie)
+        </li>
+        <li>
+          <strong>Analytics</strong> — Retained by Vercel according to their policies, in aggregated
+          form
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Security</h2>
+      <p>
+        Server-side file transfers use HTTPS encryption. Authentication is handled by Supabase. We
+        take reasonable measures to protect the information we process, but we do not guarantee
+        that the service or your data will be secure or free from unauthorized access. Use
+        client-side tools for highly sensitive documents when you want processing to remain entirely
+        on your device.
+      </p>
+    </section>
+
+    <section>
+      <h2>International users</h2>
+      <p>
+        PDFTwin is available globally. Helios Impex is based in India. Your information may also
+        be processed in the United States or other countries where our hosting and service
+        providers operate (including Supabase, PayPal, and Vercel). By using PDFTwin, you consent to
+        this transfer and processing.
+      </p>
+      <p>
+        PDFTwin supports multilingual filenames and document text. Interface translations are
+        available in English, Spanish, French, and Dutch; legal pages are currently provided in
+        English.
+      </p>
+    </section>
+
+    <section>
+      <h2>Children</h2>
+      <p>
+        PDFTwin is not directed at children under 13. We do not knowingly collect personal
+        information from children. If you believe a child has provided us account information,
+        contact us so we can delete it.
+      </p>
+    </section>
+
+    <section>
+      <h2>Your choices</h2>
+      <ul>
+        <li>
+          <strong>Use without an account</strong> — Most tools work without signing in
+        </li>
+        <li>
+          <strong>Clear local data</strong> — Remove workspace files and site data from your browser
+          settings
+        </li>
+        <li>
+          <strong>Manage cookies</strong> — Block or delete cookies in your browser
+        </li>
+        <li>
+          <strong>Delete your account</strong> — Remove your profile and sign-in credentials
+        </li>
+        <li>
+          <strong>Cancel Pro</strong> — Cancel recurring billing through PayPal at any time
+        </li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>Changes to this policy</h2>
+      <p>
+        We may update this Privacy Policy from time to time. The &ldquo;Last updated&rdquo; date at
+        the top reflects the latest revision. Continued use of PDFTwin after changes are posted
+        constitutes acceptance of the updated policy.
       </p>
     </section>
 
     <section>
       <h2>Contact</h2>
       <p>
-        Questions about this policy can be sent through the contact options listed on
-        <a href="https://pdftwin.com">pdftwin.com</a>.
+        Questions about this Privacy Policy or your data may be directed to Helios Impex through the
+        contact options listed on <a href="https://pdftwin.com">pdftwin.com</a>. A dedicated
+        support email will be published on the site when available.
+      </p>
+      <p>
+        Related documents: <a href="/terms">Terms of Use</a> ·
+        <a href="/resources">How it works</a> · <a href="/faq">FAQ</a>
       </p>
     </section>
   </article>
