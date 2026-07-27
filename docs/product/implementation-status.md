@@ -217,9 +217,11 @@ Footer links (all locales): FAQ, How it works, Blog, Compare — see [`SiteFoote
 
 ---
 
-## Tool workspace UI (Phase 1 — shipped 2026-07-27)
+## Tool workspace UI (Phases 1–3 — shipped 2026-07-27)
 
-Redesigned shell for all `/tools/*` pages. Full spec: [tool-workspace-ui.md](./tool-workspace-ui.md).
+Redesigned shell for all `/tools/*` pages. **All three phases complete.** Full spec: [tool-workspace-ui.md](./tool-workspace-ui.md).
+
+### Phase 1 — layout & navigation
 
 | Change | Implementation |
 |--------|----------------|
@@ -228,13 +230,7 @@ Redesigned shell for all `/tools/*` pages. Full spec: [tool-workspace-ui.md](./t
 | Category + tool tabs | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) |
 | Styles | [`index.css`](../../frontend/src/index.css) — `.workspace-files-column`, `.workspace-category-tabs` |
 
-**Phase 1 scope:** layout and navigation only.
-
----
-
-## Tool workspace UI — Phase 2 (shipped 2026-07-27)
-
-Result cards, workflow shell, and next-step links. Full spec: [tool-workspace-ui.md](./tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27).
+### Phase 2 — result cards & workflow
 
 | Change | Implementation |
 |--------|----------------|
@@ -244,11 +240,7 @@ Result cards, workflow shell, and next-step links. Full spec: [tool-workspace-ui
 | Post-action suggestions | [`toolNextSteps.ts`](../../frontend/src/config/toolNextSteps.ts) |
 | All tool panels | 17 panels migrated — auto-download removed |
 
----
-
-## Tool workspace UI — Phase 3 (shipped 2026-07-27)
-
-Client navigation, file thumbnails, and mobile refinements. Full spec: [tool-workspace-ui.md](./tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27).
+### Phase 3 — client nav, thumbnails, mobile
 
 | Change | Implementation |
 |--------|----------------|
@@ -261,7 +253,9 @@ Client navigation, file thumbnails, and mobile refinements. Full spec: [tool-wor
 | Mobile: action-first + collapsible files | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx), [`index.css`](../../frontend/src/index.css) |
 | Path resolver for back/forward | [`tools.ts`](../../frontend/src/config/tools.ts) — `toolIdFromPath()` |
 
-**Workspace UI redesign complete** (Phases 1–3). Remaining i18n gap: tool panel UI still English-only.
+**Remaining gap:** tool panel UI still English-only — see [i18n next phases](./i18n.md#next-phases).
+
+---
 
 ## Deferred (see [roadmap](../strategy/roadmap.md))
 
@@ -295,9 +289,9 @@ PDF → text, OCR (Tesseract.js)           Extract pages, extract images
 
 English is the default at `/`. Spanish, French, and Dutch use prefixed routes (`/es/`, `/fr/`, `/nl/`).
 
-- **Translated:** home, nav, footer (incl. growth links), pricing, tool names/descriptions in grid, **72 SEO landings** (18 tools × 4 locales)  
+- **Translated:** home, nav, footer (incl. growth links), pricing, tool names/descriptions in grid, **workspace shell** (headings + category/tool tabs), **72 SEO landings** (18 tools × 4 locales)  
 - **English only:** `/compare/ilovepdf`, `/resources`, `/faq`, `/blog/*`  
-- **Not yet translated:** in-tool panel UI, login/account/privacy/terms, growth content pages  
+- **Not yet translated:** in-tool panel UI, workspace file-tray chrome, login/account/privacy/terms, growth content pages  
 
 See [docs/product/i18n.md](../product/i18n.md).
 

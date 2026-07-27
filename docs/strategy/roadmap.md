@@ -118,7 +118,9 @@ See [tool workspace UI — Phase 3](../product/tool-workspace-ui.md#phase-3-scop
 
 ---
 
-## Phase 3 — toward $3–5K/mo
+## Growth phase — toward $3–5K/mo
+
+> Not to be confused with [workspace UI Phase 3](../product/tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27) (client navigation — shipped 2026-07-27).
 
 - Expand tool count based on search demand (avoid 46-tool scatter)  
 - Build in public (weekly stats)  

@@ -1,8 +1,18 @@
 # Tool workspace UI
 
-> Last updated: 2026-07-27 · [Docs hub](../README.md) · [Implementation status](./implementation-status.md)
+> **Status:** Phases 1–3 complete (2026-07-27) · [Docs hub](../README.md) · [Implementation status](./implementation-status.md)
 
-This document describes the **tool workspace** layout and navigation — the shell every `/tools/*` page shares. Individual tool panels (`CompressPanel`, `ArrangeMergePanel`, etc.) are documented in [implementation status](./implementation-status.md).
+This document is the canonical spec for the **tool workspace** — the shared shell on every `/tools/*` page. Individual tool panels (`CompressPanel`, `ArrangeMergePanel`, etc.) are documented in [implementation status](./implementation-status.md).
+
+### Rollout summary
+
+| Phase | Date | Delivered |
+|-------|------|-----------|
+| **1** | 2026-07-27 | Two-column layout, category-filtered tabs, merged files column |
+| **2** | 2026-07-27 | Result cards, workflow shell, next-step chips (17 panels) |
+| **3** | 2026-07-27 | Client-side tool switching, file thumbnails, mobile refinements |
+
+Commits: `c1ea547` (Phase 1) · `021da07` (Phase 2) · `e34a223` (Phase 3)
 
 ---
 
@@ -111,6 +121,46 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `.workspace-tab-btn` / `.workspace-chip-btn` | Button-based tabs and next-step chips (no full reload) |
 
 Styles live in [`frontend/src/index.css`](../../frontend/src/index.css) under the “Workspace” section.
+
+---
+
+## Architecture
+
+PDFTwin is **not a single-page app**. Astro pre-renders each tool URL; the workspace React island hydrates on that page. Phase 3 adds **partial client routing** inside the island only — static routes remain the source of truth for SEO and first paint.
+
+```
+┌─────────────────────────────────────────────────────────────────┐
+│  Astro static page (/tools/compress, /es/tools/compress, …)     │
+│  ┌───────────────────────────────────────────────────────────┐  │
+│  │  ToolWorkspace (React island)                             │  │
+│  │  ├─ useWorkspaceNavigation — activeToolId state           │  │
+│  │  ├─ useWorkspaceFiles — IndexedDB tray (cross-tool)       │  │
+│  │  ├─ WorkspaceToolSwitcher — button tabs → navigateToTool  │  │
+│  │  ├─ WorkspaceFileTray — dropzone + thumbnails             │  │
+│  │  └─ *Panel — active tool (swapped on client nav)          │  │
+│  └───────────────────────────────────────────────────────────┘  │
+└─────────────────────────────────────────────────────────────────┘
+         │ pushState / popstate              │
+         ▼                                     ▼
+   URL bar updates                    Browser back/forward
+   document.title                     restores tool + panel
+   SiteHeader pill (workspaceNavStore)
+```
+
+**First visit:** full Astro page load → correct tool panel in HTML.  
+**In-workspace tab click:** `history.pushState` + React panel swap — no reload, tray persists in memory/IndexedDB.  
+**External link / refresh:** full load again from static route.
+
+### i18n in the workspace
+
+| Translated (EN/ES/FR/NL) | English-only |
+|--------------------------|--------------|
+| Tool heading name + description | Panel form labels, buttons, help text |
+| Category tab labels (`toolGrid.categories`) | “Your files”, “Clear all files”, empty-state copy |
+| Tool tab short labels (`tools[id].shortLabel`) | Upload dropzone strings (`upload.ts`) |
+| Page title on client nav | Merge batch gate, convert limit gate copy |
+
+See [i18n doc](./i18n.md#next-phases) — tool panel translation is the next open i18n item.
 
 ---
 
@@ -274,3 +324,16 @@ Legacy hash URLs (`#merge`, `#convert`, …) redirect via inline script in `Base
 - **Client navigation:** in-workspace tabs must call `navigateToTool` — do not use `<a href>` for sibling tool switches (breaks instant swap and preserves tray state awkwardly via full reload).
 - **Changing category order:** `CATEGORY_ORDER` in `WorkspaceToolSwitcher.tsx` and `ToolGrid.tsx` should stay in sync.
 - **Do not** re-split upload and tray without updating this doc — the single files column is intentional for scan path and one clear action.
+
+### Verification checklist
+
+After workspace changes, manually verify:
+
+1. Land on `/tools/merge` — correct panel, category tab, tool tabs for Organize
+2. Click **Compress** tab — panel swaps without reload; URL becomes `/tools/compress`; files remain in tray
+3. Browser **Back** — returns to merge panel and URL
+4. Upload a PDF and an image — thumbnails appear in tray rows
+5. Run a tool — result card shows; **Download** works; next-step chip navigates client-side
+6. Header tool pill updates when switching tools
+7. At ≤640px width — action column first; file list collapses; dropzone still visible
+8. Localized route `/es/tools/comprimir-pdf` or `/es/tools/compress` — client nav preserves locale in URL

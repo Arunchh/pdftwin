@@ -272,9 +272,23 @@ Set frontend env in `frontend/.env` locally and in **Vercel → Environment Vari
 
 **PDF to text** extracts the text layer only — for scanned PDFs, use the OCR tool instead.
 - **Unlock** works for restriction-only PDFs and empty passwords; encrypted files need the correct password.
-- **Workspace tray** stores files in the browser only; clearing site data removes them.
+- **Workspace tray** stores files in the browser only (IndexedDB); clearing site data removes them. Thumbnails use in-memory object URLs and a PDF.js page cache — not persisted separately.
+- **In-workspace navigation** swaps tools client-side via the History API; the file tray and uploaded files persist across tool switches without re-upload.
 - **Mock auth** is for development and UX preview — not suitable for production security.
 - **Supabase auth** is live on pdftwin.com when `VITE_AUTH_PROVIDER=supabase` is set at build time. See [Supabase auth guide](docs/product/supabase-auth.md).
+
+## Documentation
+
+Internal docs live in [`docs/`](docs/README.md):
+
+| Topic | Doc |
+|-------|-----|
+| Tool inventory, limits, client vs server | [Implementation status](docs/product/implementation-status.md) |
+| Workspace UI (layout, result cards, client nav) | [Tool workspace UI](docs/product/tool-workspace-ui.md) |
+| i18n & SEO landings (72 pages) | [i18n](docs/product/i18n.md) |
+| Supabase auth & production deploy | [Supabase auth guide](docs/product/supabase-auth.md) |
+| Roadmap & deferred items | [Roadmap](docs/strategy/roadmap.md) |
+| Monetization & pricing rationale | [Monetization plan](docs/strategy/monetization-plan.md) |
 
 ## Multilingual Support
 
