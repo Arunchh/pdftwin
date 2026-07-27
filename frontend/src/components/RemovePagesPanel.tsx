@@ -3,7 +3,8 @@ import { FileMinus } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
 import ClientProcessedBadge from "./ClientProcessedBadge";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { useToolResult } from "../hooks/useToolResult";
 import { PdfClientError, removePdfPages } from "../services/pdfClient";
 import { fileKey, getPdfFiles } from "../utils/files";
 
@@ -15,7 +16,7 @@ export default function RemovePagesPanel({ files }: RemovePagesPanelProps) {
   const [pages, setPages] = useState("");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -34,31 +35,27 @@ export default function RemovePagesPanel({ files }: RemovePagesPanelProps) {
 
   const handleRemove = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF file above." });
+      setError("Add at least one PDF file above.");
       return;
     }
 
     if (!pages.trim()) {
-      setMessage({ type: "error", text: "Enter at least one page number to remove." });
+      setError("Enter at least one page number to remove.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const blob = await removePdfPages(targetFile, pages);
       const baseName = targetFile.name.replace(/\.pdf$/i, "") || "document";
-      downloadBlob(blob, `${baseName}_edited.pdf`);
-      setMessage({
-        type: "success",
-        text: "Pages removed successfully. Your download should start automatically.",
+      setResultFromBlob(blob, `${baseName}_edited.pdf`, {
+        title: "Pages removed",
+        detail: `Removed pages: ${pages.trim()}`,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Remove failed.",
-      });
+      setError(err instanceof PdfClientError || err instanceof Error ? err.message : "Remove failed.");
     } finally {
       setLoading(false);
     }
@@ -107,7 +104,12 @@ export default function RemovePagesPanel({ files }: RemovePagesPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="remove-pages"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

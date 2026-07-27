@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { Lock, LockOpen, ShieldCheck } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
-import { downloadResponse, postFiles } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import ToolWorkflowShell from "./ToolWorkflowShell";
+import { postFiles } from "../api";
+import { useToolResult } from "../hooks/useToolResult";
 import { fileKey, getPdfFiles } from "../utils/files";
 
 interface LockUnlockPanelProps {
@@ -15,9 +18,8 @@ export default function LockUnlockPanel({ files }: LockUnlockPanelProps) {
   const [lockPassword, setLockPassword] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [loading, setLoading] = useState<"unlock" | "lock" | null>(null);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(
-    null
-  );
+  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+    useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -35,12 +37,12 @@ export default function LockUnlockPanel({ files }: LockUnlockPanelProps) {
 
   const handleUnlock = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF file." });
+      setError("Add at least one PDF file.");
       return;
     }
 
     setLoading("unlock");
-    setMessage(null);
+    clearFeedback();
 
     try {
       const extra: Record<string, string> = {};
@@ -52,13 +54,12 @@ export default function LockUnlockPanel({ files }: LockUnlockPanelProps) {
         throw new Error(data.detail ?? "Unlock failed.");
       }
 
-      await downloadResponse(response, "unlocked.pdf");
-      setMessage({ type: "success", text: "PDF unlocked. Your download should start automatically." });
-    } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Unlock failed.",
+      await setResultFromResponse(response, "unlocked.pdf", {
+        title: "PDF unlocked",
+        detail: "Password and restrictions removed where permitted",
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Unlock failed.");
     } finally {
       setLoading(null);
     }
@@ -66,17 +67,17 @@ export default function LockUnlockPanel({ files }: LockUnlockPanelProps) {
 
   const handleLock = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF file." });
+      setError("Add at least one PDF file.");
       return;
     }
 
     if (!lockPassword.trim()) {
-      setMessage({ type: "error", text: "Enter a password to lock the PDF." });
+      setError("Enter a password to lock the PDF.");
       return;
     }
 
     setLoading("lock");
-    setMessage(null);
+    clearFeedback();
 
     try {
       const extra: Record<string, string> = { password: lockPassword };
@@ -88,13 +89,12 @@ export default function LockUnlockPanel({ files }: LockUnlockPanelProps) {
         throw new Error(data.detail ?? "Lock failed.");
       }
 
-      await downloadResponse(response, "locked.pdf");
-      setMessage({ type: "success", text: "PDF locked. Your download should start automatically." });
-    } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Lock failed.",
+      await setResultFromResponse(response, "locked.pdf", {
+        title: "PDF locked",
+        detail: "Password protection applied",
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Lock failed.");
     } finally {
       setLoading(null);
     }
@@ -107,22 +107,16 @@ export default function LockUnlockPanel({ files }: LockUnlockPanelProps) {
         Remove password restrictions or protect a PDF with a new password.
       </p>
 
-      <div className="workflow-rail">
-        <div className={`workflow-step ${targetFile ? "active" : ""}`}>
-          <span className="workflow-step-number">1</span>
-          <span>Choose PDF</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${targetFile ? "active" : ""}`}>
-          <span className="workflow-step-number">2</span>
-          <ShieldCheck size={16} />
-          <span>Protect</span>
-        </div>
-      </div>
-
-      {pdfFiles.length === 0 ? (
-        <p className="file-hint muted">Upload at least one PDF file above to get started.</p>
-      ) : (
+      <ToolWorkflowShell
+        showContent={pdfFiles.length > 0}
+        emptyState={
+          <p className="file-hint muted">Upload at least one PDF file to get started.</p>
+        }
+        steps={[
+          { label: "Choose PDF", active: Boolean(targetFile) },
+          { label: "Protect", icon: <ShieldCheck size={16} />, active: Boolean(targetFile) },
+        ]}
+      >
         <>
           <section className="workflow-panel">
             <div className="workflow-panel-header">
@@ -218,9 +212,14 @@ export default function LockUnlockPanel({ files }: LockUnlockPanelProps) {
             </div>
           </section>
         </>
-      )}
+      </ToolWorkflowShell>
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="lock-unlock"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

@@ -228,7 +228,21 @@ Redesigned shell for all `/tools/*` pages. Full spec: [tool-workspace-ui.md](./t
 | Category + tool tabs | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) |
 | Styles | [`index.css`](../../frontend/src/index.css) — `.workspace-files-column`, `.workspace-category-tabs` |
 
-**Phase 1 scope:** layout and navigation only. Individual tool panels unchanged. Result cards and unified workflow shell are Phase 2.
+**Phase 1 scope:** layout and navigation only.
+
+---
+
+## Tool workspace UI — Phase 2 (shipped 2026-07-27)
+
+Result cards, workflow shell, and next-step links. Full spec: [tool-workspace-ui.md](./tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27).
+
+| Change | Implementation |
+|--------|----------------|
+| Explicit download result card | [`ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) |
+| Result state | [`useToolResult.ts`](../../frontend/src/hooks/useToolResult.ts) |
+| Multi-step workflow rail | [`ToolWorkflowShell.tsx`](../../frontend/src/components/ToolWorkflowShell.tsx) |
+| Post-action suggestions | [`toolNextSteps.ts`](../../frontend/src/config/toolNextSteps.ts) |
+| All tool panels | 17 panels migrated — auto-download removed |
 
 ---
 

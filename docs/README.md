@@ -37,6 +37,7 @@ Living docs for product strategy, competitive research, and implementation statu
 | Cloud workspace (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
 | Supabase auth (live) | [Supabase auth guide](./product/supabase-auth.md) |
 | Tool workspace layout (Phase 1) | [Tool workspace UI](./product/tool-workspace-ui.md) |
+| Result cards & next steps (Phase 2) | [Tool workspace UI — Phase 2](./product/tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27) |
 | Business tier (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
 | Revenue target ($3–5K/mo) | [Monetization plan](./strategy/monetization-plan.md#revenue-target) |
 

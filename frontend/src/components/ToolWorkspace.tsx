@@ -20,7 +20,7 @@ import SignPdfPanel from "./SignPdfPanel";
 import WorkspaceFileTray from "./WorkspaceFileTray";
 import WorkspaceToolSwitcher from "./layout/WorkspaceToolSwitcher";
 import type { ToolId } from "../config/tools";
-import { toolById, toolPath } from "../config/tools";
+import { toolById } from "../config/tools";
 import { TOOL_UPLOAD_CONFIG } from "../config/upload";
 import { useAuth } from "../hooks/useAuth";
 import { useWorkspaceFiles } from "../hooks/useWorkspaceFiles";
@@ -95,11 +95,8 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
             onPdfOrderChange={setPdfOrder}
             orderFrozen={mergeOrderFrozen}
             onOrderFrozenChange={setMergeOrderFrozen}
-            onMergedFile={(file) => addFiles([file])}
-            onConvertMerged={() => {
-              window.location.href = toolPath("convert-extract");
-            }}
-          />
+          onMergedFile={(file) => addFiles([file])}
+        />
         );
       case "split":
         return <SplitPanel files={files} />;

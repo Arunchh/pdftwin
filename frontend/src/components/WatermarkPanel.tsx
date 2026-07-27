@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Stamp } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
-import { downloadResponse, postFiles } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { postFiles } from "../api";
+import { useToolResult } from "../hooks/useToolResult";
 import { fileKey, getPdfFiles } from "../utils/files";
 
 interface WatermarkPanelProps {
@@ -14,7 +16,8 @@ export default function WatermarkPanel({ files }: WatermarkPanelProps) {
   const [opacity, setOpacity] = useState(0.25);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+    useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -32,16 +35,16 @@ export default function WatermarkPanel({ files }: WatermarkPanelProps) {
 
   const handleWatermark = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF to watermark." });
+      setError("Add at least one PDF to watermark.");
       return;
     }
     if (!text.trim()) {
-      setMessage({ type: "error", text: "Enter watermark text." });
+      setError("Enter watermark text.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const response = await postFiles("/api/watermark", [targetFile], {
@@ -53,13 +56,12 @@ export default function WatermarkPanel({ files }: WatermarkPanelProps) {
         throw new Error(data.detail ?? "Watermark failed.");
       }
 
-      await downloadResponse(response, "watermarked.pdf");
-      setMessage({ type: "success", text: "Watermarked PDF downloaded." });
-    } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Watermark failed.",
+      await setResultFromResponse(response, "watermarked.pdf", {
+        title: "Watermark applied",
+        detail: `"${text.trim()}" added to every page`,
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Watermark failed.");
     } finally {
       setLoading(false);
     }
@@ -117,7 +119,12 @@ export default function WatermarkPanel({ files }: WatermarkPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="watermark-pdf"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

@@ -3,7 +3,8 @@ import { BookImage } from "lucide-react";
 import IconButton from "./IconButton";
 import ClientProcessedBadge from "./ClientProcessedBadge";
 import DraggableOrderList, { type OrderListItem } from "./DraggableOrderList";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { useToolResult } from "../hooks/useToolResult";
 import { imagesToPdf, PdfClientError } from "../services/pdfClient";
 import { fileKey, getImageFiles } from "../utils/files";
 
@@ -15,7 +16,7 @@ export default function ImagesToPdfPanel({ files }: ImagesToPdfPanelProps) {
   const imageFiles = getImageFiles(files);
   const [order, setOrder] = useState<File[]>([]);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   useEffect(() => {
     setOrder(getImageFiles(files));
@@ -38,25 +39,23 @@ export default function ImagesToPdfPanel({ files }: ImagesToPdfPanelProps) {
 
   const handleCreate = async () => {
     if (order.length < 1) {
-      setMessage({ type: "error", text: "Add at least one image file above." });
+      setError("Add at least one image file above.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const blob = await imagesToPdf(order);
-      downloadBlob(blob, "images.pdf");
-      setMessage({
-        type: "success",
-        text: "PDF created successfully. Your download should start automatically.",
+      setResultFromBlob(blob, "images.pdf", {
+        title: "PDF created",
+        detail: `${order.length} image(s) combined`,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Conversion failed.",
-      });
+      setError(
+        err instanceof PdfClientError || err instanceof Error ? err.message : "Conversion failed."
+      );
     } finally {
       setLoading(false);
     }
@@ -97,7 +96,12 @@ export default function ImagesToPdfPanel({ files }: ImagesToPdfPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="images-to-pdf"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

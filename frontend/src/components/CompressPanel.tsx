@@ -2,7 +2,9 @@ import { useEffect, useState } from "react";
 import { Shrink } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
-import { downloadResponse, postFiles } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { postFiles } from "../api";
+import { useToolResult } from "../hooks/useToolResult";
 import { fileKey, getPdfFiles } from "../utils/files";
 
 interface CompressPanelProps {
@@ -13,7 +15,8 @@ export default function CompressPanel({ files }: CompressPanelProps) {
   const [level, setLevel] = useState<"medium" | "high">("medium");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+    useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -31,12 +34,12 @@ export default function CompressPanel({ files }: CompressPanelProps) {
 
   const handleCompress = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF to compress." });
+      setError("Add at least one PDF to compress.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const response = await postFiles("/api/compress", [targetFile], { level });
@@ -46,18 +49,12 @@ export default function CompressPanel({ files }: CompressPanelProps) {
       }
 
       const saved = response.headers.get("X-Compression-Saved-Percent");
-      await downloadResponse(response, "compressed.pdf");
-      setMessage({
-        type: "success",
-        text: saved
-          ? `PDF compressed (~${saved}% smaller). Download started.`
-          : "PDF compressed. Download started.",
+      await setResultFromResponse(response, "compressed.pdf", {
+        title: "PDF compressed",
+        detail: saved ? `About ${saved}% smaller than the original` : undefined,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Compression failed.",
-      });
+      setError(err instanceof Error ? err.message : "Compression failed.");
     } finally {
       setLoading(false);
     }
@@ -71,7 +68,7 @@ export default function CompressPanel({ files }: CompressPanelProps) {
       </p>
 
       {pdfFiles.length === 0 ? (
-        <p className="file-hint muted">Upload a PDF above to compress it.</p>
+        <p className="file-hint muted">Upload a PDF to compress it.</p>
       ) : (
         <>
           <PdfSelectList
@@ -113,7 +110,12 @@ export default function CompressPanel({ files }: CompressPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="compress-pdf"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

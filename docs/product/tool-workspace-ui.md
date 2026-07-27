@@ -49,14 +49,19 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `WorkspaceToolSwitcher` | [`frontend/src/components/layout/WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Category tabs + filtered tool tabs (i18n labels) |
 | `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Left column: dropzone, file list, single “Clear all” |
 | `FileDropzone` | [`frontend/src/components/FileDropzone.tsx`](../../frontend/src/components/FileDropzone.tsx) | Drag/drop + browse; Pro gate on oversized files |
-| Tool panels | [`frontend/src/components/*Panel.tsx`](../../frontend/src/components/) | Per-tool logic (Phase 1: unchanged) |
+| `ToolResultCard` | [`frontend/src/components/ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) | Success state: filename, Download, next steps |
+| `ToolPanelFeedback` | [`frontend/src/components/ToolPanelFeedback.tsx`](../../frontend/src/components/ToolPanelFeedback.tsx) | Error + notice + result card wrapper for panels |
+| `ToolWorkflowShell` | [`frontend/src/components/ToolWorkflowShell.tsx`](../../frontend/src/components/ToolWorkflowShell.tsx) | Step rail for multi-step tools |
+| Tool panels | [`frontend/src/components/*Panel.tsx`](../../frontend/src/components/) | Per-tool logic; use `useToolResult` for downloads |
 
 ### Data & state
 
 | Layer | Path | Notes |
 |-------|------|-------|
 | `useWorkspaceFiles` | [`frontend/src/hooks/useWorkspaceFiles.ts`](../../frontend/src/hooks/useWorkspaceFiles.ts) | IndexedDB via `StorageAdapter`; shared across tools |
+| `useToolResult` | [`frontend/src/hooks/useToolResult.ts`](../../frontend/src/hooks/useToolResult.ts) | Pending download blob + error state for panels |
 | Upload config | [`frontend/src/config/upload.ts`](../../frontend/src/config/upload.ts) | Per-tool `accept`, titles, labels |
+| Next-step links | [`frontend/src/config/toolNextSteps.ts`](../../frontend/src/config/toolNextSteps.ts) | Suggested tools on result card |
 | Tool registry | [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts) | 18 tools, categories, routes |
 
 ---
@@ -152,13 +157,40 @@ Mobile is **secondary** for this redesign; desktop layout is the primary target.
 - Existing PDFTwin visual design (Option A)
 - i18n for category and tool tab labels
 
-**Not included (future phases):**
+---
+
+## Phase 2 scope (shipped 2026-07-27)
+
+**Included:**
+
+| Feature | Implementation |
+|---------|----------------|
+| Result card + explicit Download | [`ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) — no auto-download after processing |
+| Result state hook | [`useToolResult.ts`](../../frontend/src/hooks/useToolResult.ts) |
+| Panel feedback wrapper | [`ToolPanelFeedback.tsx`](../../frontend/src/components/ToolPanelFeedback.tsx) |
+| Workflow shell (multi-step tools) | [`ToolWorkflowShell.tsx`](../../frontend/src/components/ToolWorkflowShell.tsx) |
+| Post-action tool links | [`toolNextSteps.ts`](../../frontend/src/config/toolNextSteps.ts) — chips on result card |
+
+**All 17 download-capable panels** now show a result card with filename, size, Download button, and contextual next-step links. Compare (`ComparePanel`) is unchanged — no file download.
+
+**Workflow shell** used by: Convert, Extract, Merge, Split, Lock/Unlock, Image Convert.
+
+**Simple one-screen tools** (Compress, Rotate, Watermark, etc.) use result card only — no forced step rail.
+
+### Result flow
+
+```
+User runs tool → processing → ToolResultCard appears
+  → User clicks Download (explicit)
+  → Optional: Next steps chips (e.g. Merge → Convert, Compress → Protect)
+```
+
+---
+
+## Future phases
 
 | Item | Phase | Notes |
 |------|-------|-------|
-| Result card with explicit Download | 2 | Replace auto-download in panels |
-| Unified step shell for all tools | 2 | `ToolWorkflowShell`; simple tools stay one screen |
-| Post-action tool chaining (“Merge → Convert”) | 2 | Contextual chips after success |
 | Client-side tool switching (no full reload) | 3 | Astro + React router |
 | File thumbnails in tray | 3 | Optional polish |
 | Tool panel UI translation | 1.5 i18n | Panels still English-only |
@@ -181,6 +213,7 @@ Legacy hash URLs (`#merge`, `#convert`, …) redirect via inline script in `Base
 
 ## Maintenance notes
 
-- **Adding a new tool:** register in `tools.ts`, add panel + route in `ToolWorkspace`, upload config in `upload.ts`. Category tab and switcher update automatically from `TOOLS`.
+- **Adding a new tool:** register in `tools.ts`, add panel + route in `ToolWorkspace`, upload config in `upload.ts`, optional entries in `toolNextSteps.ts`. Category tab and switcher update automatically from `TOOLS`.
+- **Download UX:** panels must use `useToolResult` + `ToolPanelFeedback` — do not call `downloadBlob` / `downloadResponse` directly after processing.
 - **Changing category order:** `CATEGORY_ORDER` in `WorkspaceToolSwitcher.tsx` and `ToolGrid.tsx` should stay in sync.
 - **Do not** re-split upload and tray without updating this doc — the single files column is intentional for scan path and one clear action.

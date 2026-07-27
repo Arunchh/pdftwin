@@ -43,7 +43,7 @@ Priority changes from competitive review:
 
 | Item | Priority | Notes |
 |------|----------|-------|
-| **Tool workspace UI — Phase 2** | High | Result card + explicit download; pilot panels (compress, extract, merge); optional tool chaining |
+| **Tool workspace UI — Phase 2** | ~~High~~ | **Done** — result cards, workflow shell, next steps |
 | ~~SEO landing content (all 18 tools)~~ | ~~High~~ | **Done** — 72 pages — see [i18n doc](../product/i18n.md) |
 | ~~Comparison page~~ | ~~High~~ | **Done** — `/compare/ilovepdf` |
 | ~~FAQ hub + blog starter content~~ | ~~High~~ | **Done** — `/faq`, `/blog` |
@@ -69,14 +69,16 @@ Priority changes from competitive review:
 
 See [tool workspace UI](../product/tool-workspace-ui.md).
 
-### Phase 2 — next
+### Phase 2 — shipped (2026-07-27)
 
-- [ ] Result card with explicit Download button (replace auto-download in panels)
-- [ ] Shared workflow shell for complex tools; simple tools remain one screen
-- [ ] Post-action tool suggestions (e.g. after merge → convert)
-- [ ] Pilot migration: Compress, Extract Pages, Merge
+- [x] Result card with explicit Download button (all 17 download tools)
+- [x] Shared workflow shell for multi-step tools
+- [x] Post-action tool suggestion chips on result card
+- [x] Pilot + full panel migration (Compress, Extract, Merge, and all others)
 
-### Phase 3 — polish
+See [tool workspace UI](../product/tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27).
+
+### Phase 3 — next
 
 - [ ] Client-side tool switching without full page reload
 - [ ] File thumbnails in tray

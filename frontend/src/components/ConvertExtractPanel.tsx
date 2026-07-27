@@ -9,7 +9,10 @@ import {
 } from "./FileTypeIcons";
 import IconButton from "./IconButton";
 import ConvertLimitGate from "./ConvertLimitGate";
-import { downloadResponse, postFiles } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import ToolWorkflowShell from "./ToolWorkflowShell";
+import { postFiles } from "../api";
+import { useToolResult } from "../hooks/useToolResult";
 import { FREE_DAILY_DOC_CONVERT_LIMIT } from "../config/limits";
 import { useAuth } from "../hooks/useAuth";
 import { entitlementsForUser } from "../services/entitlements";
@@ -76,7 +79,8 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
   const [remainingConverts, setRemainingConverts] = useState<number | null>(
     remainingDocConverts(entitlements.isPro)
   );
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+    useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const selectedFile =
@@ -103,12 +107,12 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
 
   const handleExport = async () => {
     if (!selectedFile) {
-      setMessage({ type: "error", text: "Upload at least one PDF file above." });
+      setError("Upload at least one PDF file above.");
       return;
     }
 
     if (!outputFormat) {
-      setMessage({ type: "error", text: "Choose an output format in step 2." });
+      setError("Choose an output format in step 2.");
       return;
     }
 
@@ -118,7 +122,7 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
     setShowLimitGate(false);
 
     const endpoints: Record<OutputFormat, string> = {
@@ -168,23 +172,17 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
         fallback = contentType.includes("zip") ? "images.zip" : "image.png";
       }
 
-      await downloadResponse(response, fallback);
-
       const labels: Record<OutputFormat, string> = {
         word: "Word document",
         excel: "Excel spreadsheet",
         images: "Images archive",
       };
 
-      setMessage({
-        type: "success",
-        text: `${labels[outputFormat]} ready. Download started.`,
+      await setResultFromResponse(response, fallback, {
+        title: `${labels[outputFormat]} ready`,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Export failed.",
-      });
+      setError(err instanceof Error ? err.message : "Export failed.");
     } finally {
       setLoading(false);
     }
@@ -198,28 +196,17 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
         PNG, or JPEG for your website and campaigns.
       </p>
 
-      <div className="workflow-rail">
-        <div className={`workflow-step ${selectedFile ? "active" : ""}`}>
-          <span className="workflow-step-number">1</span>
-          <PdfIcon size={18} />
-          <span>Source PDF</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${outputFormat ? "active" : ""}`}>
-          <span className="workflow-step-number">2</span>
-          <span>Output</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${selectedFile && outputFormat ? "active" : ""}`}>
-          <span className="workflow-step-number">3</span>
-          <Download size={16} />
-          <span>Export</span>
-        </div>
-      </div>
-
-      {pdfFiles.length === 0 ? (
-        <p className="file-hint muted">Upload at least one PDF file above to get started.</p>
-      ) : (
+      <ToolWorkflowShell
+        showContent={pdfFiles.length > 0}
+        emptyState={
+          <p className="file-hint muted">Upload at least one PDF file above to get started.</p>
+        }
+        steps={[
+          { label: "Source PDF", icon: <PdfIcon size={18} />, active: Boolean(selectedFile) },
+          { label: "Output", active: Boolean(outputFormat) },
+          { label: "Export", icon: <Download size={16} />, active: Boolean(selectedFile && outputFormat) },
+        ]}
+      >
         <>
           <section className="workflow-panel">
             <div className="workflow-panel-header">
@@ -389,11 +376,16 @@ export default function ConvertExtractPanel({ files }: ConvertExtractPanelProps)
             </div>
           </section>
         </>
-      )}
+      </ToolWorkflowShell>
 
       {showLimitGate && <ConvertLimitGate onDismiss={() => setShowLimitGate(false)} />}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="convert-extract"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

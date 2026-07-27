@@ -1,7 +1,10 @@
 import { useEffect, useState } from "react";
 import { Download, RefreshCw } from "lucide-react";
 import IconButton from "./IconButton";
-import { downloadResponse, postFiles } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import ToolWorkflowShell from "./ToolWorkflowShell";
+import { postFiles } from "../api";
+import { useToolResult } from "../hooks/useToolResult";
 import { IMAGE_OUTPUT_FORMATS, type ImageOutputFormat } from "../config/formats";
 import { fileKey, getImageFiles } from "../utils/files";
 
@@ -19,7 +22,8 @@ export default function ImageConvertPanel({ files }: ImageConvertPanelProps) {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [outputFormat, setOutputFormat] = useState<ImageOutputFormat>("webp");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+    useToolResult();
 
   const imageFiles = getImageFiles(files);
   const selectedFiles =
@@ -39,12 +43,12 @@ export default function ImageConvertPanel({ files }: ImageConvertPanelProps) {
 
   const handleConvert = async () => {
     if (!selectedFiles.length) {
-      setMessage({ type: "error", text: "Upload at least one image file above." });
+      setError("Upload at least one image file above.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const response = await postFiles("/api/convert/image", selectedFiles, {
@@ -60,16 +64,12 @@ export default function ImageConvertPanel({ files }: ImageConvertPanelProps) {
         ? "converted_images.zip"
         : `converted.${outputFormat === "jpeg" ? "jpg" : outputFormat}`;
 
-      await downloadResponse(response, fallback);
-      setMessage({
-        type: "success",
-        text: `Images converted to ${outputFormat.toUpperCase()}. Download started.`,
+      await setResultFromResponse(response, fallback, {
+        title: "Images converted",
+        detail: `Output format: ${outputFormat.toUpperCase()}`,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Conversion failed.",
-      });
+      setError(err instanceof Error ? err.message : "Conversion failed.");
     } finally {
       setLoading(false);
     }
@@ -83,27 +83,19 @@ export default function ImageConvertPanel({ files }: ImageConvertPanelProps) {
         or JPEG for email and documents.
       </p>
 
-      <div className="workflow-rail">
-        <div className={`workflow-step ${selectedFiles.length ? "active" : ""}`}>
-          <span className="workflow-step-number">1</span>
-          <span>Select images</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${outputFormat ? "active" : ""}`}>
-          <span className="workflow-step-number">2</span>
-          <span>Output format</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${selectedFiles.length && outputFormat ? "active" : ""}`}>
-          <span className="workflow-step-number">3</span>
-          <Download size={16} />
-          <span>Convert</span>
-        </div>
-      </div>
-
-      {imageFiles.length === 0 ? (
-        <p className="file-hint muted">Upload PNG, JPG, WebP, GIF, BMP, or TIFF files above to get started.</p>
-      ) : (
+      <ToolWorkflowShell
+        showContent={imageFiles.length > 0}
+        emptyState={
+          <p className="file-hint muted">
+            Upload PNG, JPG, WebP, GIF, BMP, or TIFF files above to get started.
+          </p>
+        }
+        steps={[
+          { label: "Select images", active: selectedFiles.length > 0 },
+          { label: "Output format", active: Boolean(outputFormat) },
+          { label: "Convert", icon: <Download size={16} />, active: selectedFiles.length > 0 },
+        ]}
+      >
         <>
           <section className="workflow-panel">
             <div className="workflow-panel-header">
@@ -193,9 +185,14 @@ export default function ImageConvertPanel({ files }: ImageConvertPanelProps) {
             </div>
           </section>
         </>
-      )}
+      </ToolWorkflowShell>
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="image-convert"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

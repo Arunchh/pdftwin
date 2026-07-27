@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { Maximize2 } from "lucide-react";
 import IconButton from "./IconButton";
-import { downloadResponse, postFiles } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { postFiles } from "../api";
+import { useToolResult } from "../hooks/useToolResult";
 import { fileKey, getImageFiles } from "../utils/files";
 
 interface ImageResizePanelProps {
@@ -21,7 +23,8 @@ export default function ImageResizePanel({ files }: ImageResizePanelProps) {
   const [quality, setQuality] = useState(85);
   const [outputFormat, setOutputFormat] = useState<"" | "jpeg" | "png" | "webp">("");
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+    useToolResult();
 
   const imageFiles = getImageFiles(files);
   const targetFile =
@@ -39,12 +42,12 @@ export default function ImageResizePanel({ files }: ImageResizePanelProps) {
 
   const handleResize = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Upload at least one image to resize." });
+      setError("Upload at least one image to resize.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const fields: Record<string, string> = {
@@ -62,13 +65,12 @@ export default function ImageResizePanel({ files }: ImageResizePanelProps) {
         throw new Error(data.detail ?? "Resize failed.");
       }
 
-      await downloadResponse(response, "resized-image.jpg");
-      setMessage({ type: "success", text: "Resized image downloaded." });
-    } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Resize failed.",
+      await setResultFromResponse(response, "resized-image.jpg", {
+        title: "Image resized",
+        detail: `Max dimensions ${maxWidth}×${maxHeight}px`,
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Resize failed.");
     } finally {
       setLoading(false);
     }
@@ -183,7 +185,12 @@ export default function ImageResizePanel({ files }: ImageResizePanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="image-resize"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

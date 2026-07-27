@@ -3,7 +3,8 @@ import { RotateCw } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
 import ClientProcessedBadge from "./ClientProcessedBadge";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { useToolResult } from "../hooks/useToolResult";
 import { PdfClientError, rotatePdf } from "../services/pdfClient";
 import { fileKey, getPdfFiles } from "../utils/files";
 
@@ -18,7 +19,7 @@ export default function RotatePanel({ files }: RotatePanelProps) {
   const [angle, setAngle] = useState<(typeof ANGLES)[number]>(90);
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -36,27 +37,28 @@ export default function RotatePanel({ files }: RotatePanelProps) {
 
   const handleRotate = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF to rotate." });
+      setError("Add at least one PDF to rotate.");
       return;
     }
 
     if (!pages.trim()) {
-      setMessage({ type: "error", text: "Enter page numbers or use all." });
+      setError("Enter page numbers or use all.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const rotatedBlob = await rotatePdf(targetFile, pages.trim(), angle);
-      downloadBlob(rotatedBlob, "rotated.pdf");
-      setMessage({ type: "success", text: "PDF rotated. Download started." });
-    } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Rotation failed.",
+      setResultFromBlob(rotatedBlob, "rotated.pdf", {
+        title: "PDF rotated",
+        detail: `Pages rotated ${angle}°`,
       });
+    } catch (err) {
+      setError(
+        err instanceof PdfClientError || err instanceof Error ? err.message : "Rotation failed."
+      );
     } finally {
       setLoading(false);
     }
@@ -119,7 +121,12 @@ export default function RotatePanel({ files }: RotatePanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="rotate-pdf"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

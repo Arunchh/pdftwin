@@ -2,7 +2,10 @@ import { useEffect, useState } from "react";
 import { FileOutput, Layers } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
-import { downloadResponse, postFiles } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import ToolWorkflowShell from "./ToolWorkflowShell";
+import { postFiles } from "../api";
+import { useToolResult } from "../hooks/useToolResult";
 import { fileKey, getPdfFiles } from "../utils/files";
 
 interface ExtractPagesPanelProps {
@@ -13,9 +16,8 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
   const [pages, setPages] = useState("");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(
-    null
-  );
+  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+    useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -34,17 +36,17 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
 
   const handleExtract = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF file to extract pages." });
+      setError("Add at least one PDF file to extract pages.");
       return;
     }
 
     if (!pages.trim()) {
-      setMessage({ type: "error", text: "Enter at least one page to extract." });
+      setError("Enter at least one page to extract.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const response = await postFiles("/api/extract-pages", [targetFile], { pages });
@@ -53,13 +55,12 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
         throw new Error(data.detail ?? "Extract failed.");
       }
 
-      await downloadResponse(response, "extracted.pdf");
-      setMessage({ type: "success", text: "Pages extracted. Your download should start automatically." });
-    } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Extract failed.",
+      await setResultFromResponse(response, "extracted.pdf", {
+        title: "Pages extracted",
+        detail: `Pages ${pages.trim()} saved as a new PDF`,
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Extract failed.");
     } finally {
       setLoading(false);
     }
@@ -72,28 +73,17 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
         Pull specific pages out of a PDF and save them as a new, smaller document.
       </p>
 
-      <div className="workflow-rail">
-        <div className={`workflow-step ${targetFile ? "active" : ""}`}>
-          <span className="workflow-step-number">1</span>
-          <span>Choose PDF</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${pagesReady ? "active" : ""}`}>
-          <span className="workflow-step-number">2</span>
-          <Layers size={16} />
-          <span>Pages</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${targetFile && pagesReady ? "active" : ""}`}>
-          <span className="workflow-step-number">3</span>
-          <FileOutput size={16} />
-          <span>Extract</span>
-        </div>
-      </div>
-
-      {pdfFiles.length === 0 ? (
-        <p className="file-hint muted">Upload at least one PDF file above to get started.</p>
-      ) : (
+      <ToolWorkflowShell
+        showContent={pdfFiles.length > 0}
+        emptyState={
+          <p className="file-hint muted">Upload at least one PDF file to get started.</p>
+        }
+        steps={[
+          { label: "Choose PDF", active: Boolean(targetFile) },
+          { label: "Pages", icon: <Layers size={16} />, active: pagesReady },
+          { label: "Extract", icon: <FileOutput size={16} />, active: Boolean(targetFile && pagesReady) },
+        ]}
+      >
         <>
           <section className="workflow-panel">
             <div className="workflow-panel-header">
@@ -141,7 +131,7 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
           <section className="workflow-panel workflow-panel-export">
             <div className="workflow-panel-header">
               <div>
-                <h3>Step 3 · Extract &amp; download</h3>
+                <h3>Step 3 · Extract</h3>
                 <p>Review your choices, then create the new PDF.</p>
               </div>
               <span className={`workflow-status ${targetFile && pagesReady ? "done" : "pending"}`}>
@@ -160,9 +150,14 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
             </div>
           </section>
         </>
-      )}
+      </ToolWorkflowShell>
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="extract-pages"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

@@ -3,7 +3,8 @@ import { AlignLeft } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
 import ClientProcessedBadge from "./ClientProcessedBadge";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { useToolResult } from "../hooks/useToolResult";
 import { PdfClientError } from "../services/pdfClient";
 import { pdfToText } from "../services/pdfJsClient";
 import { fileKey, getPdfFiles } from "../utils/files";
@@ -15,7 +16,7 @@ interface PdfToTextPanelProps {
 export default function PdfToTextPanel({ files }: PdfToTextPanelProps) {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -33,27 +34,25 @@ export default function PdfToTextPanel({ files }: PdfToTextPanelProps) {
 
   const handleExtract = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF file above." });
+      setError("Add at least one PDF file above.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const text = await pdfToText(targetFile);
       const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
       const baseName = targetFile.name.replace(/\.pdf$/i, "") || "document";
-      downloadBlob(blob, `${baseName}.txt`);
-      setMessage({
-        type: "success",
-        text: "Text extracted successfully. Your download should start automatically.",
+      setResultFromBlob(blob, `${baseName}.txt`, {
+        title: "Text extracted",
+        detail: "Selectable text layer exported",
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Extraction failed.",
-      });
+      setError(
+        err instanceof PdfClientError || err instanceof Error ? err.message : "Extraction failed."
+      );
     } finally {
       setLoading(false);
     }
@@ -90,7 +89,12 @@ export default function PdfToTextPanel({ files }: PdfToTextPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="pdf-to-text"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

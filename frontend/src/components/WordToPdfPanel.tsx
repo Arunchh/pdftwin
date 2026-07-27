@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { FileText } from "lucide-react";
 import IconButton from "./IconButton";
-import { downloadResponse, postFiles } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { postFiles } from "../api";
+import { useToolResult } from "../hooks/useToolResult";
 import { fileKey, getDocxFiles } from "../utils/files";
 
 interface WordToPdfPanelProps {
@@ -11,7 +13,8 @@ interface WordToPdfPanelProps {
 export default function WordToPdfPanel({ files }: WordToPdfPanelProps) {
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+    useToolResult();
 
   const docxFiles = getDocxFiles(files);
   const targetFile =
@@ -29,12 +32,12 @@ export default function WordToPdfPanel({ files }: WordToPdfPanelProps) {
 
   const handleConvert = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one DOCX file to convert." });
+      setError("Add at least one DOCX file to convert.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const response = await postFiles("/api/convert/word-to-pdf", [targetFile]);
@@ -43,13 +46,11 @@ export default function WordToPdfPanel({ files }: WordToPdfPanelProps) {
         throw new Error(data.detail ?? "Conversion failed.");
       }
 
-      await downloadResponse(response, "document.pdf");
-      setMessage({ type: "success", text: "Word document converted to PDF." });
-    } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof Error ? err.message : "Conversion failed.",
+      await setResultFromResponse(response, "document.pdf", {
+        title: "Word converted to PDF",
       });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Conversion failed.");
     } finally {
       setLoading(false);
     }
@@ -93,7 +94,12 @@ export default function WordToPdfPanel({ files }: WordToPdfPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="word-to-pdf"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

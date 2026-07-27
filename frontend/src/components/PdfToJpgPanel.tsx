@@ -3,7 +3,8 @@ import { ImageDown } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
 import ClientProcessedBadge from "./ClientProcessedBadge";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { useToolResult } from "../hooks/useToolResult";
 import { PdfClientError } from "../services/pdfClient";
 import { pdfToImagesDownload } from "../services/pdfJsClient";
 import { fileKey, getPdfFiles } from "../utils/files";
@@ -18,7 +19,7 @@ export default function PdfToJpgPanel({ files }: PdfToJpgPanelProps) {
   const [pages, setPages] = useState("");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -36,25 +37,21 @@ export default function PdfToJpgPanel({ files }: PdfToJpgPanelProps) {
 
   const handleExport = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF file above." });
+      setError("Add at least one PDF file above.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const { blob, filename } = await pdfToImagesDownload(targetFile, format, quality, pages);
-      downloadBlob(blob, filename);
-      setMessage({
-        type: "success",
-        text: "Images exported successfully. Your download should start automatically.",
+      setResultFromBlob(blob, filename, {
+        title: "Images exported",
+        detail: format === "jpeg" ? "JPEG pages" : "PNG pages",
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Export failed.",
-      });
+      setError(err instanceof PdfClientError || err instanceof Error ? err.message : "Export failed.");
     } finally {
       setLoading(false);
     }
@@ -132,7 +129,12 @@ export default function PdfToJpgPanel({ files }: PdfToJpgPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="pdf-to-jpg"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

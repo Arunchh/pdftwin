@@ -41,6 +41,8 @@ PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`
 - **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads and unlimited PDF → Word/Excel exports
 - **Two-column tool workspace** — Files column (upload + tray) on the left; tool actions on the right — see [tool workspace UI](docs/product/tool-workspace-ui.md)
 - **Category-filtered tool tabs** — Convert, Organize, and Protect tabs; only tools in the active category shown (not all 18 at once)
+- **Result cards** — After processing, a result card shows filename and an explicit Download button (no silent auto-download)
+- **Next-step suggestions** — Result cards link to related tools (e.g. Merge → Convert, Compress → Protect)
 - **Persistent file tray** — Files stay in IndexedDB while you switch between tools — no re-upload needed
 - **Compare + tray** — Pick left/right PDFs directly from the workspace tray
 

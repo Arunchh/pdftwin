@@ -4,7 +4,8 @@ import DraggableOrderList, { type OrderListItem } from "./DraggableOrderList";
 import OrderActions from "./OrderActions";
 import ClientProcessedBadge from "./ClientProcessedBadge";
 import MergeBatchGate from "./MergeBatchGate";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import ToolWorkflowShell from "./ToolWorkflowShell";
 import { FREE_MERGE_FILE_LIMIT } from "../config/limits";
 import {
   arrangeAndMergePdfs,
@@ -13,6 +14,7 @@ import {
   reorderPdf,
 } from "../services/pdfClient";
 import { useAuth } from "../hooks/useAuth";
+import { useToolResult } from "../hooks/useToolResult";
 import { defaultPdfOrder, fileKey } from "../utils/files";
 
 interface ArrangeMergePanelProps {
@@ -22,7 +24,6 @@ interface ArrangeMergePanelProps {
   orderFrozen: boolean;
   onOrderFrozenChange: (frozen: boolean) => void;
   onMergedFile?: (file: File) => void;
-  onConvertMerged?: () => void;
 }
 
 function formatSize(bytes: number): string {
@@ -47,7 +48,6 @@ export default function ArrangeMergePanel({
   orderFrozen,
   onOrderFrozenChange,
   onMergedFile,
-  onConvertMerged,
 }: ArrangeMergePanelProps) {
   const { entitlements } = useAuth();
   const [selectedPdfKey, setSelectedPdfKey] = useState<string | null>(null);
@@ -56,7 +56,8 @@ export default function ArrangeMergePanel({
   const [pageItems, setPageItems] = useState<OrderListItem[]>([]);
   const [loadingPages, setLoadingPages] = useState(false);
   const [loading, setLoading] = useState<"merge" | "download" | null>(null);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const [notice, setNotice] = useState<string | null>(null);
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   const selectedFile =
     pdfOrder.find((file) => fileKey(file) === selectedPdfKey) ?? pdfOrder[0] ?? null;
@@ -118,10 +119,11 @@ export default function ArrangeMergePanel({
       .catch((err) => {
         if (!cancelled) {
           setPageItems([]);
-          setMessage({
-            type: "error",
-            text: err instanceof PdfClientError || err instanceof Error ? err.message : "Could not read PDF pages.",
-          });
+          setError(
+            err instanceof PdfClientError || err instanceof Error
+              ? err.message
+              : "Could not read PDF pages."
+          );
         }
       })
       .finally(() => {
@@ -131,7 +133,7 @@ export default function ArrangeMergePanel({
     return () => {
       cancelled = true;
     };
-  }, [selectedFile]);
+  }, [selectedFile, setError]);
 
   const handleDocumentItemsChange = (items: OrderListItem[]) => {
     const byId = new Map(pdfOrder.map((file) => [fileKey(file), file]));
@@ -171,11 +173,12 @@ export default function ArrangeMergePanel({
 
   const handleConfirmOrder = () => {
     if (pdfOrder.length < 2) {
-      setMessage({ type: "error", text: "Add at least 2 PDF files above to set merge order." });
+      setError("Add at least 2 PDF files to set merge order.");
       return;
     }
     onOrderFrozenChange(true);
-    setMessage({ type: "success", text: "Document order confirmed. You can merge or fine-tune pages." });
+    setNotice("Document order confirmed. You can merge or fine-tune pages.");
+    clearResult();
   };
 
   const buildPageOrdersPayload = () =>
@@ -187,12 +190,12 @@ export default function ArrangeMergePanel({
 
   const handleMerge = async () => {
     if (pdfOrder.length < 2) {
-      setMessage({ type: "error", text: "Add at least 2 PDF files above to merge." });
+      setError("Add at least 2 PDF files to merge.");
       return;
     }
 
     if (!orderFrozen) {
-      setMessage({ type: "error", text: "Confirm the document order in step 1 before merging." });
+      setError("Confirm the document order in step 1 before merging.");
       return;
     }
 
@@ -202,23 +205,20 @@ export default function ArrangeMergePanel({
     }
 
     setLoading("merge");
-    setMessage(null);
+    clearFeedback();
+    setNotice(null);
     setShowMergeGate(false);
 
     try {
       const mergedBlob = await arrangeAndMergePdfs(pdfOrder, buildPageOrdersPayload());
       const mergedFile = new File([mergedBlob], "merged.pdf", { type: "application/pdf" });
-      downloadBlob(mergedFile, mergedFile.name);
       onMergedFile?.(mergedFile);
-      setMessage({
-        type: "success",
-        text: "Merged PDF downloaded and added to your files.",
+      setResultFromBlob(mergedBlob, mergedFile.name, {
+        title: "PDFs merged",
+        detail: `${pdfOrder.length} documents combined into one file`,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Merge failed.",
-      });
+      setError(err instanceof PdfClientError || err instanceof Error ? err.message : "Merge failed.");
     } finally {
       setLoading(null);
     }
@@ -226,32 +226,31 @@ export default function ArrangeMergePanel({
 
   const handleDownloadReordered = async () => {
     if (!selectedFile) {
-      setMessage({ type: "error", text: "Select a PDF above to reorder pages." });
+      setError("Select a PDF to reorder pages.");
       return;
     }
 
     const key = fileKey(selectedFile);
     const pages = pageOrders[key];
     if (!pages?.length) {
-      setMessage({ type: "error", text: "No pages available to reorder." });
+      setError("No pages available to reorder.");
       return;
     }
 
     setLoading("download");
-    setMessage(null);
+    clearFeedback();
+    setNotice(null);
 
     try {
       const reorderedBlob = await reorderPdf(selectedFile, pages.join(", "));
-      downloadBlob(reorderedBlob, "reordered.pdf");
-      setMessage({
-        type: "success",
-        text: "Reordered PDF downloaded. You can still merge all documents afterward.",
+      setResultFromBlob(reorderedBlob, "reordered.pdf", {
+        title: "PDF pages reordered",
+        detail: `Custom page order applied to ${selectedFile.name}`,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Download failed.",
-      });
+      setError(
+        err instanceof PdfClientError || err instanceof Error ? err.message : "Download failed."
+      );
     } finally {
       setLoading(null);
     }
@@ -260,6 +259,13 @@ export default function ArrangeMergePanel({
   const hasCustomPages = Object.values(pageOrders).some(
     (pages) => pages && isCustomPageOrder(pages)
   );
+
+  const emptyState =
+    pdfOrder.length === 0 ? (
+      <p className="file-hint muted">Upload at least 2 PDF files to get started.</p>
+    ) : (
+      <p className="file-hint muted">Add one more PDF file to merge.</p>
+    );
 
   return (
     <div className="panel tool-panel">
@@ -274,29 +280,15 @@ export default function ArrangeMergePanel({
         <MergeBatchGate fileCount={pdfOrder.length} onDismiss={() => setShowMergeGate(false)} />
       )}
 
-      <div className="workflow-rail">
-        <div className={`workflow-step ${pdfOrder.length >= 2 ? "active" : ""}`}>
-          <span className="workflow-step-number">1</span>
-          <span>Documents</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${selectedFile ? "active" : ""}`}>
-          <span className="workflow-step-number">2</span>
-          <span>Pages</span>
-          <span className="workflow-step-tag">Optional</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${orderFrozen ? "active" : ""}`}>
-          <span className="workflow-step-number">3</span>
-          <span>Merge</span>
-        </div>
-      </div>
-
-      {pdfOrder.length === 0 ? (
-        <p className="file-hint muted">Upload at least 2 PDF files above to get started.</p>
-      ) : pdfOrder.length === 1 ? (
-        <p className="file-hint muted">Add one more PDF file above to merge.</p>
-      ) : (
+      <ToolWorkflowShell
+        showContent={pdfOrder.length >= 2}
+        emptyState={emptyState}
+        steps={[
+          { label: "Documents", active: pdfOrder.length >= 2 },
+          { label: "Pages", optional: true, active: Boolean(selectedFile) },
+          { label: "Merge", active: orderFrozen },
+        ]}
+      >
         <>
           <section className="workflow-panel">
             <div className="workflow-panel-header">
@@ -385,9 +377,7 @@ export default function ArrangeMergePanel({
             <div className="workflow-panel-header">
               <div>
                 <h3>Step 3 · Merge</h3>
-                <p>
-                  Combines all documents using step 1 order and any page edits from step 2.
-                </p>
+                <p>Combines all documents using step 1 order and any page edits from step 2.</p>
               </div>
               <span className={`workflow-status ${orderFrozen ? "done" : "pending"}`}>
                 {orderFrozen ? "Ready" : "Waiting"}
@@ -403,18 +393,15 @@ export default function ArrangeMergePanel({
             />
           </section>
         </>
-      )}
+      </ToolWorkflowShell>
 
-      {message && (
-        <div className={`message ${message.type}`}>
-          {message.text}
-          {message.type === "success" && onConvertMerged && (
-            <button type="button" className="message-action" onClick={onConvertMerged}>
-              Convert merged PDF →
-            </button>
-          )}
-        </div>
-      )}
+      <ToolPanelFeedback
+        toolId="arrange-merge"
+        error={error}
+        notice={notice}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

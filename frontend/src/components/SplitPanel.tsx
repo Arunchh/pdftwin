@@ -3,7 +3,9 @@ import { Scissors } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
 import ClientProcessedBadge from "./ClientProcessedBadge";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import ToolWorkflowShell from "./ToolWorkflowShell";
+import { useToolResult } from "../hooks/useToolResult";
 import { PdfClientError, splitPdfDownload } from "../services/pdfClient";
 import { fileKey, getPdfFiles } from "../utils/files";
 
@@ -15,9 +17,7 @@ export default function SplitPanel({ files }: SplitPanelProps) {
   const [ranges, setRanges] = useState("");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(
-    null
-  );
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const targetFile =
@@ -36,31 +36,26 @@ export default function SplitPanel({ files }: SplitPanelProps) {
 
   const handleSplit = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF file to split." });
+      setError("Add at least one PDF file to split.");
       return;
     }
 
     if (!ranges.trim()) {
-      setMessage({ type: "error", text: "Enter at least one page range." });
+      setError("Enter at least one page range.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const { blob, filename } = await splitPdfDownload(targetFile, ranges);
-      downloadBlob(blob, filename);
-
-      setMessage({
-        type: "success",
-        text: "PDF split successfully. Your download should start automatically.",
+      setResultFromBlob(blob, filename, {
+        title: "PDF split",
+        detail: `Ranges: ${ranges.trim()}`,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Split failed.",
-      });
+      setError(err instanceof PdfClientError || err instanceof Error ? err.message : "Split failed.");
     } finally {
       setLoading(false);
     }
@@ -74,27 +69,17 @@ export default function SplitPanel({ files }: SplitPanelProps) {
       </p>
       <ClientProcessedBadge />
 
-      <div className="workflow-rail">
-        <div className={`workflow-step ${targetFile ? "active" : ""}`}>
-          <span className="workflow-step-number">1</span>
-          <span>Choose PDF</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${rangesReady ? "active" : ""}`}>
-          <span className="workflow-step-number">2</span>
-          <span>Page ranges</span>
-        </div>
-        <span className="workflow-connector" />
-        <div className={`workflow-step ${targetFile && rangesReady ? "active" : ""}`}>
-          <span className="workflow-step-number">3</span>
-          <Scissors size={16} />
-          <span>Split</span>
-        </div>
-      </div>
-
-      {pdfFiles.length === 0 ? (
-        <p className="file-hint muted">Upload at least one PDF file above to get started.</p>
-      ) : (
+      <ToolWorkflowShell
+        showContent={pdfFiles.length > 0}
+        emptyState={
+          <p className="file-hint muted">Upload at least one PDF file to get started.</p>
+        }
+        steps={[
+          { label: "Choose PDF", active: Boolean(targetFile) },
+          { label: "Page ranges", active: rangesReady },
+          { label: "Split", icon: <Scissors size={16} />, active: Boolean(targetFile && rangesReady) },
+        ]}
+      >
         <>
           <section className="workflow-panel">
             <div className="workflow-panel-header">
@@ -144,7 +129,7 @@ export default function SplitPanel({ files }: SplitPanelProps) {
           <section className="workflow-panel workflow-panel-export">
             <div className="workflow-panel-header">
               <div>
-                <h3>Step 3 · Split &amp; download</h3>
+                <h3>Step 3 · Split</h3>
                 <p>Review your choices, then split the PDF.</p>
               </div>
               <span className={`workflow-status ${targetFile && rangesReady ? "done" : "pending"}`}>
@@ -163,9 +148,14 @@ export default function SplitPanel({ files }: SplitPanelProps) {
             </div>
           </section>
         </>
-      )}
+      </ToolWorkflowShell>
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="split"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

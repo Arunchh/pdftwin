@@ -3,7 +3,8 @@ import { Eraser, PenLine, Upload } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
 import ClientProcessedBadge from "./ClientProcessedBadge";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { useToolResult } from "../hooks/useToolResult";
 import { PdfClientError, signPdf, type SignaturePosition } from "../services/pdfClient";
 import { fileKey, getImageFiles, getPdfFiles } from "../utils/files";
 
@@ -32,7 +33,7 @@ export default function SignPdfPanel({ files }: SignPdfPanelProps) {
   const [position, setPosition] = useState<SignaturePosition>("bottom-right");
   const [loading, setLoading] = useState(false);
   const [hasDrawing, setHasDrawing] = useState(false);
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   const pdfFiles = getPdfFiles(files);
   const pngFiles = getImageFiles(files).filter((file) => file.name.toLowerCase().endsWith(".png"));
@@ -135,27 +136,23 @@ export default function SignPdfPanel({ files }: SignPdfPanelProps) {
 
   const handleSign = async () => {
     if (!targetFile) {
-      setMessage({ type: "error", text: "Add at least one PDF file above." });
+      setError("Add at least one PDF file above.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
 
     try {
       const signatureBytes = await resolveSignatureBytes();
       const blob = await signPdf(targetFile, signatureBytes, pages, position);
       const baseName = targetFile.name.replace(/\.pdf$/i, "") || "document";
-      downloadBlob(blob, `${baseName}_signed.pdf`);
-      setMessage({
-        type: "success",
-        text: "PDF signed successfully. Your download should start automatically.",
+      setResultFromBlob(blob, `${baseName}_signed.pdf`, {
+        title: "PDF signed",
+        detail: `Signature placed on ${pages === "all" ? "all pages" : `pages ${pages}`}`,
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "Signing failed.",
-      });
+      setError(err instanceof PdfClientError || err instanceof Error ? err.message : "Signing failed.");
     } finally {
       setLoading(false);
     }
@@ -270,7 +267,12 @@ export default function SignPdfPanel({ files }: SignPdfPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="sign-pdf"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }

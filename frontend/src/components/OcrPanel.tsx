@@ -2,7 +2,8 @@ import { useState } from "react";
 import { ScanText } from "lucide-react";
 import IconButton from "./IconButton";
 import ClientProcessedBadge from "./ClientProcessedBadge";
-import { downloadBlob } from "../api";
+import ToolPanelFeedback from "./ToolPanelFeedback";
+import { useToolResult } from "../hooks/useToolResult";
 import { OCR_LANGUAGES, ocrFiles, type OcrLanguage } from "../services/ocrClient";
 import { PdfClientError } from "../services/pdfClient";
 import { getImageFiles, getPdfFiles } from "../utils/files";
@@ -16,7 +17,7 @@ export default function OcrPanel({ files }: OcrPanelProps) {
   const [loading, setLoading] = useState(false);
   const [progress, setProgress] = useState(0);
   const [progressLabel, setProgressLabel] = useState("");
-  const [message, setMessage] = useState<{ type: "error" | "success"; text: string } | null>(null);
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } = useToolResult();
 
   const pdfCount = getPdfFiles(files).length;
   const imageCount = getImageFiles(files).length;
@@ -24,12 +25,12 @@ export default function OcrPanel({ files }: OcrPanelProps) {
 
   const handleOcr = async () => {
     if (!hasInput) {
-      setMessage({ type: "error", text: "Add at least one PDF or image file above." });
+      setError("Add at least one PDF or image file above.");
       return;
     }
 
     setLoading(true);
-    setMessage(null);
+    clearFeedback();
     setProgress(0);
     setProgressLabel("Preparing OCR…");
 
@@ -39,16 +40,12 @@ export default function OcrPanel({ files }: OcrPanelProps) {
         setProgressLabel(`Processing ${label}`);
       });
       const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
-      downloadBlob(blob, "ocr-text.txt");
-      setMessage({
-        type: "success",
-        text: "OCR complete. Your text file download should start automatically.",
+      setResultFromBlob(blob, "ocr-text.txt", {
+        title: "OCR complete",
+        detail: "Editable text extracted from scans",
       });
     } catch (err) {
-      setMessage({
-        type: "error",
-        text: err instanceof PdfClientError || err instanceof Error ? err.message : "OCR failed.",
-      });
+      setError(err instanceof PdfClientError || err instanceof Error ? err.message : "OCR failed.");
     } finally {
       setLoading(false);
       setProgressLabel("");
@@ -108,7 +105,12 @@ export default function OcrPanel({ files }: OcrPanelProps) {
         </>
       )}
 
-      {message && <div className={`message ${message.type}`}>{message.text}</div>}
+      <ToolPanelFeedback
+        toolId="ocr-pdf"
+        error={error}
+        result={result}
+        onDismissResult={clearResult}
+      />
     </div>
   );
 }
