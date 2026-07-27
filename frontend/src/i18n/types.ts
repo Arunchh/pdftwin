@@ -77,6 +77,7 @@ export interface Messages {
     addFromTray: string;
     enterReview: string;
     changeDocuments: string;
+    swapDocuments: string;
     scrollLinked: string;
     scrollIndependent: string;
     zoomLinked: string;
@@ -96,6 +97,24 @@ export interface Messages {
     loading: string;
     pages: string;
     privacyHint: string;
+    viewerMode: string;
+    diffMode: string;
+    chooseDiffMode: string;
+    modeOff: string;
+    modeText: string;
+    modeVisual: string;
+    modeOverlay: string;
+    textDiffLabel: string;
+    overlayLabel: string;
+    sensitivity: string;
+    analyzing: string;
+    analyzeFailed: string;
+    changesFound: string;
+    noChangesFound: string;
+    changed: string;
+    prevChange: string;
+    nextChange: string;
+    noTextOnPage: string;
   };
   toolGrid: {
     heading: string;

@@ -2,7 +2,9 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-27):** **Compare-first homepage** and **dedicated PDF compare review viewer** — immersive dual-pane mode with working zoom, fit-width, single-page navigation, and fullscreen. Home restructured: compare hero → workflow → featured tools + SEO tool index (`#tools`). See [compare-first homepage](./product/compare-first-homepage.md).
+**Latest (2026-07-27):** **Compare diff modes** (text / visual / overlay) with **Web Worker** off-thread analysis, plus **swap left/right**. Default compare experience remains viewer-only. See [pdf-compare-diff](./product/pdf-compare-diff.md).
+
+**Previous (2026-07-27):** **Compare-first homepage** and **dedicated PDF compare review viewer** — immersive dual-pane mode with working zoom, fit-width, single-page navigation, and fullscreen. Home restructured: compare hero → workflow → featured tools + SEO tool index (`#tools`). See [compare-first homepage](./product/compare-first-homepage.md).
 
 **Previous (2026-07-27):** Tool taxonomy reorganized by conversion direction and input scope (**One PDF** vs **Multiple PDFs**). Nav and workspace switcher updated; see [tool workspace UI — tool taxonomy](./product/tool-workspace-ui.md#tool-taxonomy-home-grid--navigation).
 
@@ -18,6 +20,7 @@ Living docs for product strategy, competitive research, and implementation statu
 
 ## Product
 
+- [PDF compare & diff architecture](./product/pdf-compare-diff.md) — viewer vs diff modes, Web Worker, swap, algorithms
 - [Compare-first homepage & PDF compare viewer](./product/compare-first-homepage.md) — hero, workflow, review mode, SEO
 - [Implementation status](./product/implementation-status.md) — **18 tools**, client vs server split, limits
 - [Tool workspace UI](./product/tool-workspace-ui.md) — two-column layout, client navigation, thumbnails, mobile
@@ -28,6 +31,7 @@ Living docs for product strategy, competitive research, and implementation statu
 
 | Topic | Doc |
 |-------|-----|
+| PDF compare diff + worker | [pdf-compare-diff](./product/pdf-compare-diff.md) |
 | Compare-first home + review viewer | [Compare-first homepage](./product/compare-first-homepage.md) |
 | Full tool list (18) + input scope | [Implementation status — tool inventory](./product/implementation-status.md#tool-inventory-18-tools) |
 | Tool taxonomy (categories + 1 PDF vs 2+ PDFs) | [Tool workspace UI — tool taxonomy](./product/tool-workspace-ui.md#tool-taxonomy-home-grid--navigation) |

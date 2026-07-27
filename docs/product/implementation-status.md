@@ -2,6 +2,12 @@
 
 > Last updated: 2026-07-27 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
+### Shipped (2026-07-27 — compare diff + worker)
+
+- **PDF compare — diff modes** — Opt-in analysis from review toolbar: text redline, visual pixel overlay, 50% overlay blend. Default remains viewer-only. See [pdf-compare-diff](./pdf-compare-diff.md).
+- **Compare diff Web Worker** — Pixel loops and line diffs run in `compareDiff.worker.ts`; PDF.js render/text extraction stays on main thread.
+- **Swap left/right** — Instant pane swap in setup and review toolbar without re-parsing PDFs.
+
 ### Shipped (2026-07-27 — compare-first)
 
 - **Compare-first homepage** — [`HeroSection`](../../frontend/src/components/layout/HeroSection.tsx), [`HomeWorkflowSection`](../../frontend/src/components/layout/HomeWorkflowSection.tsx), [`HomeToolsSection`](../../frontend/src/components/layout/HomeToolsSection.tsx) replace full `ToolGrid`, `TrustBar`, and `FormatSupportSection` on `/`. Primary CTA → `/tools/compare`. Crawlable `#tools` index preserves internal SEO links. See [compare-first homepage](./compare-first-homepage.md).
@@ -61,7 +67,7 @@ Each tool has:
 | Tool ID | Route | Processing |
 |---------|-------|------------|
 | `arrange-merge` | `/tools/merge` | **Client** (pdf-lib) — batch gate on free |
-| `pdf-compare` | `/tools/compare` | **Client** (PDF.js) |
+| `pdf-compare` | `/tools/compare` | **Client** (PDF.js viewer + optional diff worker) — see [pdf-compare-diff](./pdf-compare-diff.md) |
 
 **Summary:** 11 client-side · 7 server-side · 14 single-input tools · 4 multi-input tools (merge, compare, images-to-pdf, image convert/resize)
 

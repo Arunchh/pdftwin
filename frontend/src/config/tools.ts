@@ -293,7 +293,7 @@ export const TOOLS: ToolDefinition[] = [
     id: "pdf-compare",
     name: "Compare PDFs",
     shortLabel: "Compare",
-    description: "View two PDFs side by side with linked scroll and zoom for contract review",
+    description: "View two PDFs side by side with linked scroll, zoom, and optional text or visual diff",
     category: "pdf-ops",
     inputScope: "multi",
     icon: Columns2,
