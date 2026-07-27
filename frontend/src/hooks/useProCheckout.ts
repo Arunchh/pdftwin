@@ -1,6 +1,6 @@
 import { useCallback, useState } from "react";
 import type { CheckoutStep } from "../config/checkout";
-import { CHECKOUT_LIVE } from "../config/checkout";
+import { isCheckoutLive } from "../config/checkout";
 import { readSession } from "../stores/authStore";
 import { getAuthAdapter } from "../adapters/auth";
 import { createPayPalSubscription } from "../services/payments";
@@ -75,7 +75,7 @@ export function useProCheckout() {
   const startPayPalCheckout = useCallback(async () => {
     setError(null);
 
-    if (CHECKOUT_LIVE) {
+    if (isCheckoutLive()) {
       setStep("redirecting");
       try {
         const returnUrl = `${window.location.origin}${window.location.pathname}#pricing?subscription=success`;
@@ -101,7 +101,7 @@ export function useProCheckout() {
     step,
     termsAccepted,
     error,
-    isLive: CHECKOUT_LIVE,
+    isLive: isCheckoutLive(),
     setTermsAccepted,
     openCheckout,
     closeCheckout,

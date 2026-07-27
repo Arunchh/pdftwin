@@ -180,7 +180,10 @@ VITE_AUTH_PROVIDER=supabase
 VITE_SUPABASE_URL=https://tcwvrdykeojriwsxglbn.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key
 VITE_BILLING_PROVIDER=mock
+VITE_CHECKOUT_LIVE=false
 ```
+
+For production Supabase setup, the Astro 5 build fix, Vercel env vars, and verification steps, see **[Supabase auth guide](docs/product/supabase-auth.md)**.
 
 ## Build & Deploy
 
@@ -190,6 +193,8 @@ npm run build
 ```
 
 Output is written to `frontend/dist/`. Vercel runs the Astro build and serves static pages; `/api/*` routes to the FastAPI serverless function.
+
+**Important:** `VITE_*` variables are read at build time. On Vercel, set them under Project → Settings → Environment Variables, then redeploy. The app injects them into each page as `window.__PDFTWIN_ENV__` so client-side auth islands receive Supabase config in production (see [Supabase auth guide](docs/product/supabase-auth.md#astro-5-production-build-fix)).
 
 ## API Endpoints
 
@@ -238,9 +243,11 @@ See `.env.example`:
 - `FREE_DAILY_DOC_CONVERT_LIMIT` — Free PDF → Word/Excel exports per day (default 3)
 - `FREE_MERGE_FILE_LIMIT` — Free merge batch size (default 5; 6+ requires Pro)
 - `VITE_AUTH_PROVIDER` / `VITE_BILLING_PROVIDER` — Frontend provider selection (default `mock`)
-- PayPal credentials for live Pro checkout
+- `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` — Required when auth provider is `supabase`
+- `VITE_CHECKOUT_LIVE` — PayPal live checkout (`true` when backend billing is wired)
+- PayPal credentials — Live Pro checkout (backend)
 
-Set `VITE_CHECKOUT_LIVE=true` in the frontend environment when PayPal billing is wired for production.
+Set frontend env in `frontend/.env` locally and in **Vercel → Environment Variables** for production. After changing `VITE_*` vars, redeploy — they are baked in at build time. See [Supabase auth guide](docs/product/supabase-auth.md) for the full checklist.
 
 ## Notes
 
@@ -260,6 +267,7 @@ Set `VITE_CHECKOUT_LIVE=true` in the frontend environment when PayPal billing is
 - **Unlock** works for restriction-only PDFs and empty passwords; encrypted files need the correct password.
 - **Workspace tray** stores files in the browser only; clearing site data removes them.
 - **Mock auth** is for development and UX preview — not suitable for production security.
+- **Supabase auth** is live on pdftwin.com when `VITE_AUTH_PROVIDER=supabase` is set at build time. See [Supabase auth guide](docs/product/supabase-auth.md).
 
 ## Multilingual Support
 

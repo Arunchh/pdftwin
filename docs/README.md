@@ -16,6 +16,7 @@ Living docs for product strategy, competitive research, and implementation statu
 
 - [Implementation status](./product/implementation-status.md) — **18 tools**, client vs server split, limits
 - [Internationalization (i18n)](./product/i18n.md)
+- [Supabase auth — setup & production deploy](./product/supabase-auth.md)
 
 ## Quick links
 
@@ -33,6 +34,7 @@ Living docs for product strategy, competitive research, and implementation statu
 | Blog & how-to guides | `/blog` · [blogPosts.ts](../frontend/src/content/blogPosts.ts) |
 | How PDFTwin works (architecture) | `/resources` |
 | Cloud workspace (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
+| Supabase auth (live) | [Supabase auth guide](./product/supabase-auth.md) |
 | Business tier (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
 | Revenue target ($3–5K/mo) | [Monetization plan](./strategy/monetization-plan.md#revenue-target) |
 

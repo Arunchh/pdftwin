@@ -157,9 +157,16 @@ Still upload to FastAPI (in-memory, discarded):
 |---------|--------|
 | PayPal subscription stub | Backend wired; `VITE_CHECKOUT_LIVE` for production |
 | Pro price in code | **$9.00** |
-| Supabase auth | Optional via `VITE_AUTH_PROVIDER=supabase` |
-| Mock auth / Pro preview | Default for local dev |
+| Supabase auth | **Live on pdftwin.com** — see [Supabase auth guide](./supabase-auth.md) |
+| Mock auth / Pro preview | Fallback when `VITE_AUTH_PROVIDER=mock` or env missing at build |
 | Cloud workspace | **Not started** — deferred |
+
+### Supabase auth (shipped 2026-07-27)
+
+- **Project:** PDF Twin (`tcwvrdykeojriwsxglbn`)
+- **Table:** `public.profiles` (plan: `free` / `pro`)
+- **Production fix:** Runtime env via `window.__PDFTWIN_ENV__` in `BaseLayout.astro` — Astro 5 was inlining env for SSR HTML but not client JS bundles; see [architecture notes](./supabase-auth.md#astro-5-production-build-fix)
+- **Billing:** Still mock — Pro preview toggle on `/account` updates `profiles.plan` without PayPal
 
 ---
 

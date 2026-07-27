@@ -1,5 +1,5 @@
 import { useEffect } from "react";
-import { AUTH_PROVIDER } from "../../config/providers";
+import { getAuthProvider } from "../../config/providers";
 import { isSupabaseConfigured } from "../../lib/supabaseClient";
 import {
   listenForSupabaseAuthChanges,
@@ -8,7 +8,7 @@ import {
 
 export default function AuthProvider() {
   useEffect(() => {
-    if (AUTH_PROVIDER !== "supabase" || !isSupabaseConfigured()) {
+    if (getAuthProvider() !== "supabase" || !isSupabaseConfigured()) {
       return;
     }
 

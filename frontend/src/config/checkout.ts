@@ -1,6 +1,8 @@
 import { formatFileLimit, PRO_FILE_LIMIT_MB } from "./limits";
 import { PRICING_PLANS } from "./pricing";
 
+import { getRuntimeEnv } from "./runtimeEnv";
+
 export const PRO_PLAN = PRICING_PLANS.find((plan) => plan.id === "pro")!;
 
 export const CHECKOUT_PRICE = PRO_PLAN.price;
@@ -8,7 +10,9 @@ export const CHECKOUT_PERIOD = PRO_PLAN.period;
 export const CHECKOUT_CURRENCY = "USD";
 
 /** Set VITE_CHECKOUT_LIVE=true when backend PayPal billing is wired up. */
-export const CHECKOUT_LIVE = import.meta.env.VITE_CHECKOUT_LIVE === "true";
+export function isCheckoutLive(): boolean {
+  return getRuntimeEnv().checkoutLive;
+}
 
 export type CheckoutStep = "plan" | "confirm" | "pay" | "redirecting" | "success" | "cancelled";
 

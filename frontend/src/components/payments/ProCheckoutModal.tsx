@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 import {
   CHECKOUT_FAQ,
-  CHECKOUT_LIVE,
+  isCheckoutLive,
   CHECKOUT_PRICE,
   PRO_CHECKOUT_SUMMARY,
   PRO_PLAN,
@@ -59,6 +59,7 @@ export default function ProCheckoutModal({
   onRetryCheckout,
 }: ProCheckoutModalProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
+  const checkoutLive = isCheckoutLive();
 
   useEffect(() => {
     if (!open) return;
@@ -132,7 +133,7 @@ export default function ProCheckoutModal({
           </div>
         )}
 
-        {!CHECKOUT_LIVE && step !== "success" && step !== "cancelled" && (
+        {!checkoutLive && step !== "success" && step !== "cancelled" && (
           <p className="checkout-preview-banner">
             Secure checkout preview — live PayPal billing connects when the backend is enabled.
           </p>
@@ -265,7 +266,7 @@ export default function ProCheckoutModal({
               <div className="checkout-redirecting-spinner" aria-hidden="true" />
               <h3>Taking you to PayPal</h3>
               <p>
-                {CHECKOUT_LIVE
+                {checkoutLive
                   ? "Complete your subscription approval on PayPal to activate Pro."
                   : "Simulating PayPal secure checkout…"}
               </p>
@@ -279,7 +280,7 @@ export default function ProCheckoutModal({
               </span>
               <h3>Subscription confirmed</h3>
               <p>
-                {CHECKOUT_LIVE
+                {checkoutLive
                   ? "Thanks for subscribing to PDFTwin Pro. Your larger file limits and priority processing will activate shortly."
                   : "This is a preview of the checkout experience. Live PayPal billing will activate Pro automatically once connected — you were not charged."}
               </p>

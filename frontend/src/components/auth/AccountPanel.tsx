@@ -2,7 +2,7 @@ import { Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { formatFileLimit, FREE_FILE_LIMIT_MB } from "../../config/limits";
-import { AUTH_PROVIDER } from "../../config/providers";
+import { getAuthProvider } from "../../config/providers";
 import { openCheckout } from "../../utils/checkoutEvents";
 import {
   readWorkspaceUsage,
@@ -47,7 +47,7 @@ export default function AccountPanel() {
     <div className="account-panel panel">
       <h1>Your account</h1>
       <p className="description">
-        {AUTH_PROVIDER === "supabase"
+        {getAuthProvider() === "supabase"
           ? "Manage your PDFTwin account, plan, and upload limits."
           : "Preview account — ready to connect to Supabase when you are."}
       </p>

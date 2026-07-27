@@ -26,12 +26,22 @@ const pageTitle = title ?? messages.meta.homeTitle;
 const pageDescription = description ?? messages.meta.homeDescription;
 const canonical = new URL(localizePath(Astro.url.pathname, locale), "https://pdftwin.com/").href;
 const alternates = hreflangOverride ?? hreflangAlternates(Astro.url.pathname);
+const runtimeEnv = {
+  authProvider: import.meta.env.VITE_AUTH_PROVIDER ?? "mock",
+  billingProvider: import.meta.env.VITE_BILLING_PROVIDER ?? "mock",
+  supabaseUrl: import.meta.env.VITE_SUPABASE_URL ?? "",
+  supabaseAnonKey: import.meta.env.VITE_SUPABASE_ANON_KEY ?? "",
+  checkoutLive: import.meta.env.VITE_CHECKOUT_LIVE === "true",
+};
 ---
 
 <!doctype html>
 <html lang={LOCALE_HTML_LANG[locale]}>
   <head>
     <meta charset="UTF-8" />
+    <script is:inline define:vars={{ runtimeEnv }}>
+      window.__PDFTWIN_ENV__ = runtimeEnv;
+    </script>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />

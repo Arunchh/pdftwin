@@ -5,6 +5,9 @@ export default defineConfig({
   integrations: [react()],
   output: "static",
   outDir: "dist",
+  experimental: {
+    staticImportMetaEnv: true,
+  },
   build: {
     format: "directory",
   },

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useAuth } from "../../hooks/useAuth";
 import { readNextPath } from "../../utils/authRedirect";
-import { AUTH_PROVIDER } from "../../config/providers";
+import { getAuthProvider } from "../../config/providers";
 
 export default function SignupForm() {
   const { signUp } = useAuth();
@@ -28,7 +28,7 @@ export default function SignupForm() {
     <form className="auth-form panel" onSubmit={handleSubmit}>
       <h1>Create account</h1>
       <p className="description">
-        {AUTH_PROVIDER === "supabase"
+        {getAuthProvider() === "supabase"
           ? "Create your PDFTwin account to upgrade to Pro and upload files larger than 24 MB."
           : "Start free today. Your account is stored locally in this preview."}
       </p>
