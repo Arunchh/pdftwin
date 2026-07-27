@@ -28,10 +28,76 @@ PDFTwin’s workspace is a **two-column desktop layout**:
 Above the columns:
 
 1. **Tool heading** — name and one-line description (from `tools.ts` / i18n)
-2. **Category tabs** — Convert & Export · Organize Documents · Protect Files
-3. **Tool tabs** — only tools in the active category (not all 18 at once)
+2. **Category tabs** — PDF to Other Formats · Convert to PDF · Work with PDFs
+3. **Tool tabs** — only tools in the active category (not all 18 at once). **Work with PDFs** tabs are grouped under **One PDF** and **Multiple PDFs** scope labels with **1 PDF** / **2+ PDFs** badges.
 
 Design tokens and category colors follow the existing **Neon Pastel / PDFTwin** palette (`index.css` `:root`).
+
+---
+
+## Tool taxonomy (home grid & navigation)
+
+Tools are organized so users can answer two questions quickly: **what direction is the conversion?** and **how many files do I have?**
+
+### Top-level categories (`ToolCategory`)
+
+| ID | Label (EN) | User question |
+|----|------------|---------------|
+| `pdf-from` | PDF to Other Formats | “I have a PDF — export it to Word, Excel, images, or text.” |
+| `to-pdf` | Convert to PDF | “I have Word docs or images — make a PDF.” |
+| `pdf-ops` | Work with PDFs | “I need to edit, merge, or compare PDFs without converting format.” |
+
+Defined in [`tools.ts`](../../frontend/src/config/tools.ts): `CATEGORY_ORDER`, `TOOL_CATEGORIES`, per-tool `category`.
+
+### Input scope (`InputScope`)
+
+| Scope | Badge | Meaning | Examples |
+|-------|-------|---------|----------|
+| `single` | **1 PDF** | One source PDF (or one Word file for Word→PDF) | Split, rotate, sign, compress, PDF→Word |
+| `multi` | **2+ PDFs** | Two or more source files | Merge, compare; also images→PDF and batch image tools |
+
+Declared on each `ToolDefinition` as `inputScope`. Helpers: `toolsInScope()`, `singlePdfToolsInSubcategory()`.
+
+### Work with PDFs — two-column home layout
+
+The homepage **Work with PDFs** block renders as side-by-side columns:
+
+```
+┌──────────────────────────────┬─────────────────────┐
+│  ONE PDF                     │  MULTIPLE PDFs      │
+│  Upload a single file        │  Upload 2+ files    │
+│  ─ Pages & layout            │  ┌──────┐ ┌──────┐  │
+│    Split · Extract · Remove  │  │Merge │ │Compare│ │
+│    Rotate                    │  └──────┘ └──────┘  │
+│  ─ Markup & signing          │                     │
+│    Watermark · Sign          │                     │
+│  ─ Optimize & protect        │                     │
+│    Compress · Protect        │                     │
+└──────────────────────────────┴─────────────────────┘
+```
+
+Implemented in [`ToolGrid.tsx`](../../frontend/src/components/layout/ToolGrid.tsx) via `PdfOpsScopeColumns` and [`ToolCardLink.tsx`](../../frontend/src/components/layout/ToolCardLink.tsx) badges.
+
+### Subcategories (`ToolSubcategory`)
+
+| Category | Subcategories | Tools |
+|----------|---------------|-------|
+| `to-pdf` | `documents`, `images` | Word/images→PDF vs image-only tools |
+| `pdf-ops` (single scope) | `pages`, `markup`, `protect` | Layout vs signing vs compression/security |
+
+Constants: `SUBCATEGORY_ORDER`, `SINGLE_PDF_SUBCATEGORY_ORDER`.
+
+### i18n keys
+
+| Key path | Used for |
+|----------|----------|
+| `toolGrid.categories.*` | Category headings (home + workspace tabs) |
+| `toolGrid.categoryHints.*` | One-line hint under each category heading |
+| `toolGrid.inputScopes.single\|multi` | Column titles + hints in PDF-ops split |
+| `toolGrid.inputScopeBadges.single\|multi` | **1 PDF** / **2+ PDFs** on cards, nav, workspace tabs |
+| `toolGrid.subcategories.*` | Sub-headings inside columns |
+
+All five locales (EN, ES, FR, NL, PT) include these keys.
 
 ---
 
@@ -60,7 +126,9 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | Component | Path | Role |
 |-----------|------|------|
 | `ToolWorkspace` | [`frontend/src/components/ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | Shell: heading, nav, 2-column grid, dispatches to tool panels |
-| `WorkspaceToolSwitcher` | [`frontend/src/components/layout/WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Category tabs + filtered tool tabs (i18n labels) |
+| `ToolGrid` | [`frontend/src/components/layout/ToolGrid.tsx`](../../frontend/src/components/layout/ToolGrid.tsx) | Home `#tools` — category sections + PDF-ops scope columns |
+| `ToolCardLink` | [`frontend/src/components/layout/ToolCardLink.tsx`](../../frontend/src/components/layout/ToolCardLink.tsx) | Tool card with icon, label, and input-scope badge |
+| `WorkspaceToolSwitcher` | [`frontend/src/components/layout/WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Category tabs + filtered tool tabs (i18n labels, scope grouping for pdf-ops) |
 | `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Left column: dropzone, file list, single “Clear all” |
 | `FileDropzone` | [`frontend/src/components/FileDropzone.tsx`](../../frontend/src/components/FileDropzone.tsx) | Drag/drop + browse; Pro gate on oversized files |
 | `ToolResultCard` | [`frontend/src/components/ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) | Success state: filename, Download, next steps |
@@ -82,7 +150,7 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `useToolResult` | [`frontend/src/hooks/useToolResult.ts`](../../frontend/src/hooks/useToolResult.ts) | Pending download blob + error state for panels |
 | Upload config | [`frontend/src/config/upload.ts`](../../frontend/src/config/upload.ts) | Per-tool `accept`, titles, labels |
 | Next-step links | [`frontend/src/config/toolNextSteps.ts`](../../frontend/src/config/toolNextSteps.ts) | Suggested tools on result card |
-| Tool registry | [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts) | 18 tools, categories, routes, `toolIdFromPath()` |
+| Tool registry | [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts) | 18 tools, categories, `inputScope`, subcategories, routes, `toolIdFromPath()` |
 
 ---
 
@@ -93,8 +161,9 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
   <div class="workspace-heading">…</div>
 
   <nav class="workspace-nav">
-    <div class="workspace-category-tabs">…</div>   <!-- 3 categories + All tools -->
-    <div class="workspace-tool-switcher">…</div>   <!-- tools in active category -->
+    <div class="workspace-category-tabs">…</div>   <!-- pdf-from / to-pdf / pdf-ops + All tools -->
+    <div class="workspace-tool-switcher workspace-tool-switcher--scoped">…</div>
+      <!-- tools in active category; pdf-ops grouped by One PDF / Multiple PDFs -->
   </nav>
 
   <div class="workspace-layout">
@@ -113,8 +182,12 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `.workspace-layout` | CSS grid: 320px + 1fr on desktop; single column ≤640px |
 | `.workspace-files-column` | Sticky left column; dashed border |
 | `.workspace-action-column` | Right column; hosts existing tool panels |
-| `.workspace-category-tabs` | Top row: Convert / Organize / Protect |
-| `.workspace-category-tab--{category}.active` | Category accent colors |
+| `.workspace-category-tabs` | Top row: PDF from / To PDF / Work with PDFs |
+| `.workspace-category-tab--{category}.active` | Category accent colors (mint, amber, violet) |
+| `.workspace-tool-switcher--scoped` | PDF-ops tab row with scope + subcategory labels |
+| `.workspace-tool-scope-label` | **One PDF** / **Multiple PDFs** divider in workspace tabs |
+| `.tool-scope-columns` | Home grid: two-column split for pdf-ops |
+| `.tool-card-input-badge` | **1 PDF** / **2+ PDFs** pill on tool cards |
 | `.workspace-tool-switcher` | Second row: tool tabs for active category only |
 | `.workspace-tray-thumb` | 40×40 file preview in tray rows |
 | `.workspace-files-collapsible` | Mobile `<details>` wrapper for file list |
@@ -185,21 +258,22 @@ In-workspace category and tool tabs are **`<button>` elements**, not `<a href>` 
 
 ### Category tabs
 
-- **Convert & Export** → first convert tool (`convert-extract` / `/tools/convert`) when clicked from another category
-- **Organize Documents** → `pdf-compare` (`/tools/compare`)
-- **Protect Files** → `watermark-pdf` (`/tools/watermark`)
+- **PDF to Other Formats** → first pdf-from tool (`convert-extract` / `/tools/convert`) when clicked from another category
+- **Convert to PDF** → `word-to-pdf` (`/tools/word-to-pdf`)
+- **Work with PDFs** → `split` (`/tools/split`) — first single-PDF tool in registry order
 
 Clicking a category tab navigates to the **first tool in that category** (client-side). The active category is always derived from the current tool.
 
 ### Tool tabs
 
 - Only tools where `tool.category === activeTool.category` are shown.
+- **Work with PDFs:** tabs render in scope order — **One PDF** block (pages → markup → protect sub-labels), then **Multiple PDFs** (merge, compare). Each tab shows a **1 PDF** or **2+ PDFs** suffix where applicable.
 - Labels use i18n `messages.tools[toolId].shortLabel` (locale-aware via `toolPath(id, locale)`).
 - “All tools” links to `/#tools` (or `/{locale}/#tools`) — full navigation to home anchor.
 
 ### Comparison with site header nav
 
-`SiteNav` uses category **dropdowns** on desktop and accordion on mobile (full page links). The workspace uses **horizontal button tabs** scoped to the active category — fewer choices on screen, same category grouping, instant panel swap.
+`SiteNav` uses category **dropdowns** on desktop and accordion on mobile (full page links). The **Edit PDF** dropdown mirrors the home grid: **One PDF** and **Multiple PDFs** blocks with scope hints, sub-headings, and badge labels on each link. The workspace uses **horizontal button tabs** scoped to the active category — fewer choices on screen, same taxonomy, instant panel swap.
 
 ---
 
@@ -319,21 +393,24 @@ Legacy hash URLs (`#merge`, `#convert`, …) redirect via inline script in `Base
 
 ## Maintenance notes
 
-- **Adding a new tool:** register in `tools.ts`, add panel + route in `ToolWorkspace`, upload config in `upload.ts`, optional entries in `toolNextSteps.ts`. Category tab and switcher update automatically from `TOOLS`.
+- **Adding a new tool:** register in `tools.ts` with `category`, `inputScope`, and optional `subcategory`; add panel + route in `ToolWorkspace`, upload config in `upload.ts`, optional entries in `toolNextSteps.ts`. Category tab, home grid, and switcher update automatically from `TOOLS`.
+- **Single vs multi PDF:** set `inputScope: "single"` for one-file tools and `"multi"` for merge/compare (or multi-image batch tools). PDF-ops multi tools appear only in the **Multiple PDFs** column; single tools stay under **One PDF** with the correct subcategory.
 - **Download UX:** panels must use `useToolResult` + `ToolPanelFeedback` — do not call `downloadBlob` / `downloadResponse` directly after processing.
 - **Client navigation:** in-workspace tabs must call `navigateToTool` — do not use `<a href>` for sibling tool switches (breaks instant swap and preserves tray state awkwardly via full reload).
-- **Changing category order:** `CATEGORY_ORDER` in `WorkspaceToolSwitcher.tsx` and `ToolGrid.tsx` should stay in sync.
+- **Changing category order:** `CATEGORY_ORDER` in `tools.ts` is the single source of truth — imported by `ToolGrid`, `SiteNav`, and `WorkspaceToolSwitcher`.
 - **Do not** re-split upload and tray without updating this doc — the single files column is intentional for scan path and one clear action.
 
 ### Verification checklist
 
 After workspace changes, manually verify:
 
-1. Land on `/tools/merge` — correct panel, category tab, tool tabs for Organize
-2. Click **Compress** tab — panel swaps without reload; URL becomes `/tools/compress`; files remain in tray
-3. Browser **Back** — returns to merge panel and URL
-4. Upload a PDF and an image — thumbnails appear in tray rows
-5. Run a tool — result card shows; **Download** works; next-step chip navigates client-side
-6. Header tool pill updates when switching tools
-7. At ≤640px width — action column first; file list collapses; dropzone still visible
-8. Localized route `/es/tools/comprimir-pdf` or `/es/tools/compress` — client nav preserves locale in URL
+1. Land on `/tools/merge` — correct panel; **Work with PDFs** category tab; tool under **Multiple PDFs** scope
+2. Land on `/tools/split` — **One PDF** scope; pages sub-group in workspace tabs
+3. Home `/#tools` — **Work with PDFs** shows two columns; merge/compare only in right column with **2+ PDFs** badges
+4. Click **Compress** tab — panel swaps without reload; URL becomes `/tools/compress`; files remain in tray
+5. Browser **Back** — returns to previous panel and URL
+6. Upload a PDF and an image — thumbnails appear in tray rows
+7. Run a tool — result card shows; **Download** works; next-step chip navigates client-side
+8. Header tool pill updates when switching tools
+9. At ≤640px width — action column first; pdf-ops scope columns stack vertically on home
+10. Localized route `/es/tools/comprimir-pdf` or `/es/tools/compress` — client nav preserves locale in URL

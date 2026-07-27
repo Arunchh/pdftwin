@@ -2,7 +2,7 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-27):** Terms of Use and Privacy Policy rewritten for the hybrid 18-tool product, Helios Impex (India), and no-warranty / limited-liability posture. See [implementation status — legal pages](./product/implementation-status.md#legal-pages--shipped-2026-07-27).
+**Latest (2026-07-27):** Tool taxonomy reorganized by conversion direction and input scope (**One PDF** vs **Multiple PDFs**). Homepage grid, nav, and workspace switcher updated; see [tool workspace UI — tool taxonomy](./product/tool-workspace-ui.md#tool-taxonomy-home-grid--navigation) and [implementation status](./product/implementation-status.md#tool-inventory-18-tools).
 
 ## Competitive research
 
@@ -25,7 +25,8 @@ Living docs for product strategy, competitive research, and implementation statu
 
 | Topic | Doc |
 |-------|-----|
-| Full tool list (18) | [Implementation status — tool inventory](./product/implementation-status.md#tool-inventory-18-tools) |
+| Full tool list (18) + input scope | [Implementation status — tool inventory](./product/implementation-status.md#tool-inventory-18-tools) |
+| Tool taxonomy (categories + 1 PDF vs 2+ PDFs) | [Tool workspace UI — tool taxonomy](./product/tool-workspace-ui.md#tool-taxonomy-home-grid--navigation) |
 | Why we raised free limit to 50 MB | [Monetization plan](./strategy/monetization-plan.md#free-tier-volume-engine) |
 | Daily Word/Excel cap (3/day) | [Implementation status](./product/implementation-status.md#daily-document-export-cap) |
 | Merge batch gate (5 free, 6+ Pro) | [Implementation status](./product/implementation-status.md#merge-batch-gate-5--pro) |

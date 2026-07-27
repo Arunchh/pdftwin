@@ -59,7 +59,7 @@ export const nl: Messages = {
     categoryHints: {
       "pdf-from": "Exporteer PDF's naar Word, Excel, afbeeldingen of platte tekst",
       "to-pdf": "Zet Word-documenten, afbeeldingen en foto's om naar PDF-bestanden",
-      "pdf-ops": "Voeg samen, splits, roteer, onderteken, watermerk, comprimeer en beveilig PDF's",
+      "pdf-ops": "Begin met één PDF, of kies een multi-bestand tool om samen te voegen of te vergelijken",
     },
     categories: {
       "pdf-from": "PDF naar andere formaten",
@@ -72,6 +72,20 @@ export const nl: Messages = {
       pages: "Pagina's en lay-out",
       markup: "Markering en ondertekening",
       protect: "Optimaliseren en beveiligen",
+    },
+    inputScopes: {
+      single: {
+        title: "Eén PDF",
+        hint: "Upload één bestand — splitsen, roteren, ondertekenen, watermerken, comprimeren of beveiligen",
+      },
+      multi: {
+        title: "Meerdere PDF's",
+        hint: "Upload twee of meer bestanden — voeg samen of vergelijk naast elkaar",
+      },
+    },
+    inputScopeBadges: {
+      single: "1 PDF",
+      multi: "2+ PDF",
     },
   },
   trust: [

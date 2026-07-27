@@ -59,7 +59,7 @@ export const fr: Messages = {
     categoryHints: {
       "pdf-from": "Exportez des PDF vers Word, Excel, images ou texte brut",
       "to-pdf": "Transformez documents Word, images et photos en fichiers PDF",
-      "pdf-ops": "Fusionnez, scindez, pivotez, signez, filigranez, compressez et protégez des PDF",
+      "pdf-ops": "Commencez avec un PDF, ou choisissez un outil multi-fichiers pour fusionner ou comparer",
     },
     categories: {
       "pdf-from": "PDF vers autres formats",
@@ -72,6 +72,20 @@ export const fr: Messages = {
       pages: "Pages et mise en page",
       markup: "Annotation et signature",
       protect: "Optimiser et protéger",
+    },
+    inputScopes: {
+      single: {
+        title: "Un PDF",
+        hint: "Téléversez un seul fichier — scinder, pivoter, signer, filigraner, compresser ou protéger",
+      },
+      multi: {
+        title: "Plusieurs PDF",
+        hint: "Téléversez deux fichiers ou plus — fusionnez ou comparez côte à côte",
+      },
+    },
+    inputScopeBadges: {
+      single: "1 PDF",
+      multi: "2+ PDF",
     },
   },
   trust: [

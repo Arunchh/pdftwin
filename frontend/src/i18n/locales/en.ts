@@ -59,7 +59,7 @@ export const en: Messages = {
     categoryHints: {
       "pdf-from": "Export PDFs to Word, Excel, images, or plain text",
       "to-pdf": "Turn Word documents, images, and photos into PDF files",
-      "pdf-ops": "Merge, split, rotate, sign, watermark, compress, and protect PDFs",
+      "pdf-ops": "Start with one PDF, or pick a multi-file tool when you need to combine or compare documents",
     },
     categories: {
       "pdf-from": "PDF to Other Formats",
@@ -72,6 +72,20 @@ export const en: Messages = {
       pages: "Pages & layout",
       markup: "Markup & signing",
       protect: "Optimize & protect",
+    },
+    inputScopes: {
+      single: {
+        title: "One PDF",
+        hint: "Upload a single file — split, rotate, sign, watermark, compress, or protect it",
+      },
+      multi: {
+        title: "Multiple PDFs",
+        hint: "Upload two or more files — merge them together or compare side by side",
+      },
+    },
+    inputScopeBadges: {
+      single: "1 PDF",
+      multi: "2+ PDFs",
     },
   },
   trust: [

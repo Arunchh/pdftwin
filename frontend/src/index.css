@@ -1215,6 +1215,7 @@ textarea {
 }
 
 .site-nav-tool-link {
+  position: relative;
   display: flex;
   align-items: flex-start;
   gap: 0.75rem;
@@ -2171,6 +2172,207 @@ textarea {
   margin-bottom: 0.55rem;
 }
 
+.tool-subcategory-heading h5 {
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-subtle);
+  margin-bottom: 0.45rem;
+}
+
+.tool-scope-columns {
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(0, 0.85fr);
+  gap: 0.85rem;
+}
+
+.tool-scope-column {
+  padding: 0.85rem 0.95rem;
+  border-radius: var(--radius);
+  border: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.55);
+}
+
+.tool-scope-column--single {
+  border-color: var(--cat-pdf-ops-border);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.72), rgba(240, 229, 255, 0.35));
+}
+
+.tool-scope-column--multi {
+  border-color: var(--amethyst-200);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.82), rgba(240, 229, 255, 0.55));
+  box-shadow: inset 0 0 0 1px rgba(157, 46, 255, 0.08);
+}
+
+.tool-scope-heading {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.65rem;
+  margin-bottom: 0.85rem;
+  padding-bottom: 0.65rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.tool-scope-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 8px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tool-scope-icon--single {
+  background: var(--cat-pdf-ops-bg);
+  color: var(--cat-pdf-ops-accent);
+  border: 1px solid var(--cat-pdf-ops-border);
+}
+
+.tool-scope-icon--multi {
+  background: var(--amethyst-100);
+  color: var(--amethyst-700);
+  border: 1px solid var(--amethyst-200);
+}
+
+.tool-scope-copy h4 {
+  font-size: 0.82rem;
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+  color: var(--text);
+}
+
+.tool-scope-copy p {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  line-height: 1.35;
+}
+
+.tool-card-input-badge {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.2rem;
+  padding: 0.14rem 0.38rem;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.tool-card-input-badge--single {
+  background: var(--cat-pdf-ops-bg);
+  color: var(--cat-pdf-ops-text);
+  border: 1px solid var(--cat-pdf-ops-border);
+}
+
+.tool-card-input-badge--multi {
+  background: var(--amethyst-100);
+  color: var(--amethyst-700);
+  border: 1px solid var(--amethyst-200);
+}
+
+.tool-card--scope-multi {
+  border-color: var(--amethyst-100);
+}
+
+.tool-card--scope-multi:hover {
+  border-color: var(--amethyst-200);
+  background: var(--amethyst-50);
+}
+
+.site-nav-scope-block + .site-nav-scope-block {
+  margin-top: 0.45rem;
+  padding-top: 0.45rem;
+  border-top: 1px dashed var(--border-soft);
+}
+
+.site-nav-scope-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin: 0.2rem 0.55rem 0.45rem;
+  font-size: 0.72rem;
+  color: var(--text-muted);
+}
+
+.site-nav-scope-label strong {
+  display: block;
+  font-size: 0.72rem;
+  color: var(--text);
+}
+
+.site-nav-scope-label small {
+  display: block;
+  font-size: 0.66rem;
+  line-height: 1.3;
+  color: var(--text-muted);
+}
+
+.site-nav-tool-scope {
+  margin-left: auto;
+  flex-shrink: 0;
+  padding: 0.1rem 0.35rem;
+  border-radius: 999px;
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.site-nav-tool-scope--single {
+  background: var(--cat-pdf-ops-bg);
+  color: var(--cat-pdf-ops-text);
+}
+
+.site-nav-tool-scope--multi {
+  background: var(--amethyst-100);
+  color: var(--amethyst-700);
+}
+
+.workspace-tool-switcher--scoped {
+  gap: 0.35rem 0.45rem;
+}
+
+.workspace-tool-scope-label {
+  flex: 0 0 100%;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text);
+  padding: 0.45rem 0.25rem 0.05rem;
+}
+
+.workspace-tool-scope-label--multi {
+  color: var(--amethyst-700);
+}
+
+.workspace-tool-tab-scope {
+  font-size: 0.58rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+.workspace-tool-tab--scope-multi.active {
+  color: var(--amethyst-700);
+  background: var(--amethyst-50);
+  box-shadow: inset 0 0 0 1px var(--amethyst-100);
+}
+
+@media (max-width: 768px) {
+  .tool-scope-columns {
+    grid-template-columns: 1fr;
+  }
+}
+
 .site-nav-subcategory {
   padding: 0 0.65rem 0.35rem;
 }
@@ -2207,6 +2409,7 @@ textarea {
 }
 
 .tool-card {
+  position: relative;
   aspect-ratio: 1;
   display: flex;
   flex-direction: column;

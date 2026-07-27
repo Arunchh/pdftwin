@@ -12,35 +12,49 @@ PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`
 
 ## Features
 
-### Convert & Export
+Tools are grouped on the homepage and in navigation by **what you are trying to do**, then by **how many files you need**:
+
+| Group | When to use it |
+|-------|----------------|
+| **PDF to Other Formats** | You have a PDF and want Word, Excel, images, or text |
+| **Convert to PDF** | You have Word docs, images, or photos and want a PDF |
+| **Work with PDFs → One PDF** | You have a single PDF to split, rotate, sign, watermark, compress, or protect |
+| **Work with PDFs → Multiple PDFs** | You need to merge several PDFs or compare two versions side by side |
+
+Each tool card shows a **1 PDF** or **2+ PDFs** badge so you can tell at a glance whether you need one file or several.
+
+### PDF to Other Formats (1 PDF each)
 - **Document conversion** — PDF to Word (.docx) or Excel (.xlsx); extract embedded images as WebP, PNG, or JPEG *(server)*
-- **Word to PDF** — Convert DOCX proposals and contracts into share-ready PDFs *(server)*
-- **Image conversion** — PNG, JPG, WebP, GIF, BMP, TIFF → WebP, PNG, or JPEG *(server)*
-- **Images to PDF** — Combine JPG, PNG, and other images into one PDF *(client-side)*
 - **PDF to JPG/PNG** — Export PDF pages as image files; multi-page downloads as ZIP *(client-side)*
 - **PDF to Text** — Extract selectable text to a `.txt` file *(client-side)*
 - **OCR text extract** — Turn scanned PDFs and photos into editable text with Tesseract.js *(client-side)*
-- **Resize images** — Shrink photos and brand assets with quality and dimension controls *(server)*
-- **Compress PDF** — Reduce file size with quality presets *(server)*
 
-### Organize Documents
-- **Compare PDFs** — Side-by-side viewer with linked scroll and linked/independent zoom *(client-side, PDF.js)*
-- **Merge & arrange** — Combine multiple PDFs and reorder pages; free tier merges up to **5 PDFs** at once *(client-side)*
-- **Split PDF** — Split by page ranges (e.g. `1-3, 5-7`) *(client-side)*
+### Convert to PDF
+- **Word to PDF** — Convert DOCX proposals and contracts into share-ready PDFs *(server, 1 file)*
+- **Images to PDF** — Combine JPG, PNG, and other images into one PDF *(client-side, multiple images)*
+- **Image conversion** — PNG, JPG, WebP, GIF, BMP, TIFF → WebP, PNG, or JPEG *(server, multiple files)*
+- **Resize images** — Shrink photos and brand assets with quality and dimension controls *(server, multiple files)*
+
+### Work with PDFs — One PDF
+- **Split PDF** — Split one PDF into separate files by page range *(client-side)*
 - **Extract pages** — Pull selected pages into a new PDF *(client-side)*
 - **Remove pages** — Delete unwanted pages from a PDF *(client-side)*
 - **Rotate PDF** — Rotate all pages or selected pages by 90°, 180°, or 270° *(client-side)*
-
-### Protect Files
 - **Watermark PDF** — Add confidential or draft watermarks across every page *(server)*
-- **Lock & unlock** — Add password protection or remove restrictions when permitted *(server)*
 - **Sign PDF** — Draw a signature or upload a PNG and place it on selected pages *(client-side)*
+- **Compress PDF** — Reduce file size with quality presets *(server)*
+- **Lock & unlock** — Add password protection or remove restrictions when permitted *(server)*
+
+### Work with PDFs — Multiple PDFs
+- **Merge & arrange** — Combine multiple PDFs and reorder pages; free tier merges up to **5 PDFs** at once *(client-side)*
+- **Compare PDFs** — Side-by-side viewer with linked scroll and linked/independent zoom *(client-side, PDF.js)*
 
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
 - **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads and unlimited PDF → Word/Excel exports
 - **Two-column tool workspace** — Files column (upload + tray + thumbnails) on the left; tool actions on the right — see [tool workspace UI](docs/product/tool-workspace-ui.md)
-- **Category-filtered tool tabs** — Convert, Organize, and Protect tabs; only tools in the active category shown (not all 18 at once)
+- **Conversion-direction categories** — PDF → other formats, convert → PDF, and work-with-PDFs tabs on home and workspace
+- **Single vs multi-PDF columns** — “One PDF” and “Multiple PDFs” side-by-side in the Work with PDFs section, with **1 PDF** / **2+ PDFs** badges on each tool card
 - **Instant tool switching** — Switch tools in the workspace without a full page reload; browser back/forward supported
 - **Result cards** — After processing, a result card shows filename and an explicit Download button (no silent auto-download)
 - **Next-step suggestions** — Result cards link to related tools (e.g. Merge → Convert, Compress → Protect)
@@ -119,17 +133,18 @@ PDFTwin uses a **Neon Pastel** palette — bright fluorescent pastels (mint, vio
 | Surfaces | `--surface`, `--surface-muted` | Cards, panels, hero |
 | Primary brand | `--accent` (`#00C49A`) | Buttons, links, logo mark |
 | Secondary accent | `--accent-secondary` (`#9D2EFF`) | Editorial highlights, organize category |
-| Convert category | Fluorescent mint (`--sapphire-*`) | Convert & export tools |
-| Organize category | Fluorescent violet (`--amethyst-*`) | Merge, split, compare, rotate |
-| Protect category | Fluorescent coral (`--emerald-*`) | Watermark, lock/unlock, compress |
+| Convert category | Fluorescent mint (`--sapphire-*`) | PDF → other formats |
+| To-PDF category | Fluorescent amber (`--amber-*`) | Word/images → PDF |
+| PDF ops category | Fluorescent violet (`--amethyst-*`) | Edit, merge, compare PDFs |
+| Multi-PDF accent | Violet highlight (`--amethyst-*`) | Merge & compare tools and **2+ PDFs** badges |
 
 **Category color reference**
 
 | Category | Background | Accent | Text |
 |----------|------------|--------|------|
-| Convert | `#DFFFF8` | `#00E5B4` | `#009973` |
-| Organize | `#F0E5FF` | `#9D2EFF` | `#7C00E5` |
-| Protect | `#FFE8DC` | `#FF5722` | `#E04412` |
+| PDF from | `#DFFFF8` | `#00E5B4` | `#009973` |
+| To PDF | `#FFFCE0` | `#FFD600` | `#CC9900` |
+| PDF ops | `#F0E5FF` | `#9D2EFF` | `#7C00E5` |
 
 ### Client-side vs server-side
 
@@ -149,9 +164,11 @@ Client-side tools show a **“Processed on your device”** badge. See [implemen
 
 Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names (`--sapphire-*`, `--amethyst-*`, `--emerald-*`) are retained for compatibility but map to the fluorescent mint / violet / coral palette.
 
-**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (Convert, Organize, Protect), inspired by tool-directory sites but styled with PDFTwin’s fluorescent mint palette and bright pastel category headers. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
+**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (**From PDF**, **To PDF**, **Edit PDF**). The **Edit PDF** dropdown splits into **One PDF** and **Multiple PDFs** blocks with scope hints and **1 PDF** / **2+ PDFs** labels on each link. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
 
-**Tool workspace:** Each `/tools/*` page uses a two-column layout — upload and file tray (with thumbnails) on the left, the active tool panel on the right. In-workspace navigation uses category tabs plus horizontal tool tabs filtered to the current category; tab clicks swap tools client-side via the History API (no full reload). On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
+**Tool grid (home):** The **Work with PDFs** section uses a **two-column layout** — a wider **One PDF** column (pages, markup, protect sub-headings) beside a narrower **Multiple PDFs** column (merge, compare). Tool cards show input-scope badges.
+
+**Tool workspace:** Each `/tools/*` page uses a two-column layout — upload and file tray (with thumbnails) on the left, the active tool panel on the right. In-workspace navigation uses three category tabs plus horizontal tool tabs filtered to the current category; **Edit PDF** tabs are grouped under **One PDF** / **Multiple PDFs** scope labels. Tab clicks swap tools client-side via the History API (no full reload). On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
 
 ## Prerequisites
 

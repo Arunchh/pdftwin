@@ -44,7 +44,10 @@ export type ToolId =
 /** Top-level grouping shown in the tool grid and navigation. */
 export type ToolCategory = "pdf-from" | "to-pdf" | "pdf-ops";
 
-/** Optional sub-grouping within a category (e.g. pages vs. markup inside PDF ops). */
+/** How many source files the tool expects — drives single vs multi PDF columns. */
+export type InputScope = "single" | "multi";
+
+/** Optional sub-grouping within a category. */
 export type ToolSubcategory = "documents" | "images" | "pages" | "markup" | "protect";
 
 export interface ToolDefinition {
@@ -53,6 +56,8 @@ export interface ToolDefinition {
   shortLabel: string;
   description: string;
   category: ToolCategory;
+  /** Single-file vs multi-file — shown on cards and used to split pdf-ops UI. */
+  inputScope?: InputScope;
   subcategory?: ToolSubcategory;
   icon: LucideIcon;
   /** Legacy hash — redirected to `path` */
@@ -65,10 +70,14 @@ export const TOOL_COUNT = 18;
 
 export const CATEGORY_ORDER: ToolCategory[] = ["pdf-from", "to-pdf", "pdf-ops"];
 
+export const INPUT_SCOPE_ORDER: InputScope[] = ["single", "multi"];
+
 export const SUBCATEGORY_ORDER: Partial<Record<ToolCategory, ToolSubcategory[]>> = {
   "to-pdf": ["documents", "images"],
-  "pdf-ops": ["pages", "markup", "protect"],
 };
+
+/** Sub-headings inside the single-PDF column of pdf-ops. */
+export const SINGLE_PDF_SUBCATEGORY_ORDER: ToolSubcategory[] = ["pages", "markup", "protect"];
 
 export const TOOL_CATEGORIES: Record<ToolCategory, string> = {
   "pdf-from": "PDF to Other Formats",
@@ -77,13 +86,14 @@ export const TOOL_CATEGORIES: Record<ToolCategory, string> = {
 };
 
 export const TOOLS: ToolDefinition[] = [
-  // — PDF → other formats —
+  // — PDF → other formats (always one PDF) —
   {
     id: "convert-extract",
     name: "Document Conversion",
     shortLabel: "Convert",
     description: "Export PDFs to Word, Excel, or web-ready image assets for your team",
     category: "pdf-from",
+    inputScope: "single",
     icon: FileSpreadsheet,
     hash: "convert",
     path: "convert",
@@ -94,6 +104,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "PDF→JPG",
     description: "Export PDF pages as JPG or PNG images for slides, email, and social posts",
     category: "pdf-from",
+    inputScope: "single",
     icon: ImageDown,
     hash: "pdf-to-jpg",
     path: "pdf-to-jpg",
@@ -104,6 +115,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "PDF→Text",
     description: "Extract selectable text from PDFs into an editable .txt file",
     category: "pdf-from",
+    inputScope: "single",
     icon: AlignLeft,
     hash: "pdf-to-text",
     path: "pdf-to-text",
@@ -114,6 +126,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "OCR",
     description: "Turn scanned PDFs and photos into editable text with optical character recognition",
     category: "pdf-from",
+    inputScope: "single",
     icon: ScanText,
     hash: "ocr",
     path: "ocr",
@@ -125,6 +138,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Word→PDF",
     description: "Convert DOCX proposals and contracts into share-ready PDF files",
     category: "to-pdf",
+    inputScope: "single",
     subcategory: "documents",
     icon: FileText,
     hash: "word-to-pdf",
@@ -136,6 +150,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Img→PDF",
     description: "Combine JPG, PNG, and other images into one share-ready PDF document",
     category: "to-pdf",
+    inputScope: "multi",
     subcategory: "documents",
     icon: BookImage,
     hash: "images-to-pdf",
@@ -147,6 +162,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Images",
     description: "Convert PNG, JPG, GIF, and BMP files to WebP, PNG, or JPEG in one step",
     category: "to-pdf",
+    inputScope: "multi",
     subcategory: "images",
     icon: Image,
     hash: "images",
@@ -158,6 +174,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Resize",
     description: "Resize and compress images for email, web, and slide decks",
     category: "to-pdf",
+    inputScope: "multi",
     subcategory: "images",
     icon: Maximize2,
     hash: "resize",
@@ -165,22 +182,12 @@ export const TOOLS: ToolDefinition[] = [
   },
   // — Single-PDF operations —
   {
-    id: "arrange-merge",
-    name: "Merge & Arrange",
-    shortLabel: "Merge",
-    description: "Combine proposals, invoices, and reports into a single client-ready PDF",
-    category: "pdf-ops",
-    subcategory: "pages",
-    icon: Combine,
-    hash: "merge",
-    path: "merge",
-  },
-  {
     id: "split",
     name: "Split PDF",
     shortLabel: "Split",
-    description: "Break large contracts and decks into separate files by page range",
+    description: "Break one PDF into separate files by page range",
     category: "pdf-ops",
+    inputScope: "single",
     subcategory: "pages",
     icon: Layers,
     hash: "split",
@@ -192,6 +199,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Extract",
     description: "Pull only the pages you need into a new PDF for sharing or approval",
     category: "pdf-ops",
+    inputScope: "single",
     subcategory: "pages",
     icon: FileOutput,
     hash: "extract",
@@ -203,6 +211,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Remove",
     description: "Delete unwanted pages from a PDF without splitting the whole file",
     category: "pdf-ops",
+    inputScope: "single",
     subcategory: "pages",
     icon: FileMinus,
     hash: "remove-pages",
@@ -214,21 +223,11 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Rotate",
     description: "Rotate all pages or selected pages by 90°, 180°, or 270°",
     category: "pdf-ops",
+    inputScope: "single",
     subcategory: "pages",
     icon: RotateCw,
     hash: "rotate",
     path: "rotate",
-  },
-  {
-    id: "pdf-compare",
-    name: "Compare PDFs",
-    shortLabel: "Compare",
-    description: "View two PDFs side by side with linked scroll and zoom for contract review",
-    category: "pdf-ops",
-    subcategory: "pages",
-    icon: Columns2,
-    hash: "compare",
-    path: "compare",
   },
   {
     id: "watermark-pdf",
@@ -236,6 +235,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Watermark",
     description: "Add a confidential or draft watermark across every page",
     category: "pdf-ops",
+    inputScope: "single",
     subcategory: "markup",
     icon: Stamp,
     hash: "watermark",
@@ -247,6 +247,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Sign",
     description: "Add your handwritten or uploaded signature to PDF pages",
     category: "pdf-ops",
+    inputScope: "single",
     subcategory: "markup",
     icon: PenLine,
     hash: "sign",
@@ -258,6 +259,7 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Compress",
     description: "Reduce PDF file size for email attachments and faster client downloads",
     category: "pdf-ops",
+    inputScope: "single",
     subcategory: "protect",
     icon: Shrink,
     hash: "compress",
@@ -269,10 +271,34 @@ export const TOOLS: ToolDefinition[] = [
     shortLabel: "Protect",
     description: "Add password protection to confidential files or remove restrictions securely",
     category: "pdf-ops",
+    inputScope: "single",
     subcategory: "protect",
     icon: LockKeyhole,
     hash: "protect",
     path: "protect",
+  },
+  // — Multi-PDF operations —
+  {
+    id: "arrange-merge",
+    name: "Merge & Arrange",
+    shortLabel: "Merge",
+    description: "Combine proposals, invoices, and reports into a single client-ready PDF",
+    category: "pdf-ops",
+    inputScope: "multi",
+    icon: Combine,
+    hash: "merge",
+    path: "merge",
+  },
+  {
+    id: "pdf-compare",
+    name: "Compare PDFs",
+    shortLabel: "Compare",
+    description: "View two PDFs side by side with linked scroll and zoom for contract review",
+    category: "pdf-ops",
+    inputScope: "multi",
+    icon: Columns2,
+    hash: "compare",
+    path: "compare",
   },
 ];
 
@@ -285,6 +311,19 @@ export function toolsInSubcategory(
   subcategory: ToolSubcategory,
 ): ToolDefinition[] {
   return TOOLS.filter((tool) => tool.category === category && tool.subcategory === subcategory);
+}
+
+export function toolsInScope(category: ToolCategory, scope: InputScope): ToolDefinition[] {
+  return TOOLS.filter((tool) => tool.category === category && tool.inputScope === scope);
+}
+
+export function singlePdfToolsInSubcategory(subcategory: ToolSubcategory): ToolDefinition[] {
+  return TOOLS.filter(
+    (tool) =>
+      tool.category === "pdf-ops" &&
+      tool.inputScope === "single" &&
+      tool.subcategory === subcategory,
+  );
 }
 
 /** URL segment under /tools/ (optionally prefixed with /es, /fr, /nl, /pt). */

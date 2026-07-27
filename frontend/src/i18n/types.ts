@@ -72,6 +72,14 @@ export interface Messages {
       markup: string;
       protect: string;
     };
+    inputScopes: {
+      single: { title: string; hint: string };
+      multi: { title: string; hint: string };
+    };
+    inputScopeBadges: {
+      single: string;
+      multi: string;
+    };
   };
   trust: Array<{ title: string; description: string }>;
   formats: {

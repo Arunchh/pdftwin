@@ -1,9 +1,14 @@
+import { FileStack, FileText } from "lucide-react";
 import {
   CATEGORY_ORDER,
+  INPUT_SCOPE_ORDER,
+  SINGLE_PDF_SUBCATEGORY_ORDER,
   SUBCATEGORY_ORDER,
   TOOLS,
+  singlePdfToolsInSubcategory,
   toolById,
   toolPath,
+  toolsInScope,
   toolsInSubcategory,
   type ToolCategory,
   type ToolId,
@@ -34,7 +39,69 @@ export default function WorkspaceToolSwitcher({
     "pdf-ops": messages.toolGrid.categories["pdf-ops"],
   };
 
+  const renderToolTab = (tool: (typeof TOOLS)[number]) => {
+    const Icon = tool.icon;
+    const isActive = tool.id === activeTool;
+    const copy = messages.tools[tool.id];
+
+    return (
+      <button
+        key={tool.id}
+        type="button"
+        role="tab"
+        aria-selected={isActive}
+        className={`workspace-tool-tab workspace-tool-tab--${tool.category} workspace-tool-tab--scope-${tool.inputScope ?? "none"} ${isActive ? "active" : ""}`}
+        title={copy.description}
+        onClick={() => onNavigate(tool.id)}
+      >
+        <Icon size={16} />
+        <span className="workspace-tool-tab-label">{copy.shortLabel}</span>
+        {tool.inputScope && (
+          <span className={`workspace-tool-tab-scope workspace-tool-tab-scope--${tool.inputScope}`}>
+            {messages.toolGrid.inputScopeBadges[tool.inputScope]}
+          </span>
+        )}
+      </button>
+    );
+  };
+
+  const renderPdfOpsTabs = () =>
+    INPUT_SCOPE_ORDER.flatMap((scope) => {
+      const scopeCopy = messages.toolGrid.inputScopes[scope];
+      const ScopeIcon = scope === "single" ? FileText : FileStack;
+
+      const scopeHeader = (
+        <span key={`scope-${scope}`} className={`workspace-tool-scope-label workspace-tool-scope-label--${scope}`}>
+          <ScopeIcon size={12} strokeWidth={2} aria-hidden="true" />
+          {scopeCopy.title}
+        </span>
+      );
+
+      if (scope === "single") {
+        return [
+          scopeHeader,
+          ...SINGLE_PDF_SUBCATEGORY_ORDER.flatMap((subcategory) => {
+            const tools = singlePdfToolsInSubcategory(subcategory);
+            if (!tools.length) return [];
+
+            return [
+              <span key={`label-${subcategory}`} className="workspace-tool-subcategory-label">
+                {messages.toolGrid.subcategories[subcategory]}
+              </span>,
+              ...tools.map((tool) => renderToolTab(tool)),
+            ];
+          }),
+        ];
+      }
+
+      return [scopeHeader, ...toolsInScope("pdf-ops", "multi").map((tool) => renderToolTab(tool))];
+    });
+
   const renderToolTabs = () => {
+    if (activeCategory === "pdf-ops") {
+      return renderPdfOpsTabs();
+    }
+
     const subcategories = SUBCATEGORY_ORDER[activeCategory];
 
     if (!subcategories) {
@@ -54,27 +121,6 @@ export default function WorkspaceToolSwitcher({
         ...tools.map((tool) => renderToolTab(tool)),
       ];
     });
-  };
-
-  const renderToolTab = (tool: (typeof TOOLS)[number]) => {
-    const Icon = tool.icon;
-    const isActive = tool.id === activeTool;
-    const copy = messages.tools[tool.id];
-
-    return (
-      <button
-        key={tool.id}
-        type="button"
-        role="tab"
-        aria-selected={isActive}
-        className={`workspace-tool-tab workspace-tool-tab--${tool.category} ${isActive ? "active" : ""}`}
-        title={copy.description}
-        onClick={() => onNavigate(tool.id)}
-      >
-        <Icon size={16} />
-        <span className="workspace-tool-tab-label">{copy.shortLabel}</span>
-      </button>
-    );
   };
 
   return (
@@ -103,7 +149,7 @@ export default function WorkspaceToolSwitcher({
       </div>
 
       <div
-        className="workspace-tool-switcher"
+        className={`workspace-tool-switcher${activeCategory === "pdf-ops" ? " workspace-tool-switcher--scoped" : ""}`}
         role="tablist"
         aria-label={`${categoryLabels[activeCategory]} tools`}
       >

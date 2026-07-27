@@ -1,34 +1,67 @@
+import { FileStack, FileText } from "lucide-react";
 import {
   CATEGORY_ORDER,
+  INPUT_SCOPE_ORDER,
+  SINGLE_PDF_SUBCATEGORY_ORDER,
   SUBCATEGORY_ORDER,
   TOOLS,
-  toolPath,
+  singlePdfToolsInSubcategory,
+  toolsInScope,
   toolsInSubcategory,
   type ToolCategory,
 } from "../../config/tools";
 import { useI18n } from "../../i18n/I18nProvider";
+import ToolCardLink from "./ToolCardLink";
 
-function ToolCards({ tools }: { tools: typeof TOOLS }) {
-  const { locale, messages } = useI18n();
-
+function ToolCardGrid({ tools }: { tools: typeof TOOLS }) {
   return (
     <div className="tool-grid">
-      {tools.map((tool) => {
-        const Icon = tool.icon;
-        const copy = messages.tools[tool.id];
+      {tools.map((tool) => (
+        <ToolCardLink key={tool.id} tool={tool} />
+      ))}
+    </div>
+  );
+}
+
+function PdfOpsScopeColumns() {
+  const { messages } = useI18n();
+
+  return (
+    <div className="tool-scope-columns">
+      {INPUT_SCOPE_ORDER.map((scope) => {
+        const scopeCopy = messages.toolGrid.inputScopes[scope];
+        const ScopeIcon = scope === "single" ? FileText : FileStack;
 
         return (
-          <a
-            key={tool.id}
-            href={toolPath(tool.id, locale)}
-            className={`tool-card tool-card--${tool.category}`}
-            title={copy.description}
-          >
-            <span className="tool-card-icon">
-              <Icon size={28} strokeWidth={1.75} />
-            </span>
-            <span className="tool-card-label">{copy.shortLabel}</span>
-          </a>
+          <div key={scope} className={`tool-scope-column tool-scope-column--${scope}`}>
+            <div className="tool-scope-heading">
+              <span className={`tool-scope-icon tool-scope-icon--${scope}`} aria-hidden="true">
+                <ScopeIcon size={18} strokeWidth={1.75} />
+              </span>
+              <div className="tool-scope-copy">
+                <h4>{scopeCopy.title}</h4>
+                <p>{scopeCopy.hint}</p>
+              </div>
+            </div>
+
+            {scope === "single" ? (
+              SINGLE_PDF_SUBCATEGORY_ORDER.map((subcategory) => {
+                const tools = singlePdfToolsInSubcategory(subcategory);
+                if (!tools.length) return null;
+
+                return (
+                  <div key={subcategory} className="tool-subcategory">
+                    <div className="tool-subcategory-heading">
+                      <h5>{messages.toolGrid.subcategories[subcategory]}</h5>
+                    </div>
+                    <ToolCardGrid tools={tools} />
+                  </div>
+                );
+              })
+            ) : (
+              <ToolCardGrid tools={toolsInScope("pdf-ops", "multi")} />
+            )}
+          </div>
         );
       })}
     </div>
@@ -39,10 +72,14 @@ export default function ToolGrid() {
   const { messages } = useI18n();
 
   const renderCategoryTools = (category: ToolCategory) => {
+    if (category === "pdf-ops") {
+      return <PdfOpsScopeColumns />;
+    }
+
     const subcategories = SUBCATEGORY_ORDER[category];
 
     if (!subcategories) {
-      return <ToolCards tools={TOOLS.filter((tool) => tool.category === category)} />;
+      return <ToolCardGrid tools={TOOLS.filter((tool) => tool.category === category)} />;
     }
 
     return subcategories.map((subcategory) => {
@@ -54,7 +91,7 @@ export default function ToolGrid() {
           <div className="tool-subcategory-heading">
             <h4>{messages.toolGrid.subcategories[subcategory]}</h4>
           </div>
-          <ToolCards tools={tools} />
+          <ToolCardGrid tools={tools} />
         </div>
       );
     });

@@ -59,7 +59,7 @@ export const pt: Messages = {
     categoryHints: {
       "pdf-from": "Exporte PDFs para Word, Excel, imagens ou texto simples",
       "to-pdf": "Converta documentos Word, imagens e fotos em arquivos PDF",
-      "pdf-ops": "Combine, divida, gire, assine, marque com d'água, comprima e proteja PDFs",
+      "pdf-ops": "Comece com um PDF ou escolha uma ferramenta multi-arquivo para combinar ou comparar",
     },
     categories: {
       "pdf-from": "PDF para outros formatos",
@@ -72,6 +72,20 @@ export const pt: Messages = {
       pages: "Páginas e layout",
       markup: "Marcação e assinatura",
       protect: "Otimizar e proteger",
+    },
+    inputScopes: {
+      single: {
+        title: "Um PDF",
+        hint: "Envie um único arquivo — dividir, girar, assinar, marcar, comprimir ou proteger",
+      },
+      multi: {
+        title: "Vários PDFs",
+        hint: "Envie dois ou mais arquivos — combine ou compare lado a lado",
+      },
+    },
+    inputScopeBadges: {
+      single: "1 PDF",
+      multi: "2+ PDFs",
     },
   },
   trust: [

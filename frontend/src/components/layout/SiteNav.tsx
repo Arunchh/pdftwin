@@ -1,18 +1,56 @@
 import { useEffect, useState } from "react";
-import { ChevronDown, Menu, X } from "lucide-react";
+import { ChevronDown, FileStack, FileText, Menu, X } from "lucide-react";
 import {
   CATEGORY_ORDER,
+  INPUT_SCOPE_ORDER,
+  SINGLE_PDF_SUBCATEGORY_ORDER,
   SUBCATEGORY_ORDER,
   TOOLS,
+  singlePdfToolsInSubcategory,
   toolPath,
+  toolsInScope,
   toolsInSubcategory,
+  type InputScope,
   type ToolCategory,
 } from "../../config/tools";
 import LanguageSwitcher from "../../i18n/LanguageSwitcher";
 import { useI18n } from "../../i18n/I18nProvider";
 
+function NavToolLink({
+  tool,
+  category,
+  onNavigate,
+}: {
+  tool: (typeof TOOLS)[number];
+  category: ToolCategory;
+  onNavigate: () => void;
+}) {
+  const { locale, messages } = useI18n();
+  const Icon = tool.icon;
+  const copy = messages.tools[tool.id];
+
+  return (
+    <li>
+      <a href={toolPath(tool.id, locale)} className="site-nav-tool-link" onClick={onNavigate}>
+        <span className={`site-nav-tool-icon site-nav-tool-icon--${category}`}>
+          <Icon size={18} strokeWidth={1.75} />
+        </span>
+        <span className="site-nav-tool-copy">
+          <strong>{copy.shortLabel}</strong>
+          <small>{copy.description}</small>
+        </span>
+        {tool.inputScope && (
+          <span className={`site-nav-tool-scope site-nav-tool-scope--${tool.inputScope}`}>
+            {messages.toolGrid.inputScopeBadges[tool.inputScope]}
+          </span>
+        )}
+      </a>
+    </li>
+  );
+}
+
 export default function SiteNav() {
-  const { locale, messages, localizePath } = useI18n();
+  const { messages, localizePath } = useI18n();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [expandedCategory, setExpandedCategory] = useState<ToolCategory | null>(null);
 
@@ -48,34 +86,77 @@ export default function SiteNav() {
     "pdf-ops": messages.nav.pdfOps,
   };
 
+  const renderScopeBlock = (category: ToolCategory, scope: InputScope) => {
+    const scopeCopy = messages.toolGrid.inputScopes[scope];
+    const ScopeIcon = scope === "single" ? FileText : FileStack;
+
+    return (
+      <div key={scope} className={`site-nav-scope-block site-nav-scope-block--${scope}`}>
+        <p className="site-nav-scope-label">
+          <ScopeIcon size={13} strokeWidth={2} aria-hidden="true" />
+          <span>
+            <strong>{scopeCopy.title}</strong>
+            <small>{scopeCopy.hint}</small>
+          </span>
+        </p>
+
+        {scope === "single" && category === "pdf-ops" ? (
+          SINGLE_PDF_SUBCATEGORY_ORDER.map((subcategory) => {
+            const tools = singlePdfToolsInSubcategory(subcategory);
+            if (!tools.length) return null;
+
+            return (
+              <div key={subcategory} className="site-nav-subcategory">
+                <p className="site-nav-subcategory-label">
+                  {messages.toolGrid.subcategories[subcategory]}
+                </p>
+                <ul className="site-nav-dropdown-grid">
+                  {tools.map((tool) => (
+                    <NavToolLink
+                      key={tool.id}
+                      tool={tool}
+                      category={category}
+                      onNavigate={closeMobile}
+                    />
+                  ))}
+                </ul>
+              </div>
+            );
+          })
+        ) : (
+          <ul className="site-nav-dropdown-grid">
+            {toolsInScope(category, scope).map((tool) => (
+              <NavToolLink
+                key={tool.id}
+                tool={tool}
+                category={category}
+                onNavigate={closeMobile}
+              />
+            ))}
+          </ul>
+        )}
+      </div>
+    );
+  };
+
   const renderNavTools = (category: ToolCategory) => {
+    if (category === "pdf-ops") {
+      return INPUT_SCOPE_ORDER.map((scope) => renderScopeBlock(category, scope));
+    }
+
     const subcategories = SUBCATEGORY_ORDER[category];
 
     if (!subcategories) {
       return (
         <ul className="site-nav-dropdown-grid">
-          {TOOLS.filter((tool) => tool.category === category).map((tool) => {
-            const Icon = tool.icon;
-            const copy = messages.tools[tool.id];
-
-            return (
-              <li key={tool.id}>
-                <a
-                  href={toolPath(tool.id, locale)}
-                  className="site-nav-tool-link"
-                  onClick={closeMobile}
-                >
-                  <span className={`site-nav-tool-icon site-nav-tool-icon--${category}`}>
-                    <Icon size={18} strokeWidth={1.75} />
-                  </span>
-                  <span className="site-nav-tool-copy">
-                    <strong>{copy.shortLabel}</strong>
-                    <small>{copy.description}</small>
-                  </span>
-                </a>
-              </li>
-            );
-          })}
+          {TOOLS.filter((tool) => tool.category === category).map((tool) => (
+            <NavToolLink
+              key={tool.id}
+              tool={tool}
+              category={category}
+              onNavigate={closeMobile}
+            />
+          ))}
         </ul>
       );
     }
@@ -88,28 +169,14 @@ export default function SiteNav() {
         <div key={subcategory} className="site-nav-subcategory">
           <p className="site-nav-subcategory-label">{messages.toolGrid.subcategories[subcategory]}</p>
           <ul className="site-nav-dropdown-grid">
-            {tools.map((tool) => {
-              const Icon = tool.icon;
-              const copy = messages.tools[tool.id];
-
-              return (
-                <li key={tool.id}>
-                  <a
-                    href={toolPath(tool.id, locale)}
-                    className="site-nav-tool-link"
-                    onClick={closeMobile}
-                  >
-                    <span className={`site-nav-tool-icon site-nav-tool-icon--${category}`}>
-                      <Icon size={18} strokeWidth={1.75} />
-                    </span>
-                    <span className="site-nav-tool-copy">
-                      <strong>{copy.shortLabel}</strong>
-                      <small>{copy.description}</small>
-                    </span>
-                  </a>
-                </li>
-              );
-            })}
+            {tools.map((tool) => (
+              <NavToolLink
+                key={tool.id}
+                tool={tool}
+                category={category}
+                onNavigate={closeMobile}
+              />
+            ))}
           </ul>
         </div>
       );

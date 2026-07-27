@@ -4,46 +4,60 @@
 
 ### Shipped (2026-07-27)
 
+- **Tool taxonomy — conversion direction + input scope** — Homepage grid, site nav, and workspace switcher group tools by **PDF → other formats**, **convert → PDF**, and **work with PDFs**. The PDF-ops group splits visually into **One PDF** (single-file tools) and **Multiple PDFs** (merge, compare). Each tool declares `inputScope: "single" | "multi"` in [`tools.ts`](../../frontend/src/config/tools.ts); cards and nav links show **1 PDF** / **2+ PDFs** badges. See [tool workspace UI — tool taxonomy](./tool-workspace-ui.md#tool-taxonomy-home-grid--navigation).
 - **Extract pages → client-side** — [`ExtractPagesPanel.tsx`](../../frontend/src/components/ExtractPagesPanel.tsx) uses `extractPdfPages()` in [`pdfClient.ts`](../../frontend/src/services/pdfClient.ts). Organize category is now fully client-side. Split: **11 client / 7 server**.
 
 ## Tool inventory (18 tools)
 
 Canonical registry: [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts)
 
-### Convert & Export (9)
+Each tool has:
+
+| Field | Purpose |
+|-------|---------|
+| `category` | Top-level group: `pdf-from` · `to-pdf` · `pdf-ops` |
+| `inputScope` | `single` (one source PDF/file) or `multi` (two or more files) — drives badges and PDF-ops column split |
+| `subcategory` | Optional sub-heading within a group (e.g. `pages`, `markup`, `protect` under single-PDF ops) |
+
+### PDF to Other Formats (4) — `inputScope: single`
 
 | Tool ID | Route | Processing |
 |---------|-------|------------|
 | `convert-extract` | `/tools/convert` | Server — PDF → Word/Excel; extract embedded images |
-| `image-convert` | `/tools/images` | Server |
-| `images-to-pdf` | `/tools/images-to-pdf` | **Client** (pdf-lib) |
 | `pdf-to-jpg` | `/tools/pdf-to-jpg` | **Client** (PDF.js) |
 | `pdf-to-text` | `/tools/pdf-to-text` | **Client** (PDF.js text layer) |
 | `ocr-pdf` | `/tools/ocr` | **Client** (Tesseract.js) |
-| `compress-pdf` | `/tools/compress` | Server |
-| `word-to-pdf` | `/tools/word-to-pdf` | Server |
-| `image-resize` | `/tools/resize` | Server |
 
-### Organize Documents (6)
+### Convert to PDF (4)
+
+| Tool ID | Route | Scope | Processing |
+|---------|-------|-------|------------|
+| `word-to-pdf` | `/tools/word-to-pdf` | single | Server |
+| `images-to-pdf` | `/tools/images-to-pdf` | multi | **Client** (pdf-lib) |
+| `image-convert` | `/tools/images` | multi | Server |
+| `image-resize` | `/tools/resize` | multi | Server |
+
+### Work with PDFs — One PDF (8) — `inputScope: single`
+
+| Tool ID | Route | Subcategory | Processing |
+|---------|-------|-------------|------------|
+| `split` | `/tools/split` | pages | **Client** (pdf-lib + JSZip) |
+| `extract-pages` | `/tools/extract` | pages | **Client** (pdf-lib) |
+| `remove-pages` | `/tools/remove-pages` | pages | **Client** (pdf-lib) |
+| `rotate-pdf` | `/tools/rotate` | pages | **Client** (pdf-lib) |
+| `watermark-pdf` | `/tools/watermark` | markup | Server |
+| `sign-pdf` | `/tools/sign` | markup | **Client** (pdf-lib) |
+| `compress-pdf` | `/tools/compress` | protect | Server |
+| `lock-unlock` | `/tools/protect` | protect | Server |
+
+### Work with PDFs — Multiple PDFs (2) — `inputScope: multi`
 
 | Tool ID | Route | Processing |
 |---------|-------|------------|
-| `pdf-compare` | `/tools/compare` | **Client** (PDF.js) |
 | `arrange-merge` | `/tools/merge` | **Client** (pdf-lib) — batch gate on free |
-| `split` | `/tools/split` | **Client** (pdf-lib + JSZip) |
-| `extract-pages` | `/tools/extract` | **Client** (pdf-lib) |
-| `remove-pages` | `/tools/remove-pages` | **Client** (pdf-lib) |
-| `rotate-pdf` | `/tools/rotate` | **Client** (pdf-lib) |
+| `pdf-compare` | `/tools/compare` | **Client** (PDF.js) |
 
-### Protect Files (3)
-
-| Tool ID | Route | Processing |
-|---------|-------|------------|
-| `watermark-pdf` | `/tools/watermark` | Server |
-| `lock-unlock` | `/tools/protect` | Server |
-| `sign-pdf` | `/tools/sign` | **Client** (pdf-lib) |
-
-**Summary:** 11 client-side · 7 server-side
+**Summary:** 11 client-side · 7 server-side · 14 single-input tools · 4 multi-input tools (merge, compare, images-to-pdf, image convert/resize)
 
 ---
 
