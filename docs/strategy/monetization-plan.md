@@ -73,12 +73,12 @@ Upgrade moments — never block mid-download or watermark:
 
 | Tool type | Processing | Free cost to us |
 |-----------|------------|-----------------|
-| Merge, split, rotate, compare, sign, remove pages | Browser (pdf-lib / PDF.js) | ~$0 |
+| Merge, split, rotate, compare, extract pages, sign, remove pages | Browser (pdf-lib / PDF.js) | ~$0 |
 | Images→PDF, PDF→JPG, PDF→text | Browser (pdf-lib / PDF.js) | ~$0 |
 | OCR | Browser (Tesseract.js WASM) | ~$0 (user’s CPU) |
 | PDF → Word/Excel | Python serverless | High — **daily cap** |
 | Compress, watermark, lock | Python serverless | Medium — file size gate |
-| Image convert/resize, extract pages | Python serverless | Medium |
+| Image convert/resize | Python serverless | Medium |
 
 New client-side tools (2026-07-23) expand the zero-COGS surface without watermarks. Server tools remain the Pro value anchor for layout-heavy conversion.
 

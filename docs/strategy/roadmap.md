@@ -41,6 +41,7 @@ Priority changes from competitive review:
 - [x] **Tool workspace UI — Phase 2** — result cards, workflow shell, next-step chips — see [Phase 2](../product/tool-workspace-ui.md#phase-2-scope-shipped-2026-07-27)
 - [x] **Tool workspace UI — Phase 3** — client-side tool switching, file thumbnails, mobile refinements — see [Phase 3](../product/tool-workspace-ui.md#phase-3-scope-shipped-2026-07-27)
 - [x] **Portuguese locale (`pt`)** — UI strings, 18 SEO landings, geo detection (BR, PT, etc.), sitemap — see [i18n doc](../product/i18n.md)
+- [x] **Extract pages → client-side** — pdf-lib in browser; `/api/extract-pages` legacy only
 
 ### Still open
 
@@ -56,7 +57,7 @@ Priority changes from competitive review:
 | Product Hunt / Peerlist launch | Medium | One spike + backlinks |
 | Differentiate priority queue | Low | Only if free users see wait times |
 | Annual billing ($79/yr) | Medium | Needs PayPal plan |
-| Move **extract pages** client-side | Low | Same pattern as split/remove |
+| Move **extract pages** client-side | ~~Low~~ | **Done** — pdf-lib in [`ExtractPagesPanel`](../../frontend/src/components/ExtractPagesPanel.tsx) |
 | Move watermark / lock client-side | Low | pdf-lib supports both |
 | Update PayPal plan to $9 in dashboard | **Required** if old $7 plan exists |
 

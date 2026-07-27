@@ -23,10 +23,10 @@ export const RESOURCES_SECTIONS: ResourceSection[] = [
     id: "architecture",
     title: "Hybrid architecture",
     body:
-      "We split tools by where the work actually belongs. Browser engines (pdf-lib, PDF.js, Tesseract.js) handle merge, split, rotate, compare, sign, remove pages, images-to-PDF, PDF-to-JPG, text extract, and OCR — your files never leave your device. Server-side Python and image pipelines handle PDF → Word/Excel, compress, watermark, lock/unlock, extract pages, and image convert/resize — then discard files immediately.",
+      "We split tools by where the work actually belongs. Browser engines (pdf-lib, PDF.js, Tesseract.js) handle merge, split, rotate, compare, extract pages, sign, remove pages, images-to-PDF, PDF-to-JPG, text extract, and OCR — your files never leave your device. Server-side Python and image pipelines handle PDF → Word/Excel, compress, watermark, lock/unlock, and image convert/resize — then discard files immediately.",
     bullets: [
-      "10 tools run entirely in your browser",
-      "8 tools use secure in-memory server processing",
+      "11 tools run entirely in your browser",
+      "7 tools use secure in-memory server processing",
       "No permanent file storage on our servers",
       "Workspace file tray uses browser IndexedDB on your device",
     ],
@@ -72,6 +72,7 @@ export const RESOURCES_SECTIONS: ResourceSection[] = [
 export const CLIENT_TOOLS = [
   "Merge & arrange",
   "Split PDF",
+  "Extract pages",
   "Rotate pages",
   "Compare PDFs",
   "Sign PDF",
@@ -88,7 +89,6 @@ export const SERVER_TOOLS = [
   "Compress PDF",
   "Watermark PDF",
   "Lock & unlock",
-  "Extract pages",
   "Image convert",
   "Resize images",
 ];

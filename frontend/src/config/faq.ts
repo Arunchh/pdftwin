@@ -51,7 +51,7 @@ export const PRODUCT_FAQ: FaqItem[] = [
     category: "privacy-security",
     question: "Are my files uploaded to your servers?",
     answer:
-      "It depends on the tool. Merge, split, rotate, compare, sign, remove pages, images-to-PDF, PDF-to-JPG, PDF-to-text, and OCR run entirely in your browser — files stay on your device. PDF → Word/Excel, compress, watermark, lock/unlock, extract pages, and image convert/resize use secure server processing and are discarded immediately after.",
+      "It depends on the tool. Merge, split, rotate, compare, extract pages, sign, remove pages, images-to-PDF, PDF-to-JPG, PDF-to-text, and OCR run entirely in your browser — files stay on your device. PDF → Word/Excel, compress, watermark, lock/unlock, and image convert/resize use secure server processing and are discarded immediately after.",
   },
   {
     category: "privacy-security",

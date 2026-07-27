@@ -249,7 +249,7 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         heading: "Server-side processing",
         paragraphs: [
-          "PDF → Word/Excel, compress, watermark, lock/unlock, extract pages, and image convert/resize need heavier engines. Files upload over HTTPS, process in memory, and are discarded after the response — like iLovePDF’s documented two-hour max retention, but PDFTwin does not keep files for later re-download.",
+          "PDF → Word/Excel, compress, watermark, lock/unlock, and image convert/resize need heavier engines. Files upload over HTTPS, process in memory, and are discarded after the response — like iLovePDF’s documented two-hour max retention, but PDFTwin does not keep files for later re-download.",
         ],
         bullets: [
           "Best for: layout-heavy Word export, strong compression, batch image convert",

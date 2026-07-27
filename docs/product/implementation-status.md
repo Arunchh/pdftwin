@@ -2,6 +2,10 @@
 
 > Last updated: 2026-07-27 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
+### Shipped (2026-07-27)
+
+- **Extract pages → client-side** — [`ExtractPagesPanel.tsx`](../../frontend/src/components/ExtractPagesPanel.tsx) uses `extractPdfPages()` in [`pdfClient.ts`](../../frontend/src/services/pdfClient.ts). Organize category is now fully client-side. Split: **11 client / 7 server**.
+
 ## Tool inventory (18 tools)
 
 Canonical registry: [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts)
@@ -27,7 +31,7 @@ Canonical registry: [`frontend/src/config/tools.ts`](../../frontend/src/config/t
 | `pdf-compare` | `/tools/compare` | **Client** (PDF.js) |
 | `arrange-merge` | `/tools/merge` | **Client** (pdf-lib) — batch gate on free |
 | `split` | `/tools/split` | **Client** (pdf-lib + JSZip) |
-| `extract-pages` | `/tools/extract` | Server |
+| `extract-pages` | `/tools/extract` | **Client** (pdf-lib) |
 | `remove-pages` | `/tools/remove-pages` | **Client** (pdf-lib) |
 | `rotate-pdf` | `/tools/rotate` | **Client** (pdf-lib) |
 
@@ -39,7 +43,7 @@ Canonical registry: [`frontend/src/config/tools.ts`](../../frontend/src/config/t
 | `lock-unlock` | `/tools/protect` | Server |
 | `sign-pdf` | `/tools/sign` | **Client** (pdf-lib) |
 
-**Summary:** 10 client-side · 8 server-side
+**Summary:** 11 client-side · 7 server-side
 
 ---
 
@@ -104,12 +108,13 @@ Image extraction, OCR, PDF-to-text, and other tools are **not** capped.
 |------|-------|-------|
 | Merge & arrange | [`ArrangeMergePanel.tsx`](../../frontend/src/components/ArrangeMergePanel.tsx) | Free: max 5 PDFs per merge |
 | Split | [`SplitPanel.tsx`](../../frontend/src/components/SplitPanel.tsx) | Multi-range → ZIP |
+| Extract pages | [`ExtractPagesPanel.tsx`](../../frontend/src/components/ExtractPagesPanel.tsx) | Selected pages → one PDF |
 | Rotate | [`RotatePanel.tsx`](../../frontend/src/components/RotatePanel.tsx) | |
 | Remove pages | [`RemovePagesPanel.tsx`](../../frontend/src/components/RemovePagesPanel.tsx) | Inverse of extract |
 | Images → PDF | [`ImagesToPdfPanel.tsx`](../../frontend/src/components/ImagesToPdfPanel.tsx) | Drag to reorder pages |
 | Sign PDF | [`SignPdfPanel.tsx`](../../frontend/src/components/SignPdfPanel.tsx) | Draw or upload PNG signature |
 
-Legacy server endpoints (`/api/merge`, `/api/arrange-merge`, `/api/split`, `/api/rotate`) still exist but the frontend no longer calls them.
+Legacy server endpoints (`/api/merge`, `/api/arrange-merge`, `/api/split`, `/api/rotate`, `/api/extract-pages`) still exist but the frontend no longer calls them.
 
 ### PDF.js
 
@@ -143,8 +148,7 @@ Still upload to FastAPI (in-memory, discarded):
 - Word → PDF  
 - Compress PDF  
 - Watermark, lock/unlock  
-- Extract pages  
-- Extract embedded images  
+- Extract embedded images *(convert tool)*  
 - Image convert / resize  
 
 ---
@@ -222,7 +226,7 @@ Terms and Privacy rewritten to match the live product. English only (not yet loc
 
 **Privacy highlights:**
 
-- Client-side vs server-side tool breakdown (10 browser / 8 server)
+- Client-side vs server-side tool breakdown (11 browser / 7 server)
 - Supabase auth profiles, PayPal subscription metadata
 - Cookies: `pdftwin_locale`, `pdftwin_doc_convert`, Supabase session, Vercel Analytics
 - IndexedDB workspace tray, localStorage mirrors, OCR Tesseract CDN downloads
@@ -293,7 +297,7 @@ Redesigned shell for all `/tools/*` pages. **All three phases complete.** Full s
 - Cloud workspace sync (Supabase Storage)  
 - Business tier  
 - Annual Pro plan  
-- Move extract pages, watermark, lock/unlock client-side  
+- Move watermark / lock-unlock client-side  
 - Localize comparison, resources, blog, FAQ (EN only today)  
 - Tool panel UI translation (Phase 1.5 i18n)  
 - Product Hunt / Peerlist launch  
@@ -308,9 +312,10 @@ Redesigned shell for all `/tools/*` pages. **All three phases complete.** Full s
 Browser (client-side)                    Server (FastAPI / Vercel)
 ─────────────────────                    ─────────────────────────
 Merge, split, rotate, compare            PDF → Word/Excel (capped)
-Remove pages, sign PDF                   Compress, watermark, lock
-Images → PDF, PDF → JPG/PNG              Word → PDF, image convert/resize
-PDF → text, OCR (Tesseract.js)           Extract pages, extract images
+Extract pages, remove pages, sign PDF    Word → PDF, compress
+Images → PDF, PDF → JPG/PNG              Watermark, lock/unlock
+PDF → text, OCR (Tesseract.js)           Extract embedded images
+                                         Image convert/resize
                                          In-memory only, no storage
 ```
 

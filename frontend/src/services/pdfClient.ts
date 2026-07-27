@@ -135,6 +135,11 @@ export async function reorderPdf(file: File, order: string): Promise<Blob> {
   return new Blob([result], { type: "application/pdf" });
 }
 
+/** Copy selected pages (in order) into a new PDF — inverse of removePdfPages. */
+export async function extractPdfPages(file: File, pages: string): Promise<Blob> {
+  return reorderPdf(file, pages);
+}
+
 export async function arrangeAndMergePdfs(
   files: File[],
   pageOrders: Array<string | null>

@@ -27,7 +27,7 @@ PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`
 - **Compare PDFs** — Side-by-side viewer with linked scroll and linked/independent zoom *(client-side, PDF.js)*
 - **Merge & arrange** — Combine multiple PDFs and reorder pages; free tier merges up to **5 PDFs** at once *(client-side)*
 - **Split PDF** — Split by page ranges (e.g. `1-3, 5-7`) *(client-side)*
-- **Extract pages** — Pull selected pages into a new PDF *(server)*
+- **Extract pages** — Pull selected pages into a new PDF *(client-side)*
 - **Remove pages** — Delete unwanted pages from a PDF *(client-side)*
 - **Rotate PDF** — Rotate all pages or selected pages by 90°, 180°, or 270° *(client-side)*
 
@@ -135,10 +135,10 @@ PDFTwin uses a **Neon Pastel** palette — bright fluorescent pastels (mint, vio
 
 | Client-side (no upload) | Server-side (HTTPS upload, discarded after) |
 |-------------------------|---------------------------------------------|
-| Merge, split, rotate, compare | PDF → Word, PDF → Excel |
+| Merge, split, rotate, compare, extract pages | PDF → Word, PDF → Excel |
 | Remove pages, sign PDF | Word → PDF, compress |
 | Images → PDF, PDF → JPG/PNG | Watermark, lock/unlock |
-| PDF → text, OCR | Extract pages, extract images |
+| PDF → text, OCR | Extract embedded images |
 | | Image convert, image resize |
 
 Client-side tools show a **“Processed on your device”** badge. See [implementation status](docs/product/implementation-status.md) for the full matrix.
@@ -219,7 +219,7 @@ Output is written to `frontend/dist/`. Vercel runs the Astro build and serves st
 | POST | `/api/convert/word-to-pdf` | DOCX → PDF |
 | POST | `/api/convert/image-resize` | Resize/compress an image |
 | POST | `/api/pdf-info` | Page count for a PDF |
-| POST | `/api/extract-pages` | Extract pages into one PDF |
+| POST | `/api/extract-pages` | Extract pages into one PDF *(legacy — frontend uses client-side pdf-lib)* |
 | POST | `/api/extract-images` | Extract embedded images (optional output format) |
 | POST | `/api/compress` | Compress PDF (quality preset) |
 | POST | `/api/rotate` | Rotate pages in a PDF |
@@ -264,7 +264,7 @@ Set frontend env in `frontend/.env` locally and in **Vercel → Environment Vari
 - Server-side tools process files in memory and do not store them permanently.
 - **Compare** renders locally with PDF.js — files never leave the device for viewing.
 
-**Client-side tools** (merge, split, rotate, compare, sign, remove pages, images↔PDF, PDF→text, OCR) run in the browser via pdf-lib, PDF.js, or Tesseract.js — no server upload.
+**Client-side tools** (merge, split, rotate, compare, extract/remove pages, sign, images↔PDF, PDF→text, OCR) run in the browser via pdf-lib, PDF.js, or Tesseract.js — no server upload.
 
 **Merge batch limit:** Free accounts merge up to 5 PDFs at once; 6+ requires Pro (`MergeBatchGate`).
 

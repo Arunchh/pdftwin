@@ -2,10 +2,11 @@ import { useEffect, useState } from "react";
 import { FileOutput, Layers } from "lucide-react";
 import IconButton from "./IconButton";
 import PdfSelectList from "./PdfSelectList";
+import ClientProcessedBadge from "./ClientProcessedBadge";
 import ToolPanelFeedback from "./ToolPanelFeedback";
 import ToolWorkflowShell from "./ToolWorkflowShell";
-import { postFiles } from "../api";
 import { useToolResult } from "../hooks/useToolResult";
+import { extractPdfPages, PdfClientError } from "../services/pdfClient";
 import { fileKey, getPdfFiles } from "../utils/files";
 
 interface ExtractPagesPanelProps {
@@ -16,7 +17,7 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
   const [pages, setPages] = useState("");
   const [selectedKey, setSelectedKey] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const { result, error, setError, setResultFromResponse, clearResult, clearFeedback } =
+  const { result, error, setError, setResultFromBlob, clearResult, clearFeedback } =
     useToolResult();
 
   const pdfFiles = getPdfFiles(files);
@@ -49,18 +50,14 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
     clearFeedback();
 
     try {
-      const response = await postFiles("/api/extract-pages", [targetFile], { pages });
-      if (!response.ok) {
-        const data = await response.json().catch(() => ({}));
-        throw new Error(data.detail ?? "Extract failed.");
-      }
-
-      await setResultFromResponse(response, "extracted.pdf", {
+      const blob = await extractPdfPages(targetFile, pages);
+      const baseName = targetFile.name.replace(/\.pdf$/i, "") || "document";
+      setResultFromBlob(blob, `${baseName}_extracted.pdf`, {
         title: "Pages extracted",
         detail: `Pages ${pages.trim()} saved as a new PDF`,
       });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Extract failed.");
+      setError(err instanceof PdfClientError || err instanceof Error ? err.message : "Extract failed.");
     } finally {
       setLoading(false);
     }
@@ -72,6 +69,7 @@ export default function ExtractPagesPanel({ files }: ExtractPagesPanelProps) {
       <p className="description">
         Pull specific pages out of a PDF and save them as a new, smaller document.
       </p>
+      <ClientProcessedBadge />
 
       <ToolWorkflowShell
         showContent={pdfFiles.length > 0}
