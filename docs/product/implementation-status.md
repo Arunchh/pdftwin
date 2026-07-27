@@ -1,6 +1,6 @@
 # Implementation status
 
-> Last updated: 2026-07-23 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
+> Last updated: 2026-07-27 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
 ---
 
@@ -214,6 +214,21 @@ Competitive-inspired content for traffic and trust. English-only routes (not yet
 | Blog posts (6) | `/blog/{slug}` | 3 product guides + 3 long-form how-tos (compare, merge, Word, compress, sign, client vs server) |
 
 Footer links (all locales): FAQ, How it works, Blog, Compare — see [`SiteFooter.tsx`](../../frontend/src/components/layout/SiteFooter.tsx).
+
+---
+
+## Tool workspace UI (Phase 1 — shipped 2026-07-27)
+
+Redesigned shell for all `/tools/*` pages. Full spec: [tool-workspace-ui.md](./tool-workspace-ui.md).
+
+| Change | Implementation |
+|--------|----------------|
+| Two-column layout | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) — `.workspace-layout` grid |
+| Files column | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) — upload + tray + single clear |
+| Category + tool tabs | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) |
+| Styles | [`index.css`](../../frontend/src/index.css) — `.workspace-files-column`, `.workspace-category-tabs` |
+
+**Phase 1 scope:** layout and navigation only. Individual tool panels unchanged. Result cards and unified workflow shell are Phase 2.
 
 ---
 

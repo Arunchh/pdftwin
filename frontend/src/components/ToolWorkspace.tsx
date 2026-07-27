@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import { Trash2 } from "lucide-react";
-import FileDropzone from "./FileDropzone";
-import IconButton from "./IconButton";
 import ConvertExtractPanel from "./ConvertExtractPanel";
 import ArrangeMergePanel from "./ArrangeMergePanel";
 import SplitPanel from "./SplitPanel";
@@ -25,7 +22,6 @@ import WorkspaceToolSwitcher from "./layout/WorkspaceToolSwitcher";
 import type { ToolId } from "../config/tools";
 import { toolById, toolPath } from "../config/tools";
 import { TOOL_UPLOAD_CONFIG } from "../config/upload";
-import { formatFileLimit } from "../config/limits";
 import { useAuth } from "../hooks/useAuth";
 import { useWorkspaceFiles } from "../hooks/useWorkspaceFiles";
 import { recordToolVisit } from "../stores/workspaceUsageStore";
@@ -37,7 +33,7 @@ interface ToolWorkspaceProps {
 
 export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
   const { entitlements } = useAuth();
-  const { files, loading, addFiles, clearAll } = useWorkspaceFiles();
+  const { records, files, loading, addFiles, removeFile, clearAll } = useWorkspaceFiles();
   const [pdfOrder, setPdfOrder] = useState<File[]>([]);
   const [mergeOrderFrozen, setMergeOrderFrozen] = useState(false);
 
@@ -69,6 +65,61 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
     setMergeOrderFrozen(false);
   };
 
+  const renderToolPanel = () => {
+    switch (toolId) {
+      case "convert-extract":
+        return <ConvertExtractPanel files={files} />;
+      case "image-convert":
+        return <ImageConvertPanel files={files} />;
+      case "image-resize":
+        return <ImageResizePanel files={files} />;
+      case "images-to-pdf":
+        return <ImagesToPdfPanel files={files} />;
+      case "pdf-to-jpg":
+        return <PdfToJpgPanel files={files} />;
+      case "pdf-to-text":
+        return <PdfToTextPanel files={files} />;
+      case "ocr-pdf":
+        return <OcrPanel files={files} />;
+      case "compress-pdf":
+        return <CompressPanel files={files} />;
+      case "word-to-pdf":
+        return <WordToPdfPanel files={files} />;
+      case "pdf-compare":
+        return <ComparePanel pdfFiles={pdfFiles} />;
+      case "arrange-merge":
+        return (
+          <ArrangeMergePanel
+            files={files}
+            pdfOrder={pdfOrder}
+            onPdfOrderChange={setPdfOrder}
+            orderFrozen={mergeOrderFrozen}
+            onOrderFrozenChange={setMergeOrderFrozen}
+            onMergedFile={(file) => addFiles([file])}
+            onConvertMerged={() => {
+              window.location.href = toolPath("convert-extract");
+            }}
+          />
+        );
+      case "split":
+        return <SplitPanel files={files} />;
+      case "extract-pages":
+        return <ExtractPagesPanel files={files} />;
+      case "remove-pages":
+        return <RemovePagesPanel files={files} />;
+      case "rotate-pdf":
+        return <RotatePanel files={files} />;
+      case "watermark-pdf":
+        return <WatermarkPanel files={files} />;
+      case "lock-unlock":
+        return <LockUnlockPanel files={files} />;
+      case "sign-pdf":
+        return <SignPdfPanel files={files} />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <section className={`workspace site--focused workspace--${activeTool.category}`} id="workspace">
       <div className="section-heading workspace-heading">
@@ -78,73 +129,24 @@ export default function ToolWorkspace({ toolId }: ToolWorkspaceProps) {
 
       <WorkspaceToolSwitcher activeTool={toolId} />
 
-      <WorkspaceFileTray />
-
-      <div className="panel upload-section">
-        <div className="workspace-upload-header">
-          <div>
-            <h3>{uploadConfig.title}</h3>
-            <p className="description">
-              Files go into your workspace tray and stay available across every tool.
-            </p>
-          </div>
-          <span className={`workspace-limit ${entitlements.isPro ? "workspace-limit--pro" : ""}`}>
-            {entitlements.label} · up to {formatFileLimit(entitlements.fileLimitMb)} per file
-          </span>
-        </div>
-
-        {!loading && (
-          <FileDropzone
-            files={files}
-            onFilesChange={handleIncomingFiles}
-            accept={uploadConfig.accept}
-            label={uploadConfig.label}
-            append
-          />
-        )}
-
-        {files.length > 0 && (
-          <div className="actions">
-            <IconButton
-              icon={<Trash2 size={18} />}
-              label="Clear workspace"
-              variant="secondary"
-              onClick={handleClearAll}
-            />
-          </div>
-        )}
-      </div>
-
-      {toolId === "convert-extract" && <ConvertExtractPanel files={files} />}
-      {toolId === "image-convert" && <ImageConvertPanel files={files} />}
-      {toolId === "image-resize" && <ImageResizePanel files={files} />}
-      {toolId === "images-to-pdf" && <ImagesToPdfPanel files={files} />}
-      {toolId === "pdf-to-jpg" && <PdfToJpgPanel files={files} />}
-      {toolId === "pdf-to-text" && <PdfToTextPanel files={files} />}
-      {toolId === "ocr-pdf" && <OcrPanel files={files} />}
-      {toolId === "compress-pdf" && <CompressPanel files={files} />}
-      {toolId === "word-to-pdf" && <WordToPdfPanel files={files} />}
-      {toolId === "pdf-compare" && <ComparePanel pdfFiles={pdfFiles} />}
-      {toolId === "arrange-merge" && (
-        <ArrangeMergePanel
+      <div className="workspace-layout">
+        <WorkspaceFileTray
+          accept={uploadConfig.accept}
+          uploadTitle={uploadConfig.title}
+          uploadLabel={uploadConfig.label}
           files={files}
-          pdfOrder={pdfOrder}
-          onPdfOrderChange={setPdfOrder}
-          orderFrozen={mergeOrderFrozen}
-          onOrderFrozenChange={setMergeOrderFrozen}
-          onMergedFile={(file) => addFiles([file])}
-          onConvertMerged={() => {
-            window.location.href = toolPath("convert-extract");
-          }}
+          records={records}
+          loading={loading}
+          entitlementsLabel={entitlements.label}
+          fileLimitMb={entitlements.fileLimitMb}
+          isPro={entitlements.isPro}
+          onFilesChange={handleIncomingFiles}
+          onRemoveFile={removeFile}
+          onClearAll={handleClearAll}
         />
-      )}
-      {toolId === "split" && <SplitPanel files={files} />}
-      {toolId === "extract-pages" && <ExtractPagesPanel files={files} />}
-      {toolId === "remove-pages" && <RemovePagesPanel files={files} />}
-      {toolId === "rotate-pdf" && <RotatePanel files={files} />}
-      {toolId === "watermark-pdf" && <WatermarkPanel files={files} />}
-      {toolId === "lock-unlock" && <LockUnlockPanel files={files} />}
-      {toolId === "sign-pdf" && <SignPdfPanel files={files} />}
+
+        <div className="workspace-action-column">{renderToolPanel()}</div>
+      </div>
     </section>
   );
 }

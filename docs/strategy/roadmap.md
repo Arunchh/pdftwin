@@ -35,10 +35,15 @@ Priority changes from competitive review:
 - [x] **FAQ hub** — `/faq` with 28 categorized questions + schema  
 - [x] **Blog** — `/blog` with 6 starter posts (product + long-form how-tos)  
 
+### Shipped (2026-07-27)
+
+- [x] **Tool workspace UI — Phase 1** — two-column layout, category-filtered tool tabs, merged files column — see [tool workspace UI](../product/tool-workspace-ui.md)
+
 ### Still open
 
 | Item | Priority | Notes |
 |------|----------|-------|
+| **Tool workspace UI — Phase 2** | High | Result card + explicit download; pilot panels (compress, extract, merge); optional tool chaining |
 | ~~SEO landing content (all 18 tools)~~ | ~~High~~ | **Done** — 72 pages — see [i18n doc](../product/i18n.md) |
 | ~~Comparison page~~ | ~~High~~ | **Done** — `/compare/ilovepdf` |
 | ~~FAQ hub + blog starter content~~ | ~~High~~ | **Done** — `/faq`, `/blog` |
@@ -50,6 +55,32 @@ Priority changes from competitive review:
 | Move **extract pages** client-side | Low | Same pattern as split/remove |
 | Move watermark / lock client-side | Low | pdf-lib supports both |
 | Update PayPal plan to $9 in dashboard | **Required** if old $7 plan exists |
+
+---
+
+## Workspace UI redesign
+
+### Phase 1 — shipped (2026-07-27)
+
+- [x] Two-column desktop layout (files left, tool panel right)
+- [x] Category tabs (Convert / Organize / Protect) + filtered horizontal tool tabs
+- [x] Merged upload + file tray; single “Clear all” action
+- [x] Keep existing PDFTwin Neon Pastel visual design
+
+See [tool workspace UI](../product/tool-workspace-ui.md).
+
+### Phase 2 — next
+
+- [ ] Result card with explicit Download button (replace auto-download in panels)
+- [ ] Shared workflow shell for complex tools; simple tools remain one screen
+- [ ] Post-action tool suggestions (e.g. after merge → convert)
+- [ ] Pilot migration: Compress, Extract Pages, Merge
+
+### Phase 3 — polish
+
+- [ ] Client-side tool switching without full page reload
+- [ ] File thumbnails in tray
+- [ ] Mobile-first refinements (currently secondary)
 
 ---
 

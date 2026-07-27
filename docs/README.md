@@ -15,6 +15,7 @@ Living docs for product strategy, competitive research, and implementation statu
 ## Product
 
 - [Implementation status](./product/implementation-status.md) — **18 tools**, client vs server split, limits
+- [Tool workspace UI](./product/tool-workspace-ui.md) — two-column layout, category navigation, files column
 - [Internationalization (i18n)](./product/i18n.md)
 - [Supabase auth — setup & production deploy](./product/supabase-auth.md)
 
@@ -35,6 +36,7 @@ Living docs for product strategy, competitive research, and implementation statu
 | How PDFTwin works (architecture) | `/resources` |
 | Cloud workspace (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
 | Supabase auth (live) | [Supabase auth guide](./product/supabase-auth.md) |
+| Tool workspace layout (Phase 1) | [Tool workspace UI](./product/tool-workspace-ui.md) |
 | Business tier (deferred) | [Roadmap](./strategy/roadmap.md#phase-2--after-50-100-clicksday) |
 | Revenue target ($3–5K/mo) | [Monetization plan](./strategy/monetization-plan.md#revenue-target) |
 
