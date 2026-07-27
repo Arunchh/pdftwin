@@ -31,9 +31,14 @@ import { defaultPdfOrder, getPdfFiles, reconcilePdfOrder } from "../utils/files"
 
 interface ToolWorkspaceProps {
   toolId: ToolId;
+  variant?: "default" | "homeHero";
 }
 
-export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspaceProps) {
+export default function ToolWorkspace({
+  toolId: initialToolId,
+  variant = "default",
+}: ToolWorkspaceProps) {
+  const isHomeHero = variant === "homeHero";
   const { messages } = useI18n();
   const { entitlements } = useAuth();
   const { entries, files, loading, addFiles, removeFile, clearAll } = useWorkspaceFiles();
@@ -138,15 +143,19 @@ export default function ToolWorkspace({ toolId: initialToolId }: ToolWorkspacePr
       <section
         className={`workspace site--focused workspace--${activeTool.category}${
           isCompareTool ? " workspace--compare" : ""
-        }${hideWorkspaceChrome ? " workspace--compare-review" : ""}`}
+        }${isHomeHero ? " workspace--home-hero" : ""}${
+          hideWorkspaceChrome ? " workspace--compare-review" : ""
+        }`}
         id="workspace"
       >
         {!hideWorkspaceChrome && (
           <>
-            <div className="section-heading workspace-heading">
-              <h2>{toolCopy.name}</h2>
-              <p>{toolCopy.description}</p>
-            </div>
+            {!isHomeHero && (
+              <div className="section-heading workspace-heading">
+                <h2>{toolCopy.name}</h2>
+                <p>{toolCopy.description}</p>
+              </div>
+            )}
 
             <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
           </>

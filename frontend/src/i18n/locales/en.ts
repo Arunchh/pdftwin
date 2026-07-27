@@ -60,13 +60,8 @@ export const en: Messages = {
     workflow: {
       heading: "From first draft to signed PDF",
       subheading:
-        "Compare is the starting point. These tools finish the review workflow without switching apps.",
+        "After you compare, these tools finish the review workflow without switching apps.",
       steps: [
-        {
-          title: "Compare revisions",
-          description: "Open two PDFs side by side with linked scroll, zoom, and page-by-page review.",
-          toolId: "pdf-compare",
-        },
         {
           title: "Extract what changed",
           description: "Pull only the pages you need into a new PDF for approval or redlines.",

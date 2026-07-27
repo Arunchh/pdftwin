@@ -60,13 +60,8 @@ export const fr: Messages = {
     workflow: {
       heading: "Du brouillon au PDF signé",
       subheading:
-        "Comparer est le point de départ. Ces outils terminent la relecture sans changer d'application.",
+        "Après la comparaison, ces outils terminent la relecture sans changer d'application.",
       steps: [
-        {
-          title: "Comparer les révisions",
-          description: "Ouvrez deux PDF côte à côte avec défilement, zoom et relecture page par page.",
-          toolId: "pdf-compare",
-        },
         {
           title: "Extraire les changements",
           description: "Récupérez uniquement les pages nécessaires dans un nouveau PDF pour approbation.",

@@ -60,13 +60,8 @@ export const nl: Messages = {
     workflow: {
       heading: "Van concept tot ondertekende PDF",
       subheading:
-        "Vergelijken is het startpunt. Deze tools ronden de review af zonder van app te wisselen.",
+        "Na het vergelijken ronden deze tools de review af zonder van app te wisselen.",
       steps: [
-        {
-          title: "Revisies vergelijken",
-          description: "Open twee PDF's naast elkaar met gekoppeld scrollen, zoom en pagina-voor-pagina review.",
-          toolId: "pdf-compare",
-        },
         {
           title: "Wijzigingen extraheren",
           description: "Haal alleen de pagina's op die u nodig heeft in een nieuwe PDF voor goedkeuring.",

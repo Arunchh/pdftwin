@@ -60,13 +60,8 @@ export const es: Messages = {
     workflow: {
       heading: "Del borrador al PDF firmado",
       subheading:
-        "Comparar es el punto de partida. Estas herramientas completan la revisión sin cambiar de app.",
+        "Después de comparar, estas herramientas completan la revisión sin cambiar de app.",
       steps: [
-        {
-          title: "Comparar revisiones",
-          description: "Abre dos PDFs lado a lado con desplazamiento, zoom y revisión página a página.",
-          toolId: "pdf-compare",
-        },
         {
           title: "Extraer lo que cambió",
           description: "Obtén solo las páginas que necesitas en un PDF nuevo para aprobación.",

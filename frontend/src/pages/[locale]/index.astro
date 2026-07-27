@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../../layouts/BaseLayout.astro";
+import HomeCompareHeroSection from "../../components/layout/HomeCompareHeroSection";
 import HeroSection from "../../components/layout/HeroSection";
 import HomeWorkflowSection from "../../components/layout/HomeWorkflowSection";
 import HomeToolsSection from "../../components/layout/HomeToolsSection";
@@ -16,6 +17,7 @@ const messages = getMessages(locale);
 ---
 
 <BaseLayout locale={locale} title={messages.meta.homeTitle} description={messages.meta.homeDescription}>
+  <HomeCompareHeroSection client:load />
   <HeroSection client:visible />
   <HomeWorkflowSection client:visible />
   <HomeToolsSection client:visible />
