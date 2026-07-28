@@ -1,15 +1,11 @@
-import { FileStack, FileText } from "lucide-react";
 import {
   WORKSPACE_CATEGORY_ORDER,
-  INPUT_SCOPE_ORDER,
-  SINGLE_PDF_SUBCATEGORY_ORDER,
   SUBCATEGORY_ORDER,
   TOOLS,
-  singlePdfToolsInSubcategory,
-  toolById,
-  toolPath,
   toolsInScope,
   toolsInSubcategory,
+  toolById,
+  toolPath,
   type ToolCategory,
   type ToolId,
 } from "../../config/tools";
@@ -66,36 +62,7 @@ export default function WorkspaceToolSwitcher({
   };
 
   const renderPdfOpsTabs = () =>
-    INPUT_SCOPE_ORDER.flatMap((scope) => {
-      const scopeCopy = messages.toolGrid.inputScopes[scope];
-      const ScopeIcon = scope === "single" ? FileText : FileStack;
-
-      const scopeHeader = (
-        <span key={`scope-${scope}`} className={`workspace-tool-scope-label workspace-tool-scope-label--${scope}`}>
-          <ScopeIcon size={12} strokeWidth={2} aria-hidden="true" />
-          {scopeCopy.title}
-        </span>
-      );
-
-      if (scope === "single") {
-        return [
-          scopeHeader,
-          ...SINGLE_PDF_SUBCATEGORY_ORDER.flatMap((subcategory) => {
-            const tools = singlePdfToolsInSubcategory(subcategory);
-            if (!tools.length) return [];
-
-            return [
-              <span key={`label-${subcategory}`} className="workspace-tool-subcategory-label">
-                {messages.toolGrid.subcategories[subcategory]}
-              </span>,
-              ...tools.map((tool) => renderToolTab(tool)),
-            ];
-          }),
-        ];
-      }
-
-      return [scopeHeader, ...toolsInScope("pdf-ops", "multi").map((tool) => renderToolTab(tool))];
-    });
+    toolsInScope("pdf-ops", "multi").map((tool) => renderToolTab(tool));
 
   const renderToolTabs = () => {
     if (activeCategory === "pdf-ops") {
@@ -149,7 +116,9 @@ export default function WorkspaceToolSwitcher({
       </div>
 
       <div
-        className={`workspace-tool-switcher${activeCategory === "pdf-ops" ? " workspace-tool-switcher--scoped" : ""}`}
+        className={`workspace-tool-switcher${
+          activeCategory === "pdf-ops" ? " workspace-tool-switcher--multi-only" : ""
+        }`}
         role="tablist"
         aria-label={`${categoryLabels[activeCategory]} tools`}
       >

@@ -2,7 +2,9 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-28):** **All tools mega menu** — From PDF / To PDF / Edit PDF grouped under one nav item. **Work with PDFs** first in workspace tool picker. **Mobile waitlist bar** — email + join on one tight row. See [tool workspace UI — header nav](./product/tool-workspace-ui.md#comparison-with-site-header-nav).
+**Latest (2026-07-28):** **Vertical tool rail** — single-PDF edit tools (split, watermark, sign, etc.) in a Paint-style icon rail on the workspace left margin; Merge/Compare stay in horizontal tabs. See [tool workspace UI — vertical tool rail](./product/tool-workspace-ui.md#vertical-tool-rail-single-pdf-edit-tools).
+
+**Previous (2026-07-28):** **All tools mega menu** — From PDF / To PDF / Edit PDF grouped under one nav item.
 
 **Previous (2026-07-28):** **Upload-first home hero** — dropzone directly under the compare H1, tool switcher below upload (iLovePDF-style). **Mobile announcement bar** compacted. **Header nav** neutral background. See [compare-first homepage](./product/compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
 

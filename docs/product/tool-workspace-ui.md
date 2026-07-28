@@ -22,14 +22,29 @@ PDFTwin’s workspace is a **two-column desktop layout** on tool routes (`/tools
 
 | Column | Width | Purpose |
 |--------|-------|---------|
-| **Action (left)** | Flexible | Active tool panel (options, run, messages) |
+| **Tool rail (left)** | ~54px, sticky | Icon buttons for **single-PDF** edit tools (split, rotate, watermark, sign, compress, protect) |
+| **Action (center)** | Flexible | Active tool panel (options, run, messages) |
 | **Files (right)** | ~320px, sticky | Upload dropzone + persisted file list |
 
-Above the columns on tool routes:
+Above the rail + columns on tool routes:
 
 1. **Tool heading** — name and one-line description (from `tools.ts` / i18n)
 2. **Category tabs** — PDF to Other Formats · Convert to PDF · Work with PDFs
-3. **Tool tabs** — only tools in the active category (not all 18 at once). **Work with PDFs** tabs are grouped under **One PDF** and **Multiple PDFs** scope labels with **1 PDF** / **2+ PDFs** badges.
+3. **Tool tabs** — tools in the active category. For **Work with PDFs**, only **Merge** and **Compare** appear here; single-PDF tools live on the vertical rail.
+
+### Vertical tool rail (single-PDF edit tools)
+
+Paint- and PDF-viewer-style icon rail on the left margin (`WorkspaceToolRail`). Eight tools grouped by subcategory with dividers:
+
+| Group | Tools |
+|-------|-------|
+| **Pages** | Split · Extract · Remove · Rotate |
+| **Markup** | Watermark · Sign |
+| **Protect** | Compress · Lock & unlock |
+
+Registry helper: `singlePdfOpsRailTools()` in [`tools.ts`](../../frontend/src/config/tools.ts). Hidden in compare **review mode** (immersive viewer). On mobile (≤640px), the rail becomes a horizontal scroll strip above the tool panel.
+
+CSS: `.workspace-tool-rail`, `.workspace-body--with-rail`, `.workspace-tool-rail-btn`.
 
 ### Home hero layout (`variant="homeHero"`)
 
@@ -144,7 +159,8 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `HomeWorkflowSection` | [`frontend/src/components/layout/HomeWorkflowSection.tsx`](../../frontend/src/components/layout/HomeWorkflowSection.tsx) | Home — 4-step compare workflow |
 | `HomeToolsSection` | [`frontend/src/components/layout/HomeToolsSection.tsx`](../../frontend/src/components/layout/HomeToolsSection.tsx) | Home — featured tools + SEO tool index (`#tools`) |
 | `ToolCardLink` | [`frontend/src/components/layout/ToolCardLink.tsx`](../../frontend/src/components/layout/ToolCardLink.tsx) | Tool card with icon, label, and input-scope badge |
-| `WorkspaceToolSwitcher` | [`frontend/src/components/layout/WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Category tabs + filtered tool tabs (i18n labels, scope grouping for pdf-ops) |
+| `WorkspaceToolRail` | [`frontend/src/components/layout/WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx) | Vertical icon rail for single-PDF edit tools (split, watermark, sign, etc.) |
+| `WorkspaceToolSwitcher` | [`frontend/src/components/layout/WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Category tabs + filtered tool tabs (multi-PDF ops only when pdf-ops category active) |
 | `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Upload + file list; `variant="sidebar"` (tool pages) or `variant="hero"` (home) |
 | `FileDropzone` | [`frontend/src/components/FileDropzone.tsx`](../../frontend/src/components/FileDropzone.tsx) | Drag/drop + browse; Pro gate on oversized files |
 | `ToolResultCard` | [`frontend/src/components/ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) | Success state: filename, Download, next steps |
@@ -180,14 +196,17 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 
   <nav class="workspace-nav">
     <div class="workspace-category-tabs">…</div>
-    <div class="workspace-tool-switcher workspace-tool-switcher--scoped">…</div>
+    <div class="workspace-tool-switcher">…</div>   <!-- merge + compare when pdf-ops -->
   </nav>
 
-  <div class="workspace-layout">
-    <div class="workspace-action-column">
-      <div class="panel tool-panel">…</div>
+  <div class="workspace-body workspace-body--with-rail">
+    <aside class="workspace-tool-rail">…</aside>   <!-- single-PDF icon buttons -->
+    <div class="workspace-main">
+      <div class="workspace-layout">
+        <div class="workspace-action-column">…</div>
+        <aside class="workspace-files-column panel">…</aside>
+      </div>
     </div>
-    <aside class="workspace-files-column panel">…</aside>
   </div>
 </section>
 ```
@@ -199,9 +218,12 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
   <header class="home-compare-hero-header"><h1>…</h1></header>
   <section class="workspace workspace--home-hero" id="workspace">
     <div class="workspace-hero-upload">…</div>   <!-- prominent dropzone -->
-    <nav class="workspace-nav">…</nav>            <!-- tool switcher below upload -->
-    <div class="workspace-layout workspace-layout--home-hero">
-      <div class="workspace-action-column">…</div>
+    <nav class="workspace-nav">…</nav>
+    <div class="workspace-body workspace-body--with-rail">
+      <aside class="workspace-tool-rail">…</aside>
+      <div class="workspace-main">
+        <div class="workspace-layout workspace-layout--home-hero">…</div>
+      </div>
     </div>
   </section>
 </div>
@@ -211,8 +233,11 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 
 | Class | Purpose |
 |-------|---------|
+| `.workspace-body--with-rail` | Grid: tool rail + main content column |
+| `.workspace-tool-rail` | Sticky vertical icon toolbar (single-PDF ops) |
+| `.workspace-tool-rail-btn` | Rail icon button; `.active` when tool selected |
+| `.workspace-tool-switcher--multi-only` | Horizontal row for Merge + Compare only |
 | `.workspace-layout--home-hero` | Single column on home; no right file tray |
-| `.workspace-hero-upload` | Full-width hero dropzone wrapper |
 | `.workspace-files-upload--hero` | Large dropzone styling (iLovePDF-style) |
 | `.workspace-layout` | CSS grid: 1fr + 320px on desktop; single column ≤640px |
 | `.workspace-action-column` | Left column; hosts existing tool panels |
@@ -301,16 +326,19 @@ Clicking a category tab navigates to the **first tool in that category** (client
 
 ### Tool tabs
 
-- Only tools where `tool.category === activeTool.category` are shown.
-- **Work with PDFs:** tabs render in scope order — **One PDF** block (pages → markup → protect sub-labels), then **Multiple PDFs** (merge, compare). Each tab shows a **1 PDF** or **2+ PDFs** suffix where applicable.
+- Only tools where `tool.category === activeTool.category` are shown in the horizontal row.
+- **Work with PDFs:** horizontal tabs show **Merge** and **Compare** only. All eight **single-PDF** tools (split, extract, watermark, sign, etc.) live on the vertical [`WorkspaceToolRail`](../../frontend/src/components/layout/WorkspaceToolRail.tsx).
+- **PDF to Other Formats** and **Convert to PDF:** all category tools remain in the horizontal row (no rail entries for those categories).
 - Labels use i18n `messages.tools[toolId].shortLabel` (locale-aware via `toolPath(id, locale)`).
 - “All tools” links to `/#tools` (or `/{locale}/#tools`) — full navigation to home anchor.
+
+**Tool rail:** icon buttons call the same `navigateToTool()` as horizontal tabs. Active rail tool gets `.workspace-tool-rail-btn.active`. Hover shows a flyout tooltip with the short label.
 
 ### Comparison with site header nav
 
 `SiteNav` uses a single **All tools** mega menu on desktop (hover) and mobile (accordion). Inside the panel, tools are grouped by category in `WORKSPACE_CATEGORY_ORDER` — **Work with PDFs** (Edit PDF) first, then **From PDF**, then **To PDF**. Each column mirrors the workspace taxonomy: **One PDF** / **Multiple PDFs** blocks for pdf-ops, sub-headings, and badge labels on each link. Top-level nav is slim: **All tools** · **Pricing** · **Compare** (`/#workspace`) · **language switcher**. Footer link inside the mega menu → `/#tools` (full crawlable index).
 
-The workspace uses **horizontal button tabs** scoped to the active category — same taxonomy as the mega menu, instant panel swap. Category tab order matches the header: **Work with PDFs** leftmost.
+The workspace uses **horizontal button tabs** for category-level tools plus a **vertical icon rail** for single-PDF edit ops — same taxonomy as the mega menu, instant panel swap. Category tab order matches the header: **Work with PDFs** leftmost.
 
 ---
 
@@ -341,8 +369,8 @@ Empty state: *“No files yet — upload above to get started.”*
 
 | Breakpoint | Behavior |
 |------------|----------|
-| **Desktop (default)** | 2-column grid (tool panel left, files right); files column `position: sticky; top: 5.5rem` |
-| **≤640px** | Single column; **action column first** (`order: 1`), files second (`order: 2`); sticky disabled; tool tab labels hidden (icons only) |
+| **Desktop (default)** | Rail + 2-column grid (tool panel center, files right); files column `position: sticky; top: 5.5rem`; rail `position: sticky` |
+| **≤640px** | Single column; tool panel first, files second; **rail becomes horizontal scroll strip** above the panel; sticky disabled on files |
 | **≤640px + files present** | File list collapses into `<details>` (“Your files (N)”) — dropzone stays visible above the collapsible list |
 
 Mobile refinements prioritize reaching the tool panel quickly while keeping upload accessible without scrolling past a long file list.
@@ -501,13 +529,14 @@ Legacy hash URLs (`#merge`, `#convert`, …) redirect via inline script in `Base
 
 After workspace changes, manually verify:
 
-1. Land on `/tools/merge` — correct panel; **Work with PDFs** category tab; tool under **Multiple PDFs** scope
-2. Land on `/tools/split` — **One PDF** scope; pages sub-group in workspace tabs
+1. Land on `/tools/merge` — correct panel; **Work with PDFs** category tab; Merge in horizontal row
+2. Land on `/tools/watermark` — watermark active on **vertical rail**; pdf-ops category tab active
 3. Home `/#tools` — SEO tool index lists all 18 tools by category (featured cards + link list)
-4. Click **Compress** tab — panel swaps without reload; URL becomes `/tools/compress`; files remain in tray
+4. Click **Compress** on rail — panel swaps without reload; URL becomes `/tools/compress`; files remain in tray
 5. Browser **Back** — returns to previous panel and URL
 6. Upload a PDF and an image — thumbnails appear in tray rows
 7. Run a tool — result card shows; **Download** works; next-step chip navigates client-side
 8. Header tool pill updates when switching tools
-9. At ≤640px width — action column first; pdf-ops scope columns stack vertically on home
-10. Localized route `/es/tools/comprimir-pdf` or `/es/tools/compress` — client nav preserves locale in URL
+9. At ≤640px width — horizontal rail scroll; action column first
+10. Open compare review mode — rail and switcher hidden; full-width viewer
+11. Localized route `/es/tools/comprimir-pdf` or `/es/tools/compress` — client nav preserves locale in URL

@@ -44,7 +44,9 @@ The home compare hero follows an **iLovePDF-style** flow: upload first, then pic
 ├─────────────────────────────────────────────────────┤
 │  WorkspaceToolSwitcher — category + tool tabs         │
 ├─────────────────────────────────────────────────────┤
-│  Active tool panel (ComparePanel by default)          │
+│  ┌────┬──────────────────────────────────────────┐  │
+│  │Rail│  Active tool panel (Compare by default)  │  │
+│  └────┴──────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -54,12 +56,13 @@ Implementation:
 |-------|------|-------|
 | Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace variant="homeHero" />` |
 | Upload zone | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) `variant="hero"` | Large dropzone; no sidebar panel wrapper |
-| Tool switcher | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Rendered **below** upload; **Work with PDFs** tab first (`WORKSPACE_CATEGORY_ORDER`) |
-| Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | `variant="homeHero"` reorders chrome; single-column layout (no right file tray) |
+| Tool rail | [`WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx) | Vertical icon bar for single-PDF edit tools (split, watermark, sign, etc.) |
+| Tool switcher | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Rendered **below** upload; **Work with PDFs** tab first; Merge + Compare in horizontal row |
+| Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | `variant="homeHero"` reorders chrome; rail + single-column panel (no right file tray) |
 
-On **`/tools/*` routes**, the standard two-column workspace is unchanged: tool panel left, file tray right.
+On **`/tools/*` routes**, layout is **rail | tool panel | file tray** on desktop.
 
-CSS: `.workspace-hero-upload`, `.workspace-files-upload--hero`, `.workspace-layout--home-hero` in [`index.css`](../../frontend/src/index.css).
+CSS: `.workspace-hero-upload`, `.workspace-files-upload--hero`, `.workspace-layout--home-hero`, `.workspace-tool-rail` in [`index.css`](../../frontend/src/index.css).
 
 ### Removed from home (still available elsewhere)
 
@@ -189,6 +192,7 @@ Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 | `HomeToolsSection` | `frontend/src/components/layout/HomeToolsSection.tsx` |
 | `ToolCardLink` | `frontend/src/components/layout/ToolCardLink.tsx` (reused for featured tools) |
 | `AnnouncementBanner` | `frontend/src/components/layout/AnnouncementBanner.tsx` (global waitlist bar) |
+| `WorkspaceToolRail` | `frontend/src/components/layout/WorkspaceToolRail.tsx` (single-PDF vertical icon rail) |
 
 **Legacy (still used on other routes, not home):**
 
@@ -211,6 +215,7 @@ Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 5. `/es/`, `/fr/`, `/nl/`, `/pt/` — same structure, translated copy
 6. View source — `<title>` and meta description include compare keywords
 7. Mobile — announcement bar stays compact (email-only form); hero upload remains usable
+8. Vertical tool rail — single-PDF icons on left; Merge/Compare in horizontal tabs; rail hidden in compare review mode
 
 ### Compare tool
 

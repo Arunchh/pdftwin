@@ -54,7 +54,8 @@ Each tool card shows a **1 PDF** or **2+ PDFs** badge so you can tell at a glanc
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
 - **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads and unlimited PDF → Word/Excel exports
-- **Two-column tool workspace** — On `/tools/*`: tool panel (job options + run) on the left; files column (upload + tray + thumbnails) on the right. On `/`: upload-first hero with tool switcher below the dropzone — see [tool workspace UI](docs/product/tool-workspace-ui.md)
+- **Tool workspace** — On `/tools/*`: vertical **tool rail** (single-PDF edit tools) + tool panel + files column. On `/`: upload-first hero with tool switcher and rail below the dropzone — see [tool workspace UI](docs/product/tool-workspace-ui.md)
+- **Vertical tool rail** — Paint-style icon bar for split, rotate, watermark, sign, compress, protect, etc.; Merge and Compare stay in horizontal tabs
 - **Conversion-direction categories** — PDF → other formats, convert → PDF, and work-with-PDFs tabs on home and workspace
 - **Single vs multi-PDF columns** — “One PDF” and “Multiple PDFs” side-by-side in the Work with PDFs section, with **1 PDF** / **2+ PDFs** badges on each tool card
 - **Instant tool switching** — Switch tools in the workspace without a full page reload; browser back/forward supported

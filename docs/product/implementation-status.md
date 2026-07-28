@@ -2,6 +2,10 @@
 
 > Last updated: 2026-07-28 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
+### Shipped (2026-07-28 — vertical tool rail)
+
+- **Workspace tool rail** — [`WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx): sticky vertical icon toolbar for all eight **single-PDF** pdf-ops tools (pages, markup, protect groups). Merge and Compare remain in the horizontal [`WorkspaceToolSwitcher`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx). Layout: rail | panel | file tray. Mobile: horizontal scroll strip. See [tool workspace UI — vertical tool rail](./tool-workspace-ui.md#vertical-tool-rail-single-pdf-edit-tools).
+
 ### Shipped (2026-07-28 — home UX + chrome)
 
 - **Upload-first home hero** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) + [`ToolWorkspace`](../../frontend/src/components/ToolWorkspace.tsx) `variant="homeHero"`: H1 → prominent upload dropzone → tool switcher → tool panel. [`WorkspaceFileTray`](../../frontend/src/components/WorkspaceFileTray.tsx) gains `variant="hero"` for the full-width home dropzone; standard two-column layout unchanged on `/tools/*`. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).

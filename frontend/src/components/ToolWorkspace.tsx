@@ -18,6 +18,7 @@ import WatermarkPanel from "./WatermarkPanel";
 import WordToPdfPanel from "./WordToPdfPanel";
 import SignPdfPanel from "./SignPdfPanel";
 import WorkspaceFileTray from "./WorkspaceFileTray";
+import WorkspaceToolRail from "./layout/WorkspaceToolRail";
 import WorkspaceToolSwitcher from "./layout/WorkspaceToolSwitcher";
 import type { ToolId } from "../config/tools";
 import { TOOL_UPLOAD_CONFIG, WORKSPACE_ACCEPT } from "../config/upload";
@@ -175,32 +176,44 @@ export default function ToolWorkspace({
             )}
 
             <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
+
+            <div className="workspace-body workspace-body--with-rail">
+              <WorkspaceToolRail activeTool={activeToolId} onNavigate={navigateToTool} />
+
+              <div className="workspace-main">
+                <div
+                  className={`workspace-layout${
+                    isHomeHero ? " workspace-layout--home-hero" : ""
+                  }`}
+                >
+                  <div className="workspace-action-column">{renderToolPanel()}</div>
+
+                  {!isHomeHero && (
+                    <WorkspaceFileTray
+                      accept={WORKSPACE_ACCEPT}
+                      uploadTitle={uploadConfig.title}
+                      uploadLabel={uploadConfig.label}
+                      entries={entries}
+                      loading={loading}
+                      entitlementsLabel={entitlements.label}
+                      fileLimitMb={entitlements.fileLimitMb}
+                      isPro={entitlements.isPro}
+                      onFilesChange={handleIncomingFiles}
+                      onRemoveFile={removeFile}
+                      onClearAll={handleClearAll}
+                    />
+                  )}
+                </div>
+              </div>
+            </div>
           </>
         )}
 
-        <div
-          className={`workspace-layout${
-            hideWorkspaceChrome ? " workspace-layout--compare-review" : ""
-          }${isHomeHero && !hideWorkspaceChrome ? " workspace-layout--home-hero" : ""}`}
-        >
-          <div className="workspace-action-column">{renderToolPanel()}</div>
-
-          {!hideWorkspaceChrome && !isHomeHero && (
-            <WorkspaceFileTray
-              accept={WORKSPACE_ACCEPT}
-              uploadTitle={uploadConfig.title}
-              uploadLabel={uploadConfig.label}
-              entries={entries}
-              loading={loading}
-              entitlementsLabel={entitlements.label}
-              fileLimitMb={entitlements.fileLimitMb}
-              isPro={entitlements.isPro}
-              onFilesChange={handleIncomingFiles}
-              onRemoveFile={removeFile}
-              onClearAll={handleClearAll}
-            />
-          )}
-        </div>
+        {hideWorkspaceChrome && (
+          <div className="workspace-layout workspace-layout--compare-review">
+            <div className="workspace-action-column">{renderToolPanel()}</div>
+          </div>
+        )}
       </section>
     </WorkspaceNavProvider>
   );

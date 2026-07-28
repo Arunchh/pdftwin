@@ -329,6 +329,13 @@ export function singlePdfToolsInSubcategory(subcategory: ToolSubcategory): ToolD
   );
 }
 
+/** Single-PDF edit tools for the vertical workspace rail (pages → markup → protect). */
+export function singlePdfOpsRailTools(): ToolDefinition[] {
+  return SINGLE_PDF_SUBCATEGORY_ORDER.flatMap((subcategory) =>
+    singlePdfToolsInSubcategory(subcategory),
+  );
+}
+
 /** URL segment under /tools/ (optionally prefixed with /es, /fr, /nl, /pt). */
 export function toolPath(id: ToolId, locale?: Locale): string {
   const segment = `/tools/${toolById(id).path}`;
