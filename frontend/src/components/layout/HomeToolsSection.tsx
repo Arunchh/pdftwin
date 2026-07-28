@@ -5,12 +5,13 @@ import {
   type ToolCategory,
 } from "../../config/tools";
 import { useI18n } from "../../i18n/I18nProvider";
-import ToolCardLink from "./ToolCardLink";
 
 export default function HomeToolsSection() {
-  const { messages, localizePath } = useI18n();
+  const { locale, messages, localizePath } = useI18n();
   const { complementary, seoTools } = messages.home;
-  const featuredTools = TOOLS.filter((tool) => complementary.toolIds.includes(tool.id));
+  const featuredTools = complementary.toolIds
+    .map((toolId) => TOOLS.find((tool) => tool.id === toolId))
+    .filter((tool): tool is (typeof TOOLS)[number] => Boolean(tool));
 
   return (
     <section className="home-tools-section" id="tools">
@@ -19,11 +20,15 @@ export default function HomeToolsSection() {
         <p>{complementary.subheading}</p>
       </div>
 
-      <div className="home-tools-grid">
-        {featuredTools.map((tool) => (
-          <ToolCardLink key={tool.id} tool={tool} />
-        ))}
-      </div>
+      <nav className="home-featured-tools" aria-label={complementary.heading}>
+        <ul>
+          {featuredTools.map((tool) => (
+            <li key={tool.id}>
+              <a href={toolPath(tool.id, locale)}>{messages.tools[tool.id].name}</a>
+            </li>
+          ))}
+        </ul>
+      </nav>
 
       <div className="home-seo-tools">
         <div className="section-heading">
