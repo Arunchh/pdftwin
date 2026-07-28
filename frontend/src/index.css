@@ -1847,6 +1847,29 @@ textarea {
   margin: 0;
 }
 
+@media (min-width: 901px) {
+  .site-main {
+    padding-bottom: 1.25rem;
+  }
+
+  .site-prefooter .format-support-section {
+    padding: 1.25rem 1.25rem;
+  }
+
+  .site-prefooter .format-support-section .section-heading {
+    margin-bottom: 1rem;
+  }
+
+  .site-prefooter .format-support-grid {
+    margin-top: 1rem;
+  }
+
+  .site-prefooter .format-support-highlights {
+    margin-top: 1.25rem;
+    padding: 0.75rem 1rem;
+  }
+}
+
 .section-heading h2 {
   position: relative;
   display: inline-block;
