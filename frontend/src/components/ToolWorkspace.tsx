@@ -157,63 +157,53 @@ export default function ToolWorkspace({
           }`}
           id="workspace"
         >
-          {!hideWorkspaceChrome && (
-            <>
-              {!isHomeHero && (
-                <div className="section-heading workspace-heading">
-                  <h2>{toolCopy.name}</h2>
-                  <p>{toolCopy.description}</p>
-                </div>
-              )}
-
-              {isHomeHero && (
-                <WorkspaceFileTray
-                  variant="hero"
-                  accept={WORKSPACE_ACCEPT}
-                  uploadTitle={uploadConfig.title}
-                  uploadLabel={uploadConfig.label}
-                  entries={entries}
-                  loading={loading}
-                  entitlementsLabel={entitlements.label}
-                  fileLimitMb={entitlements.fileLimitMb}
-                  isPro={entitlements.isPro}
-                  onFilesChange={handleIncomingFiles}
-                  onRemoveFile={removeFile}
-                  onClearAll={handleClearAll}
-                />
-              )}
-
-              <div
-                className={`workspace-layout${
-                  isHomeHero ? " workspace-layout--home-hero" : ""
-                }`}
-              >
-                <div className="workspace-action-column">{renderToolPanel()}</div>
-
-                {!isHomeHero && (
-                  <WorkspaceFileTray
-                    accept={WORKSPACE_ACCEPT}
-                    uploadTitle={uploadConfig.title}
-                    uploadLabel={uploadConfig.label}
-                    entries={entries}
-                    loading={loading}
-                    entitlementsLabel={entitlements.label}
-                    fileLimitMb={entitlements.fileLimitMb}
-                    isPro={entitlements.isPro}
-                    onFilesChange={handleIncomingFiles}
-                    onRemoveFile={removeFile}
-                    onClearAll={handleClearAll}
-                  />
-                )}
-              </div>
-            </>
-          )}
-
-          {hideWorkspaceChrome && (
-            <div className="workspace-layout workspace-layout--compare-review">
-              <div className="workspace-action-column">{renderToolPanel()}</div>
+          {!hideWorkspaceChrome && !isHomeHero && (
+            <div className="section-heading workspace-heading">
+              <h2>{toolCopy.name}</h2>
+              <p>{toolCopy.description}</p>
             </div>
           )}
+
+          {!hideWorkspaceChrome && isHomeHero && (
+            <WorkspaceFileTray
+              variant="hero"
+              accept={WORKSPACE_ACCEPT}
+              uploadTitle={uploadConfig.title}
+              uploadLabel={uploadConfig.label}
+              entries={entries}
+              loading={loading}
+              entitlementsLabel={entitlements.label}
+              fileLimitMb={entitlements.fileLimitMb}
+              isPro={entitlements.isPro}
+              onFilesChange={handleIncomingFiles}
+              onRemoveFile={removeFile}
+              onClearAll={handleClearAll}
+            />
+          )}
+
+          <div
+            className={`workspace-layout${
+              isHomeHero ? " workspace-layout--home-hero" : ""
+            }${hideWorkspaceChrome ? " workspace-layout--compare-review" : ""}`}
+          >
+            <div className="workspace-action-column">{renderToolPanel()}</div>
+
+            {!hideWorkspaceChrome && !isHomeHero && (
+              <WorkspaceFileTray
+                accept={WORKSPACE_ACCEPT}
+                uploadTitle={uploadConfig.title}
+                uploadLabel={uploadConfig.label}
+                entries={entries}
+                loading={loading}
+                entitlementsLabel={entitlements.label}
+                fileLimitMb={entitlements.fileLimitMb}
+                isPro={entitlements.isPro}
+                onFilesChange={handleIncomingFiles}
+                onRemoveFile={removeFile}
+                onClearAll={handleClearAll}
+              />
+            )}
+          </div>
         </section>
       </div>
     </WorkspaceNavProvider>
