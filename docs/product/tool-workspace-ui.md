@@ -42,9 +42,11 @@ Paint- and PDF-viewer-style icon rail on the left margin (`WorkspaceToolRail`). 
 | **Markup** | Watermark · Sign |
 | **Protect** | Compress · Lock & unlock |
 
-Registry helper: `singlePdfOpsRailTools()` in [`tools.ts`](../../frontend/src/config/tools.ts). Hidden in compare **review mode** (immersive viewer). On mobile (≤640px), the rail becomes a horizontal scroll strip above the tool panel.
+Registry helper: `singlePdfOpsRailTools()` in [`tools.ts`](../../frontend/src/config/tools.ts). Hidden in compare **review mode** (immersive viewer).
 
-CSS: `.workspace-tool-rail`, `.workspace-body--with-rail`, `.workspace-tool-rail-btn`.
+**Placement:** On viewports **≥1240px**, the rail sits in the **left viewport gutter** outside the 1120px content column (`workspace-frame` full-bleed grid) so the tool panel keeps full width. Between 641px and 1239px it sits inline beside the workspace card; on mobile it becomes a horizontal scroll strip.
+
+CSS: `.workspace-frame--with-rail`, `.workspace-tool-rail`.
 
 ### Home hero layout (`variant="homeHero"`)
 
@@ -191,24 +193,20 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 ### Tool routes (`/tools/*`)
 
 ```html
-<section class="workspace workspace--{category}">
-  <div class="workspace-heading">…</div>
-
-  <nav class="workspace-nav">
-    <div class="workspace-category-tabs">…</div>
-    <div class="workspace-tool-switcher">…</div>   <!-- merge + compare when pdf-ops -->
-  </nav>
-
-  <div class="workspace-body workspace-body--with-rail">
-    <aside class="workspace-tool-rail">…</aside>   <!-- single-PDF icon buttons -->
-    <div class="workspace-main">
-      <div class="workspace-layout">
-        <div class="workspace-action-column">…</div>
-        <aside class="workspace-files-column panel">…</aside>
-      </div>
+<div class="workspace-frame workspace-frame--with-rail">
+  <aside class="workspace-tool-rail">…</aside>   <!-- left gutter on wide screens -->
+  <section class="workspace workspace--{category}">
+    <div class="workspace-heading">…</div>
+    <nav class="workspace-nav">
+      <div class="workspace-category-tabs">…</div>
+      <div class="workspace-tool-switcher">…</div>
+    </nav>
+    <div class="workspace-layout">
+      <div class="workspace-action-column">…</div>
+      <aside class="workspace-files-column panel">…</aside>
     </div>
-  </div>
-</section>
+  </section>
+</div>
 ```
 
 ### Home hero (`/` — `variant="homeHero"`)
@@ -216,16 +214,14 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 ```html
 <div class="home-compare-hero">
   <header class="home-compare-hero-header"><h1>…</h1></header>
-  <section class="workspace workspace--home-hero" id="workspace">
-    <div class="workspace-hero-upload">…</div>   <!-- prominent dropzone -->
-    <nav class="workspace-nav">…</nav>
-    <div class="workspace-body workspace-body--with-rail">
-      <aside class="workspace-tool-rail">…</aside>
-      <div class="workspace-main">
-        <div class="workspace-layout workspace-layout--home-hero">…</div>
-      </div>
-    </div>
-  </section>
+  <div class="workspace-frame workspace-frame--with-rail">
+    <aside class="workspace-tool-rail">…</aside>
+    <section class="workspace workspace--home-hero" id="workspace">
+      <div class="workspace-hero-upload">…</div>
+      <nav class="workspace-nav">…</nav>
+      <div class="workspace-layout workspace-layout--home-hero">…</div>
+    </section>
+  </div>
 </div>
 ```
 
@@ -233,7 +229,7 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 
 | Class | Purpose |
 |-------|---------|
-| `.workspace-body--with-rail` | Grid: tool rail + main content column |
+| `.workspace-frame--with-rail` | Full-bleed grid; rail in left gutter (≥1240px) or inline (tablet) |
 | `.workspace-tool-rail` | Sticky vertical icon toolbar (single-PDF ops) |
 | `.workspace-tool-rail-btn` | Rail icon button; `.active` when tool selected |
 | `.workspace-tool-switcher--multi-only` | Horizontal row for Merge + Compare only |
@@ -369,8 +365,9 @@ Empty state: *“No files yet — upload above to get started.”*
 
 | Breakpoint | Behavior |
 |------------|----------|
-| **Desktop (default)** | Rail + 2-column grid (tool panel center, files right); files column `position: sticky; top: 5.5rem`; rail `position: sticky` |
-| **≤640px** | Single column; tool panel first, files second; **rail becomes horizontal scroll strip** above the panel; sticky disabled on files |
+| **Desktop (≥1240px)** | Rail in **left viewport gutter**; workspace card stays 1120px; panel + files grid unchanged |
+| **Tablet (641px–1239px)** | Rail inline beside workspace card |
+| **≤640px** | Single column; horizontal rail strip above panel; files below |
 | **≤640px + files present** | File list collapses into `<details>` (“Your files (N)”) — dropzone stays visible above the collapsible list |
 
 Mobile refinements prioritize reaching the tool panel quickly while keeping upload accessible without scrolling past a long file list.

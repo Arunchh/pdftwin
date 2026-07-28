@@ -141,80 +141,84 @@ export default function ToolWorkspace({
 
   return (
     <WorkspaceNavProvider navigateToTool={navigateToTool}>
-      <section
-        className={`workspace site--focused workspace--${activeTool.category}${
-          isCompareTool ? " workspace--compare" : ""
-        }${isHomeHero ? " workspace--home-hero" : ""}${
-          hideWorkspaceChrome ? " workspace--compare-review" : ""
+      <div
+        className={`workspace-frame${
+          !hideWorkspaceChrome ? " workspace-frame--with-rail" : ""
         }`}
-        id="workspace"
       >
         {!hideWorkspaceChrome && (
-          <>
-            {!isHomeHero && (
-              <div className="section-heading workspace-heading">
-                <h2>{toolCopy.name}</h2>
-                <p>{toolCopy.description}</p>
-              </div>
-            )}
+          <WorkspaceToolRail activeTool={activeToolId} onNavigate={navigateToTool} />
+        )}
 
-            {isHomeHero && (
-              <WorkspaceFileTray
-                variant="hero"
-                accept={WORKSPACE_ACCEPT}
-                uploadTitle={uploadConfig.title}
-                uploadLabel={uploadConfig.label}
-                entries={entries}
-                loading={loading}
-                entitlementsLabel={entitlements.label}
-                fileLimitMb={entitlements.fileLimitMb}
-                isPro={entitlements.isPro}
-                onFilesChange={handleIncomingFiles}
-                onRemoveFile={removeFile}
-                onClearAll={handleClearAll}
-              />
-            )}
-
-            <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
-
-            <div className="workspace-body workspace-body--with-rail">
-              <WorkspaceToolRail activeTool={activeToolId} onNavigate={navigateToTool} />
-
-              <div className="workspace-main">
-                <div
-                  className={`workspace-layout${
-                    isHomeHero ? " workspace-layout--home-hero" : ""
-                  }`}
-                >
-                  <div className="workspace-action-column">{renderToolPanel()}</div>
-
-                  {!isHomeHero && (
-                    <WorkspaceFileTray
-                      accept={WORKSPACE_ACCEPT}
-                      uploadTitle={uploadConfig.title}
-                      uploadLabel={uploadConfig.label}
-                      entries={entries}
-                      loading={loading}
-                      entitlementsLabel={entitlements.label}
-                      fileLimitMb={entitlements.fileLimitMb}
-                      isPro={entitlements.isPro}
-                      onFilesChange={handleIncomingFiles}
-                      onRemoveFile={removeFile}
-                      onClearAll={handleClearAll}
-                    />
-                  )}
+        <section
+          className={`workspace site--focused workspace--${activeTool.category}${
+            isCompareTool ? " workspace--compare" : ""
+          }${isHomeHero ? " workspace--home-hero" : ""}${
+            hideWorkspaceChrome ? " workspace--compare-review" : ""
+          }`}
+          id="workspace"
+        >
+          {!hideWorkspaceChrome && (
+            <>
+              {!isHomeHero && (
+                <div className="section-heading workspace-heading">
+                  <h2>{toolCopy.name}</h2>
+                  <p>{toolCopy.description}</p>
                 </div>
-              </div>
-            </div>
-          </>
-        )}
+              )}
 
-        {hideWorkspaceChrome && (
-          <div className="workspace-layout workspace-layout--compare-review">
-            <div className="workspace-action-column">{renderToolPanel()}</div>
-          </div>
-        )}
-      </section>
+              {isHomeHero && (
+                <WorkspaceFileTray
+                  variant="hero"
+                  accept={WORKSPACE_ACCEPT}
+                  uploadTitle={uploadConfig.title}
+                  uploadLabel={uploadConfig.label}
+                  entries={entries}
+                  loading={loading}
+                  entitlementsLabel={entitlements.label}
+                  fileLimitMb={entitlements.fileLimitMb}
+                  isPro={entitlements.isPro}
+                  onFilesChange={handleIncomingFiles}
+                  onRemoveFile={removeFile}
+                  onClearAll={handleClearAll}
+                />
+              )}
+
+              <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
+
+              <div
+                className={`workspace-layout${
+                  isHomeHero ? " workspace-layout--home-hero" : ""
+                }`}
+              >
+                <div className="workspace-action-column">{renderToolPanel()}</div>
+
+                {!isHomeHero && (
+                  <WorkspaceFileTray
+                    accept={WORKSPACE_ACCEPT}
+                    uploadTitle={uploadConfig.title}
+                    uploadLabel={uploadConfig.label}
+                    entries={entries}
+                    loading={loading}
+                    entitlementsLabel={entitlements.label}
+                    fileLimitMb={entitlements.fileLimitMb}
+                    isPro={entitlements.isPro}
+                    onFilesChange={handleIncomingFiles}
+                    onRemoveFile={removeFile}
+                    onClearAll={handleClearAll}
+                  />
+                )}
+              </div>
+            </>
+          )}
+
+          {hideWorkspaceChrome && (
+            <div className="workspace-layout workspace-layout--compare-review">
+              <div className="workspace-action-column">{renderToolPanel()}</div>
+            </div>
+          )}
+        </section>
+      </div>
     </WorkspaceNavProvider>
   );
 }
