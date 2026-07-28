@@ -2380,10 +2380,6 @@ textarea {
   grid-template-columns: minmax(0, 1fr);
 }
 
-.home-compare-hero .workspace-nav {
-  margin-bottom: 1rem;
-}
-
 .hero--marketing {
   display: block;
   grid-template-columns: unset;

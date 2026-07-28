@@ -2,13 +2,15 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-28):** **`/tools/` catalog page** — full-page tool index (mega-menu layout at larger scale); smoother nav mega-menu scroll; SEO updates (ItemList schema, sitemap, internal links). See [tool workspace UI — All tools page](./product/tool-workspace-ui.md#all-tools-catalog-page-tools).
+**Latest (2026-07-28):** **Workspace tool switcher removed** — category and tool tabs no longer appear under the home upload zone or on tool routes; users pick tools from the header **All tools** mega menu or [`/tools/` catalog](./product/tool-workspace-ui.md#all-tools-catalog-page-tools). See [tool workspace UI](./product/tool-workspace-ui.md).
+
+**Previous (2026-07-28):** **`/tools/` catalog page** — full-page tool index (mega-menu layout at larger scale); smoother nav mega-menu scroll; SEO updates (ItemList schema, sitemap, internal links). See [tool workspace UI — All tools page](./product/tool-workspace-ui.md#all-tools-catalog-page-tools).
 
 **Previous (2026-07-28):** **Vertical tool rail** — single-PDF edit tools in a Paint-style icon rail on the workspace left margin.
 
 **Previous (2026-07-28):** **All tools mega menu** — From PDF / To PDF / Edit PDF grouped under one nav item.
 
-**Previous (2026-07-28):** **Upload-first home hero** — dropzone directly under the compare H1, tool switcher below upload (iLovePDF-style). **Mobile announcement bar** compacted. **Header nav** neutral background. See [compare-first homepage](./product/compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
+**Previous (2026-07-28):** **Upload-first home hero** — dropzone directly under the compare H1 (iLovePDF-style). **Mobile announcement bar** compacted. **Header nav** neutral background. See [compare-first homepage](./product/compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
 
 **Previous (2026-07-28):** **Header nav** — **Compare** primary button with **language switcher** immediately to its right. **Workspace layout** — tool panel on the left, file upload tray on the right (desktop). See [tool workspace UI](./product/tool-workspace-ui.md#overview).
 

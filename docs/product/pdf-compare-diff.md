@@ -146,7 +146,7 @@ Empty text on one side still diffs correctly (whole page = insert or delete).
 
 ### Review mode chrome
 
-When `reviewMode === true`, workspace hides file tray and tool switcher (`workspace--compare-review`). Fullscreen targets the dual-pane viewer element.
+When `reviewMode === true`, workspace hides file tray and tool rail (`workspace--compare-review`). Fullscreen targets the dual-pane viewer element.
 
 ### CSS hooks
 

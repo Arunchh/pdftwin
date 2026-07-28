@@ -25,14 +25,14 @@ Compare remains **client-side** (PDF.js) — files never upload for viewing. SEO
 
 | Section | Component | Purpose |
 |---------|-----------|---------|
-| Compare hero | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | H1 headline → **upload dropzone** → tool switcher → embedded compare workspace |
+| Compare hero | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | H1 headline → **upload dropzone** → embedded compare workspace |
 | Marketing hero | [`HeroSection.tsx`](../../frontend/src/components/layout/HeroSection.tsx) | Secondary trust copy, browse-all-tools CTA, compare guide link |
 | Workflow | [`HomeWorkflowSection.tsx`](../../frontend/src/components/layout/HomeWorkflowSection.tsx) | 3-step post-compare workflow with links into tools |
 | Tools + SEO | [`HomeToolsSection.tsx`](../../frontend/src/components/layout/HomeToolsSection.tsx) | 6 featured complementary tools + crawlable list of all 18 tools (`#tools`) |
 
 ### Upload-first hero layout (2026-07-28)
 
-The home compare hero follows an **iLovePDF-style** flow: upload first, then pick a tool. Vertical order inside [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx):
+The home compare hero follows an **upload-first** flow: upload on the home hero, then use the default Compare tool. Tool selection happens via the header **All tools** mega menu or [`/tools/` catalog](./tool-workspace-ui.md#all-tools-catalog-page-tools). Vertical order inside [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx):
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -41,8 +41,6 @@ The home compare hero follows an **iLovePDF-style** flow: upload first, then pic
 │  Hero upload dropzone (full width, prominent)       │
 │  · drag-and-drop or click to browse                 │
 │  · compact file list when files are present           │
-├─────────────────────────────────────────────────────┤
-│  WorkspaceToolSwitcher — category + tool tabs         │
 ├─────────────────────────────────────────────────────┤
 │  ┌────┬──────────────────────────────────────────┐  │
 │  │Rail│  Active tool panel (Compare by default)  │  │
@@ -57,7 +55,6 @@ Implementation:
 | Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace variant="homeHero" />` |
 | Upload zone | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) `variant="hero"` | Large dropzone; no sidebar panel wrapper |
 | Tool rail | [`WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx) | Vertical icon bar for single-PDF edit tools (split, watermark, sign, etc.) |
-| Tool switcher | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Rendered **below** upload; **Work with PDFs** tab first; Merge + Compare in horizontal row |
 | Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | `variant="homeHero"` reorders chrome; rail + single-column panel (no right file tray) |
 
 On **`/tools/*` routes**, layout is **rail | tool panel | file tray** on desktop.
@@ -150,7 +147,7 @@ Click "Open compare viewer"    Workspace chrome hidden (see below)
 
 [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) listens to `onReviewModeChange` from `ComparePanel`:
 
-- When `reviewMode === true`: hides tool heading, `WorkspaceToolSwitcher`, and `WorkspaceFileTray`
+- When `reviewMode === true`: hides tool heading, `WorkspaceToolRail`, and `WorkspaceFileTray`
 - Adds classes `workspace--compare-review`, `workspace-layout--compare-review`
 - User exits via **Change documents** in compare toolbar
 
@@ -208,19 +205,19 @@ Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 
 ### Homepage
 
-1. `/` — hero shows compare headline; **upload dropzone directly under H1**; tool switcher below upload
-2. Upload a PDF on home — file appears in hero file list; switch tools without re-uploading
+1. `/` — hero shows compare headline; **upload dropzone directly under H1**; no category/tool tabs under upload
+2. Upload a PDF on home — file appears in hero file list; use **All tools** nav to open another tool route
 3. Workflow section — 3 steps with working tool links
 4. `#tools` — all 18 tools linked by category; nav **All tools** scrolls here
 5. `/es/`, `/fr/`, `/nl/`, `/pt/` — same structure, translated copy
 6. View source — `<title>` and meta description include compare keywords
 7. Mobile — announcement bar stays compact (email-only form); hero upload remains usable
-8. Vertical tool rail — single-PDF icons on left; Merge/Compare in horizontal tabs; rail hidden in compare review mode
+8. Vertical tool rail — single-PDF icons on left; rail hidden in compare review mode
 
 ### Compare tool
 
 1. `/tools/compare` — upload 2 PDFs, assign left/right, **Open compare viewer**
-2. Review mode — file tray and tool switcher hidden; dual panes full width
+2. Review mode — file tray and tool rail hidden; dual panes full width
 3. Zoom in/out — visible size changes (not just resolution)
 4. **Fit width** — both panes scale to pane width
 5. Single-page mode — prev/next and page input work; arrow keys work

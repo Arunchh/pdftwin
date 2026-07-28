@@ -54,9 +54,9 @@ Each tool card shows a **1 PDF** or **2+ PDFs** badge so you can tell at a glanc
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
 - **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads and unlimited PDF → Word/Excel exports
-- **Tool workspace** — On `/tools/*`: vertical **tool rail** (single-PDF edit tools) + tool panel + files column. On `/`: upload-first hero with tool switcher and rail below the dropzone — see [tool workspace UI](docs/product/tool-workspace-ui.md)
-- **Vertical tool rail** — Paint-style icon bar for split, rotate, watermark, sign, compress, protect, etc.; Merge and Compare stay in horizontal tabs
-- **Conversion-direction categories** — PDF → other formats, convert → PDF, and work-with-PDFs tabs on home and workspace
+- **Tool workspace** — On `/tools/*`: vertical **tool rail** (single-PDF edit tools) + tool panel + files column. On `/`: upload-first hero with rail beside the default Compare panel — see [tool workspace UI](docs/product/tool-workspace-ui.md)
+- **Vertical tool rail** — Paint-style icon bar for split, rotate, watermark, sign, compress, protect, etc.; pick other tools from header **All tools** or `/tools/` catalog
+- **Conversion-direction categories** — PDF → other formats, convert → PDF, and work-with-PDFs groupings in **All tools** nav and `/tools/` catalog
 - **Single vs multi-PDF columns** — “One PDF” and “Multiple PDFs” side-by-side in the Work with PDFs section, with **1 PDF** / **2+ PDFs** badges on each tool card
 - **Instant tool switching** — Switch tools in the workspace without a full page reload; browser back/forward supported
 - **Result cards** — After processing, a result card shows filename and an explicit Download button (no silent auto-download)
@@ -174,7 +174,7 @@ Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names
 
 **Homepage (compare-first):** The home route leads with a **compare hero** (primary CTA → `/tools/compare`), a **4-step review workflow** section, six **featured complementary tools**, and a crawlable **All PDFTwin tools** index at `#tools`. The former full tool grid, trust bar, and formats section are no longer on `/` — formats live at `/formats`; full taxonomy remains in header nav. See [compare-first homepage](docs/product/compare-first-homepage.md).
 
-**Tool workspace:** Each `/tools/*` page uses a two-column layout — the active tool panel on the left, upload and file tray (with thumbnails) on the right. **Compare** adds a second **review mode** that hides workspace chrome for a full-width dual-pane viewer. In-workspace navigation uses three category tabs plus horizontal tool tabs filtered to the current category; **Edit PDF** tabs are grouped under **One PDF** / **Multiple PDFs** scope labels. Tab clicks swap tools client-side via the History API (no full reload). On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
+**Tool workspace:** Each `/tools/*` page uses a two-column layout — the active tool panel on the left, upload and file tray (with thumbnails) on the right. **Compare** adds a second **review mode** that hides workspace chrome for a full-width dual-pane viewer. Tool discovery uses the header **All tools** mega menu and [`/tools/` catalog](docs/product/tool-workspace-ui.md#all-tools-catalog-page-tools); the vertical **tool rail** switches between related single-PDF edit tools without a full reload. On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
 
 ## Prerequisites
 

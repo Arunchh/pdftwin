@@ -2,6 +2,10 @@
 
 > Last updated: 2026-07-28 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
+### Shipped (2026-07-28 — remove workspace tool switcher)
+
+- **Workspace tool switcher removed** — [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) deleted; category and tool tabs no longer render under the home upload zone or on `/tools/*` routes. Users pick tools from the header **All tools** mega menu or [`/tools/` catalog](./tool-workspace-ui.md#all-tools-catalog-page-tools). The vertical **tool rail** remains for switching between related single-PDF edit tools within a session.
+
 ### Shipped (2026-07-28 — tools catalog page + SEO)
 
 - **`/tools/` catalog page** — [`ToolsIndexPage.tsx`](../../frontend/src/components/content/ToolsIndexPage.tsx) + [`pages/tools/index.astro`](../../frontend/src/pages/tools/index.astro): full-page mega-menu-style index of all 18 tools (5 locales). **Browse full tool index** in nav, footer, workspace, and hero now link here instead of `/#tools`.
@@ -10,12 +14,12 @@
 
 ### Shipped (2026-07-28 — vertical tool rail)
 
-- **Workspace tool rail** — [`WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx): sticky vertical icon toolbar for all eight **single-PDF** pdf-ops tools (pages, markup, protect groups). Merge and Compare remain in the horizontal [`WorkspaceToolSwitcher`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx). Layout: rail | panel | file tray. Mobile: horizontal scroll strip. See [tool workspace UI — vertical tool rail](./tool-workspace-ui.md#vertical-tool-rail-single-pdf-edit-tools).
+- **Workspace tool rail** — [`WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx): sticky vertical icon toolbar for all eight **single-PDF** pdf-ops tools (pages, markup, protect groups). Layout: rail | panel | file tray. Mobile: horizontal scroll strip. See [tool workspace UI — vertical tool rail](./tool-workspace-ui.md#vertical-tool-rail-single-pdf-edit-tools).
 
 ### Shipped (2026-07-28 — home UX + chrome)
 
-- **Upload-first home hero** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) + [`ToolWorkspace`](../../frontend/src/components/ToolWorkspace.tsx) `variant="homeHero"`: H1 → prominent upload dropzone → tool switcher → tool panel. [`WorkspaceFileTray`](../../frontend/src/components/WorkspaceFileTray.tsx) gains `variant="hero"` for the full-width home dropzone; standard two-column layout unchanged on `/tools/*`. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
-- **Workspace category order** — [`WORKSPACE_CATEGORY_ORDER`](../../frontend/src/config/tools.ts) puts **Work with PDFs** first in the home/tool workspace picker ([`WorkspaceToolSwitcher`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx)).
+- **Upload-first home hero** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) + [`ToolWorkspace`](../../frontend/src/components/ToolWorkspace.tsx) `variant="homeHero"`: H1 → prominent upload dropzone → tool panel. [`WorkspaceFileTray`](../../frontend/src/components/WorkspaceFileTray.tsx) gains `variant="hero"` for the full-width home dropzone; standard two-column layout unchanged on `/tools/*`. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
+- **Workspace category order** — [`WORKSPACE_CATEGORY_ORDER`](../../frontend/src/config/tools.ts) puts **Work with PDFs** first in the header mega menu and `/tools/` catalog.
 - **Header All tools mega menu** — [`SiteNav`](../../frontend/src/components/layout/SiteNav.tsx): **From PDF**, **To PDF**, and **Edit PDF** moved under one **All tools** dropdown (3-column mega menu on desktop; accordion on mobile). Top-level nav freed to **All tools · Pricing · Compare · language**.
 - **Announcement banner — mobile compact** — [`AnnouncementBanner.tsx`](../../frontend/src/components/layout/AnnouncementBanner.tsx): tighter padding; email and **Join waitlist** stay on one row with minimal gap (≤640px no longer stacks full-width).
 - **Header nav — neutral background** — [`SiteHeader`](../../frontend/src/components/layout/SiteHeader.tsx): sticky bar uses neutral `#f6f7f9` with backdrop blur instead of pure white.
@@ -34,7 +38,7 @@
 ### Shipped (2026-07-27 — compare-first)
 
 - **Compare-first homepage** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) embeds compare workspace on `/`; [`HeroSection`](../../frontend/src/components/layout/HeroSection.tsx), [`HomeWorkflowSection`](../../frontend/src/components/layout/HomeWorkflowSection.tsx), [`HomeToolsSection`](../../frontend/src/components/layout/HomeToolsSection.tsx) replace full `ToolGrid`, `TrustBar`, and `FormatSupportSection`. Crawlable `#tools` index preserves internal SEO links. See [compare-first homepage](./compare-first-homepage.md).
-- **PDF compare — review mode** — [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx): setup phase (pick left/right from tray) + immersive viewer (zoom, fit-width, single-page / continuous modes, page nav, fullscreen, keyboard shortcuts). [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) hides file tray and tool switcher in review mode. Canvas zoom fix: removed `max-width: 100%` on `.compare-page-canvas`.
+- **PDF compare — review mode** — [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx): setup phase (pick left/right from tray) + immersive viewer (zoom, fit-width, single-page / continuous modes, page nav, fullscreen, keyboard shortcuts). [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) hides file tray and tool rail in review mode. Canvas zoom fix: removed `max-width: 100%` on `.compare-page-canvas`.
 - **Home & compare i18n** — New `hero`, `home`, and `compare` message namespaces in all 5 locales. Updated `meta.homeTitle` / `meta.homeDescription` with compare keywords. `BUSINESS_TAGLINE` and structured data feature list prioritize compare.
 
 ### Shipped (2026-07-27 — taxonomy)
@@ -311,8 +315,7 @@ Redesigned shell for all `/tools/*` pages. **All three phases complete.** Full s
 |--------|----------------|
 | Two-column layout | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) — `.workspace-layout` grid |
 | Files column | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) — upload + tray + single clear |
-| Category + tool tabs | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) |
-| Styles | [`index.css`](../../frontend/src/index.css) — `.workspace-files-column`, `.workspace-category-tabs` |
+| Styles | [`index.css`](../../frontend/src/index.css) — `.workspace-files-column` |
 
 ### Phase 2 — result cards & workflow
 
@@ -331,7 +334,7 @@ Redesigned shell for all `/tools/*` pages. **All three phases complete.** Full s
 | Client-side tool switching | [`useWorkspaceNavigation.ts`](../../frontend/src/hooks/useWorkspaceNavigation.ts) — History API, no full reload |
 | Nav context + result chips | [`WorkspaceNavContext.tsx`](../../frontend/src/context/WorkspaceNavContext.tsx) |
 | Header tool pill sync | [`workspaceNavStore.ts`](../../frontend/src/stores/workspaceNavStore.ts) + [`SiteHeader.tsx`](../../frontend/src/components/layout/SiteHeader.tsx) |
-| Button-based workspace tabs | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) |
+| Vertical rail (single-PDF tools) | [`WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx) |
 | File thumbnails in tray | [`WorkspaceFileThumbnail.tsx`](../../frontend/src/components/WorkspaceFileThumbnail.tsx), [`useFileThumbnail.ts`](../../frontend/src/hooks/useFileThumbnail.ts) |
 | PDF thumb rendering | [`pdfJsClient.ts`](../../frontend/src/services/pdfJsClient.ts) — `pdfThumbnailDataUrl()` |
 | Mobile: action-first + collapsible files | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx), [`index.css`](../../frontend/src/index.css) |

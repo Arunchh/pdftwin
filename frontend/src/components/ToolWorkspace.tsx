@@ -19,7 +19,6 @@ import WordToPdfPanel from "./WordToPdfPanel";
 import SignPdfPanel from "./SignPdfPanel";
 import WorkspaceFileTray from "./WorkspaceFileTray";
 import WorkspaceToolRail from "./layout/WorkspaceToolRail";
-import WorkspaceToolSwitcher from "./layout/WorkspaceToolSwitcher";
 import type { ToolId } from "../config/tools";
 import { TOOL_UPLOAD_CONFIG, WORKSPACE_ACCEPT } from "../config/upload";
 import { WorkspaceNavProvider } from "../context/WorkspaceNavContext";
@@ -183,8 +182,6 @@ export default function ToolWorkspace({
                   onClearAll={handleClearAll}
                 />
               )}
-
-              <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
 
               <div
                 className={`workspace-layout${
