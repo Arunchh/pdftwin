@@ -27,6 +27,7 @@ from services.pdf_watermark import add_pdf_watermark
 from services import entitlements as entitlements_service
 from services import paypal_service
 from services.daily_usage import assert_doc_convert_allowed, mark_doc_convert, remaining_doc_converts
+from services import waitlist as waitlist_service
 from utils import attachment_header, normalize_filename, output_filename, write_zip_entry
 
 app = FastAPI(title="PDFTwin API")
@@ -47,6 +48,11 @@ class PayPalConnectRequest(BaseModel):
 class PayPalSubscriptionRequest(BaseModel):
     return_url: str = Field(min_length=1)
     cancel_url: str = Field(min_length=1)
+
+
+class WaitlistRequest(BaseModel):
+    email: str = Field(min_length=3, max_length=320)
+    name: str | None = Field(default=None, max_length=120)
 
 app.add_middleware(
     CORSMiddleware,
@@ -126,6 +132,16 @@ async def paypal_webhook_stub():
 @app.get("/api/health")
 def health():
     return {"status": "ok"}
+
+
+@app.post("/api/waitlist")
+def join_waitlist(payload: WaitlistRequest):
+    try:
+        return waitlist_service.submit_waitlist(payload.email, payload.name)
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
+    except RuntimeError as exc:
+        raise HTTPException(status_code=502, detail=str(exc)) from exc
 
 
 @app.get("/api/config")

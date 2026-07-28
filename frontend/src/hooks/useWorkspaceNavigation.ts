@@ -2,7 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 import type { ToolId } from "../config/tools";
 import { toolById, toolIdFromPath, toolPath } from "../config/tools";
 import { useI18n } from "../i18n/I18nProvider";
-import { setWorkspaceToolLabel } from "../stores/workspaceNavStore";
 
 export function useWorkspaceNavigation(initialToolId: ToolId) {
   const { locale, messages } = useI18n();
@@ -12,7 +11,6 @@ export function useWorkspaceNavigation(initialToolId: ToolId) {
     (toolId: ToolId) => {
       const copy = messages.tools[toolId];
       document.title = `${copy.name} | ${messages.meta.toolTitleSuffix}`;
-      setWorkspaceToolLabel(copy.name);
     },
     [messages]
   );

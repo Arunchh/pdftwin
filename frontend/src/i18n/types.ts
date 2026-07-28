@@ -168,6 +168,22 @@ export interface Messages {
     };
     faq: Array<{ question: string; answer: string }>;
   };
+  waitlist: {
+    ariaLabel: string;
+    badge: string;
+    headline: string;
+    subtext: string;
+    nameLabel: string;
+    namePlaceholder: string;
+    emailLabel: string;
+    emailPlaceholder: string;
+    submit: string;
+    submitting: string;
+    success: string;
+    alreadyJoined: string;
+    error: string;
+    dismiss: string;
+  };
   footer: {
     tools: string;
     formats: string;

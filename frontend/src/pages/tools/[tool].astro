@@ -23,7 +23,6 @@ const toolCopy = messages.tools[toolId];
   locale="en"
   title={`${toolCopy.name} | ${messages.meta.toolTitleSuffix}`}
   description={toolCopy.description}
-  activeToolLabel={toolCopy.name}
 >
   <ToolWorkspace client:load toolId={toolId} />
 </BaseLayout>

@@ -9,7 +9,6 @@ interface Props {
   locale?: Locale;
   title?: string;
   description?: string;
-  activeToolLabel?: string;
   hreflangAlternates?: Array<{ locale: Locale; href: string }>;
 }
 
@@ -17,7 +16,6 @@ const {
   locale = DEFAULT_LOCALE,
   title,
   description,
-  activeToolLabel,
   hreflangAlternates: hreflangOverride,
 } = Astro.props;
 
@@ -109,7 +107,7 @@ const runtimeEnv = {
     </script>
   </head>
   <body data-locale={locale}>
-    <AppShell client:load locale={locale} activeToolLabel={activeToolLabel}>
+    <AppShell client:load locale={locale}>
       <slot />
     </AppShell>
   </body>

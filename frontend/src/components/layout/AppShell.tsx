@@ -5,22 +5,23 @@ import AuthProvider from "../auth/AuthProvider";
 import CheckoutHost from "../CheckoutHost";
 import SeoStructuredData from "../SeoStructuredData";
 import VercelAnalytics from "../VercelAnalytics";
+import AnnouncementBanner from "./AnnouncementBanner";
 import FormatSupportSection from "./FormatSupportSection";
 import SiteFooter from "./SiteFooter";
 import SiteHeader from "./SiteHeader";
 
 interface AppShellProps {
   locale: Locale;
-  activeToolLabel?: string;
   children: ReactNode;
 }
 
-export default function AppShell({ locale, activeToolLabel, children }: AppShellProps) {
+export default function AppShell({ locale, children }: AppShellProps) {
   return (
     <I18nProvider locale={locale}>
       <div className="site">
         <SeoStructuredData />
-        <SiteHeader activeToolLabel={activeToolLabel} />
+        <AnnouncementBanner />
+        <SiteHeader />
         <main className="site-main">{children}</main>
         <div className="site-prefooter">
           <FormatSupportSection />
