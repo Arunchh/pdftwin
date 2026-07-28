@@ -62,6 +62,10 @@ Compare remains **client-side** (PDF.js) — files never upload for viewing. SEO
 
 All 18 tools listed by category (PDF from · To PDF · Work with PDFs) with links to each `/tools/{path}`. Preserves crawlable internal links after removing the full home grid. Anchor: `#tools` (nav **All tools** and footer **Tools** still work).
 
+### Header nav (Compare + language)
+
+[`SiteNav.tsx`](../../frontend/src/components/layout/SiteNav.tsx) ends with a primary **Compare** button (`/#workspace` — scrolls to the embedded compare workspace on home) followed by the **language switcher**. See [i18n — language switcher](./i18n.md#what-is-translated-phase-1--shipped).
+
 ---
 
 ## SEO & meta (home)

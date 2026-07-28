@@ -22,8 +22,8 @@ PDFTwin’s workspace is a **two-column desktop layout**:
 
 | Column | Width | Purpose |
 |--------|-------|---------|
-| **Files (left)** | ~320px, sticky | Upload dropzone + persisted file list |
-| **Action (right)** | Flexible | Active tool panel (options, run, messages) |
+| **Action (left)** | Flexible | Active tool panel (options, run, messages) |
+| **Files (right)** | ~320px, sticky | Upload dropzone + persisted file list |
 
 Above the columns:
 
@@ -111,8 +111,8 @@ Land on /tools/{tool} (direct link, SEO landing, or header nav)
   → See tool name + category-colored workspace border
   → Category tab matches tool (e.g. Convert for /tools/compress)
   → Tool tabs show siblings in that category
-  → Left: upload or pick from tray (IndexedDB, cross-tool) with thumbnails
-  → Right: configure and run the tool
+  → Left: configure and run the tool
+  → Right: upload or pick from tray (IndexedDB, cross-tool) with thumbnails
   → Switch tool tab → client-side swap (History API, no reload)
   → Browser back/forward → popstate restores previous tool + URL
   → Run tool → result card with explicit Download + next-step chips
@@ -133,7 +133,7 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `HomeToolsSection` | [`frontend/src/components/layout/HomeToolsSection.tsx`](../../frontend/src/components/layout/HomeToolsSection.tsx) | Home — featured tools + SEO tool index (`#tools`) |
 | `ToolCardLink` | [`frontend/src/components/layout/ToolCardLink.tsx`](../../frontend/src/components/layout/ToolCardLink.tsx) | Tool card with icon, label, and input-scope badge |
 | `WorkspaceToolSwitcher` | [`frontend/src/components/layout/WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Category tabs + filtered tool tabs (i18n labels, scope grouping for pdf-ops) |
-| `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Left column: dropzone, file list, single “Clear all” |
+| `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Right column: dropzone, file list, single “Clear all” |
 | `FileDropzone` | [`frontend/src/components/FileDropzone.tsx`](../../frontend/src/components/FileDropzone.tsx) | Drag/drop + browse; Pro gate on oversized files |
 | `ToolResultCard` | [`frontend/src/components/ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) | Success state: filename, Download, next steps |
 | `ToolPanelFeedback` | [`frontend/src/components/ToolPanelFeedback.tsx`](../../frontend/src/components/ToolPanelFeedback.tsx) | Error + notice + result card wrapper for panels |
@@ -171,10 +171,10 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
   </nav>
 
   <div class="workspace-layout">
-    <aside class="workspace-files-column panel">…</aside>
     <div class="workspace-action-column">
       <div class="panel tool-panel">…</div>        <!-- e.g. CompressPanel -->
     </div>
+    <aside class="workspace-files-column panel">…</aside>
   </div>
 </section>
 ```
@@ -183,9 +183,9 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 
 | Class | Purpose |
 |-------|---------|
-| `.workspace-layout` | CSS grid: 320px + 1fr on desktop; single column ≤640px |
-| `.workspace-files-column` | Sticky left column; dashed border |
-| `.workspace-action-column` | Right column; hosts existing tool panels |
+| `.workspace-layout` | CSS grid: 1fr + 320px on desktop; single column ≤640px |
+| `.workspace-action-column` | Left column; hosts existing tool panels |
+| `.workspace-files-column` | Sticky right column; dashed border |
 | `.workspace-category-tabs` | Top row: PDF from / To PDF / Work with PDFs |
 | `.workspace-category-tab--{category}.active` | Category accent colors (mint, amber, violet) |
 | `.workspace-tool-switcher--scoped` | PDF-ops tab row with scope + subcategory labels |
@@ -277,13 +277,13 @@ Clicking a category tab navigates to the **first tool in that category** (client
 
 ### Comparison with site header nav
 
-`SiteNav` uses category **dropdowns** on desktop and accordion on mobile (full page links). The **Edit PDF** dropdown mirrors the home grid: **One PDF** and **Multiple PDFs** blocks with scope hints, sub-headings, and badge labels on each link. The workspace uses **horizontal button tabs** scoped to the active category — fewer choices on screen, same taxonomy, instant panel swap.
+`SiteNav` uses category **dropdowns** on desktop and accordion on mobile (full page links). The **Edit PDF** dropdown mirrors the home grid: **One PDF** and **Multiple PDFs** blocks with scope hints, sub-headings, and badge labels on each link. After **Formats** and **Pricing**, a primary **Compare** button (`/#workspace`) is followed by the **language switcher**. The workspace uses **horizontal button tabs** scoped to the active category — fewer choices on screen, same taxonomy, instant panel swap.
 
 ---
 
-## Files column (left)
+## Files column (right)
 
-Merged **upload + tray** into one surface (Phase 1), with thumbnails (Phase 3):
+Merged **upload + tray** into one surface (Phase 1), with thumbnails (Phase 3). Rendered in the **right** grid column on desktop (2026-07-28 column swap):
 
 1. Header: “Your files” + plan limit badge (`Free` / `Pro` · file size cap)
 2. Tool-specific dropzone (`TOOL_UPLOAD_CONFIG[toolId]`) — always visible, including on mobile
@@ -308,7 +308,7 @@ Empty state: *“No files yet — upload above to get started.”*
 
 | Breakpoint | Behavior |
 |------------|----------|
-| **Desktop (default)** | 2-column grid; files column `position: sticky; top: 5.5rem` |
+| **Desktop (default)** | 2-column grid (tool panel left, files right); files column `position: sticky; top: 5.5rem` |
 | **≤640px** | Single column; **action column first** (`order: 1`), files second (`order: 2`); sticky disabled; tool tab labels hidden (icons only) |
 | **≤640px + files present** | File list collapses into `<details>` (“Your files (N)”) — dropzone stays visible above the collapsible list |
 

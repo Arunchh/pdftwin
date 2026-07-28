@@ -1,6 +1,11 @@
 # Implementation status
 
-> Last updated: 2026-07-27 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
+> Last updated: 2026-07-28 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
+
+### Shipped (2026-07-28 — nav + workspace layout)
+
+- **Header nav — Compare CTA + language order** — [`SiteNav.tsx`](../../frontend/src/components/layout/SiteNav.tsx): primary **Compare** button (`/#workspace`) followed by the **language switcher** at the end of the main nav bar (Formats · Pricing · Compare · language).
+- **Workspace column swap** — [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx): **tool panel left**, **file upload tray right** on desktop (`grid-template-columns: 1fr + 320px`). Mobile unchanged (tool panel first, collapsible file list). See [tool workspace UI — overview](./tool-workspace-ui.md#overview).
 
 ### Shipped (2026-07-27 — compare diff + worker)
 

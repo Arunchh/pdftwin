@@ -252,6 +252,14 @@ export default function SiteNav() {
           {messages.nav.pricing}
         </a>
 
+        <a
+          className="site-nav-item site-nav-compare btn btn-primary btn-sm"
+          href={`${localizePath("/")}#workspace`}
+          onClick={closeMobile}
+        >
+          {messages.tools["pdf-compare"].shortLabel}
+        </a>
+
         <div className="site-nav-language">
           <LanguageSwitcher variant="nav" />
         </div>

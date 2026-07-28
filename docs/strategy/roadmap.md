@@ -77,7 +77,7 @@ Priority changes from competitive review:
 
 ### Phase 1 — shipped (2026-07-27)
 
-- [x] Two-column desktop layout (files left, tool panel right)
+- [x] Two-column desktop layout (tool panel left, file tray right)
 - [x] Category tabs (Convert / Organize / Protect) + filtered horizontal tool tabs
 - [x] Merged upload + file tray; single “Clear all” action
 - [x] Keep existing PDFTwin Neon Pastel visual design

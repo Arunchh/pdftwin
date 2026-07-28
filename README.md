@@ -10,7 +10,7 @@ Live site: [pdftwin.com](https://pdftwin.com) · Operated by **Helios Impex** (I
 
 ## Languages
 
-PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`), **Dutch** (`/nl/`), and **Portuguese** (`/pt/`). On Vercel, first-time visitors from matching regions are redirected based on country and browser language. Use the globe menu in the header to switch manually.
+PDFTwin supports **English** (default), **Spanish** (`/es/`), **French** (`/fr/`), **Dutch** (`/nl/`), and **Portuguese** (`/pt/`). On Vercel, first-time visitors from matching regions are redirected based on country and browser language. Use the **language switcher** in the main nav bar (to the right of **Compare**) to switch manually.
 
 ## Features
 
@@ -54,7 +54,7 @@ Each tool card shows a **1 PDF** or **2+ PDFs** badge so you can tell at a glanc
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
 - **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads and unlimited PDF → Word/Excel exports
-- **Two-column tool workspace** — Files column (upload + tray + thumbnails) on the left; tool actions on the right — see [tool workspace UI](docs/product/tool-workspace-ui.md)
+- **Two-column tool workspace** — Tool panel (job options + run) on the left; files column (upload + tray + thumbnails) on the right — see [tool workspace UI](docs/product/tool-workspace-ui.md)
 - **Conversion-direction categories** — PDF → other formats, convert → PDF, and work-with-PDFs tabs on home and workspace
 - **Single vs multi-PDF columns** — “One PDF” and “Multiple PDFs” side-by-side in the Work with PDFs section, with **1 PDF** / **2+ PDFs** badges on each tool card
 - **Instant tool switching** — Switch tools in the workspace without a full page reload; browser back/forward supported
@@ -168,11 +168,11 @@ Client-side tools show a **“Processed on your device”** badge. See [implemen
 
 Design tokens live in `frontend/src/index.css` under `:root`. Legacy token names (`--sapphire-*`, `--amethyst-*`, `--emerald-*`) are retained for compatibility but map to the fluorescent mint / violet / coral palette.
 
-**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (**From PDF**, **To PDF**, **Edit PDF**). The **Edit PDF** dropdown splits into **One PDF** and **Multiple PDFs** blocks with scope hints and **1 PDF** / **2+ PDFs** labels on each link. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
+**Navigation:** The main header (`SiteHeader` + `SiteNav`) uses a flat white bar with category dropdowns (**From PDF**, **To PDF**, **Edit PDF**). The **Edit PDF** dropdown splits into **One PDF** and **Multiple PDFs** blocks with scope hints and **1 PDF** / **2+ PDFs** labels on each link. After **Formats** and **Pricing**, a primary **Compare** button links to `/#workspace`, followed by the **language switcher**. On mobile, a hamburger menu opens a full-height panel with accordion tool lists.
 
 **Homepage (compare-first):** The home route leads with a **compare hero** (primary CTA → `/tools/compare`), a **4-step review workflow** section, six **featured complementary tools**, and a crawlable **All PDFTwin tools** index at `#tools`. The former full tool grid, trust bar, and formats section are no longer on `/` — formats live at `/formats`; full taxonomy remains in header nav. See [compare-first homepage](docs/product/compare-first-homepage.md).
 
-**Tool workspace:** Each `/tools/*` page uses a two-column layout — upload and file tray (with thumbnails) on the left, the active tool panel on the right. **Compare** adds a second **review mode** that hides workspace chrome for a full-width dual-pane viewer. In-workspace navigation uses three category tabs plus horizontal tool tabs filtered to the current category; **Edit PDF** tabs are grouped under **One PDF** / **Multiple PDFs** scope labels. Tab clicks swap tools client-side via the History API (no full reload). On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
+**Tool workspace:** Each `/tools/*` page uses a two-column layout — the active tool panel on the left, upload and file tray (with thumbnails) on the right. **Compare** adds a second **review mode** that hides workspace chrome for a full-width dual-pane viewer. In-workspace navigation uses three category tabs plus horizontal tool tabs filtered to the current category; **Edit PDF** tabs are grouped under **One PDF** / **Multiple PDFs** scope labels. Tab clicks swap tools client-side via the History API (no full reload). On mobile, the action column appears first and the file list collapses when files are present. Full spec: [docs/product/tool-workspace-ui.md](docs/product/tool-workspace-ui.md).
 
 ## Prerequisites
 

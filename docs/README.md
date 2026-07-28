@@ -2,7 +2,9 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-27):** **Compare diff modes** (text / visual / overlay) with **Web Worker** off-thread analysis, plus **swap left/right**. Default compare experience remains viewer-only. See [pdf-compare-diff](./product/pdf-compare-diff.md).
+**Latest (2026-07-28):** **Header nav** — **Compare** primary button with **language switcher** immediately to its right. **Workspace layout** — tool panel on the left, file upload tray on the right (desktop). See [tool workspace UI](./product/tool-workspace-ui.md#overview).
+
+**Previous (2026-07-27):** **Compare diff modes** (text / visual / overlay) with **Web Worker** off-thread analysis, plus **swap left/right**. Default compare experience remains viewer-only. See [pdf-compare-diff](./product/pdf-compare-diff.md).
 
 **Previous (2026-07-27):** **Compare-first homepage** and **dedicated PDF compare review viewer** — immersive dual-pane mode with working zoom, fit-width, single-page navigation, and fullscreen. Home restructured: compare hero → workflow → featured tools + SEO tool index (`#tools`). See [compare-first homepage](./product/compare-first-homepage.md).
 

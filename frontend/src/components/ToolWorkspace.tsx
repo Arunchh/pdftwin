@@ -166,6 +166,8 @@ export default function ToolWorkspace({
             hideWorkspaceChrome ? " workspace-layout--compare-review" : ""
           }`}
         >
+          <div className="workspace-action-column">{renderToolPanel()}</div>
+
           {!hideWorkspaceChrome && (
             <WorkspaceFileTray
               accept={WORKSPACE_ACCEPT}
@@ -181,8 +183,6 @@ export default function ToolWorkspace({
               onClearAll={handleClearAll}
             />
           )}
-
-          <div className="workspace-action-column">{renderToolPanel()}</div>
         </div>
       </section>
     </WorkspaceNavProvider>
