@@ -5,6 +5,7 @@ import AuthProvider from "../auth/AuthProvider";
 import CheckoutHost from "../CheckoutHost";
 import SeoStructuredData from "../SeoStructuredData";
 import VercelAnalytics from "../VercelAnalytics";
+import FormatSupportSection from "./FormatSupportSection";
 import SiteFooter from "./SiteFooter";
 import SiteHeader from "./SiteHeader";
 
@@ -21,6 +22,9 @@ export default function AppShell({ locale, activeToolLabel, children }: AppShell
         <SeoStructuredData />
         <SiteHeader activeToolLabel={activeToolLabel} />
         <main className="site-main">{children}</main>
+        <div className="site-prefooter">
+          <FormatSupportSection />
+        </div>
         <SiteFooter />
         <CheckoutHost />
         <AuthProvider />

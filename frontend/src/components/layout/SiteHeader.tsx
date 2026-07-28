@@ -7,6 +7,7 @@ import {
   getWorkspaceToolLabel,
   subscribeWorkspaceToolLabel,
 } from "../../stores/workspaceNavStore";
+import LanguageSwitcher from "../../i18n/LanguageSwitcher";
 import BrandLogo from "../BrandLogo";
 import SiteNav from "./SiteNav";
 
@@ -35,6 +36,7 @@ export default function SiteHeader({ activeToolLabel }: SiteHeaderProps) {
         <SiteNav />
 
         <div className="site-header-actions">
+          <LanguageSwitcher variant="header" />
           {toolPillLabel && (
             <span className="active-tool-pill">{toolPillLabel}</span>
           )}

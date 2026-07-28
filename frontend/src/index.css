@@ -1282,6 +1282,10 @@ textarea {
   flex-shrink: 0;
 }
 
+.site-header-actions .language-switcher-trigger {
+  font-size: 0.85rem;
+}
+
 .language-switcher {
   position: relative;
 }
@@ -1334,11 +1338,6 @@ textarea {
 .language-switcher-menu button.active {
   background: var(--surface-muted);
   color: var(--accent);
-}
-
-.site-nav-language {
-  display: flex;
-  align-items: center;
 }
 
 .site-nav-compare {
@@ -1828,7 +1827,6 @@ textarea {
 .site-main > .hero,
 .site-main > .trust-bar,
 .site-main > .tool-grid-section,
-.site-main > .format-support-section,
 .site-main > .home-compare-hero,
 .site-main > .home-workflow-section,
 .site-main > .home-tools-section,
@@ -1836,6 +1834,17 @@ textarea {
 .site-main > .workspace {
   margin-inline: -1.25rem;
   padding-inline: 1.25rem;
+}
+
+.site-prefooter {
+  width: 100%;
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0 1.25rem 0.5rem;
+}
+
+.site-prefooter .format-support-section {
+  margin: 0;
 }
 
 .section-heading h2 {

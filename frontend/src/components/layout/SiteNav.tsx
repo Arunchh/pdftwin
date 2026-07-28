@@ -13,7 +13,6 @@ import {
   type InputScope,
   type ToolCategory,
 } from "../../config/tools";
-import LanguageSwitcher from "../../i18n/LanguageSwitcher";
 import { useI18n } from "../../i18n/I18nProvider";
 
 function NavToolLink({
@@ -245,9 +244,6 @@ export default function SiteNav() {
           );
         })}
 
-        <a className="site-nav-item" href={localizePath("/formats")} onClick={closeMobile}>
-          {messages.nav.formats}
-        </a>
         <a className="site-nav-item" href={localizePath("/pricing")} onClick={closeMobile}>
           {messages.nav.pricing}
         </a>
@@ -259,10 +255,6 @@ export default function SiteNav() {
         >
           {messages.tools["pdf-compare"].shortLabel}
         </a>
-
-        <div className="site-nav-language">
-          <LanguageSwitcher variant="nav" />
-        </div>
       </nav>
     </>
   );

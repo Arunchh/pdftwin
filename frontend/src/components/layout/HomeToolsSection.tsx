@@ -38,7 +38,7 @@ export default function HomeToolsSection() {
         </nav>
 
         <div className="home-tools-footer-links">
-          <a href={localizePath("/formats")}>{messages.nav.formats}</a>
+          <a href="#formats">{messages.nav.formats}</a>
           <a href={localizePath("/guides/compare-pdf-online")}>{messages.hero.seeCompareGuide}</a>
           <a href={localizePath("/pricing")}>{messages.nav.pricing}</a>
         </div>
