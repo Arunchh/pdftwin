@@ -16,6 +16,9 @@ export const nl: Messages = {
     formatsTitle: "Ondersteunde formaten | PDFTwin",
     formatsDescription:
       "Bekijk alle document- en afbeeldingsformaten die PDFTwin converteert voor zakelijke teams.",
+    toolsIndexTitle: "Alle PDF-tools — Vergelijken, samenvoegen, converteren | PDFTwin",
+    toolsIndexDescription:
+      "Bekijk alle 18 PDFTwin-tools: PDF's vergelijken, samenvoegen, splitsen, naar Word converteren, OCR, watermerk, ondertekenen, comprimeren en meer — gratis in de browser.",
     toolTitleSuffix: "PDFTwin",
   },
   language: {
@@ -90,6 +93,14 @@ export const nl: Messages = {
       subheading:
         "Elke zakelijke conversie- en PDF-tool in één werkruimte — samenvoegen, splitsen, OCR, watermerk en meer.",
     },
+  },
+  toolsIndex: {
+    heading: "Alle PDFTwin-tools",
+    subheading:
+      "Elke zakelijke conversie- en PDF-tool op één pagina — gegroepeerd zoals in het navigatiemenu.",
+    breadcrumb: "Alle tools",
+    compareCta: "PDF's vergelijken",
+    homeCta: "Terug naar home",
   },
   compare: {
     setupTitle: "Kies twee PDF's om te vergelijken",

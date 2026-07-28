@@ -2,7 +2,9 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-28):** **Vertical tool rail** — single-PDF edit tools (split, watermark, sign, etc.) in a Paint-style icon rail on the workspace left margin; Merge/Compare stay in horizontal tabs. See [tool workspace UI — vertical tool rail](./product/tool-workspace-ui.md#vertical-tool-rail-single-pdf-edit-tools).
+**Latest (2026-07-28):** **`/tools/` catalog page** — full-page tool index (mega-menu layout at larger scale); smoother nav mega-menu scroll; SEO updates (ItemList schema, sitemap, internal links). See [tool workspace UI — All tools page](./product/tool-workspace-ui.md#all-tools-catalog-page-tools).
+
+**Previous (2026-07-28):** **Vertical tool rail** — single-PDF edit tools in a Paint-style icon rail on the workspace left margin.
 
 **Previous (2026-07-28):** **All tools mega menu** — From PDF / To PDF / Edit PDF grouped under one nav item.
 

@@ -17,6 +17,8 @@ export interface Messages {
     pricingDescription: string;
     formatsTitle: string;
     formatsDescription: string;
+    toolsIndexTitle: string;
+    toolsIndexDescription: string;
     toolTitleSuffix: string;
   };
   language: {
@@ -68,6 +70,13 @@ export interface Messages {
       heading: string;
       subheading: string;
     };
+  };
+  toolsIndex: {
+    heading: string;
+    subheading: string;
+    breadcrumb: string;
+    compareCta: string;
+    homeCta: string;
   };
   compare: {
     setupTitle: string;

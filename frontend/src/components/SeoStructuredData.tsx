@@ -17,6 +17,13 @@ const structuredData = {
       name: SITE_NAME,
       description: BUSINESS_TAGLINE,
       inLanguage: "en",
+      hasPart: {
+        "@type": "CollectionPage",
+        "@id": `${SITE_URL}/tools/#collection`,
+        url: `${SITE_URL}/tools/`,
+        name: "All PDFTwin Tools",
+        description: `Browse all ${TOOL_COUNT} PDF and document tools.`,
+      },
     },
     {
       "@type": "WebApplication",

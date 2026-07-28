@@ -97,7 +97,7 @@ Compare is the **default home hero tool** — users upload and compare without l
 
 ### SEO tool index (`messages.home.seoTools`)
 
-All 18 tools listed by category (PDF from · To PDF · Work with PDFs) with links to each `/tools/{path}`. Preserves crawlable internal links after removing the full home grid. Anchor: `#tools` (nav **All tools** and footer **Tools** still work).
+All 18 tools listed by category (PDF from · To PDF · Work with PDFs) with links to each `/tools/{path}`. Preserves crawlable internal links after removing the full home grid. Anchor: `#tools` on home; full catalog at [`/tools/`](../../frontend/src/pages/tools/index.astro).
 
 ### Header nav (Compare + language)
 

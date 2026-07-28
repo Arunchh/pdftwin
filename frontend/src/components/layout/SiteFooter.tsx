@@ -16,7 +16,7 @@ export default function SiteFooter() {
           </div>
         </div>
         <div className="site-footer-links">
-          <a href={`${localizePath("/")}#tools`}>{messages.footer.tools}</a>
+          <a href={localizePath("/tools")}>{messages.footer.tools}</a>
           <a href={localizePath("/formats")}>{messages.footer.formats}</a>
           <a href={localizePath("/pricing")}>{messages.footer.pricing}</a>
           <a href={localizePath("/login")}>{messages.footer.signIn}</a>

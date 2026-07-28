@@ -326,13 +326,28 @@ Clicking a category tab navigates to the **first tool in that category** (client
 - **Work with PDFs:** horizontal tabs show **Merge** and **Compare** only. All eight **single-PDF** tools (split, extract, watermark, sign, etc.) live on the vertical [`WorkspaceToolRail`](../../frontend/src/components/layout/WorkspaceToolRail.tsx).
 - **PDF to Other Formats** and **Convert to PDF:** all category tools remain in the horizontal row (no rail entries for those categories).
 - Labels use i18n `messages.tools[toolId].shortLabel` (locale-aware via `toolPath(id, locale)`).
-- “All tools” links to `/#tools` (or `/{locale}/#tools`) — full navigation to home anchor.
+- “All tools” links to [`/tools/`](../../frontend/src/pages/tools/index.astro) (localized full catalog page).
 
 **Tool rail:** icon buttons call the same `navigateToTool()` as horizontal tabs. Active rail tool gets `.workspace-tool-rail-btn.active`. Hover shows a flyout tooltip with the short label.
 
 ### Comparison with site header nav
 
-`SiteNav` uses a single **All tools** mega menu on desktop (hover) and mobile (accordion). Inside the panel, tools are grouped by category in `WORKSPACE_CATEGORY_ORDER` — **Work with PDFs** (Edit PDF) first, then **From PDF**, then **To PDF**. Each column mirrors the workspace taxonomy: **One PDF** / **Multiple PDFs** blocks for pdf-ops, sub-headings, and badge labels on each link. Top-level nav is slim: **All tools** · **Pricing** · **Compare** (`/#workspace`) · **language switcher**. Footer link inside the mega menu → `/#tools` (full crawlable index).
+`SiteNav` uses a single **All tools** mega menu on desktop (hover) and mobile (accordion). Inside the panel, tools are grouped by category in `WORKSPACE_CATEGORY_ORDER` — **Work with PDFs** (Edit PDF) first, then **From PDF**, then **To PDF**. Each column mirrors the workspace taxonomy: **One PDF** / **Multiple PDFs** blocks for pdf-ops, sub-headings, and badge labels on each link. Top-level nav is slim: **All tools** · **Pricing** · **Compare** (`/#workspace`) · **language switcher**. Footer link inside the mega menu → [`/tools/`](../../frontend/src/pages/tools/index.astro) (full catalog page). Home `#tools` anchor remains for the compact SEO index on `/`.
+
+### All tools catalog page (`/tools/`)
+
+Dedicated crawlable page with the same taxonomy as the header mega menu, at full-page scale:
+
+| Route | Page |
+|-------|------|
+| `/tools/` | English |
+| `/{locale}/tools/` | ES, FR, NL, PT |
+
+Component: [`ToolsIndexPage.tsx`](../../frontend/src/components/content/ToolsIndexPage.tsx). Three columns (**Work with PDFs** · **From PDF** · **To PDF**), scope/subcategory groupings, icon + description cards, compare/home CTAs.
+
+SEO per page: localized `<title>` / meta description, canonical + hreflang via `BaseLayout`, `ItemList` + `BreadcrumbList` JSON-LD (SSR in Astro).
+
+Internal links updated: nav mega-menu footer, workspace **All tools**, site footer **Tools**, hero **Browse all tools**, home `#tools` section link.
 
 The workspace uses **horizontal button tabs** for category-level tools plus a **vertical icon rail** for single-PDF edit ops — same taxonomy as the mega menu, instant panel swap. Category tab order matches the header: **Work with PDFs** leftmost.
 
@@ -528,7 +543,7 @@ After workspace changes, manually verify:
 
 1. Land on `/tools/merge` — correct panel; **Work with PDFs** category tab; Merge in horizontal row
 2. Land on `/tools/watermark` — watermark active on **vertical rail**; pdf-ops category tab active
-3. Home `/#tools` — SEO tool index lists all 18 tools by category (featured cards + link list)
+3. Home `/#tools` — compact SEO tool index; full catalog at `/tools/` (all 18 tools, mega-menu layout)
 4. Click **Compress** on rail — panel swaps without reload; URL becomes `/tools/compress`; files remain in tray
 5. Browser **Back** — returns to previous panel and URL
 6. Upload a PDF and an image — thumbnails appear in tray rows

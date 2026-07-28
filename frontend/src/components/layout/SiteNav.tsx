@@ -242,7 +242,7 @@ export default function SiteNav() {
             </div>
 
             <div className="site-nav-mega-footer">
-              <a href={`${localizePath("/")}#tools`} onClick={closeMobile}>
+              <a href={localizePath("/tools")} onClick={closeMobile}>
                 {messages.nav.browseToolIndex}
               </a>
             </div>

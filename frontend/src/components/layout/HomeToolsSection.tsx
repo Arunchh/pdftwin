@@ -34,6 +34,9 @@ export default function HomeToolsSection() {
         <div className="section-heading">
           <h2>{seoTools.heading}</h2>
           <p>{seoTools.subheading}</p>
+          <p className="home-tools-index-link">
+            <a href={localizePath("/tools")}>{messages.nav.browseToolIndex}</a>
+          </p>
         </div>
 
         <nav className="home-seo-tools-nav" aria-label={seoTools.heading}>

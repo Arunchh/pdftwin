@@ -25,7 +25,7 @@ export default function WorkspaceToolSwitcher({
   activeTool,
   onNavigate,
 }: WorkspaceToolSwitcherProps) {
-  const { locale, messages } = useI18n();
+  const { messages, localizePath } = useI18n();
   const active = toolById(activeTool);
   const activeCategory = active.category;
 
@@ -110,7 +110,7 @@ export default function WorkspaceToolSwitcher({
             </button>
           );
         })}
-        <a href={locale === "en" ? "/#tools" : `/${locale}/#tools`} className="workspace-tool-browse">
+        <a href={localizePath("/tools")} className="workspace-tool-browse">
           All tools
         </a>
       </div>

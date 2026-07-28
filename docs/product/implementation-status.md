@@ -2,6 +2,12 @@
 
 > Last updated: 2026-07-28 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
+### Shipped (2026-07-28 — tools catalog page + SEO)
+
+- **`/tools/` catalog page** — [`ToolsIndexPage.tsx`](../../frontend/src/components/content/ToolsIndexPage.tsx) + [`pages/tools/index.astro`](../../frontend/src/pages/tools/index.astro): full-page mega-menu-style index of all 18 tools (5 locales). **Browse full tool index** in nav, footer, workspace, and hero now link here instead of `/#tools`.
+- **SEO** — Per-locale `meta.toolsIndexTitle` / `toolsIndexDescription`; `ItemList` + `BreadcrumbList` JSON-LD on catalog pages; [`sitemap.xml`](../../frontend/public/sitemap.xml) entries for `/tools/`; `WebSite.hasPart` in [`SeoStructuredData.tsx`](../../frontend/src/components/SeoStructuredData.tsx); legacy `#tools` hash redirects to `/tools/` via [`BaseLayout.astro`](../../frontend/src/layouts/BaseLayout.astro).
+- **Nav mega menu** — Smoother scroll (`scroll-behavior: smooth`, styled scrollbar).
+
 ### Shipped (2026-07-28 — vertical tool rail)
 
 - **Workspace tool rail** — [`WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx): sticky vertical icon toolbar for all eight **single-PDF** pdf-ops tools (pages, markup, protect groups). Merge and Compare remain in the horizontal [`WorkspaceToolSwitcher`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx). Layout: rail | panel | file tray. Mobile: horizontal scroll strip. See [tool workspace UI — vertical tool rail](./tool-workspace-ui.md#vertical-tool-rail-single-pdf-edit-tools).

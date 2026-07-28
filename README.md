@@ -72,6 +72,7 @@ PDFTwin is **not a single-page app**. It uses **Astro** to pre-render real URLs;
 | Route | Page |
 |-------|------|
 | `/` | Home — compare hero, review workflow, featured tools, SEO tool index (`#tools`) |
+| `/tools/` | Full tool catalog index (mega-menu layout, all 18 tools) |
 | `/formats` | Format reference |
 | `/pricing` | Plans, FAQ, Pro checkout |
 | `/login` | Sign in |

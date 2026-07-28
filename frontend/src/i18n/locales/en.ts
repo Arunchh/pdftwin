@@ -16,6 +16,9 @@ export const en: Messages = {
     formatsTitle: "Supported Formats | PDFTwin",
     formatsDescription:
       "See every document and image format PDFTwin converts for business teams — PDF, Word, Excel, WebP, and more.",
+    toolsIndexTitle: "All PDF Tools — Compare, Merge, Convert & Edit | PDFTwin",
+    toolsIndexDescription:
+      "Browse all 18 PDFTwin tools: compare PDFs side by side, merge, split, convert to Word, OCR, watermark, sign, compress, and more — free in your browser.",
     toolTitleSuffix: "PDFTwin",
   },
   language: {
@@ -90,6 +93,14 @@ export const en: Messages = {
       subheading:
         "Every business conversion and PDF tool in one workspace — merge, split, OCR, watermark, and more.",
     },
+  },
+  toolsIndex: {
+    heading: "All PDFTwin tools",
+    subheading:
+      "Every business PDF and conversion tool in one place — grouped the same way as the navigation menu. Pick a tool to open its workspace.",
+    breadcrumb: "All tools",
+    compareCta: "Compare PDFs now",
+    homeCta: "Back to home workspace",
   },
   compare: {
     setupTitle: "Choose two PDFs to compare",

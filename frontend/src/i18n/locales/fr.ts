@@ -16,6 +16,9 @@ export const fr: Messages = {
     formatsTitle: "Formats pris en charge | PDFTwin",
     formatsDescription:
       "Découvrez tous les formats document et image que PDFTwin convertit pour les équipes professionnelles.",
+    toolsIndexTitle: "Tous les outils PDF — Comparer, fusionner, convertir | PDFTwin",
+    toolsIndexDescription:
+      "Parcourez les 18 outils PDFTwin : comparer des PDF, fusionner, diviser, convertir en Word, OCR, filigrane, signer, compresser et plus — gratuit dans le navigateur.",
     toolTitleSuffix: "PDFTwin",
   },
   language: {
@@ -90,6 +93,14 @@ export const fr: Messages = {
       subheading:
         "Chaque outil de conversion et PDF professionnel dans un espace — fusion, division, OCR, filigrane et plus.",
     },
+  },
+  toolsIndex: {
+    heading: "Tous les outils PDFTwin",
+    subheading:
+      "Chaque outil de conversion et PDF professionnel au même endroit — regroupés comme dans le menu de navigation.",
+    breadcrumb: "Tous les outils",
+    compareCta: "Comparer des PDF",
+    homeCta: "Retour à l'accueil",
   },
   compare: {
     setupTitle: "Choisissez deux PDF à comparer",

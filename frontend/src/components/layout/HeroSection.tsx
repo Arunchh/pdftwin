@@ -14,7 +14,7 @@ export default function HeroSection() {
       </h2>
       <p className="hero-description">{messages.hero.description}</p>
       <div className="hero-actions">
-        <a className="btn btn-secondary" href={`${localizePath("/")}#tools`}>
+        <a className="btn btn-secondary" href={localizePath("/tools")}>
           {messages.hero.seeAllTools}
         </a>
         <a className="btn btn-secondary" href={localizePath("/guides/compare-pdf-online")}>

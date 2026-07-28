@@ -16,6 +16,9 @@ export const es: Messages = {
     formatsTitle: "Formatos compatibles | PDFTwin",
     formatsDescription:
       "Consulta todos los formatos de documentos e imágenes que PDFTwin convierte para equipos empresariales.",
+    toolsIndexTitle: "Todas las herramientas PDF — Comparar, unir, convertir | PDFTwin",
+    toolsIndexDescription:
+      "Explora las 18 herramientas PDFTwin: comparar PDFs, unir, dividir, convertir a Word, OCR, marca de agua, firmar, comprimir y más — gratis en el navegador.",
     toolTitleSuffix: "PDFTwin",
   },
   language: {
@@ -90,6 +93,14 @@ export const es: Messages = {
       subheading:
         "Cada herramienta de conversión y PDF empresarial en un espacio — combinar, dividir, OCR, marca de agua y más.",
     },
+  },
+  toolsIndex: {
+    heading: "Todas las herramientas PDFTwin",
+    subheading:
+      "Cada herramienta de conversión y PDF empresarial en un solo lugar — agrupadas como en el menú de navegación.",
+    breadcrumb: "Todas las herramientas",
+    compareCta: "Comparar PDFs ahora",
+    homeCta: "Volver al inicio",
   },
   compare: {
     setupTitle: "Elige dos PDFs para comparar",

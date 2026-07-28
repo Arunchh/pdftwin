@@ -1505,6 +1505,29 @@ textarea {
   min-height: 0;
   flex: 1 1 auto;
   -webkit-overflow-scrolling: touch;
+  scroll-behavior: smooth;
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+  scrollbar-color: color-mix(in srgb, var(--border-strong) 85%, transparent) var(--surface-muted);
+}
+
+.site-nav-mega-grid::-webkit-scrollbar {
+  width: 9px;
+}
+
+.site-nav-mega-grid::-webkit-scrollbar-track {
+  background: var(--surface-muted);
+  border-radius: 999px;
+}
+
+.site-nav-mega-grid::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, var(--border-strong) 80%, var(--text-muted));
+  border-radius: 999px;
+  border: 2px solid var(--surface-muted);
+}
+
+.site-nav-mega-grid::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }
 
 .site-nav-mega-column {
@@ -4833,6 +4856,270 @@ textarea {
   font-weight: 600;
 }
 
+.home-tools-index-link {
+  margin: 0.65rem 0 0;
+}
+
+.home-tools-index-link a {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+.home-tools-index-link a:hover {
+  text-decoration: underline;
+}
+
+/* Full-page tools index (/tools/) */
+
+.tools-index-page {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 0.5rem 0 2rem;
+}
+
+.tools-index-header {
+  margin-bottom: 1.75rem;
+  padding: 1.5rem 1.25rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-soft);
+  background: linear-gradient(145deg, var(--surface), var(--surface-muted));
+  box-shadow: var(--shadow);
+}
+
+.tools-index-eyebrow {
+  margin: 0 0 0.35rem;
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.tools-index-header h1 {
+  margin: 0 0 0.65rem;
+  font-size: clamp(1.75rem, 3vw, 2.35rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+}
+
+.tools-index-lead {
+  margin: 0;
+  max-width: 42rem;
+  color: var(--text-muted);
+  font-size: 1.02rem;
+  line-height: 1.55;
+}
+
+.tools-index-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
+  margin-top: 1.15rem;
+}
+
+.tools-index-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.tools-index-column {
+  min-width: 0;
+  border: 1px solid var(--border-soft);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.tools-index-column-header {
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.tools-index-column-header h2 {
+  margin: 0;
+  font-size: 0.95rem;
+  letter-spacing: 0.01em;
+}
+
+.tools-index-column-header span {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+.tools-index-column-header--pdf-from {
+  background: var(--sapphire-50);
+  color: var(--sapphire-700);
+}
+
+.tools-index-column-header--pdf-ops {
+  background: var(--amethyst-50);
+  color: var(--amethyst-700);
+}
+
+.tools-index-column-header--to-pdf {
+  background: var(--amber-50);
+  color: var(--amber-700);
+}
+
+.tools-index-scope-block {
+  padding: 0.65rem 0.75rem 0.35rem;
+}
+
+.tools-index-scope-block + .tools-index-scope-block {
+  border-top: 1px solid var(--border-soft);
+}
+
+.tools-index-scope-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.45rem;
+  margin: 0 0 0.45rem;
+  color: var(--text-muted);
+  font-size: 0.78rem;
+}
+
+.tools-index-scope-label strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.82rem;
+}
+
+.tools-index-scope-label small {
+  display: block;
+  line-height: 1.35;
+}
+
+.tools-index-subcategory {
+  margin-bottom: 0.35rem;
+}
+
+.tools-index-subcategory-label {
+  margin: 0.35rem 0 0.25rem;
+  padding: 0 0.15rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.tools-index-tool-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tools-index-tool-link {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.7rem 0.75rem;
+  border-radius: var(--radius);
+  color: var(--text);
+  text-decoration: none;
+  transition: background 0.15s ease;
+}
+
+.tools-index-tool-link:hover {
+  background: var(--surface-hover);
+}
+
+.tools-index-tool-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.35rem;
+  height: 2.35rem;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+
+.tools-index-tool-icon--pdf-from {
+  background: var(--sapphire-50);
+  color: var(--sapphire-600);
+}
+
+.tools-index-tool-icon--pdf-ops {
+  background: var(--amethyst-50);
+  color: var(--amethyst-600);
+}
+
+.tools-index-tool-icon--to-pdf {
+  background: var(--amber-50);
+  color: var(--amber-600);
+}
+
+.tools-index-tool-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+  flex: 1;
+}
+
+.tools-index-tool-copy strong {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.tools-index-tool-copy small {
+  color: var(--text-muted);
+  font-size: 0.8rem;
+  line-height: 1.35;
+}
+
+.tools-index-tool-scope {
+  flex-shrink: 0;
+  align-self: flex-start;
+  padding: 0.15rem 0.45rem;
+  border-radius: 999px;
+  font-size: 0.68rem;
+  font-weight: 700;
+}
+
+.tools-index-tool-scope--single {
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  border: 1px solid var(--border-soft);
+}
+
+.tools-index-tool-scope--multi {
+  background: var(--cat-pdf-ops-bg);
+  color: var(--cat-pdf-ops-text);
+  border: 1px solid var(--cat-pdf-ops-border);
+}
+
+.tools-index-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-soft);
+}
+
+.tools-index-footer a {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+.tools-index-footer a:hover {
+  text-decoration: underline;
+}
+
 .sr-only {
   position: absolute;
   width: 1px;
@@ -5349,6 +5636,14 @@ textarea {
   .home-workflow-steps,
   .home-seo-tools-nav {
     grid-template-columns: 1fr;
+  }
+
+  .tools-index-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .tools-index-header {
+    padding: 1.15rem 1rem;
   }
 
   .compare-viewer,
