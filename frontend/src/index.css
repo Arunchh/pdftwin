@@ -1490,17 +1490,27 @@ textarea {
 .site-nav-dropdown-panel--mega {
   width: min(56rem, calc(100vw - 2rem));
   padding: 0;
+  display: flex;
+  flex-direction: column;
+  max-height: min(calc(100dvh - 6rem), calc(100svh - 6rem), 34rem);
+  overflow: hidden;
 }
 
 .site-nav-mega-grid {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+  flex: 1 1 auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .site-nav-mega-column {
   min-width: 0;
   border-right: 1px solid var(--border-soft);
+  align-self: start;
 }
 
 .site-nav-mega-column:last-child {
@@ -1515,10 +1525,24 @@ textarea {
 }
 
 .site-nav-mega-footer {
+  flex-shrink: 0;
   padding: 0.65rem 1rem;
   border-top: 1px solid var(--border-soft);
   background: var(--surface-muted);
   text-align: center;
+}
+
+.site-nav-dropdown-panel--mega .site-nav-tool-link {
+  padding: 0.5rem 0.65rem;
+  gap: 0.6rem;
+}
+
+.site-nav-dropdown-panel--mega .site-nav-tool-copy small {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+  line-height: 1.3;
 }
 
 .site-nav-mega-footer a {
@@ -5436,8 +5460,16 @@ textarea {
   }
 
   .site-nav-dropdown--all-tools.site-nav-dropdown--expanded > .site-nav-dropdown-panel {
-    max-height: min(85vh, 48rem);
+    display: flex;
+    flex-direction: column;
+    max-height: min(calc(100dvh - 8rem), calc(100svh - 8rem), 32rem);
+    overflow: hidden;
+  }
+
+  .site-nav-dropdown--all-tools.site-nav-dropdown--expanded .site-nav-mega-grid {
     overflow-y: auto;
+    min-height: 0;
+    flex: 1 1 auto;
   }
 
   .site-header-inner {
@@ -5524,7 +5556,8 @@ textarea {
   .site-nav-dropdown--expanded > .site-nav-dropdown-panel {
     visibility: visible;
     pointer-events: auto;
-    max-height: 40rem;
+    max-height: min(calc(100dvh - 8rem), calc(100svh - 8rem), 32rem);
+    overflow-y: auto;
     border: 1px solid var(--border-soft);
     background: var(--surface-muted);
     box-shadow: none;
