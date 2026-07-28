@@ -59,7 +59,7 @@ Tools are organized so users can answer two questions quickly: **what direction 
 | `to-pdf` | Convert to PDF | “I have Word docs or images — make a PDF.” |
 | `pdf-ops` | Work with PDFs | “I need to edit, merge, or compare PDFs without converting format.” |
 
-Defined in [`tools.ts`](../../frontend/src/config/tools.ts): `CATEGORY_ORDER`, `TOOL_CATEGORIES`, per-tool `category`.
+Defined in [`tools.ts`](../../frontend/src/config/tools.ts): `CATEGORY_ORDER` (SEO/home index), `WORKSPACE_CATEGORY_ORDER` (workspace tool picker — **Work with PDFs** first), `TOOL_CATEGORIES`, per-tool `category`.
 
 ### Input scope (`InputScope`)
 
@@ -308,7 +308,9 @@ Clicking a category tab navigates to the **first tool in that category** (client
 
 ### Comparison with site header nav
 
-`SiteNav` uses category **dropdowns** on desktop and accordion on mobile (full page links). The **Edit PDF** dropdown mirrors the home grid: **One PDF** and **Multiple PDFs** blocks with scope hints, sub-headings, and badge labels on each link. After **Formats** and **Pricing**, a primary **Compare** button (`/#workspace`) is followed by the **language switcher**. The workspace uses **horizontal button tabs** scoped to the active category — fewer choices on screen, same taxonomy, instant panel swap.
+`SiteNav` uses a single **All tools** mega menu on desktop (hover) and mobile (accordion). Inside the panel, tools are grouped by category in `WORKSPACE_CATEGORY_ORDER` — **Work with PDFs** (Edit PDF) first, then **From PDF**, then **To PDF**. Each column mirrors the workspace taxonomy: **One PDF** / **Multiple PDFs** blocks for pdf-ops, sub-headings, and badge labels on each link. Top-level nav is slim: **All tools** · **Pricing** · **Compare** (`/#workspace`) · **language switcher**. Footer link inside the mega menu → `/#tools` (full crawlable index).
+
+The workspace uses **horizontal button tabs** scoped to the active category — same taxonomy as the mega menu, instant panel swap. Category tab order matches the header: **Work with PDFs** leftmost.
 
 ---
 
@@ -492,7 +494,7 @@ Legacy hash URLs (`#merge`, `#convert`, …) redirect via inline script in `Base
 - **Single vs multi PDF:** set `inputScope: "single"` for one-file tools and `"multi"` for merge/compare (or multi-image batch tools). PDF-ops multi tools appear only in the **Multiple PDFs** column; single tools stay under **One PDF** with the correct subcategory.
 - **Download UX:** panels must use `useToolResult` + `ToolPanelFeedback` — do not call `downloadBlob` / `downloadResponse` directly after processing.
 - **Client navigation:** in-workspace tabs must call `navigateToTool` — do not use `<a href>` for sibling tool switches (breaks instant swap and preserves tray state awkwardly via full reload).
-- **Changing category order:** `CATEGORY_ORDER` in `tools.ts` is the single source of truth — imported by `ToolGrid`, `SiteNav`, and `WorkspaceToolSwitcher`.
+- **Changing category order:** `CATEGORY_ORDER` in `tools.ts` drives the home `#tools` SEO index and `ToolGrid`. `WORKSPACE_CATEGORY_ORDER` drives the workspace tool picker and header mega menu (**Work with PDFs** first). Imported by `WorkspaceToolSwitcher`, `SiteNav`, and `ToolGrid` (via `CATEGORY_ORDER` only).
 - **Do not** re-split upload and tray without updating this doc — the single files column is intentional for scan path and one clear action.
 
 ### Verification checklist

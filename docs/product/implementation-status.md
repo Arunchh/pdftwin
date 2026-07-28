@@ -5,7 +5,9 @@
 ### Shipped (2026-07-28 — home UX + chrome)
 
 - **Upload-first home hero** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) + [`ToolWorkspace`](../../frontend/src/components/ToolWorkspace.tsx) `variant="homeHero"`: H1 → prominent upload dropzone → tool switcher → tool panel. [`WorkspaceFileTray`](../../frontend/src/components/WorkspaceFileTray.tsx) gains `variant="hero"` for the full-width home dropzone; standard two-column layout unchanged on `/tools/*`. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
-- **Announcement banner — mobile compact** — [`AnnouncementBanner.tsx`](../../frontend/src/components/layout/AnnouncementBanner.tsx): reduced padding, hidden subtext and optional name field on mobile; email + join on one row (≤900px). Prevents the waitlist bar from filling the viewport.
+- **Workspace category order** — [`WORKSPACE_CATEGORY_ORDER`](../../frontend/src/config/tools.ts) puts **Work with PDFs** first in the home/tool workspace picker ([`WorkspaceToolSwitcher`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx)).
+- **Header All tools mega menu** — [`SiteNav`](../../frontend/src/components/layout/SiteNav.tsx): **From PDF**, **To PDF**, and **Edit PDF** moved under one **All tools** dropdown (3-column mega menu on desktop; accordion on mobile). Top-level nav freed to **All tools · Pricing · Compare · language**.
+- **Announcement banner — mobile compact** — [`AnnouncementBanner.tsx`](../../frontend/src/components/layout/AnnouncementBanner.tsx): tighter padding; email and **Join waitlist** stay on one row with minimal gap (≤640px no longer stacks full-width).
 - **Header nav — neutral background** — [`SiteHeader`](../../frontend/src/components/layout/SiteHeader.tsx): sticky bar uses neutral `#f6f7f9` with backdrop blur instead of pure white.
 
 ### Shipped (2026-07-28 — nav + workspace layout)

@@ -70,6 +70,9 @@ export const TOOL_COUNT = 18;
 
 export const CATEGORY_ORDER: ToolCategory[] = ["pdf-from", "to-pdf", "pdf-ops"];
 
+/** Workspace tool picker — Work with PDFs first (home hero + /tools/*). */
+export const WORKSPACE_CATEGORY_ORDER: ToolCategory[] = ["pdf-ops", "pdf-from", "to-pdf"];
+
 export const INPUT_SCOPE_ORDER: InputScope[] = ["single", "multi"];
 
 export const SUBCATEGORY_ORDER: Partial<Record<ToolCategory, ToolSubcategory[]>> = {

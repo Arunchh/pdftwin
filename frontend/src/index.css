@@ -1474,6 +1474,66 @@ textarea {
   font-size: 0.78rem;
   letter-spacing: 0.02em;
   text-transform: uppercase;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.site-nav-dropdown-header span {
+  font-size: 0.72rem;
+  font-weight: 600;
+  text-transform: none;
+  letter-spacing: 0;
+  opacity: 0.85;
+}
+
+.site-nav-dropdown-panel--mega {
+  width: min(56rem, calc(100vw - 2rem));
+  padding: 0;
+}
+
+.site-nav-mega-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+}
+
+.site-nav-mega-column {
+  min-width: 0;
+  border-right: 1px solid var(--border-soft);
+}
+
+.site-nav-mega-column:last-child {
+  border-right: none;
+}
+
+.site-nav-mega-column .site-nav-dropdown-grid,
+.site-nav-mega-column .site-nav-scope-block,
+.site-nav-mega-column .site-nav-subcategory {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+
+.site-nav-mega-footer {
+  padding: 0.65rem 1rem;
+  border-top: 1px solid var(--border-soft);
+  background: var(--surface-muted);
+  text-align: center;
+}
+
+.site-nav-mega-footer a {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--accent-text);
+  text-decoration: none;
+}
+
+.site-nav-mega-footer a:hover {
+  text-decoration: underline;
+}
+
+.site-nav-dropdown--all-tools > .site-nav-trigger {
+  font-weight: 700;
 }
 
 .site-nav-dropdown-header--pdf-from {
@@ -5155,14 +5215,14 @@ textarea {
   .announcement-banner-inner {
     flex-direction: column;
     align-items: stretch;
-    padding: 0.65rem 2.5rem 0.65rem 0.85rem;
-    gap: 0.55rem;
+    padding: 0.45rem 2.15rem 0.45rem 0.7rem;
+    gap: 0.35rem;
   }
 
   .announcement-banner-copy {
     flex-direction: row;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.35rem;
   }
 
   .announcement-subtext {
@@ -5170,21 +5230,21 @@ textarea {
   }
 
   .announcement-headline {
-    font-size: 0.88rem;
-    line-height: 1.2;
+    font-size: 0.84rem;
+    line-height: 1.15;
   }
 
   .announcement-headline .announcement-sparkle {
-    width: 16px;
-    height: 16px;
+    width: 15px;
+    height: 15px;
   }
 
   .announcement-form {
     width: 100%;
     flex-direction: row;
     flex-wrap: nowrap;
-    align-items: center;
-    gap: 0.45rem;
+    align-items: stretch;
+    gap: 0.3rem;
   }
 
   .announcement-field-name {
@@ -5199,35 +5259,57 @@ textarea {
   }
 
   .announcement-field input {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.84rem;
+    padding: 0.42rem 0.65rem;
+    font-size: 0.82rem;
   }
 
   .announcement-submit {
     width: auto;
     flex-shrink: 0;
-    padding: 0.5rem 0.85rem;
-    font-size: 0.82rem;
+    padding: 0.42rem 0.7rem;
+    font-size: 0.8rem;
   }
 
   .announcement-success {
     width: 100%;
-    padding: 0.5rem 0.75rem;
-    font-size: 0.84rem;
+    padding: 0.42rem 0.65rem;
+    font-size: 0.82rem;
   }
 
   .announcement-dismiss {
-    top: 0.45rem;
-    right: 0.45rem;
-    width: 1.65rem;
-    height: 1.65rem;
+    top: 0.35rem;
+    right: 0.35rem;
+    width: 1.55rem;
+    height: 1.55rem;
   }
 
   .announcement-banner-glow {
-    width: 160px;
-    height: 160px;
-    filter: blur(36px);
-    opacity: 0.4;
+    width: 120px;
+    height: 120px;
+    filter: blur(28px);
+    opacity: 0.35;
+  }
+
+  .site-nav-dropdown-panel--mega {
+    width: 100%;
+  }
+
+  .site-nav-mega-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .site-nav-mega-column {
+    border-right: none;
+    border-bottom: 1px solid var(--border-soft);
+  }
+
+  .site-nav-mega-column:last-child {
+    border-bottom: none;
+  }
+
+  .site-nav-dropdown--all-tools.site-nav-dropdown--expanded > .site-nav-dropdown-panel {
+    max-height: min(85vh, 48rem);
+    overflow-y: auto;
   }
 
   .site-header-inner {
@@ -5336,25 +5418,37 @@ textarea {
   }
 
   .announcement-banner-inner {
-    padding: 0.55rem 2.25rem 0.55rem 0.75rem;
-    gap: 0.45rem;
+    padding: 0.4rem 2rem 0.4rem 0.65rem;
+    gap: 0.3rem;
   }
 
   .announcement-headline {
-    font-size: 0.82rem;
+    font-size: 0.78rem;
+  }
+
+  .announcement-headline .announcement-sparkle {
+    display: none;
   }
 
   .announcement-form {
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+    gap: 0.25rem;
   }
 
   .announcement-field-email {
-    flex: 1 1 100%;
+    flex: 1 1 auto;
+    min-width: 0;
   }
 
   .announcement-submit {
-    flex: 1 1 100%;
-    text-align: center;
+    flex: 0 0 auto;
+    padding: 0.4rem 0.6rem;
+    font-size: 0.76rem;
+  }
+
+  .announcement-field input {
+    padding: 0.38rem 0.55rem;
+    font-size: 0.8rem;
   }
 
   .workspace-hero-upload .workspace-files-upload--hero .dropzone {

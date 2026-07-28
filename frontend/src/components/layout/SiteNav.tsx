@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import { ChevronDown, FileStack, FileText, Menu, X } from "lucide-react";
 import {
-  CATEGORY_ORDER,
   INPUT_SCOPE_ORDER,
   SINGLE_PDF_SUBCATEGORY_ORDER,
   SUBCATEGORY_ORDER,
   TOOLS,
+  WORKSPACE_CATEGORY_ORDER,
   singlePdfToolsInSubcategory,
   toolPath,
   toolsInScope,
@@ -51,11 +51,11 @@ function NavToolLink({
 export default function SiteNav() {
   const { messages, localizePath } = useI18n();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [expandedCategory, setExpandedCategory] = useState<ToolCategory | null>(null);
+  const [allToolsExpanded, setAllToolsExpanded] = useState(false);
 
   useEffect(() => {
     if (!mobileOpen) {
-      setExpandedCategory(null);
+      setAllToolsExpanded(false);
       return;
     }
 
@@ -74,9 +74,9 @@ export default function SiteNav() {
 
   const closeMobile = () => setMobileOpen(false);
 
-  const toggleCategory = (category: ToolCategory) => {
+  const toggleAllTools = () => {
     if (!window.matchMedia("(max-width: 900px)").matches) return;
-    setExpandedCategory((current) => (current === category ? null : category));
+    setAllToolsExpanded((current) => !current);
   };
 
   const navLabels = {
@@ -209,40 +209,45 @@ export default function SiteNav() {
         id="site-nav-panel"
         aria-label={messages.nav.main}
       >
-        <a className="site-nav-item" href={`${localizePath("/")}#tools`} onClick={closeMobile}>
-          {messages.nav.allTools}
-        </a>
+        <div
+          className={`site-nav-dropdown site-nav-dropdown--all-tools${
+            allToolsExpanded ? " site-nav-dropdown--expanded" : ""
+          }`}
+        >
+          <button
+            type="button"
+            className="site-nav-trigger"
+            aria-haspopup="true"
+            aria-expanded={allToolsExpanded}
+            onClick={toggleAllTools}
+          >
+            {messages.nav.allTools}
+            <ChevronDown size={15} className="site-nav-chevron" aria-hidden="true" />
+          </button>
 
-        {CATEGORY_ORDER.map((category) => {
-          const isExpanded = expandedCategory === category;
-
-          return (
-            <div
-              key={category}
-              className={`site-nav-dropdown site-nav-dropdown--${category}${
-                isExpanded ? " site-nav-dropdown--expanded" : ""
-              }`}
-            >
-              <button
-                type="button"
-                className="site-nav-trigger"
-                aria-haspopup="true"
-                aria-expanded={isExpanded}
-                onClick={() => toggleCategory(category)}
-              >
-                {navLabels[category]}
-                <ChevronDown size={15} className="site-nav-chevron" aria-hidden="true" />
-              </button>
-
-              <div className="site-nav-dropdown-panel">
-                <div className={`site-nav-dropdown-header site-nav-dropdown-header--${category}`}>
-                  <strong>{messages.toolGrid.categories[category]}</strong>
-                </div>
-                {renderNavTools(category)}
-              </div>
+          <div className="site-nav-dropdown-panel site-nav-dropdown-panel--mega">
+            <div className="site-nav-mega-grid">
+              {WORKSPACE_CATEGORY_ORDER.map((category) => (
+                <section
+                  key={category}
+                  className={`site-nav-mega-column site-nav-mega-column--${category}`}
+                >
+                  <div className={`site-nav-dropdown-header site-nav-dropdown-header--${category}`}>
+                    <strong>{messages.toolGrid.categories[category]}</strong>
+                    <span>{navLabels[category]}</span>
+                  </div>
+                  {renderNavTools(category)}
+                </section>
+              ))}
             </div>
-          );
-        })}
+
+            <div className="site-nav-mega-footer">
+              <a href={`${localizePath("/")}#tools`} onClick={closeMobile}>
+                {messages.nav.browseToolIndex}
+              </a>
+            </div>
+          </div>
+        </div>
 
         <a className="site-nav-item" href={localizePath("/pricing")} onClick={closeMobile}>
           {messages.nav.pricing}

@@ -54,7 +54,7 @@ Implementation:
 |-------|------|-------|
 | Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace variant="homeHero" />` |
 | Upload zone | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) `variant="hero"` | Large dropzone; no sidebar panel wrapper |
-| Tool switcher | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Rendered **below** the upload zone on home only |
+| Tool switcher | [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Rendered **below** upload; **Work with PDFs** tab first (`WORKSPACE_CATEGORY_ORDER`) |
 | Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | `variant="homeHero"` reorders chrome; single-column layout (no right file tray) |
 
 On **`/tools/*` routes**, the standard two-column workspace is unchanged: tool panel left, file tray right.
@@ -66,7 +66,7 @@ CSS: `.workspace-hero-upload`, `.workspace-files-upload--hero`, `.workspace-layo
 | Former home section | Still available at |
 |---------------------|-------------------|
 | `TrustBar` | Trust chips inline in hero; full trust copy on `/pricing`, `/resources` |
-| `ToolGrid` (full catalog) | Header nav dropdowns; `#tools` SEO index on home; each `/tools/*` route |
+| `ToolGrid` (full catalog) | Header **All tools** mega menu; `#tools` SEO index on home; each `/tools/*` route |
 | `FormatSupportSection` | `/formats` and nav **Formats** link |
 
 ### Hero CTAs (secondary marketing block)
@@ -98,7 +98,7 @@ All 18 tools listed by category (PDF from · To PDF · Work with PDFs) with link
 
 ### Header nav (Compare + language)
 
-[`SiteNav.tsx`](../../frontend/src/components/layout/SiteNav.tsx) ends with a primary **Compare** button (`/#workspace` — scrolls to the embedded compare workspace on home) followed by the **language switcher**. See [i18n — language switcher](./i18n.md#what-is-translated-phase-1--shipped).
+[`SiteNav.tsx`](../../frontend/src/components/layout/SiteNav.tsx) uses a compact bar: **All tools** (mega menu with **Edit PDF · From PDF · To PDF** grouped inside) · **Pricing** · **Compare** (`/#workspace`) · **language switcher**. The three category dropdowns no longer occupy top-level nav slots. See [tool workspace UI — header nav](./tool-workspace-ui.md#comparison-with-site-header-nav).
 
 ---
 

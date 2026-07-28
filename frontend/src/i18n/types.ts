@@ -40,6 +40,7 @@ export interface Messages {
     openMenu: string;
     closeMenu: string;
     main: string;
+    browseToolIndex: string;
   };
   hero: {
     titleLead: string;

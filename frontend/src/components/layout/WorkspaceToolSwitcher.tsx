@@ -1,6 +1,6 @@
 import { FileStack, FileText } from "lucide-react";
 import {
-  CATEGORY_ORDER,
+  WORKSPACE_CATEGORY_ORDER,
   INPUT_SCOPE_ORDER,
   SINGLE_PDF_SUBCATEGORY_ORDER,
   SUBCATEGORY_ORDER,
@@ -126,7 +126,7 @@ export default function WorkspaceToolSwitcher({
   return (
     <nav className="workspace-nav" aria-label="Tool navigation">
       <div className="workspace-category-tabs" role="tablist" aria-label="Tool categories">
-        {CATEGORY_ORDER.map((category) => {
+        {WORKSPACE_CATEGORY_ORDER.map((category) => {
           const isActive = category === activeCategory;
           const targetTool = firstToolInCategory(category);
 

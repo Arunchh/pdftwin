@@ -39,6 +39,7 @@ export const nl: Messages = {
     openMenu: "Menu openen",
     closeMenu: "Menu sluiten",
     main: "Hoofd",
+    browseToolIndex: "Volledige toolindex bekijken",
   },
   hero: {
     titleLead: "Vergelijk twee PDF's",

@@ -39,6 +39,7 @@ export const fr: Messages = {
     openMenu: "Ouvrir le menu",
     closeMenu: "Fermer le menu",
     main: "Principal",
+    browseToolIndex: "Voir l'index complet des outils",
   },
   hero: {
     titleLead: "Comparez deux PDF",
