@@ -18,6 +18,8 @@ interface WorkspaceFileTrayProps {
   onFilesChange: (files: File[]) => void;
   onRemoveFile: (id: string) => void;
   onClearAll: () => void;
+  /** Sidebar tray on tool pages; hero upload zone on home. */
+  variant?: "sidebar" | "hero";
 }
 
 export default function WorkspaceFileTray({
@@ -32,10 +34,59 @@ export default function WorkspaceFileTray({
   onFilesChange,
   onRemoveFile,
   onClearAll,
+  variant = "sidebar",
 }: WorkspaceFileTrayProps) {
+  const isHero = variant === "hero";
   const isMobile = useMediaQuery("(max-width: 640px)");
-  const showCollapsibleList = isMobile && entries.length > 0;
+  const showCollapsibleList = !isHero && isMobile && entries.length > 0;
   const trayFiles = entries.map((entry) => entry.file);
+
+  const uploadBlock = loading ? (
+    <p className="file-hint muted">Loading workspace files…</p>
+  ) : (
+    <>
+      <div className={`workspace-files-upload${isHero ? " workspace-files-upload--hero" : ""}`}>
+        {!isHero && <p className="workspace-files-upload-title">{uploadTitle}</p>}
+        <FileDropzone
+          files={trayFiles}
+          onFilesChange={onFilesChange}
+          accept={accept}
+          label={uploadLabel}
+          append
+        />
+      </div>
+
+      {entries.length === 0 ? (
+        !isHero && <p className="file-hint muted">No files yet — upload above to get started.</p>
+      ) : showCollapsibleList ? (
+        <details className="workspace-files-mobile-details" open>
+          <summary className="workspace-files-mobile-summary">
+            <span>
+              {entries.length} file{entries.length === 1 ? "" : "s"} in workspace
+            </span>
+            <ChevronDown size={18} aria-hidden="true" />
+          </summary>
+          <FileList entries={entries} onRemoveFile={onRemoveFile} onClearAll={onClearAll} />
+        </details>
+      ) : (
+        <FileList entries={entries} onRemoveFile={onRemoveFile} onClearAll={onClearAll} />
+      )}
+    </>
+  );
+
+  if (isHero) {
+    return (
+      <div className="workspace-hero-upload">
+        {uploadBlock}
+        <p className="workspace-hero-upload-meta">
+          <span className={`workspace-limit ${isPro ? "workspace-limit--pro" : ""}`}>
+            {entitlementsLabel} · up to {formatFileLimit(fileLimitMb)} per file
+          </span>
+          · Saved in your browser — switch tools without re-uploading
+        </p>
+      </div>
+    );
+  }
 
   return (
     <aside className="workspace-files-column panel">
@@ -55,38 +106,7 @@ export default function WorkspaceFileTray({
         </span>
       </div>
 
-      {loading ? (
-        <p className="file-hint muted">Loading workspace files…</p>
-      ) : (
-        <>
-          <div className="workspace-files-upload">
-            <p className="workspace-files-upload-title">{uploadTitle}</p>
-            <FileDropzone
-              files={trayFiles}
-              onFilesChange={onFilesChange}
-              accept={accept}
-              label={uploadLabel}
-              append
-            />
-          </div>
-
-          {entries.length === 0 ? (
-            <p className="file-hint muted">No files yet — upload above to get started.</p>
-          ) : showCollapsibleList ? (
-            <details className="workspace-files-mobile-details" open>
-              <summary className="workspace-files-mobile-summary">
-                <span>
-                  {entries.length} file{entries.length === 1 ? "" : "s"} in workspace
-                </span>
-                <ChevronDown size={18} aria-hidden="true" />
-              </summary>
-              <FileList entries={entries} onRemoveFile={onRemoveFile} onClearAll={onClearAll} />
-            </details>
-          ) : (
-            <FileList entries={entries} onRemoveFile={onRemoveFile} onClearAll={onClearAll} />
-          )}
-        </>
-      )}
+      {uploadBlock}
     </aside>
   );
 }

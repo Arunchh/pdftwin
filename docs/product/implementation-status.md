@@ -2,6 +2,12 @@
 
 > Last updated: 2026-07-28 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
+### Shipped (2026-07-28 — home UX + chrome)
+
+- **Upload-first home hero** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) + [`ToolWorkspace`](../../frontend/src/components/ToolWorkspace.tsx) `variant="homeHero"`: H1 → prominent upload dropzone → tool switcher → tool panel. [`WorkspaceFileTray`](../../frontend/src/components/WorkspaceFileTray.tsx) gains `variant="hero"` for the full-width home dropzone; standard two-column layout unchanged on `/tools/*`. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
+- **Announcement banner — mobile compact** — [`AnnouncementBanner.tsx`](../../frontend/src/components/layout/AnnouncementBanner.tsx): reduced padding, hidden subtext and optional name field on mobile; email + join on one row (≤900px). Prevents the waitlist bar from filling the viewport.
+- **Header nav — neutral background** — [`SiteHeader`](../../frontend/src/components/layout/SiteHeader.tsx): sticky bar uses neutral `#f6f7f9` with backdrop blur instead of pure white.
+
 ### Shipped (2026-07-28 — nav + workspace layout)
 
 - **Header nav — Compare CTA + language order** — [`SiteNav.tsx`](../../frontend/src/components/layout/SiteNav.tsx): primary **Compare** button (`/#workspace`) followed by the **language switcher** at the end of the main nav bar (Formats · Pricing · Compare · language).
@@ -15,7 +21,7 @@
 
 ### Shipped (2026-07-27 — compare-first)
 
-- **Compare-first homepage** — [`HeroSection`](../../frontend/src/components/layout/HeroSection.tsx), [`HomeWorkflowSection`](../../frontend/src/components/layout/HomeWorkflowSection.tsx), [`HomeToolsSection`](../../frontend/src/components/layout/HomeToolsSection.tsx) replace full `ToolGrid`, `TrustBar`, and `FormatSupportSection` on `/`. Primary CTA → `/tools/compare`. Crawlable `#tools` index preserves internal SEO links. See [compare-first homepage](./compare-first-homepage.md).
+- **Compare-first homepage** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) embeds compare workspace on `/`; [`HeroSection`](../../frontend/src/components/layout/HeroSection.tsx), [`HomeWorkflowSection`](../../frontend/src/components/layout/HomeWorkflowSection.tsx), [`HomeToolsSection`](../../frontend/src/components/layout/HomeToolsSection.tsx) replace full `ToolGrid`, `TrustBar`, and `FormatSupportSection`. Crawlable `#tools` index preserves internal SEO links. See [compare-first homepage](./compare-first-homepage.md).
 - **PDF compare — review mode** — [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx): setup phase (pick left/right from tray) + immersive viewer (zoom, fit-width, single-page / continuous modes, page nav, fullscreen, keyboard shortcuts). [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) hides file tray and tool switcher in review mode. Canvas zoom fix: removed `max-width: 100%` on `.compare-page-canvas`.
 - **Home & compare i18n** — New `hero`, `home`, and `compare` message namespaces in all 5 locales. Updated `meta.homeTitle` / `meta.homeDescription` with compare keywords. `BUSINESS_TAGLINE` and structured data feature list prioritize compare.
 

@@ -157,6 +157,23 @@ export default function ToolWorkspace({
               </div>
             )}
 
+            {isHomeHero && (
+              <WorkspaceFileTray
+                variant="hero"
+                accept={WORKSPACE_ACCEPT}
+                uploadTitle={uploadConfig.title}
+                uploadLabel={uploadConfig.label}
+                entries={entries}
+                loading={loading}
+                entitlementsLabel={entitlements.label}
+                fileLimitMb={entitlements.fileLimitMb}
+                isPro={entitlements.isPro}
+                onFilesChange={handleIncomingFiles}
+                onRemoveFile={removeFile}
+                onClearAll={handleClearAll}
+              />
+            )}
+
             <WorkspaceToolSwitcher activeTool={activeToolId} onNavigate={navigateToTool} />
           </>
         )}
@@ -164,11 +181,11 @@ export default function ToolWorkspace({
         <div
           className={`workspace-layout${
             hideWorkspaceChrome ? " workspace-layout--compare-review" : ""
-          }`}
+          }${isHomeHero && !hideWorkspaceChrome ? " workspace-layout--home-hero" : ""}`}
         >
           <div className="workspace-action-column">{renderToolPanel()}</div>
 
-          {!hideWorkspaceChrome && (
+          {!hideWorkspaceChrome && !isHomeHero && (
             <WorkspaceFileTray
               accept={WORKSPACE_ACCEPT}
               uploadTitle={uploadConfig.title}

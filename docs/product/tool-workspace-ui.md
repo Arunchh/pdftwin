@@ -1,6 +1,6 @@
 # Tool workspace UI
 
-> **Status:** Phases 1–3 complete (2026-07-27) · [Docs hub](../README.md) · [Implementation status](./implementation-status.md)
+> **Status:** Phases 1–3 complete (2026-07-27) · **Home hero layout:** 2026-07-28 · [Docs hub](../README.md) · [Implementation status](./implementation-status.md)
 
 This document is the canonical spec for the **tool workspace** — the shared shell on every `/tools/*` page. Individual tool panels (`CompressPanel`, `ArrangeMergePanel`, etc.) are documented in [implementation status](./implementation-status.md).
 
@@ -18,18 +18,30 @@ Commits: `c1ea547` (Phase 1) · `021da07` (Phase 2) · `e34a223` (Phase 3)
 
 ## Overview
 
-PDFTwin’s workspace is a **two-column desktop layout**:
+PDFTwin’s workspace is a **two-column desktop layout** on tool routes (`/tools/*`):
 
 | Column | Width | Purpose |
 |--------|-------|---------|
 | **Action (left)** | Flexible | Active tool panel (options, run, messages) |
 | **Files (right)** | ~320px, sticky | Upload dropzone + persisted file list |
 
-Above the columns:
+Above the columns on tool routes:
 
 1. **Tool heading** — name and one-line description (from `tools.ts` / i18n)
 2. **Category tabs** — PDF to Other Formats · Convert to PDF · Work with PDFs
 3. **Tool tabs** — only tools in the active category (not all 18 at once). **Work with PDFs** tabs are grouped under **One PDF** and **Multiple PDFs** scope labels with **1 PDF** / **2+ PDFs** badges.
+
+### Home hero layout (`variant="homeHero"`)
+
+On `/` and `/{locale}/`, the embedded workspace uses an **upload-first, single-column** layout (iLovePDF-style):
+
+| Block | Order | Purpose |
+|-------|-------|---------|
+| **Hero upload** | 1 | Full-width prominent dropzone (`WorkspaceFileTray variant="hero"`) |
+| **Tool switcher** | 2 | Category + tool tabs |
+| **Tool panel** | 3 | Active tool (Compare by default) — no right-side file tray |
+
+Files uploaded on the home hero persist in IndexedDB and remain available when switching tools client-side. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
 
 Design tokens and category colors follow the existing **Neon Pastel / PDFTwin** palette (`index.css` `:root`).
 
@@ -133,7 +145,7 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `HomeToolsSection` | [`frontend/src/components/layout/HomeToolsSection.tsx`](../../frontend/src/components/layout/HomeToolsSection.tsx) | Home — featured tools + SEO tool index (`#tools`) |
 | `ToolCardLink` | [`frontend/src/components/layout/ToolCardLink.tsx`](../../frontend/src/components/layout/ToolCardLink.tsx) | Tool card with icon, label, and input-scope badge |
 | `WorkspaceToolSwitcher` | [`frontend/src/components/layout/WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) | Category tabs + filtered tool tabs (i18n labels, scope grouping for pdf-ops) |
-| `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Right column: dropzone, file list, single “Clear all” |
+| `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Upload + file list; `variant="sidebar"` (tool pages) or `variant="hero"` (home) |
 | `FileDropzone` | [`frontend/src/components/FileDropzone.tsx`](../../frontend/src/components/FileDropzone.tsx) | Drag/drop + browse; Pro gate on oversized files |
 | `ToolResultCard` | [`frontend/src/components/ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) | Success state: filename, Download, next steps |
 | `ToolPanelFeedback` | [`frontend/src/components/ToolPanelFeedback.tsx`](../../frontend/src/components/ToolPanelFeedback.tsx) | Error + notice + result card wrapper for panels |
@@ -160,29 +172,48 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 
 ## Layout structure (DOM)
 
+### Tool routes (`/tools/*`)
+
 ```html
 <section class="workspace workspace--{category}">
   <div class="workspace-heading">…</div>
 
   <nav class="workspace-nav">
-    <div class="workspace-category-tabs">…</div>   <!-- pdf-from / to-pdf / pdf-ops + All tools -->
+    <div class="workspace-category-tabs">…</div>
     <div class="workspace-tool-switcher workspace-tool-switcher--scoped">…</div>
-      <!-- tools in active category; pdf-ops grouped by One PDF / Multiple PDFs -->
   </nav>
 
   <div class="workspace-layout">
     <div class="workspace-action-column">
-      <div class="panel tool-panel">…</div>        <!-- e.g. CompressPanel -->
+      <div class="panel tool-panel">…</div>
     </div>
     <aside class="workspace-files-column panel">…</aside>
   </div>
 </section>
 ```
 
+### Home hero (`/` — `variant="homeHero"`)
+
+```html
+<div class="home-compare-hero">
+  <header class="home-compare-hero-header"><h1>…</h1></header>
+  <section class="workspace workspace--home-hero" id="workspace">
+    <div class="workspace-hero-upload">…</div>   <!-- prominent dropzone -->
+    <nav class="workspace-nav">…</nav>            <!-- tool switcher below upload -->
+    <div class="workspace-layout workspace-layout--home-hero">
+      <div class="workspace-action-column">…</div>
+    </div>
+  </section>
+</div>
+```
+
 ### CSS classes (workspace-specific)
 
 | Class | Purpose |
 |-------|---------|
+| `.workspace-layout--home-hero` | Single column on home; no right file tray |
+| `.workspace-hero-upload` | Full-width hero dropzone wrapper |
+| `.workspace-files-upload--hero` | Large dropzone styling (iLovePDF-style) |
 | `.workspace-layout` | CSS grid: 1fr + 320px on desktop; single column ≤640px |
 | `.workspace-action-column` | Left column; hosts existing tool panels |
 | `.workspace-files-column` | Sticky right column; dashed border |
@@ -435,10 +466,11 @@ Implementation: [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.
 
 ### Verification (compare)
 
-1. Setup visible on first load; tray + switcher present
-2. After **Open compare viewer** — chrome hidden, panes use full width
-3. Zoom visibly changes page size
-4. **Change documents** — restores setup + tray
+1. **Home `/`:** upload dropzone under H1; tool switcher below upload; compare panel below switcher
+2. **Tool route `/tools/compare`:** setup visible on first load; sidebar tray + switcher present
+3. After **Open compare viewer** — chrome hidden, panes use full width
+4. Zoom visibly changes page size
+5. **Change documents** — restores setup + upload zone (home) or tray (tool route)
 
 ---
 

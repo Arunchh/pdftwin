@@ -2,7 +2,7 @@
 
 **PDFTwin** is a multi-page business file conversion workspace — **18 tools** for comparing PDFs side by side, converting documents, merging and splitting files, signing and protecting PDFs, and extracting text — all in the browser with no install.
 
-**Hero differentiator:** **Compare two PDFs** with linked scroll, real zoom, single-page review, and fullscreen — runs locally in the browser (no upload for viewing). The homepage and product story lead with compare; complementary tools finish the review workflow (extract → merge → sign).
+**Hero differentiator:** **Compare two PDFs** with linked scroll, real zoom, single-page review, and fullscreen — runs locally in the browser (no upload for viewing). The homepage leads with compare: upload files directly under the headline, pick a tool, and work — complementary tools finish the review workflow (extract → merge → sign).
 
 Live site: [pdftwin.com](https://pdftwin.com) · Operated by **Helios Impex** (India)
 
@@ -54,7 +54,7 @@ Each tool card shows a **1 PDF** or **2+ PDFs** badge so you can tell at a glanc
 ### Account & Workspace (preview)
 - **Mock sign-in** — Create an account stored in the browser (localStorage) for preview; ready to swap to Supabase later
 - **Pro preview** — Toggle Pro plan from Account or checkout flow to unlock 200 MB uploads and unlimited PDF → Word/Excel exports
-- **Two-column tool workspace** — Tool panel (job options + run) on the left; files column (upload + tray + thumbnails) on the right — see [tool workspace UI](docs/product/tool-workspace-ui.md)
+- **Two-column tool workspace** — On `/tools/*`: tool panel (job options + run) on the left; files column (upload + tray + thumbnails) on the right. On `/`: upload-first hero with tool switcher below the dropzone — see [tool workspace UI](docs/product/tool-workspace-ui.md)
 - **Conversion-direction categories** — PDF → other formats, convert → PDF, and work-with-PDFs tabs on home and workspace
 - **Single vs multi-PDF columns** — “One PDF” and “Multiple PDFs” side-by-side in the Work with PDFs section, with **1 PDF** / **2+ PDFs** badges on each tool card
 - **Instant tool switching** — Switch tools in the workspace without a full page reload; browser back/forward supported

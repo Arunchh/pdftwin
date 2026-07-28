@@ -2,7 +2,9 @@
 
 Living docs for product strategy, competitive research, and implementation status. Update these as we ship.
 
-**Latest (2026-07-28):** **Header nav** — **Compare** primary button with **language switcher** immediately to its right. **Workspace layout** — tool panel on the left, file upload tray on the right (desktop). See [tool workspace UI](./product/tool-workspace-ui.md#overview).
+**Latest (2026-07-28):** **Upload-first home hero** — dropzone directly under the compare H1, tool switcher below upload (iLovePDF-style). **Mobile announcement bar** compacted. **Header nav** neutral background. See [compare-first homepage](./product/compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
+
+**Previous (2026-07-28):** **Header nav** — **Compare** primary button with **language switcher** immediately to its right. **Workspace layout** — tool panel on the left, file upload tray on the right (desktop). See [tool workspace UI](./product/tool-workspace-ui.md#overview).
 
 **Previous (2026-07-27):** **Compare diff modes** (text / visual / overlay) with **Web Worker** off-thread analysis, plus **swap left/right**. Default compare experience remains viewer-only. See [pdf-compare-diff](./product/pdf-compare-diff.md).
 
