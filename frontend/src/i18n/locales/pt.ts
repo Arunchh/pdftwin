@@ -141,6 +141,7 @@ export const pt: Messages = {
     fullscreen: "Tela cheia",
     exitFullscreen: "Sair da tela cheia",
     loading: "Carregando PDF…",
+    preparingViewer: "Preparando o visualizador…",
     pages: "páginas",
     privacyHint:
       "Somente PDF · até {limit} por arquivo · comparação renderizada localmente — sem envio para visualização",

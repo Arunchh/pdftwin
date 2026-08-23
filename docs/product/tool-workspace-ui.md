@@ -481,7 +481,7 @@ Compare uses [`CompareFileTray`](../../frontend/src/components/compare/CompareFi
 
 ### Review toolbar (summary)
 
-Segmented control groups (`.compare-toolbar-group`) with compact icon-only buttons (`.compare-toolbar-btn`). Tooltips via `aria-label` / `title` on each control.
+Segmented control groups (`.compare-toolbar-group`) with compact icon-only buttons (`.compare-toolbar-btn`). Tooltips via `aria-label` / `title` on each control. While the viewer is preparing (PDF load, fit-to-width, or page paint), a centered pill with spinner shows **Preparing viewer…** (`.compare-toolbar-buffer`).
 
 | Control | Behavior |
 |---------|----------|
@@ -518,6 +518,7 @@ Review mode enters in two layout passes: `ComparePanel` sets `reviewMode` first,
 | `.compare-panel--review` | Panel without setup chrome |
 | `.compare-viewer--review` | Full-width `1fr 1fr` dual-pane viewer; tight padding |
 | `.compare-toolbar` / `.compare-toolbar-group` / `.compare-toolbar-btn` | Segmented review toolbar |
+| `.compare-toolbar-buffer` | Centered preparing spinner + label while viewer loads |
 | `.compare-page-canvas` | No `max-width: 100%` — zoom renders at visible scale |
 
 ### Verification (compare)

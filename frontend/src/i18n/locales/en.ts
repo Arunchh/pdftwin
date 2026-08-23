@@ -141,6 +141,7 @@ export const en: Messages = {
     fullscreen: "Full screen",
     exitFullscreen: "Exit full screen",
     loading: "Loading PDF…",
+    preparingViewer: "Preparing viewer…",
     pages: "pages",
     privacyHint:
       "PDF only · up to {limit} per file · compare renders locally in your browser — no upload for viewing",

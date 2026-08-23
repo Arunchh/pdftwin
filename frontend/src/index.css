@@ -5324,6 +5324,27 @@ textarea {
   box-shadow:
     0 1px 2px rgba(15, 23, 42, 0.04),
     0 6px 20px rgba(91, 33, 182, 0.05);
+  position: relative;
+}
+
+.compare-toolbar-buffer {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 2;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.3rem 0.75rem;
+  border-radius: 999px;
+  border: 1px solid var(--amethyst-200);
+  background: rgba(255, 255, 255, 0.94);
+  color: var(--amethyst-800);
+  font-size: 0.8rem;
+  font-weight: 600;
+  transform: translate(-50%, -50%);
+  box-shadow: 0 4px 14px rgba(91, 33, 182, 0.12);
+  pointer-events: none;
 }
 
 .compare-toolbar-group {

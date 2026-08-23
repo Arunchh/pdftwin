@@ -20,6 +20,7 @@ import {
   Link2,
   Link2Off,
   List,
+  Loader2,
   Minimize2,
   Shrink,
   Square,
@@ -52,6 +53,8 @@ function paneContentWidth(el: HTMLElement): number {
   const paddingX = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
   return Math.max(0, el.clientWidth - paddingX);
 }
+const SCALE_EPSILON = 0.005;
+const FIT_DEBOUNCE_MS = 150;
 const DEFAULT_DIFF_SENSITIVITY = 12;
 
 type ViewMode = "continuous" | "single";
@@ -81,6 +84,7 @@ function PageCanvas({
   replacementCanvas,
   changed,
   changedLabel,
+  onRenderStatusChange,
 }: {
   doc: PDFDocumentProxy | null;
   pageNum: number;
@@ -89,6 +93,7 @@ function PageCanvas({
   replacementCanvas?: HTMLCanvasElement | null;
   changed?: boolean;
   changedLabel?: string;
+  onRenderStatusChange?: (rendering: boolean) => void;
 }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayRef = useRef<HTMLCanvasElement>(null);
@@ -98,33 +103,51 @@ function PageCanvas({
     if (replacementCanvas || !doc) return;
 
     let cancelled = false;
+    let renderTask: { cancel: () => void; promise: Promise<void> } | null = null;
 
-    (async () => {
+    const renderPage = async () => {
+      onRenderStatusChange?.(true);
       try {
         const page = await doc.getPage(pageNum);
         if (cancelled) return;
 
-        const viewport = page.getViewport({ scale });
         const canvas = canvasRef.current;
-        if (!canvas) return;
+        if (!canvas) {
+          // Canvas not mounted yet — retry once on the next frame.
+          if (!cancelled) {
+            requestAnimationFrame(() => {
+              if (!cancelled) void renderPage();
+            });
+          }
+          return;
+        }
 
+        const viewport = page.getViewport({ scale });
         const context = canvas.getContext("2d");
         if (!context) return;
 
         canvas.width = viewport.width;
         canvas.height = viewport.height;
 
-        await page.render({ canvasContext: context, viewport, canvas }).promise;
-        setError(null);
-      } catch {
+        renderTask = page.render({ canvasContext: context, viewport, canvas });
+        await renderTask.promise;
+
+        if (!cancelled) setError(null);
+      } catch (err) {
         if (!cancelled) setError("Could not render this page.");
+      } finally {
+        if (!cancelled) onRenderStatusChange?.(false);
       }
-    })();
+    };
+
+    void renderPage();
 
     return () => {
       cancelled = true;
+      renderTask?.cancel();
+      onRenderStatusChange?.(false);
     };
-  }, [doc, pageNum, scale, replacementCanvas]);
+  }, [doc, pageNum, scale, replacementCanvas, onRenderStatusChange]);
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -229,6 +252,8 @@ export default function ComparePanel({
   const [visualOverlays, setVisualOverlays] = useState<
     Record<number, { leftOverlay: HTMLCanvasElement; rightOverlay: HTMLCanvasElement; blend: HTMLCanvasElement }>
   >({});
+  const [isFitting, setIsFitting] = useState(false);
+  const [renderingPageKeys, setRenderingPageKeys] = useState<Set<string>>(() => new Set());
 
   const leftScrollRef = useRef<HTMLDivElement>(null);
   const rightScrollRef = useRef<HTMLDivElement>(null);
@@ -236,6 +261,7 @@ export default function ComparePanel({
   const syncingScroll = useRef(false);
   const analysisToken = useRef(0);
   const skipPdfReloadRef = useRef(0);
+  const fitGenerationRef = useRef(0);
 
   const loadPdf = useCallback((file: File) => openPdfFile(file), []);
 
@@ -246,6 +272,20 @@ export default function ComparePanel({
   const readyForReview = Boolean(leftDoc && rightDoc);
   const changedPages = diffAnalysis?.changedPageNums ?? [];
   const diffActive = diffMode !== "off";
+  const viewerPreparing =
+    reviewMode && (loading || isFitting || renderingPageKeys.size > 0);
+
+  const handlePageRenderStatus = useCallback((key: string, rendering: boolean) => {
+    setRenderingPageKeys((current) => {
+      const hasKey = current.has(key);
+      if (rendering && hasKey) return current;
+      if (!rendering && !hasKey) return current;
+      const next = new Set(current);
+      if (rendering) next.add(key);
+      else next.delete(key);
+      return next;
+    });
+  }, []);
 
   const getPageResult = useCallback(
     (pageNum: number) => diffAnalysis?.pages.find((page) => page.pageNum === pageNum),
@@ -263,6 +303,10 @@ export default function ComparePanel({
   useEffect(() => {
     if (!compareTrigger) return;
     if (!readyForReview) return;
+    setLeftScale(1);
+    setRightScale(1);
+    setIsFitting(true);
+    setRenderingPageKeys(new Set());
     setReviewMode(true);
     setHasReviewed(true);
     setCurrentPage(1);
@@ -480,20 +524,36 @@ export default function ComparePanel({
     const paneWidth = Math.min(leftPane.clientWidth, rightPane.clientWidth);
     if (paneWidth < 48) return;
 
+    const generation = fitGenerationRef.current + 1;
+    fitGenerationRef.current = generation;
+    setIsFitting(true);
+
     try {
       const [leftPage, rightPage] = await Promise.all([
         leftDoc.getPage(Math.min(currentPage, leftDoc.numPages)),
         rightDoc.getPage(Math.min(currentPage, rightDoc.numPages)),
       ]);
+      if (generation !== fitGenerationRef.current) return;
+
       const leftBase = leftPage.getViewport({ scale: 1 });
       const rightBase = rightPage.getViewport({ scale: 1 });
       const leftFit = paneContentWidth(leftPane) / leftBase.width;
       const rightFit = paneContentWidth(rightPane) / rightBase.width;
       const nextScale = clampScale(Math.min(leftFit, rightFit));
-      setLeftScale(nextScale);
-      setRightScale(nextScale);
+
+      setLeftScale((current) =>
+        Math.abs(current - nextScale) < SCALE_EPSILON ? current : nextScale
+      );
+      setRightScale((current) =>
+        Math.abs(current - nextScale) < SCALE_EPSILON ? current : nextScale
+      );
     } catch {
+      if (generation !== fitGenerationRef.current) return;
       setMessage("Could not fit documents to pane width.");
+    } finally {
+      if (generation === fitGenerationRef.current) {
+        setIsFitting(false);
+      }
     }
   }, [leftDoc, rightDoc, currentPage]);
 
@@ -501,6 +561,8 @@ export default function ComparePanel({
     setReviewMode(false);
     setDiffMode("off");
     setDiffAnalysis(null);
+    setIsFitting(false);
+    setRenderingPageKeys(new Set());
     if (document.fullscreenElement === viewerRef.current) {
       void document.exitFullscreen();
     }
@@ -559,11 +621,15 @@ export default function ComparePanel({
     if (!leftPane || !rightPane) return;
 
     let rafId = 0;
+    let debounceId = 0;
     const scheduleFit = () => {
       cancelAnimationFrame(rafId);
-      rafId = requestAnimationFrame(() => {
-        void fitBothToWidth();
-      });
+      window.clearTimeout(debounceId);
+      debounceId = window.setTimeout(() => {
+        rafId = requestAnimationFrame(() => {
+          void fitBothToWidth();
+        });
+      }, FIT_DEBOUNCE_MS);
     };
 
     const observer = new ResizeObserver(() => {
@@ -577,6 +643,8 @@ export default function ComparePanel({
     return () => {
       observer.disconnect();
       cancelAnimationFrame(rafId);
+      window.clearTimeout(debounceId);
+      fitGenerationRef.current += 1;
     };
   }, [reviewMode, readyForReview, leftDoc, rightDoc, currentPage, viewMode, fitBothToWidth]);
 
@@ -679,6 +747,13 @@ export default function ComparePanel({
   const renderToolbar = () => (
     <>
       <div className="compare-toolbar">
+        {viewerPreparing ? (
+          <div className="compare-toolbar-buffer" role="status" aria-live="polite">
+            <Loader2 size={18} className="spin" aria-hidden="true" />
+            <span>{copy.preparingViewer}</span>
+          </div>
+        ) : null}
+
         <div className="compare-toolbar-group compare-toolbar-group--sync">
           <IconButton
             icon={linkScroll ? <Link2 size={17} /> : <Link2Off size={17} />}
@@ -922,6 +997,9 @@ export default function ComparePanel({
                 overlayCanvas={diffMode === "visual" ? overlays?.leftOverlay ?? null : null}
                 changed={diffActive && pageIsChanged(pageResult)}
                 changedLabel={copy.changed}
+                onRenderStatusChange={(rendering) =>
+                  handlePageRenderStatus(`left-${pageNum}`, rendering)
+                }
               />
             );
           })}
@@ -950,6 +1028,9 @@ export default function ComparePanel({
                 replacementCanvas={diffMode === "overlay" ? overlays?.blend ?? null : null}
                 changed={diffActive && pageIsChanged(pageResult)}
                 changedLabel={copy.changed}
+                onRenderStatusChange={(rendering) =>
+                  handlePageRenderStatus(`right-${pageNum}`, rendering)
+                }
               />
             );
           })}

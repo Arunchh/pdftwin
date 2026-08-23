@@ -141,6 +141,7 @@ export const nl: Messages = {
     fullscreen: "Volledig scherm",
     exitFullscreen: "Volledig scherm sluiten",
     loading: "PDF laden…",
+    preparingViewer: "Viewer voorbereiden…",
     pages: "pagina's",
     privacyHint:
       "Alleen PDF · tot {limit} per bestand · vergelijken lokaal gerenderd — geen upload voor weergave",

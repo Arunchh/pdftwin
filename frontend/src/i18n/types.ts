@@ -116,6 +116,7 @@ export interface Messages {
     fullscreen: string;
     exitFullscreen: string;
     loading: string;
+    preparingViewer: string;
     pages: string;
     privacyHint: string;
     viewerMode: string;

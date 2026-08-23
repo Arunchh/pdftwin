@@ -179,7 +179,8 @@ Click **Compare** in tray      Workspace chrome hidden (see below)
 | Feature | Details |
 |---------|---------|
 | **Zoom** | Linked or independent; ± buttons; keyboard `+` / `-` |
-| **Fit width** | `fitBothToWidth()` scales both panes from measured inner width (computed padding); **ResizeObserver** re-runs fit when layout expands |
+| **Fit width** | `fitBothToWidth()` scales both panes from measured inner width (computed padding); **ResizeObserver** re-runs fit when layout expands; debounced to avoid render races |
+| **Preparing state** | Centered toolbar spinner (`compare.preparingViewer`) while PDFs load, fit-to-width runs, or page canvases are painting |
 | **View modes** | **Single page** (default) or **continuous scroll** |
 | **Page navigation** | Prev/next, page number input (single-page mode) |
 | **Scroll sync** | Linked scroll in continuous mode only |
@@ -194,6 +195,7 @@ Click **Compare** in tray      Workspace chrome hidden (see below)
 | Cramped viewer | Review panes: up to `80vh` tall; viewer `min-height: calc(100vh - 12rem)` |
 | Immersive layout | Full-width grid when `workspace-layout--compare-review` |
 | Toolbar polish | Segmented `.compare-toolbar-group` chips, icon-only `.compare-toolbar-btn` controls, refined diff-mode toggle |
+| Blank panes on enter | Debounced fit-to-width + render-generation guard; centered **Preparing viewer…** spinner in toolbar while PDFs load, fit, and paint |
 
 Styles: [`frontend/src/index.css`](../../frontend/src/index.css) — `.compare-panel--review`, `.compare-viewer--review`, `.compare-toolbar`, `.compare-toolbar-btn`, `.hero--compare`, `.home-workflow-*`, `.home-seo-tools-*`.
 
