@@ -85,13 +85,26 @@ export const es: Messages = {
     },
     complementary: {
       heading: "Más herramientas para flujos documentales",
-      subheading: "Conversión, compresión y protección cuando las necesites.",
-      toolIds: ["convert-extract", "split", "compress-pdf", "lock-unlock", "word-to-pdf", "pdf-to-jpg"],
-    },
-    seoTools: {
-      heading: "Todas las herramientas PDFTwin",
       subheading:
-        "Cada herramienta de conversión y PDF empresarial en un espacio — combinar, dividir, OCR, marca de agua y más.",
+        "Busca por la tarea: convertir un archivo, reorganizar las páginas o protegerlo antes de enviarlo.",
+      groups: {
+        export: {
+          title: "Exportar desde PDF",
+          description: "¿Necesitas un Word, una hoja de cálculo, imágenes o texto seleccionable a partir de un PDF?",
+        },
+        create: {
+          title: "Crear un PDF",
+          description: "Parte de un documento Word o de fotos — o convierte y redimensiona imágenes antes de compartirlas.",
+        },
+        pages: {
+          title: "Reorganizar las páginas",
+          description: "Divide un archivo, extrae páginas, elimina extras, rota o combina varios PDF.",
+        },
+        finish: {
+          title: "Terminar y proteger",
+          description: "Comprime para el correo, marca un borrador, firma o bloquea el archivo.",
+        },
+      },
     },
   },
   toolsIndex: {

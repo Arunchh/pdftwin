@@ -64,11 +64,12 @@ export interface Messages {
     complementary: {
       heading: string;
       subheading: string;
-      toolIds: ToolId[];
-    };
-    seoTools: {
-      heading: string;
-      subheading: string;
+      groups: {
+        export: { title: string; description: string };
+        create: { title: string; description: string };
+        pages: { title: string; description: string };
+        finish: { title: string; description: string };
+      };
     };
   };
   toolsIndex: {

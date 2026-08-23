@@ -85,13 +85,26 @@ export const nl: Messages = {
     },
     complementary: {
       heading: "Meer tools voor documentworkflows",
-      subheading: "Conversie, compressie en beveiliging — beschikbaar wanneer u ze nodig heeft.",
-      toolIds: ["convert-extract", "split", "compress-pdf", "lock-unlock", "word-to-pdf", "pdf-to-jpg"],
-    },
-    seoTools: {
-      heading: "Alle PDFTwin-tools",
       subheading:
-        "Elke zakelijke conversie- en PDF-tool in één werkruimte — samenvoegen, splitsen, OCR, watermerk en meer.",
+        "Zoek op de taak — een bestand converteren, pagina's herschikken of vergrendelen voor verzending.",
+      groups: {
+        export: {
+          title: "Exporteren vanuit PDF",
+          description: "Een Word-bestand, spreadsheet, afbeelding of selecteerbare tekst uit een PDF nodig?",
+        },
+        create: {
+          title: "Een PDF maken",
+          description: "Begin met Word of foto's — of converteer en verklein afbeeldingen voordat u ze deelt.",
+        },
+        pages: {
+          title: "Pagina's herschikken",
+          description: "Splits een bestand, haal pagina's eruit, verwijder extra's, roteer of voeg meerdere PDF's samen.",
+        },
+        finish: {
+          title: "Afronden en beveiligen",
+          description: "Comprimeer voor e-mail, zet een watermerk op een concept, onderteken of vergrendel het bestand.",
+        },
+      },
     },
   },
   toolsIndex: {

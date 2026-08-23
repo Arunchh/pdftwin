@@ -85,13 +85,26 @@ export const en: Messages = {
     },
     complementary: {
       heading: "More tools for document workflows",
-      subheading: "Conversion, compression, and protection — available when you need them.",
-      toolIds: ["convert-extract", "split", "compress-pdf", "lock-unlock", "word-to-pdf", "pdf-to-jpg"],
-    },
-    seoTools: {
-      heading: "All PDFTwin tools",
       subheading:
-        "Every business conversion and PDF tool in one workspace — merge, split, OCR, watermark, and more.",
+        "Scan by the job — convert a file, reshape the pages, or lock it before you send.",
+      groups: {
+        export: {
+          title: "Export from PDF",
+          description: "Need a Word file, spreadsheet, image, or selectable text from a PDF?",
+        },
+        create: {
+          title: "Create a PDF",
+          description: "Start from Word or photos — or convert and resize images before you share them.",
+        },
+        pages: {
+          title: "Reshape the pages",
+          description: "Split a file, pull pages out, drop extras, rotate, or merge several PDFs.",
+        },
+        finish: {
+          title: "Finish and protect",
+          description: "Compress for email, watermark a draft, add a signature, or lock the file.",
+        },
+      },
     },
   },
   toolsIndex: {
