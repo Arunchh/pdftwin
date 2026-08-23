@@ -81,6 +81,16 @@ export interface Messages {
   compare: {
     setupTitle: string;
     setupDescription: string;
+    setupAwaitingFiles: string;
+    fileTrayTitle: string;
+    fileTrayDescription: string;
+    leftSlotLabel: string;
+    rightSlotLabel: string;
+    leftSlotPlaceholder: string;
+    rightSlotPlaceholder: string;
+    browsePdf: string;
+    slotEmptyHint: string;
+    vsLabel: string;
     leftLabel: string;
     rightLabel: string;
     remove: string;

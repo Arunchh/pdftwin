@@ -4,7 +4,11 @@ import { fileKey, isImageFile, isPdfFile } from "../utils/files";
 
 const thumbnailCache = new Map<string, string>();
 
-export function useFileThumbnail(file: File | undefined) {
+function thumbnailCacheKey(file: File, maxWidth: number): string {
+  return `${fileKey(file)}:${maxWidth}`;
+}
+
+export function useFileThumbnail(file: File | undefined, maxWidth = 56) {
   const [thumbnailUrl, setThumbnailUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -14,7 +18,7 @@ export function useFileThumbnail(file: File | undefined) {
       return;
     }
 
-    const key = fileKey(file);
+    const key = thumbnailCacheKey(file, maxWidth);
     const cached = thumbnailCache.get(key);
     if (cached) {
       setThumbnailUrl(cached);
@@ -37,7 +41,7 @@ export function useFileThumbnail(file: File | undefined) {
         }
 
         if (isPdfFile(file)) {
-          const dataUrl = await pdfThumbnailDataUrl(file);
+          const dataUrl = await pdfThumbnailDataUrl(file, maxWidth);
           if (!cancelled) {
             thumbnailCache.set(key, dataUrl);
             setThumbnailUrl(dataUrl);
@@ -61,7 +65,7 @@ export function useFileThumbnail(file: File | undefined) {
         URL.revokeObjectURL(objectUrl);
       }
     };
-  }, [file]);
+  }, [file, maxWidth]);
 
   return { thumbnailUrl, loading };
 }

@@ -17,7 +17,7 @@ export default function HomeCompareHeroSection() {
           <span>{messages.hero.titleHighlight}</span>
         </h1>
       </header>
-      <ToolWorkspace toolId={null} variant="homeHero" />
+      <ToolWorkspace toolId="pdf-compare" variant="homeCompare" />
     </div>
   );
 }

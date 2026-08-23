@@ -23,14 +23,12 @@ import {
   Minimize2,
   Shrink,
   Square,
-  Trash2,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
 import IconButton from "./IconButton";
 import CompareDiffModeMenu from "./compare/CompareDiffModeMenu";
 import CompareTextDiffView from "./compare/CompareTextDiffView";
-import { formatFileLimit } from "../config/limits";
 import { PdfClientError } from "../services/pdfClient";
 import { openPdfFile } from "../services/pdfJsClient";
 import {
@@ -41,8 +39,6 @@ import {
   type CompareDiffMode,
   type PageDiffResult,
 } from "../services/compareDiff";
-import { fileKey } from "../utils/files";
-import { useAuth } from "../hooks/useAuth";
 import { useI18n } from "../i18n/I18nProvider";
 import { useWorkspaceNav } from "../context/WorkspaceNavContext";
 import { TOOL_NEXT_STEPS } from "../config/toolNextSteps";
@@ -63,58 +59,12 @@ function formatPdfOpenError(err: unknown, side: "left" | "right"): string {
   return `Could not open the ${side} PDF.`;
 }
 
-function CompareSlotPicker({
-  label,
-  file,
-  pdfFiles,
-  onSelect,
-  onClear,
-  removeLabel,
-  trayHint,
-}: {
-  label: string;
-  file: File | null;
-  pdfFiles: File[];
-  onSelect: (file: File) => void;
-  onClear: () => void;
-  removeLabel: string;
-  trayHint: string;
-}) {
-  return (
-    <div className="compare-upload-slot">
-      <div className="compare-upload-slot-header">
-        <strong>{label}</strong>
-        {file && (
-          <button type="button" className="compare-clear-btn" onClick={onClear}>
-            <Trash2 size={14} />
-            {removeLabel}
-          </button>
-        )}
-      </div>
-
-      {file ? (
-        <p className="compare-file-name">{file.name}</p>
-      ) : pdfFiles.length === 0 ? (
-        <p className="file-hint muted">{trayHint}</p>
-      ) : (
-        <div className="compare-tray-picker">
-          {pdfFiles.map((candidate) => {
-            const key = fileKey(candidate);
-            return (
-              <button
-                key={key}
-                type="button"
-                className="compare-tray-pick-btn"
-                onClick={() => onSelect(candidate)}
-              >
-                {candidate.name}
-              </button>
-            );
-          })}
-        </div>
-      )}
-    </div>
-  );
+interface ComparePanelProps {
+  leftFile: File | null;
+  rightFile: File | null;
+  onLeftFileChange: (file: File | null) => void;
+  onRightFileChange: (file: File | null) => void;
+  onReviewModeChange?: (active: boolean) => void;
 }
 
 function PageCanvas({
@@ -235,23 +185,21 @@ function PageCanvas({
   );
 }
 
-interface ComparePanelProps {
-  pdfFiles: File[];
-  onReviewModeChange?: (active: boolean) => void;
-}
-
 function pageIsChanged(result: PageDiffResult | undefined): boolean {
   if (!result) return false;
   return result.status !== "identical";
 }
 
-export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePanelProps) {
+export default function ComparePanel({
+  leftFile,
+  rightFile,
+  onLeftFileChange,
+  onRightFileChange,
+  onReviewModeChange,
+}: ComparePanelProps) {
   const { messages, locale } = useI18n();
   const copy = messages.compare;
-  const { entitlements } = useAuth();
   const workspaceNav = useWorkspaceNav();
-  const [leftFile, setLeftFile] = useState<File | null>(null);
-  const [rightFile, setRightFile] = useState<File | null>(null);
   const [leftDoc, setLeftDoc] = useState<PDFDocumentProxy | null>(null);
   const [rightDoc, setRightDoc] = useState<PDFDocumentProxy | null>(null);
   const [loading, setLoading] = useState(false);
@@ -299,24 +247,6 @@ export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePa
   useEffect(() => {
     onReviewModeChange?.(reviewMode);
   }, [reviewMode, onReviewModeChange]);
-
-  useEffect(() => {
-    if (leftFile && !pdfFiles.some((file) => fileKey(file) === fileKey(leftFile))) {
-      setLeftFile(null);
-    }
-    if (rightFile && !pdfFiles.some((file) => fileKey(file) === fileKey(rightFile))) {
-      setRightFile(null);
-    }
-  }, [pdfFiles, leftFile, rightFile]);
-
-  useEffect(() => {
-    if (!leftFile && pdfFiles[0]) {
-      setLeftFile(pdfFiles[0]);
-    }
-    if (!rightFile && pdfFiles[1]) {
-      setRightFile(pdfFiles[1]);
-    }
-  }, [pdfFiles, leftFile, rightFile]);
 
   useEffect(() => {
     let cancelled = false;
@@ -581,8 +511,8 @@ export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePa
     if (!leftFile || !rightFile || !leftDoc || !rightDoc) return;
 
     skipPdfReloadRef.current = 2;
-    setLeftFile(rightFile);
-    setRightFile(leftFile);
+    onLeftFileChange(rightFile);
+    onRightFileChange(leftFile);
     setLeftDoc(rightDoc);
     setRightDoc(leftDoc);
     setLeftScale(rightScale);
@@ -982,40 +912,18 @@ export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePa
             </>
           )}
 
-          <div className="compare-upload-row">
-            <CompareSlotPicker
-              label={copy.leftLabel}
-              file={leftFile}
-              pdfFiles={pdfFiles}
-              onSelect={setLeftFile}
-              onClear={() => setLeftFile(null)}
-              removeLabel={copy.remove}
-              trayHint={copy.addFromTray}
-            />
-            <CompareSlotPicker
-              label={copy.rightLabel}
-              file={rightFile}
-              pdfFiles={pdfFiles}
-              onSelect={setRightFile}
-              onClear={() => setRightFile(null)}
-              removeLabel={copy.remove}
-              trayHint={copy.addFromTray}
-            />
-          </div>
-
-          <p className="file-hint muted">
-            {copy.privacyHint.replace("{limit}", formatFileLimit(entitlements.fileLimitMb))}
-          </p>
-
-          {readyForReview && (
+          {readyForReview ? (
             <div className="compare-setup-actions">
-              <button type="button" className="btn btn-secondary" onClick={swapDocuments}>
-                <ArrowLeftRight size={16} />
-                {copy.swapDocuments}
-              </button>
               <button type="button" className="btn btn-primary" onClick={enterReviewMode}>
                 {hasReviewed ? "Return to review" : copy.enterReview}
               </button>
+            </div>
+          ) : (
+            <div className="compare-setup-empty">
+              <div className="compare-setup-empty-icon" aria-hidden="true">
+                <Columns2 size={28} strokeWidth={1.5} />
+              </div>
+              <p className="file-hint muted">{copy.setupAwaitingFiles}</p>
             </div>
           )}
 

@@ -48,18 +48,18 @@ Registry helper: `singlePdfOpsRailTools()` in [`tools.ts`](../../frontend/src/co
 
 CSS: `.workspace-frame--with-rail`, `.workspace-tool-rail`.
 
-### Home hero layout (`variant="homeHero"`)
+### Home compare layout (`variant="homeCompare"`)
 
-On `/` and `/{locale}/`, the embedded workspace uses an **file-led, single-column** layout (UI overhaul 2026-08-23):
+On `/` and `/{locale}/`, the embedded workspace uses the **same compare layout as `/tools/compare`**, with a marketing H1 above it (UI overhaul 2026-08-23):
 
 | Block | Order | Purpose |
 |-------|-------|---------|
-| **Hero upload** | 1 | Full-width prominent dropzone (`WorkspaceFileTray variant="hero"`) |
-| **Tool panel / Suggestions** | 2 | If no tool selected but files uploaded, it shows a suggestion grid (Compare, Merge, etc.). Otherwise it shows the active tool. |
+| **Hero header** | 1 | H1 + eyebrow (`HomeCompareHeroSection`) — home only |
+| **Compare workspace** | 2 | `ToolWorkspace toolId="pdf-compare" variant="homeCompare"`: compare panel (left) + dual-slot file tray (right) |
 
-Users pick a different tool from the header **All tools** mega menu or the [`/tools/` catalog](./tool-workspace-ui.md#all-tools-catalog-page-tools); the home hero no longer defaults to showing the Compare panel if no files are uploaded.
+Home no longer uses a separate upload-first flow or tool suggestion grid. Users land directly in compare. Tool heading inside the workspace is hidden on home (the H1 serves that role); on `/tools/compare` the standard tool heading is shown.
 
-Files uploaded on the home hero persist in IndexedDB and remain available when switching tools client-side. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
+See [compare-first homepage — unified compare workspace](./compare-first-homepage.md#unified-compare-workspace-uiux-overhaul-2026-08-23).
 
 Design tokens and category colors follow the existing **Neon Pastel / PDFTwin** palette (`index.css` `:root`).
 
@@ -205,18 +205,17 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 </div>
 ```
 
-### Home hero (`/` — `variant="homeHero"`)
+### Home compare (`/` — `variant="homeCompare"`)
 
 ```html
 <div class="home-compare-hero">
   <header class="home-compare-hero-header"><h1>…</h1></header>
-  <div class="workspace-frame workspace-frame--with-rail">
-    <aside class="workspace-tool-rail">…</aside>
-    <section class="workspace workspace--home-hero" id="workspace">
-      <div class="workspace-hero-upload">…</div>
-      <div class="workspace-layout workspace-layout--home-hero">…</div>
-    </section>
-  </div>
+  <section class="workspace workspace--home-compare workspace--compare" id="workspace">
+    <div class="workspace-layout">
+      <div class="workspace-action-column"><!-- ComparePanel setup --></div>
+      <aside class="compare-file-tray workspace-files-column"><!-- Original + Revised slots --></aside>
+    </div>
+  </section>
 </div>
 ```
 
@@ -227,8 +226,10 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `.workspace-frame--with-rail` | Full-bleed grid; rail in left gutter (≥1240px) or inline (tablet) |
 | `.workspace-tool-rail` | Sticky vertical icon toolbar (single-PDF ops) |
 | `.workspace-tool-rail-btn` | Rail icon button; `.active` when tool selected |
-| `.workspace-layout--home-hero` | Single column on home; no right file tray |
-| `.workspace-files-upload--hero` | Large dropzone styling (iLovePDF-style) |
+| `.workspace-layout--home-hero` | *(removed)* — home now uses standard two-column compare layout |
+| `.workspace--home-compare` | Home-embedded compare workspace (H1 lives outside) |
+| `.compare-file-tray` | Compare-specific right column with dual upload slots |
+| `.compare-file-slot-*` | Per-slot empty/filled states, thumbnail preview, drag/hover polish |
 | `.workspace-layout` | CSS grid: 1fr + 320px on desktop; single column ≤640px |
 | `.workspace-action-column` | Left column; hosts existing tool panels |
 | `.workspace-files-column` | Sticky right column; dashed border |
@@ -453,12 +454,12 @@ Compare is the only tool with a **second UI phase** that hides the standard work
 ### Flow
 
 ```
-/tools/compare (setup)
-  → Upload PDFs in file tray
-  → Assign left / right in ComparePanel
+/tools/compare or / (setup)
+  → Add Original + Revised PDFs in CompareFileTray (right column)
+  → Each slot shows live page-1 thumbnail when filled
   → Click "Open compare viewer"
   → reviewMode = true
-       ├─ Hide: workspace heading, WorkspaceToolRail, WorkspaceFileTray
+       ├─ Hide: workspace heading, WorkspaceToolRail, CompareFileTray
        ├─ Show: full-width toolbar + dual-pane viewer
        └─ Classes: workspace--compare-review, compare-panel--review
   → "Change documents" → back to setup
@@ -468,10 +469,11 @@ Compare is the only tool with a **second UI phase** that hides the standard work
 
 | Prop / callback | Direction | Purpose |
 |-----------------|-----------|---------|
-| `pdfFiles` | Workspace → Panel | Files from IndexedDB tray |
+| `leftFile`, `rightFile` | Workspace → Panel | Controlled compare documents |
+| `onLeftFileChange`, `onRightFileChange` | Panel/Tray → Workspace | Update slot assignment |
 | `onReviewModeChange(active)` | Panel → Workspace | Toggle chrome visibility |
 
-Implementation: [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx), [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx).
+Compare uses [`CompareFileTray`](../../frontend/src/components/compare/CompareFileTray.tsx) instead of [`WorkspaceFileTray`](../../frontend/src/components/WorkspaceFileTray.tsx) in the right column.
 
 ### Review toolbar (summary)
 
@@ -496,11 +498,12 @@ Implementation: [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.
 
 ### Verification (compare)
 
-1. **Home `/`:** upload dropzone under H1; compare panel below upload (no tool tabs under dropzone)
-2. **Tool route `/tools/compare`:** setup visible on first load; sidebar tray present
-3. After **Open compare viewer** — chrome hidden, panes use full width
-4. Zoom visibly changes page size
-5. **Change documents** — restores setup + upload zone (home) or tray (tool route)
+1. **Home `/`:** same dual-slot compare workspace as `/tools/compare`; H1 above workspace
+2. **Tool route `/tools/compare`:** tool heading + setup panel + dual-slot tray
+3. Empty slots: placeholder, icon, browse button; filled slots: thumbnail + filename
+4. After **Open compare viewer** — chrome hidden, panes use full width
+5. Zoom visibly changes page size
+6. **Change documents** — restores setup + dual-slot tray
 
 ---
 

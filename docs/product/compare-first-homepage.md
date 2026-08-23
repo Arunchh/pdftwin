@@ -1,6 +1,6 @@
 # Compare-first homepage & PDF compare viewer
 
-> **Shipped:** 2026-07-27 · **Updated:** 2026-07-28 (upload-first hero layout) · [Docs hub](../README.md) · [Implementation status](./implementation-status.md) · [Tool workspace UI](./tool-workspace-ui.md)
+> **Shipped:** 2026-07-27 · **Updated:** 2026-08-23 (unified compare workspace + dual-slot file tray) · [Docs hub](../README.md) · [Implementation status](./implementation-status.md) · [Tool workspace UI](./tool-workspace-ui.md)
 
 PDFTwin is positioned around **side-by-side PDF compare** as the hero differentiator, with complementary tools (extract, merge, sign, convert) supporting a document review workflow. This doc covers the homepage restructure and the dedicated compare viewer shipped in the same release.
 
@@ -25,40 +25,55 @@ Compare remains **client-side** (PDF.js) — files never upload for viewing. SEO
 
 | Section | Component | Purpose |
 |---------|-----------|---------|
-| Compare hero | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | H1 headline → **upload dropzone** → suggested next steps (Compare, Merge, etc.) based on files dropped |
+| Compare hero | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | H1 headline → **same compare workspace** as `/tools/compare` (panel left, dual upload slots right) |
 | Workflow | [`HomeWorkflowSection.tsx`](../../frontend/src/components/layout/HomeWorkflowSection.tsx) | 3-step post-compare workflow with links into tools |
 | Tools + SEO | [`HomeToolsSection.tsx`](../../frontend/src/components/layout/HomeToolsSection.tsx) | 6 featured complementary tools + quiet crawlable list of all 18 tools (`#tools`) |
 
-### File-led hero layout (UI/UX overhaul 2026-08-23)
+### Unified compare workspace (UI/UX overhaul 2026-08-23)
 
-The home compare hero follows a **file-led** flow: upload on the home hero, then contextual tool suggestions appear depending on what you uploaded. Tool selection can also happen via the header **All tools** mega menu.
+The home page and `/tools/compare` now share **one layout**. Landing on `/` is equivalent to opening Compare from the **All tools** menu — the only difference is the marketing H1 above the workspace on home.
 
 ```
-┌─────────────────────────────────────────────────────┐
-│  Eyebrow + H1 — "Compare two PDFs side by side…"    │
-├─────────────────────────────────────────────────────┤
-│  Hero upload dropzone (full width, prominent)       │
-│  · drag-and-drop or click to browse                 │
-│  · compact file list when files are present           │
-├─────────────────────────────────────────────────────┤
-│  ┌───────────────────────────────────────────────┐  │
-│  │  Suggested actions appear when files drop     │  │
-│  │  e.g. Compare PDFs, Merge PDFs (if 2+ files)  │  │
-│  └───────────────────────────────────────────────┘  │
-└─────────────────────────────────────────────────────┘
+┌──────────────────────────────────────────────────────────────────┐
+│  Eyebrow + H1 — "Compare two PDFs side by side…"  (home only)   │
+├──────────────────────────────────────────────────────────────────┤
+│  ┌─────────────────────────────┬──────────────────────────────┐  │
+│  │  ComparePanel (setup)       │  CompareFileTray (right)     │  │
+│  │  · setup title + description│  ┌ Original ──────────────┐ │  │
+│  │  · "Open compare viewer"    │  │ drop / browse / preview │ │  │
+│  │    when both PDFs ready     │  └─────────────────────────┘ │  │
+│  │                             │           vs                 │  │
+│  │                             │  ┌ Revised ────────────────┐ │  │
+│  │                             │  │ drop / browse / preview │ │  │
+│  │                             │  └─────────────────────────┘ │  │
+│  └─────────────────────────────┴──────────────────────────────┘  │
+└──────────────────────────────────────────────────────────────────┘
 ```
+
+**Key UX changes:**
+
+| Before (2026-07-28) | After (2026-08-23) |
+|---------------------|---------------------|
+| Home: single generic dropzone → tool suggestions → compare | Home: compare tool active immediately |
+| Compare: generic file tray + left/right pickers in panel | Compare: **two dedicated upload slots** on the right |
+| Home and `/tools/compare` looked different | **Identical** two-column compare workspace |
+| No live preview in upload UI | Each slot shows **page-1 thumbnail** + filename when filled |
 
 Implementation:
 
 | Piece | Path | Notes |
 |-------|------|-------|
-| Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace toolId={null} variant="homeHero" />` |
-| Upload zone | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) `variant="hero"` | Large dropzone; no sidebar panel wrapper |
-| Tool suggestions | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | When no tool is selected but files are uploaded, displays a grid of primary actions (Compare/Merge or Compress/Convert/Split/Sign) |
+| Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace toolId="pdf-compare" variant="homeCompare" />` |
+| Compare file tray | [`CompareFileTray.tsx`](../../frontend/src/components/compare/CompareFileTray.tsx) | Right column: Original + Revised slots, swap button, privacy copy |
+| Upload slot | [`CompareFileSlot.tsx`](../../frontend/src/components/compare/CompareFileSlot.tsx) | Per-slot drag/drop, browse, PDF thumbnail preview, remove |
+| Compare panel | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) | Setup + review viewer; file assignment moved to tray |
+| Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | Lifts `compareLeftFile` / `compareRightFile` state; renders `CompareFileTray` instead of `WorkspaceFileTray` when compare tool active |
 
-On **`/tools/*` routes**, layout is **rail | tool panel | file tray** on desktop.
+On **`/tools/compare`** and **home (`/`)**, layout is **compare panel | dual-slot file tray** on desktop. Other tools keep **rail | tool panel | standard file tray**.
 
-CSS: `.workspace-hero-upload`, `.workspace-files-upload--hero`, `.workspace-layout--home-hero`, `.workspace-suggestions` in [`index.css`](../../frontend/src/index.css).
+CSS: `.compare-file-tray`, `.compare-file-slot-*`, `.compare-setup-empty`, `.workspace--home-compare` in [`index.css`](../../frontend/src/index.css).
+
+**Removed:** `variant="homeHero"` (single-column upload-first flow), tool suggestion grid on home, inline left/right pickers inside `ComparePanel`.
 
 ### Removed from home (simplified UI)
 
@@ -78,7 +93,21 @@ CSS: `.workspace-hero-upload`, `.workspace-files-upload--hero`, `.workspace-layo
 | Merge the final pack | `arrange-merge` | `/tools/merge` |
 | Sign and protect | `sign-pdf` | `/tools/sign` |
 
-Compare is the **default home hero tool** — users upload and compare without leaving `/`.
+Compare is the **default home hero tool** — users land directly in compare without an extra tool-selection step.
+
+### Compare file tray (dual upload slots)
+
+Each slot in the right column is a self-contained upload surface:
+
+| State | UI |
+|-------|-----|
+| **Empty** | Dashed border, upload icon, placeholder copy ("Drop your original PDF here"), **Browse PDF** button |
+| **Filled** | Live **page-1 thumbnail** (PDF.js via `useFileThumbnail`), filename, file size, remove button |
+| **Both filled** | **Swap documents** button between slots |
+
+Slots are labeled **Original** and **Revised** (i18n: `compare.leftSlotLabel`, `compare.rightSlotLabel`). Visual polish: gradient tray background, inset highlights, hover/drag states, shimmer loading skeleton for thumbnails.
+
+Files are held in React state in `ToolWorkspace` (`compareLeftFile`, `compareRightFile`) — not the generic IndexedDB workspace tray. This keeps compare's two-file requirement explicit and avoids the old tray → assign-left/right indirection.
 
 ### Featured complementary tools (`messages.home.complementary.toolIds`)
 
@@ -111,19 +140,31 @@ All five locales (EN, ES, FR, NL, PT) have updated `meta`, `hero`, `home`, `comp
 
 ## PDF compare viewer (`ComparePanel`)
 
-**Route:** `/tools/compare` · **Panel:** [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx)
+**Route:** `/tools/compare` and home (`/`) · **Panel:** [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) · **File tray:** [`CompareFileTray.tsx`](../../frontend/src/components/compare/CompareFileTray.tsx)
 
 ### Two phases
 
 ```
 Setup                          Review (immersive)
 ─────                          ──────────────────
-Upload PDFs via file tray      Full-width dual panes
-Pick left / right documents    Toolbar: zoom, fit, page nav, fullscreen
+Add Original + Revised PDFs    Full-width dual panes
+in CompareFileTray (right)     Toolbar: zoom, fit, page nav, fullscreen
 Click "Open compare viewer"    Workspace chrome hidden (see below)
 ```
 
-### Review-mode features
+### Workspace integration
+
+[`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) manages compare file state and listens to `onReviewModeChange` from `ComparePanel`:
+
+- When `reviewMode === true`: hides tool heading, `WorkspaceToolRail`, and `CompareFileTray`
+- Adds classes `workspace--compare-review`, `workspace-layout--compare-review`
+- User exits via **Change documents** in compare toolbar
+
+| Prop / callback | Direction | Purpose |
+|-----------------|-----------|---------|
+| `leftFile`, `rightFile` | Workspace → Panel + Tray | Controlled compare documents |
+| `onLeftFileChange`, `onRightFileChange` | Panel/Tray → Workspace | Update slot assignment |
+| `onReviewModeChange(active)` | Panel → Workspace | Toggle chrome visibility |
 
 | Feature | Details |
 |---------|---------|
@@ -133,17 +174,7 @@ Click "Open compare viewer"    Workspace chrome hidden (see below)
 | **Page navigation** | Prev/next, page number input (single-page mode) |
 | **Scroll sync** | Linked scroll in continuous mode only |
 | **Fullscreen** | Native Fullscreen API on viewer container |
-| **Privacy** | Renders locally; copy states no upload for viewing |
-
-### Workspace integration
-
-[`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) listens to `onReviewModeChange` from `ComparePanel`:
-
-- When `reviewMode === true`: hides tool heading, `WorkspaceToolRail`, and `WorkspaceFileTray`
-- Adds classes `workspace--compare-review`, `workspace-layout--compare-review`
-- User exits via **Change documents** in compare toolbar
-
-### CSS fixes
+### Review-mode features
 
 | Issue | Fix |
 |-------|-----|
@@ -163,7 +194,7 @@ Styles: [`frontend/src/index.css`](../../frontend/src/index.css) — `.compare-p
 | `home.workflow` | `heading`, `subheading`, `steps[]` | `HomeWorkflowSection` |
 | `home.complementary` | `heading`, `subheading`, `toolIds[]` | `HomeToolsSection` |
 | `home.seoTools` | `heading`, `subheading` | `HomeToolsSection` SEO nav |
-| `compare` | Full panel copy (setup, toolbar, zoom, pages, fullscreen) | `ComparePanel` |
+| `compare` | Full panel + file tray copy (`fileTrayTitle`, `leftSlotPlaceholder`, `browsePdf`, `setupAwaitingFiles`, toolbar, zoom, pages, fullscreen) | `ComparePanel`, `CompareFileTray`, `CompareFileSlot` |
 
 Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 
@@ -181,7 +212,8 @@ Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 | `HomeToolsSection` | `frontend/src/components/layout/HomeToolsSection.tsx` |
 | `ToolCardLink` | `frontend/src/components/layout/ToolCardLink.tsx` (reused for featured tools) |
 | `AnnouncementBanner` | `frontend/src/components/layout/AnnouncementBanner.tsx` (global waitlist bar) |
-| `WorkspaceToolRail` | `frontend/src/components/layout/WorkspaceToolRail.tsx` (single-PDF vertical icon rail) |
+| `CompareFileTray` | `frontend/src/components/compare/CompareFileTray.tsx` |
+| `CompareFileSlot` | `frontend/src/components/compare/CompareFileSlot.tsx` |
 
 **Legacy (still used on other routes, not home):**
 
@@ -197,25 +229,26 @@ Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 
 ### Homepage
 
-1. `/` — hero shows compare headline; **upload dropzone directly under H1**; no initial tool panel
-2. Upload 2 PDFs on home — suggestions for Compare PDFs and Merge PDFs appear
-3. Upload 1 PDF on home — suggestions for Compress, Convert, Split, and Sign appear
+1. `/` — hero shows compare H1; **same compare workspace as `/tools/compare`** (panel left, dual upload slots right)
+2. Empty slots show placeholder + browse button; filled slots show page-1 thumbnail + filename
+3. Both PDFs added — **Open compare viewer** enabled in setup panel
 4. Workflow section — 3 steps with working tool links
 5. `#tools` — featured tools list and quiet `#tools` SEO index
 6. `/es/`, `/fr/`, `/nl/`, `/pt/` — same structure, translated copy
 7. View source — `<title>` and meta description include compare keywords
-8. Vertical tool rail — hidden on home until a tool is chosen, shows on `/tools/*`
 
-### Compare tool
+### Compare tool (home and `/tools/compare`)
 
-1. `/tools/compare` — upload 2 PDFs, assign left/right, **Open compare viewer**
-2. Review mode — file tray and tool rail hidden; dual panes full width
-3. Zoom in/out — visible size changes (not just resolution)
-4. **Fit width** — both panes scale to pane width
-5. Single-page mode — prev/next and page input work; arrow keys work
-6. Continuous mode — linked scroll syncs both panes
-7. Fullscreen — viewer fills screen; exit restores layout
-8. **Change documents** — returns to setup with tray visible
+1. Add Original + Revised PDFs in right-column slots; live thumbnails appear
+2. **Swap documents** — swaps slot assignment
+3. **Open compare viewer** — enters review mode
+4. Review mode — file tray and tool rail hidden; dual panes full width
+5. Zoom in/out — visible size changes (not just resolution)
+6. **Fit width** — both panes scale to pane width
+7. Single-page mode — prev/next and page input work; arrow keys work
+8. Continuous mode — linked scroll syncs both panes
+9. Fullscreen — viewer fills screen; exit restores layout
+10. **Change documents** — returns to setup with dual-slot tray visible
 
 ---
 

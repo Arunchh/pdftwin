@@ -105,7 +105,17 @@ export const pt: Messages = {
   compare: {
     setupTitle: "Escolha dois PDFs para comparar",
     setupDescription:
-      "Envie PDFs para a bandeja do espaço de trabalho, atribua esquerda e direita e abra o visualizador dedicado.",
+      "Adicione o PDF original e o revisado no painel à direita e abra o visualizador lado a lado.",
+    setupAwaitingFiles: "Adicione ambos os PDFs pelos espaços de upload à direita para começar a comparar.",
+    fileTrayTitle: "Seus documentos",
+    fileTrayDescription: "Adicione um PDF original e um revisado para compará-los lado a lado.",
+    leftSlotLabel: "Original",
+    rightSlotLabel: "Revisado",
+    leftSlotPlaceholder: "Solte seu PDF original aqui",
+    rightSlotPlaceholder: "Solte seu PDF revisado aqui",
+    browsePdf: "Procurar PDF",
+    slotEmptyHint: "Apenas PDF · arrastar e soltar ou procurar",
+    vsLabel: "vs",
     leftLabel: "PDF esquerdo",
     rightLabel: "PDF direito",
     remove: "Remover",

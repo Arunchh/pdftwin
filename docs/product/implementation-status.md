@@ -26,7 +26,8 @@
 
 ### Shipped (2026-07-28 — home UX + chrome)
 
-- **Upload-first home hero** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) + [`ToolWorkspace`](../../frontend/src/components/ToolWorkspace.tsx) `variant="homeHero"`: H1 → prominent upload dropzone → tool panel. [`WorkspaceFileTray`](../../frontend/src/components/WorkspaceFileTray.tsx) gains `variant="hero"` for the full-width home dropzone; standard two-column layout unchanged on `/tools/*`. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
+- **Unified compare workspace (2026-08-23)** — Home (`/`) and `/tools/compare` share the same layout: [`ComparePanel`](../../frontend/src/components/ComparePanel.tsx) (left) + [`CompareFileTray`](../../frontend/src/components/compare/CompareFileTray.tsx) with dual upload slots and live PDF thumbnails (right). Removed `variant="homeHero"` upload-first flow. See [compare-first homepage](./compare-first-homepage.md#unified-compare-workspace-uiux-overhaul-2026-08-23).
+- **Upload-first home hero** *(superseded 2026-08-23)* — Former `variant="homeHero"` single-column dropzone + tool suggestions.
 - **Workspace category order** — [`WORKSPACE_CATEGORY_ORDER`](../../frontend/src/config/tools.ts) puts **Work with PDFs** first in the header mega menu and `/tools/` catalog.
 - **Header All tools mega menu** — [`SiteNav`](../../frontend/src/components/layout/SiteNav.tsx): **From PDF**, **To PDF**, and **Edit PDF** moved under one **All tools** dropdown (3-column mega menu on desktop; accordion on mobile). Top-level nav freed to **All tools · Pricing · Compare · language**.
 - **Announcement banner — mobile compact** — [`AnnouncementBanner.tsx`](../../frontend/src/components/layout/AnnouncementBanner.tsx): tighter padding; email and **Join waitlist** stay on one row with minimal gap (≤640px no longer stacks full-width).
@@ -46,7 +47,7 @@
 ### Shipped (2026-07-27 — compare-first)
 
 - **Compare-first homepage** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) embeds compare workspace on `/`; [`HeroSection`](../../frontend/src/components/layout/HeroSection.tsx), [`HomeWorkflowSection`](../../frontend/src/components/layout/HomeWorkflowSection.tsx), [`HomeToolsSection`](../../frontend/src/components/layout/HomeToolsSection.tsx) replace full `ToolGrid`, `TrustBar`, and `FormatSupportSection`. Crawlable `#tools` index preserves internal SEO links. See [compare-first homepage](./compare-first-homepage.md).
-- **PDF compare — review mode** — [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx): setup phase (pick left/right from tray) + immersive viewer (zoom, fit-width, single-page / continuous modes, page nav, fullscreen, keyboard shortcuts). [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) hides file tray and tool rail in review mode. Canvas zoom fix: removed `max-width: 100%` on `.compare-page-canvas`.
+- **PDF compare — review mode** — [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx): setup phase + immersive viewer (zoom, fit-width, single-page / continuous modes, page nav, fullscreen, keyboard shortcuts). **2026-08-23:** dual-slot [`CompareFileTray`](../../frontend/src/components/compare/CompareFileTray.tsx) replaces generic tray + inline left/right pickers; home and `/tools/compare` unified. [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) hides file tray and tool rail in review mode.
 - **Home & compare i18n** — New `hero`, `home`, and `compare` message namespaces in all 5 locales. Updated `meta.homeTitle` / `meta.homeDescription` with compare keywords. `BUSINESS_TAGLINE` and structured data feature list prioritize compare.
 
 ### Shipped (2026-07-27 — taxonomy)
@@ -183,7 +184,7 @@ Legacy server endpoints (`/api/merge`, `/api/arrange-merge`, `/api/split`, `/api
 
 | Tool | Panel | Notes |
 |------|-------|-------|
-| Compare | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) | Setup + **review mode**: dual panes, zoom, fit-width, single-page / continuous, fullscreen — see [compare-first homepage](./compare-first-homepage.md) |
+| Compare | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) + [`CompareFileTray.tsx`](../../frontend/src/components/compare/CompareFileTray.tsx) | Setup + **review mode**: dual panes, zoom, fit-width, single-page / continuous, fullscreen — see [compare-first homepage](./compare-first-homepage.md) |
 | PDF → JPG/PNG | [`PdfToJpgPanel.tsx`](../../frontend/src/components/PdfToJpgPanel.tsx) | Multi-page → ZIP |
 | PDF → Text | [`PdfToTextPanel.tsx`](../../frontend/src/components/PdfToTextPanel.tsx) | Text layer only; scans → use OCR |
 

@@ -105,7 +105,17 @@ export const en: Messages = {
   compare: {
     setupTitle: "Choose two PDFs to compare",
     setupDescription:
-      "Upload PDFs to the workspace tray, assign left and right documents, then open the dedicated compare viewer.",
+      "Add your original and revised PDFs in the panel on the right, then open the side-by-side compare viewer.",
+    setupAwaitingFiles: "Add both PDFs using the upload slots on the right to start comparing.",
+    fileTrayTitle: "Your documents",
+    fileTrayDescription: "Add an original and a revised PDF to compare them side by side.",
+    leftSlotLabel: "Original",
+    rightSlotLabel: "Revised",
+    leftSlotPlaceholder: "Drop your original PDF here",
+    rightSlotPlaceholder: "Drop your revised PDF here",
+    browsePdf: "Browse PDF",
+    slotEmptyHint: "PDF only · drag and drop or browse",
+    vsLabel: "vs",
     leftLabel: "Left PDF",
     rightLabel: "Right PDF",
     remove: "Remove",

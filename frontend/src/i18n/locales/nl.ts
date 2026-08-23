@@ -105,7 +105,17 @@ export const nl: Messages = {
   compare: {
     setupTitle: "Kies twee PDF's om te vergelijken",
     setupDescription:
-      "Upload PDF's naar de werkruimte-bak, wijs links en rechts toe en open de dedicated vergelijkingsviewer.",
+      "Voeg je originele en herziene PDF toe in het paneel rechts en open daarna de vergelijkingsviewer naast elkaar.",
+    setupAwaitingFiles: "Voeg beide PDF's toe via de uploadvakken rechts om te beginnen met vergelijken.",
+    fileTrayTitle: "Je documenten",
+    fileTrayDescription: "Voeg een originele en een herziene PDF toe om ze naast elkaar te vergelijken.",
+    leftSlotLabel: "Origineel",
+    rightSlotLabel: "Herzien",
+    leftSlotPlaceholder: "Sleep je originele PDF hierheen",
+    rightSlotPlaceholder: "Sleep je herziene PDF hierheen",
+    browsePdf: "PDF kiezen",
+    slotEmptyHint: "Alleen PDF · slepen of bladeren",
+    vsLabel: "vs",
     leftLabel: "PDF links",
     rightLabel: "PDF rechts",
     remove: "Verwijderen",
