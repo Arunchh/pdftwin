@@ -466,12 +466,15 @@ export default function ComparePanel({
   const zoomLeft = (delta: number) => setLeftScale((current) => clampScale(current + delta));
   const zoomRight = (delta: number) => setRightScale((current) => clampScale(current + delta));
 
-  const fitBothToWidth = async () => {
+  const fitBothToWidth = useCallback(async () => {
     if (!leftDoc || !rightDoc) return;
 
     const leftPane = leftScrollRef.current;
     const rightPane = rightScrollRef.current;
     if (!leftPane || !rightPane) return;
+
+    const paneWidth = Math.min(leftPane.clientWidth, rightPane.clientWidth);
+    if (paneWidth < 48) return;
 
     try {
       const [leftPage, rightPage] = await Promise.all([
@@ -488,7 +491,7 @@ export default function ComparePanel({
     } catch {
       setMessage("Could not fit documents to pane width.");
     }
-  };
+  }, [leftDoc, rightDoc, currentPage]);
 
   const exitReviewMode = () => {
     setReviewMode(false);
@@ -547,12 +550,31 @@ export default function ComparePanel({
   useEffect(() => {
     if (!reviewMode || !readyForReview) return;
 
-    const timer = window.setTimeout(() => {
-      void fitBothToWidth();
-    }, 0);
+    const leftPane = leftScrollRef.current;
+    const rightPane = rightScrollRef.current;
+    if (!leftPane || !rightPane) return;
 
-    return () => window.clearTimeout(timer);
-  }, [reviewMode, readyForReview, leftDoc, rightDoc, currentPage, viewMode]);
+    let rafId = 0;
+    const scheduleFit = () => {
+      cancelAnimationFrame(rafId);
+      rafId = requestAnimationFrame(() => {
+        void fitBothToWidth();
+      });
+    };
+
+    const observer = new ResizeObserver(() => {
+      scheduleFit();
+    });
+
+    observer.observe(leftPane);
+    observer.observe(rightPane);
+    scheduleFit();
+
+    return () => {
+      observer.disconnect();
+      cancelAnimationFrame(rafId);
+    };
+  }, [reviewMode, readyForReview, leftDoc, rightDoc, currentPage, viewMode, fitBothToWidth]);
 
   useEffect(() => {
     const onFullscreenChange = () => {
@@ -629,15 +651,19 @@ export default function ComparePanel({
         {viewMode === "single" && changedPages.length > 0 && (
           <div className="compare-toolbar-group">
             <IconButton
-              icon={<ChevronLeft size={18} />}
+              icon={<ChevronLeft size={17} />}
               label={copy.prevChange}
               variant="secondary"
+              iconOnly
+              className="compare-toolbar-btn"
               onClick={goToPrevChange}
             />
             <IconButton
-              icon={<ChevronRight size={18} />}
+              icon={<ChevronRight size={17} />}
               label={copy.nextChange}
               variant="secondary"
+              iconOnly
+              className="compare-toolbar-btn"
               onClick={goToNextChange}
             />
           </div>
@@ -651,16 +677,20 @@ export default function ComparePanel({
       <div className="compare-toolbar">
         <div className="compare-toolbar-group compare-toolbar-group--sync">
           <IconButton
-            icon={linkScroll ? <Link2 size={18} /> : <Link2Off size={18} />}
+            icon={linkScroll ? <Link2 size={17} /> : <Link2Off size={17} />}
             label={linkScroll ? copy.scrollLinked : copy.scrollIndependent}
             variant={linkScroll ? "primary" : "secondary"}
+            iconOnly
+            className="compare-toolbar-btn"
             onClick={() => setLinkScroll((value) => !value)}
             disabled={viewMode !== "continuous" || diffMode === "text"}
           />
           <IconButton
-            icon={linkZoom ? <Link2 size={18} /> : <Link2Off size={18} />}
+            icon={linkZoom ? <Link2 size={17} /> : <Link2Off size={17} />}
             label={linkZoom ? copy.zoomLinked : copy.zoomIndependent}
             variant={linkZoom ? "primary" : "secondary"}
+            iconOnly
+            className="compare-toolbar-btn"
             onClick={() => setLinkZoom((value) => !value)}
             disabled={diffMode === "text"}
           />
@@ -682,9 +712,11 @@ export default function ComparePanel({
 
         <div className="compare-toolbar-group">
           <IconButton
-            icon={<ZoomOut size={18} />}
+            icon={<ZoomOut size={17} />}
             label={copy.zoomOut}
             variant="secondary"
+            iconOnly
+            className="compare-toolbar-btn"
             onClick={() => (linkZoom ? zoomBoth(-SCALE_STEP) : zoomLeft(-SCALE_STEP))}
             disabled={diffMode === "text"}
           />
@@ -696,51 +728,61 @@ export default function ComparePanel({
                 : `L ${Math.round(leftScale * 100)}% · R ${Math.round(rightScale * 100)}%`}
           </span>
           <IconButton
-            icon={<ZoomIn size={18} />}
+            icon={<ZoomIn size={17} />}
             label={copy.zoomIn}
             variant="secondary"
+            iconOnly
+            className="compare-toolbar-btn"
             onClick={() => (linkZoom ? zoomBoth(SCALE_STEP) : zoomLeft(SCALE_STEP))}
             disabled={diffMode === "text"}
           />
           {!linkZoom && diffMode !== "text" && (
             <>
               <IconButton
-                icon={<ZoomOut size={18} />}
+                icon={<ZoomOut size={17} />}
                 label={copy.zoomOutRight}
                 variant="secondary"
+                iconOnly
+                className="compare-toolbar-btn"
                 onClick={() => zoomRight(-SCALE_STEP)}
               />
               <IconButton
-                icon={<ZoomIn size={18} />}
+                icon={<ZoomIn size={17} />}
                 label={copy.zoomInRight}
                 variant="secondary"
+                iconOnly
+                className="compare-toolbar-btn"
                 onClick={() => zoomRight(SCALE_STEP)}
               />
             </>
           )}
           <button
             type="button"
-            className="btn btn-secondary btn-sm compare-fit-btn"
+            className="btn btn-secondary btn-sm compare-toolbar-btn compare-toolbar-btn--text"
             onClick={() => void fitBothToWidth()}
             disabled={diffMode === "text"}
           >
-            <Shrink size={16} />
+            <Shrink size={15} />
             {copy.fitWidth}
           </button>
         </div>
 
         <div className="compare-toolbar-group">
           <IconButton
-            icon={<List size={18} />}
+            icon={<List size={17} />}
             label={copy.viewContinuous}
             variant={viewMode === "continuous" ? "primary" : "secondary"}
+            iconOnly
+            className="compare-toolbar-btn"
             onClick={() => setViewMode("continuous")}
             disabled={diffMode === "text"}
           />
           <IconButton
-            icon={<Square size={18} />}
+            icon={<Square size={17} />}
             label={copy.viewSinglePage}
             variant={viewMode === "single" ? "primary" : "secondary"}
+            iconOnly
+            className="compare-toolbar-btn"
             onClick={() => setViewMode("single")}
           />
         </div>
@@ -748,9 +790,11 @@ export default function ComparePanel({
         {viewMode === "single" && pageCount > 0 && (
           <div className="compare-toolbar-group compare-page-nav">
             <IconButton
-              icon={<ChevronLeft size={18} />}
+              icon={<ChevronLeft size={17} />}
               label={copy.prevPage}
               variant="secondary"
+              iconOnly
+              className="compare-toolbar-btn"
               onClick={() => goToPage(currentPage - 1)}
               disabled={currentPage <= 1}
             />
@@ -767,9 +811,11 @@ export default function ComparePanel({
               <span className="compare-page-total">/ {pageCount}</span>
             </label>
             <IconButton
-              icon={<ChevronRight size={18} />}
+              icon={<ChevronRight size={17} />}
               label={copy.nextPage}
               variant="secondary"
+              iconOnly
+              className="compare-toolbar-btn"
               onClick={() => goToPage(currentPage + 1)}
               disabled={currentPage >= pageCount}
             />
@@ -778,19 +824,27 @@ export default function ComparePanel({
 
         <div className="compare-toolbar-group compare-toolbar-actions">
           <IconButton
-            icon={<ArrowLeftRight size={18} />}
+            icon={<ArrowLeftRight size={17} />}
             label={copy.swapDocuments}
             variant="secondary"
+            iconOnly
+            className="compare-toolbar-btn"
             onClick={swapDocuments}
             disabled={!readyForReview}
           />
-          <button type="button" className="btn btn-secondary btn-sm" onClick={exitReviewMode}>
+          <button
+            type="button"
+            className="btn btn-secondary btn-sm compare-toolbar-btn compare-toolbar-btn--text"
+            onClick={exitReviewMode}
+          >
             {copy.changeDocuments}
           </button>
           <IconButton
-            icon={isFullscreen ? <Minimize2 size={18} /> : <Expand size={18} />}
+            icon={isFullscreen ? <Minimize2 size={17} /> : <Expand size={17} />}
             label={isFullscreen ? copy.exitFullscreen : copy.fullscreen}
             variant="secondary"
+            iconOnly
+            className="compare-toolbar-btn"
             onClick={() => void toggleFullscreen()}
           />
           <div className="compare-toolbar-meta">

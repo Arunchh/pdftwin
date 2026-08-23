@@ -179,7 +179,7 @@ Click **Compare** in tray      Workspace chrome hidden (see below)
 | Feature | Details |
 |---------|---------|
 | **Zoom** | Linked or independent; ± buttons; keyboard `+` / `-` |
-| **Fit width** | Calculates scale from pane width and page dimensions |
+| **Fit width** | `fitBothToWidth()` scales both panes from pane width and page dimensions; **ResizeObserver** on each pane re-runs fit when layout expands (e.g. after upload sidebar hides) |
 | **View modes** | **Single page** (default) or **continuous scroll** |
 | **Page navigation** | Prev/next, page number input (single-page mode) |
 | **Scroll sync** | Linked scroll in continuous mode only |
@@ -189,10 +189,12 @@ Click **Compare** in tray      Workspace chrome hidden (see below)
 | Issue | Fix |
 |-------|-----|
 | Zoom appeared broken | Removed `max-width: 100%` from `.compare-page-canvas` |
-| Cramped viewer | Taller panes: `min(70vh, 42rem)`; review viewer `min-height: calc(100vh - 12rem)` |
+| PDFs tiny white boxes on enter | **ResizeObserver** on `.compare-pane-scroll` re-runs `fitBothToWidth()` after `workspace-layout--compare-review` expands the column (setup fit ran while sidebar was still visible) |
+| Cramped viewer | Review panes: `min(78vh, A4 height)` with `min-height: 24rem`; viewer `min-height: calc(100vh - 12rem)` |
 | Immersive layout | Full-width grid when `workspace-layout--compare-review` |
+| Toolbar polish | Segmented `.compare-toolbar-group` chips, icon-only `.compare-toolbar-btn` controls, refined diff-mode toggle |
 
-Styles: [`frontend/src/index.css`](../../frontend/src/index.css) — `.compare-panel--review`, `.compare-viewer--review`, `.hero--compare`, `.home-workflow-*`, `.home-seo-tools-*`.
+Styles: [`frontend/src/index.css`](../../frontend/src/index.css) — `.compare-panel--review`, `.compare-viewer--review`, `.compare-toolbar`, `.compare-toolbar-btn`, `.hero--compare`, `.home-workflow-*`, `.home-seo-tools-*`.
 
 ---
 

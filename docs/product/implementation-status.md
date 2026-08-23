@@ -48,7 +48,7 @@
 ### Shipped (2026-07-27 — compare-first)
 
 - **Compare-first homepage** — [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) embeds compare workspace on `/`; [`HeroSection`](../../frontend/src/components/layout/HeroSection.tsx), [`HomeWorkflowSection`](../../frontend/src/components/layout/HomeWorkflowSection.tsx), [`HomeToolsSection`](../../frontend/src/components/layout/HomeToolsSection.tsx) replace full `ToolGrid`, `TrustBar`, and `FormatSupportSection`. Crawlable `#tools` index preserves internal SEO links. See [compare-first homepage](./compare-first-homepage.md).
-- **PDF compare — review mode** — [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx): setup phase + immersive viewer (zoom, fit-width, single-page / continuous modes, page nav, fullscreen, keyboard shortcuts). **2026-08-23:** dual-slot [`CompareFileTray`](../../frontend/src/components/compare/CompareFileTray.tsx) with **Left** / **Right** labels, primary **Compare** CTA (enabled when both PDFs load), no vs divider; home and `/tools/compare` unified. [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) wires `compareTrigger` and `onReviewReadinessChange`; hides file tray and tool rail in review mode.
+- **PDF compare — review mode** — [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx): setup phase + immersive viewer (zoom, fit-width, single-page / continuous modes, page nav, fullscreen, keyboard shortcuts). **2026-08-23:** dual-slot [`CompareFileTray`](../../frontend/src/components/compare/CompareFileTray.tsx) with **Left** / **Right** labels, primary **Compare** CTA (enabled when both PDFs load), no vs divider; home and `/tools/compare` unified. [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) wires `compareTrigger` and `onReviewReadinessChange`; hides file tray and tool rail in review mode. **2026-08-23 (fix):** ResizeObserver on pane scroll areas re-runs fit-to-width after review layout expands; segmented review toolbar (`.compare-toolbar-btn`).
 - **Home & compare i18n** — New `hero`, `home`, and `compare` message namespaces in all 5 locales. Updated `meta.homeTitle` / `meta.homeDescription` with compare keywords. `BUSINESS_TAGLINE` and structured data feature list prioritize compare.
 
 ### Shipped (2026-07-27 — taxonomy)
@@ -358,9 +358,9 @@ Redesigned shell for all `/tools/*` pages. **All three phases complete.** Full s
 
 | Layer | Implementation |
 |-------|----------------|
-| Panel | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) — `reviewMode` state; `onReviewModeChange` callback |
+| Panel | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) — `reviewMode` state; `onReviewModeChange` callback; **ResizeObserver** fit-to-width |
 | Workspace chrome | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) — hides heading, switcher, file tray when `compareReviewMode` |
-| CSS | [`index.css`](../../frontend/src/index.css) — `.compare-panel--review`, `.workspace--compare-review`, canvas zoom fix |
+| CSS | [`index.css`](../../frontend/src/index.css) — `.compare-panel--review`, `.workspace--compare-review`, `.compare-toolbar*`, canvas zoom fix |
 | i18n | `messages.compare.*` in EN/ES/FR/NL/PT |
 | Home positioning | [Compare-first homepage](./compare-first-homepage.md) |
 

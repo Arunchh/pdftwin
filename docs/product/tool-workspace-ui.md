@@ -481,14 +481,24 @@ Compare uses [`CompareFileTray`](../../frontend/src/components/compare/CompareFi
 
 ### Review toolbar (summary)
 
+Segmented control groups (`.compare-toolbar-group`) with compact icon-only buttons (`.compare-toolbar-btn`). Tooltips via `aria-label` / `title` on each control.
+
 | Control | Behavior |
 |---------|----------|
-| Zoom ± | Linked or independent (`linkZoom`) |
-| Fit width | Scale both panes to pane width |
+| Scroll / zoom link | Toggle linked scroll (continuous mode) and linked zoom |
+| Diff mode | Popover menu — viewer, text redline, visual overlay, blend |
+| Zoom ± | Linked or independent (`linkZoom`); tabular zoom % label |
+| Fit width | `fitBothToWidth()` — also re-runs via **ResizeObserver** when pane width changes |
 | Single page / Continuous | Single-page default; continuous enables linked scroll |
 | Page nav | Prev/next + input (single-page mode) |
-| Fullscreen | Native Fullscreen API on `.compare-viewer` |
+| Swap / Change documents / Fullscreen | Swap panes, exit review, native Fullscreen API on `.compare-viewer` |
 | Keyboard | `+`/`-` zoom; arrow keys for pages in single-page mode |
+
+### Fit-to-width lifecycle
+
+Review mode enters in two layout passes: `ComparePanel` sets `reviewMode` first, then `ToolWorkspace` hides the file tray and applies `workspace-layout--compare-review`. Pane width grows between passes, so a one-shot fit on enter would lock zoom to the narrow setup column.
+
+`ComparePanel` attaches a **ResizeObserver** to both `.compare-pane-scroll` elements and calls `fitBothToWidth()` (debounced with `requestAnimationFrame`) whenever pane width changes. Skips fit when `clientWidth < 48px`.
 
 ### CSS classes (compare-specific)
 
@@ -497,7 +507,8 @@ Compare uses [`CompareFileTray`](../../frontend/src/components/compare/CompareFi
 | `.workspace--compare-review` | Workspace section when review mode active |
 | `.workspace-layout--compare-review` | Single-column full-width layout |
 | `.compare-panel--review` | Panel without setup chrome |
-| `.compare-viewer--review` | Taller min-height viewer |
+| `.compare-viewer--review` | Full-width dual-pane viewer; taller scroll areas |
+| `.compare-toolbar` / `.compare-toolbar-group` / `.compare-toolbar-btn` | Segmented review toolbar |
 | `.compare-page-canvas` | No `max-width: 100%` — zoom renders at visible scale |
 
 ### Verification (compare)
@@ -505,9 +516,10 @@ Compare uses [`CompareFileTray`](../../frontend/src/components/compare/CompareFi
 1. **Home `/`:** same dual-slot compare workspace as `/tools/compare`; H1 above workspace
 2. **Tool route `/tools/compare`:** tool heading + setup panel + dual-slot tray
 3. Empty slots: placeholder, icon, browse button; filled slots: thumbnail + filename
-4. Click **Compare** in the tray — chrome hidden, panes use full width
-5. Zoom visibly changes page size
-6. **Change documents** — restores setup + dual-slot tray
+4. Click **Compare** in the tray — chrome hidden, panes expand to dual A4 width
+5. PDF pages fill each pane (fit-to-width via ResizeObserver)
+6. Zoom visibly changes page size
+7. **Change documents** — restores setup + dual-slot tray
 
 ---
 
