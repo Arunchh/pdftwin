@@ -1,8 +1,7 @@
-import { ArrowRight, Lock, Sparkles } from "lucide-react";
 import { CHECKOUT_PRICE } from "../config/checkout";
 import { formatBytes, formatFileLimit, FREE_FILE_LIMIT_MB } from "../config/limits";
 import { useAuth } from "../hooks/useAuth";
-import { loginHref, signupHref } from "../utils/authRedirect";
+import { signupHref } from "../utils/authRedirect";
 import { openCheckout } from "../utils/checkoutEvents";
 
 interface UploadProGateProps {

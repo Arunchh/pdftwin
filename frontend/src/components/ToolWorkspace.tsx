@@ -178,7 +178,7 @@ export default function ToolWorkspace({
         }`}
       >
         {!hideWorkspaceChrome && activeTool && (
-          <WorkspaceToolRail activeTool={activeToolId} onNavigate={navigateToTool} />
+          <WorkspaceToolRail activeTool={activeTool.id} onNavigate={navigateToTool} />
         )}
 
         <section

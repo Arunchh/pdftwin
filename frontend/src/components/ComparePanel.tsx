@@ -12,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import type { PDFDocumentProxy } from "pdfjs-dist";
 import {
   ArrowLeftRight,
+  ArrowRight,
   ChevronLeft,
   ChevronRight,
   Columns2,

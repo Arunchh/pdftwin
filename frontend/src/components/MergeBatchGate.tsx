@@ -1,8 +1,7 @@
-import { ArrowRight, Sparkles } from "lucide-react";
 import { CHECKOUT_PRICE } from "../config/checkout";
 import { FREE_MERGE_FILE_LIMIT } from "../config/limits";
 import { useAuth } from "../hooks/useAuth";
-import { loginHref, signupHref } from "../utils/authRedirect";
+import { signupHref } from "../utils/authRedirect";
 import { openCheckout } from "../utils/checkoutEvents";
 
 interface MergeBatchGateProps {
