@@ -23,10 +23,10 @@ PDFTwin’s workspace is a **two-column desktop layout** on tool routes (`/tools
 | Column | Width | Purpose |
 |--------|-------|---------|
 | **Tool rail (left)** | ~54px, sticky | Icon buttons for **single-PDF** edit tools (split, rotate, watermark, sign, compress, protect) |
-| **Action (center)** | Flexible, grows with viewport | Active tool panel (options, run, messages) |
-| **Files (right)** | ~300–400px (tools) / ~440–560px (compare), sticky | Upload dropzone or compare dual-slot tray |
+| **Action (center)** | **A4 page width** (`51rem`) in middle column; **2× A4** in compare review | Tool panel or compare viewer |
+| **Files (right)** | ~300–384px, sticky | Upload dropzone or compare dual-slot tray |
 
-On viewports **≥641px**, workspace routes use a **full-width shell** (`site-main:has(.workspace)`) instead of the 1120px content column. Compare uses a wider right sidebar (`workspace-layout--compare`) with upload slots side-by-side from 900px.
+On viewports **≥900px**, workspace routes use a **three-zone grid**: flexible left margin · **A4 document column** · right upload sidebar. The app shell is full-width (`site-main:has(.workspace)`); only the center workspace is capped at A4. Compare review uses `--workspace-compare-width` (two A4 columns).
 
 Above the rail + columns on tool routes:
 
@@ -228,9 +228,10 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `.workspace-frame--with-rail` | Full-bleed grid; rail in left gutter (≥1240px) or inline (tablet) |
 | `.workspace-tool-rail` | Sticky vertical icon toolbar (single-PDF ops) |
 | `.workspace-tool-rail-btn` | Rail icon button; `.active` when tool selected |
-| `.workspace-layout--compare` | Compare grid: flexible panel + wide right sidebar for dual upload slots |
-| `.compare-file-tray-slots` | Slot container; side-by-side grid from 900px |
-| `.site-main:has(.workspace)` | Full-width workspace shell (≥641px) |
+| `.workspace-layout--compare` | Three-zone grid: margin · A4 doc column · upload sidebar |
+| `.workspace-layout--compare-review` | Centered dual-A4 compare viewer; sidebars hidden |
+| `--a4-page-width` | `51rem` (~816px) document column token |
+| `--workspace-compare-width` | Two A4 columns + gap for compare review |
 | `.workspace-layout` | CSS grid: 1fr + 320px on desktop; single column ≤640px |
 | `.workspace-action-column` | Left column; hosts existing tool panels |
 | `.workspace-files-column` | Sticky right column; dashed border |

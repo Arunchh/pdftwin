@@ -27,7 +27,7 @@
 ### Shipped (2026-07-28 — home UX + chrome)
 
 - **Unified compare workspace (2026-08-23)** — Home (`/`) and `/tools/compare` share the same layout with dual upload slots and live PDF thumbnails. Removed `variant="homeHero"`.
-- **Full-width workspace layout (2026-08-23)** — `/tools/*` and home compare break out of the 1120px column on tablet/desktop (≥641px). Compare upload slots use a wider right sidebar with side-by-side layout from 900px. See [compare-first homepage](./compare-first-homepage.md#full-width-desktop--tablet-layout-2026-08-23).
+- **Document canvas layout (2026-08-23)** — Center workspace capped at A4 width (`51rem`); upload sidebar on the right. Compare review uses 2× A4. See [compare-first homepage](./compare-first-homepage.md#document-canvas-layout-2026-08-23).
 - **Upload-first home hero** *(superseded 2026-08-23)* — Former `variant="homeHero"` single-column dropzone + tool suggestions.
 - **Workspace category order** — [`WORKSPACE_CATEGORY_ORDER`](../../frontend/src/config/tools.ts) puts **Work with PDFs** first in the header mega menu and `/tools/` catalog.
 - **Header All tools mega menu** — [`SiteNav`](../../frontend/src/components/layout/SiteNav.tsx): **From PDF**, **To PDF**, and **Edit PDF** moved under one **All tools** dropdown (3-column mega menu on desktop; accordion on mobile). Top-level nav freed to **All tools · Pricing · Compare · language**.

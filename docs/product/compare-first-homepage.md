@@ -69,23 +69,22 @@ Implementation:
 | Compare panel | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) | Setup + review viewer; file assignment moved to tray |
 | Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | Lifts `compareLeftFile` / `compareRightFile` state; renders `CompareFileTray` instead of `WorkspaceFileTray` when compare tool active |
 
-On **`/tools/compare`** and **home (`/`)**, layout is **compare panel | dual-slot file tray** on desktop and tablet. The workspace uses a **full-width shell** (no 1120px cap) so the compare panel expands while upload slots occupy a dedicated right sidebar. From 900px up, the two upload slots sit **side by side** in that sidebar.
+On **`/tools/compare`** and **home (`/`)**, layout is **A4-width document canvas (center) | dual-slot file tray (right)** on desktop and tablet. The viewport is full-width, but the workspace column is capped at **one A4 page width** (~816px) for setup — like Word or Acrobat. In review mode, the dual-pane viewer expands to **two A4 widths**. Upload slots sit in a sticky right sidebar; from 900px up they display **side by side**.
 
-CSS: `.compare-file-tray`, `.compare-file-tray-slots`, `.workspace-layout--compare`, `.workspace--home-compare`, `.site-main:has(.workspace)` in [`index.css`](../../frontend/src/index.css).
+CSS: `--a4-page-width`, `--workspace-compare-width`, `.workspace-layout`, `.compare-file-tray-slots` in [`index.css`](../../frontend/src/index.css).
 
-### Full-width desktop & tablet layout (2026-08-23)
+### Document canvas layout (2026-08-23)
 
-The compare workspace and all `/tools/*` routes break out of the 1120px `site-main` column on viewports **≥641px**:
+The app shell is full-width on tablet/desktop (≥641px), but the **workspace column** follows editor conventions:
 
-| Area | Behavior |
-|------|----------|
-| **Header** | Full width with fluid horizontal padding |
-| **Workspace** | Flat chrome (no card box); panel stretches to available width |
-| **Compare grid** | `workspace-layout--compare`: flexible main column + right sidebar up to ~560px |
-| **Upload slots** | Sticky right sidebar; **side-by-side** from 900px, stacked on smaller tablets |
-| **Review mode** | Viewer uses full content width; file tray hidden |
+| Area | Width | Purpose |
+|------|-------|---------|
+| **Left margin** | Flexible `1fr` | Balances the layout |
+| **Document workspace** | `var(--a4-page-width)` (~51rem / 816px) | Tool panel or single compare setup |
+| **Compare review** | `2 × A4 + gap` (~104rem max) | Side-by-side page panes, centered |
+| **Right sidebar** | ~300–384px, sticky | Original + Revised upload slots |
 
-Mobile-specific layout is deferred; current ≤640px rules stack panel above file tray.
+Upload slots use the horizontal space **outside** the document column — not inside the A4 canvas.
 
 ### Removed from home (simplified UI)
 
