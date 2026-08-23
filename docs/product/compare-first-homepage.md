@@ -64,16 +64,28 @@ Implementation:
 | Piece | Path | Notes |
 |-------|------|-------|
 | Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace toolId="pdf-compare" variant="homeCompare" />` |
-| Compare file tray | [`CompareFileTray.tsx`](../../frontend/src/components/compare/CompareFileTray.tsx) | Right column: Original + Revised slots, swap button, privacy copy |
+| Compare file tray | [`CompareFileTray.tsx`](../../frontend/src/components/compare/CompareFileTray.tsx) | Right sidebar: Original + Revised slots (side-by-side from 900px), swap button, privacy copy |
 | Upload slot | [`CompareFileSlot.tsx`](../../frontend/src/components/compare/CompareFileSlot.tsx) | Per-slot drag/drop, browse, PDF thumbnail preview, remove |
 | Compare panel | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) | Setup + review viewer; file assignment moved to tray |
 | Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | Lifts `compareLeftFile` / `compareRightFile` state; renders `CompareFileTray` instead of `WorkspaceFileTray` when compare tool active |
 
-On **`/tools/compare`** and **home (`/`)**, layout is **compare panel | dual-slot file tray** on desktop. Other tools keep **rail | tool panel | standard file tray**.
+On **`/tools/compare`** and **home (`/`)**, layout is **compare panel | dual-slot file tray** on desktop and tablet. The workspace uses a **full-width shell** (no 1120px cap) so the compare panel expands while upload slots occupy a dedicated right sidebar. From 900px up, the two upload slots sit **side by side** in that sidebar.
 
-CSS: `.compare-file-tray`, `.compare-file-slot-*`, `.compare-setup-empty`, `.workspace--home-compare` in [`index.css`](../../frontend/src/index.css).
+CSS: `.compare-file-tray`, `.compare-file-tray-slots`, `.workspace-layout--compare`, `.workspace--home-compare`, `.site-main:has(.workspace)` in [`index.css`](../../frontend/src/index.css).
 
-**Removed:** `variant="homeHero"` (single-column upload-first flow), tool suggestion grid on home, inline left/right pickers inside `ComparePanel`.
+### Full-width desktop & tablet layout (2026-08-23)
+
+The compare workspace and all `/tools/*` routes break out of the 1120px `site-main` column on viewports **≥641px**:
+
+| Area | Behavior |
+|------|----------|
+| **Header** | Full width with fluid horizontal padding |
+| **Workspace** | Flat chrome (no card box); panel stretches to available width |
+| **Compare grid** | `workspace-layout--compare`: flexible main column + right sidebar up to ~560px |
+| **Upload slots** | Sticky right sidebar; **side-by-side** from 900px, stacked on smaller tablets |
+| **Review mode** | Viewer uses full content width; file tray hidden |
+
+Mobile-specific layout is deferred; current ≤640px rules stack panel above file tray.
 
 ### Removed from home (simplified UI)
 

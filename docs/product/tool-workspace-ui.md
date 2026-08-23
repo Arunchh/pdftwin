@@ -23,8 +23,10 @@ PDFTwin’s workspace is a **two-column desktop layout** on tool routes (`/tools
 | Column | Width | Purpose |
 |--------|-------|---------|
 | **Tool rail (left)** | ~54px, sticky | Icon buttons for **single-PDF** edit tools (split, rotate, watermark, sign, compress, protect) |
-| **Action (center)** | Flexible | Active tool panel (options, run, messages) |
-| **Files (right)** | ~320px, sticky | Upload dropzone + persisted file list |
+| **Action (center)** | Flexible, grows with viewport | Active tool panel (options, run, messages) |
+| **Files (right)** | ~300–400px (tools) / ~440–560px (compare), sticky | Upload dropzone or compare dual-slot tray |
+
+On viewports **≥641px**, workspace routes use a **full-width shell** (`site-main:has(.workspace)`) instead of the 1120px content column. Compare uses a wider right sidebar (`workspace-layout--compare`) with upload slots side-by-side from 900px.
 
 Above the rail + columns on tool routes:
 
@@ -44,7 +46,7 @@ Paint- and PDF-viewer-style icon rail on the left margin (`WorkspaceToolRail`). 
 
 Registry helper: `singlePdfOpsRailTools()` in [`tools.ts`](../../frontend/src/config/tools.ts). Hidden in compare **review mode** (immersive viewer).
 
-**Placement:** On viewports **≥1240px**, the rail sits in the **left viewport gutter** outside the 1120px content column (`workspace-frame` full-bleed grid) so the tool panel keeps full width. Between 641px and 1239px it sits inline beside the workspace card; on mobile it becomes a horizontal scroll strip.
+**Placement:** On viewports **≥1240px**, the rail sits inline to the left of the full-width workspace (no centered 1120px column). Between 641px and 1239px it sits inline beside the workspace card; on mobile it becomes a horizontal scroll strip.
 
 CSS: `.workspace-frame--with-rail`, `.workspace-tool-rail`.
 
@@ -226,10 +228,9 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `.workspace-frame--with-rail` | Full-bleed grid; rail in left gutter (≥1240px) or inline (tablet) |
 | `.workspace-tool-rail` | Sticky vertical icon toolbar (single-PDF ops) |
 | `.workspace-tool-rail-btn` | Rail icon button; `.active` when tool selected |
-| `.workspace-layout--home-hero` | *(removed)* — home now uses standard two-column compare layout |
-| `.workspace--home-compare` | Home-embedded compare workspace (H1 lives outside) |
-| `.compare-file-tray` | Compare-specific right column with dual upload slots |
-| `.compare-file-slot-*` | Per-slot empty/filled states, thumbnail preview, drag/hover polish |
+| `.workspace-layout--compare` | Compare grid: flexible panel + wide right sidebar for dual upload slots |
+| `.compare-file-tray-slots` | Slot container; side-by-side grid from 900px |
+| `.site-main:has(.workspace)` | Full-width workspace shell (≥641px) |
 | `.workspace-layout` | CSS grid: 1fr + 320px on desktop; single column ≤640px |
 | `.workspace-action-column` | Left column; hosts existing tool panels |
 | `.workspace-files-column` | Sticky right column; dashed border |

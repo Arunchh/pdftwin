@@ -42,29 +42,31 @@ export default function CompareFileTray({
         </span>
       </div>
 
-      <CompareFileSlot
-        label={copy.leftSlotLabel}
-        file={leftFile}
-        placeholder={copy.leftSlotPlaceholder}
-        browseLabel={copy.browsePdf}
-        emptyHint={copy.slotEmptyHint}
-        removeLabel={copy.remove}
-        onFileChange={onLeftFileChange}
-      />
+      <div className="compare-file-tray-slots">
+        <CompareFileSlot
+          label={copy.leftSlotLabel}
+          file={leftFile}
+          placeholder={copy.leftSlotPlaceholder}
+          browseLabel={copy.browsePdf}
+          emptyHint={copy.slotEmptyHint}
+          removeLabel={copy.remove}
+          onFileChange={onLeftFileChange}
+        />
 
-      <div className="compare-file-tray-divider" aria-hidden="true">
-        <span>{copy.vsLabel}</span>
+        <div className="compare-file-tray-divider" aria-hidden="true">
+          <span>{copy.vsLabel}</span>
+        </div>
+
+        <CompareFileSlot
+          label={copy.rightSlotLabel}
+          file={rightFile}
+          placeholder={copy.rightSlotPlaceholder}
+          browseLabel={copy.browsePdf}
+          emptyHint={copy.slotEmptyHint}
+          removeLabel={copy.remove}
+          onFileChange={onRightFileChange}
+        />
       </div>
-
-      <CompareFileSlot
-        label={copy.rightSlotLabel}
-        file={rightFile}
-        placeholder={copy.rightSlotPlaceholder}
-        browseLabel={copy.browsePdf}
-        emptyHint={copy.slotEmptyHint}
-        removeLabel={copy.remove}
-        onFileChange={onRightFileChange}
-      />
 
       {bothReady && (
         <button type="button" className="btn btn-secondary btn-sm compare-file-tray-swap" onClick={onSwap}>

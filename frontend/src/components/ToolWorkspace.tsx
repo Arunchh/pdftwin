@@ -187,8 +187,8 @@ export default function ToolWorkspace({
 
           <div
             className={`workspace-layout${
-              hideWorkspaceChrome ? " workspace-layout--compare-review" : ""
-            }`}
+              isCompareTool ? " workspace-layout--compare" : ""
+            }${hideWorkspaceChrome ? " workspace-layout--compare-review" : ""}`}
           >
             <div className="workspace-action-column">{renderToolPanel()}</div>
 
