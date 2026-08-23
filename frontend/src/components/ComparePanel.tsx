@@ -43,6 +43,9 @@ import {
 import { fileKey } from "../utils/files";
 import { useAuth } from "../hooks/useAuth";
 import { useI18n } from "../i18n/I18nProvider";
+import { useWorkspaceNav } from "../context/WorkspaceNavContext";
+import { TOOL_NEXT_STEPS } from "../config/toolNextSteps";
+import { toolPath } from "../config/tools";
 
 const MIN_SCALE = 0.35;
 const MAX_SCALE = 4;
@@ -242,9 +245,10 @@ function pageIsChanged(result: PageDiffResult | undefined): boolean {
 }
 
 export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePanelProps) {
-  const { messages } = useI18n();
+  const { messages, locale } = useI18n();
   const copy = messages.compare;
   const { entitlements } = useAuth();
+  const workspaceNav = useWorkspaceNav();
   const [leftFile, setLeftFile] = useState<File | null>(null);
   const [rightFile, setRightFile] = useState<File | null>(null);
   const [leftDoc, setLeftDoc] = useState<PDFDocumentProxy | null>(null);
@@ -258,6 +262,7 @@ export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePa
   const [viewMode, setViewMode] = useState<ViewMode>("single");
   const [currentPage, setCurrentPage] = useState(1);
   const [reviewMode, setReviewMode] = useState(false);
+  const [hasReviewed, setHasReviewed] = useState(false);
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [diffMode, setDiffMode] = useState<CompareDiffMode>("off");
   const [diffSensitivity, setDiffSensitivity] = useState(DEFAULT_DIFF_SENSITIVITY);
@@ -541,6 +546,7 @@ export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePa
   const enterReviewMode = () => {
     if (!readyForReview) return;
     setReviewMode(true);
+    setHasReviewed(true);
     setCurrentPage(1);
     void fitBothToWidth();
   };
@@ -963,8 +969,17 @@ export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePa
     >
       {!reviewMode && (
         <>
-          <h2>{copy.setupTitle}</h2>
-          <p className="description">{copy.setupDescription}</p>
+          {hasReviewed ? (
+            <>
+              <h2>Review complete</h2>
+              <p className="description">Continue working with these files or select new ones.</p>
+            </>
+          ) : (
+            <>
+              <h2>{copy.setupTitle}</h2>
+              <p className="description">{copy.setupDescription}</p>
+            </>
+          )}
 
           <div className="compare-upload-row">
             <CompareSlotPicker
@@ -998,8 +1013,38 @@ export default function ComparePanel({ pdfFiles, onReviewModeChange }: ComparePa
                 {copy.swapDocuments}
               </button>
               <button type="button" className="btn btn-primary" onClick={enterReviewMode}>
-                {copy.enterReview}
+                {hasReviewed ? "Return to review" : copy.enterReview}
               </button>
+            </div>
+          )}
+
+          {hasReviewed && TOOL_NEXT_STEPS["pdf-compare"] && (
+            <div className="tool-result-next-steps" style={{ marginTop: '2rem' }}>
+              <p className="tool-result-next-label">Continue with these files</p>
+              <div className="tool-result-next-actions">
+                {TOOL_NEXT_STEPS["pdf-compare"].map((step) =>
+                  workspaceNav ? (
+                    <button
+                      key={step.toolId}
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      onClick={() => workspaceNav.navigateToTool(step.toolId)}
+                    >
+                      {step.label}
+                      <ArrowRight size={14} aria-hidden="true" />
+                    </button>
+                  ) : (
+                    <a
+                      key={step.toolId}
+                      href={toolPath(step.toolId, locale)}
+                      className="btn btn-secondary btn-sm"
+                    >
+                      {step.label}
+                      <ArrowRight size={14} aria-hidden="true" />
+                    </a>
+                  )
+                )}
+              </div>
             </div>
           )}
         </>

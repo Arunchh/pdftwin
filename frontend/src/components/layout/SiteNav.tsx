@@ -254,7 +254,7 @@ export default function SiteNav() {
         </a>
 
         <a
-          className="site-nav-item site-nav-compare btn btn-primary btn-sm"
+          className="site-nav-item site-nav-compare"
           href={`${localizePath("/")}#workspace`}
           onClick={closeMobile}
         >

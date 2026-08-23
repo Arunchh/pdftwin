@@ -1,5 +1,6 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import FormatSupportSection from "../components/layout/FormatSupportSection";
 import { getMessages } from "../i18n/utils";
 
 const messages = getMessages("en");
@@ -9,4 +10,8 @@ const messages = getMessages("en");
   locale="en"
   title={messages.meta.formatsTitle}
   description={messages.meta.formatsDescription}
-/>
+>
+  <div className="site-prefooter">
+    <FormatSupportSection client:visible />
+  </div>
+</BaseLayout>

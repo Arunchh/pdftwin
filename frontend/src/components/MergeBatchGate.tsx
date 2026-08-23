@@ -14,7 +14,7 @@ export default function MergeBatchGate({ fileCount, onDismiss }: MergeBatchGateP
   const { isAuthenticated } = useAuth();
 
   return (
-    <div className="upload-pro-gate panel">
+    <div className="upload-pro-gate panel panel-soft">
       <div className="upload-pro-gate-copy">
         <h3>Pro required for large merges</h3>
         <p>
@@ -28,16 +28,11 @@ export default function MergeBatchGate({ fileCount, onDismiss }: MergeBatchGateP
         <div className="upload-pro-gate-actions">
           <a className="btn btn-primary" href={signupHref()}>
             Create account
-            <ArrowRight size={16} />
-          </a>
-          <a className="btn btn-secondary" href={loginHref()}>
-            Sign in
           </a>
         </div>
       ) : (
         <div className="upload-pro-gate-actions">
           <button type="button" className="btn btn-primary" onClick={openCheckout}>
-            <Sparkles size={16} />
             Upgrade to Pro — {CHECKOUT_PRICE}/mo
           </button>
         </div>
@@ -45,7 +40,7 @@ export default function MergeBatchGate({ fileCount, onDismiss }: MergeBatchGateP
 
       {onDismiss && (
         <button type="button" className="upload-pro-gate-dismiss" onClick={onDismiss}>
-          Dismiss
+          Remove some files
         </button>
       )}
     </div>

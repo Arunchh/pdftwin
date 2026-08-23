@@ -79,4 +79,9 @@ export const TOOL_NEXT_STEPS: Partial<Record<ToolId, ToolNextStep[]>> = {
     { toolId: "ocr-pdf", label: "OCR scanned PDF" },
     { toolId: "convert-extract", label: "Convert to Word" },
   ],
+  "pdf-compare": [
+    { toolId: "extract-pages", label: "Extract changed pages" },
+    { toolId: "arrange-merge", label: "Merge approvals" },
+    { toolId: "sign-pdf", label: "Sign" },
+  ],
 };

@@ -30,7 +30,7 @@ import { recordToolVisit } from "../stores/workspaceUsageStore";
 import { defaultPdfOrder, getPdfFiles, reconcilePdfOrder } from "../utils/files";
 
 interface ToolWorkspaceProps {
-  toolId: ToolId;
+  toolId: ToolId | null;
   variant?: "default" | "homeHero";
 }
 
@@ -49,13 +49,18 @@ export default function ToolWorkspace({
 
   const isCompareTool = activeToolId === "pdf-compare";
   const hideWorkspaceChrome = isCompareTool && compareReviewMode;
+  
+  // If we're on the home page and have files but no active tool, we suggest tools instead of showing a panel.
+  const isSuggestingTools = isHomeHero && entries.length > 0 && !activeToolId;
 
-  const uploadConfig = TOOL_UPLOAD_CONFIG[activeToolId];
+  const uploadConfig = activeToolId ? TOOL_UPLOAD_CONFIG[activeToolId] : TOOL_UPLOAD_CONFIG["pdf-compare"];
   const pdfFiles = getPdfFiles(files);
-  const toolCopy = messages.tools[activeToolId];
+  const toolCopy = activeToolId ? messages.tools[activeToolId] : null;
 
   useEffect(() => {
-    recordToolVisit(activeToolId);
+    if (activeToolId) {
+      recordToolVisit(activeToolId);
+    }
   }, [activeToolId]);
 
   useEffect(() => {
@@ -85,6 +90,33 @@ export default function ToolWorkspace({
   };
 
   const renderToolPanel = () => {
+    if (!activeToolId) {
+      if (isSuggestingTools) {
+        return (
+          <div className="workspace-suggestions">
+            <h3>Suggested next steps</h3>
+            <p>Select a tool to process your {entries.length === 1 ? "file" : "files"}</p>
+            <div className="workspace-suggestions-grid">
+              {entries.length >= 2 ? (
+                <>
+                  <button className="btn btn-primary" onClick={() => navigateToTool("pdf-compare")}>Compare PDFs</button>
+                  <button className="btn btn-secondary" onClick={() => navigateToTool("arrange-merge")}>Merge PDFs</button>
+                </>
+              ) : (
+                <>
+                  <button className="btn btn-secondary" onClick={() => navigateToTool("compress-pdf")}>Compress PDF</button>
+                  <button className="btn btn-secondary" onClick={() => navigateToTool("convert-extract")}>Convert to Word</button>
+                  <button className="btn btn-secondary" onClick={() => navigateToTool("split")}>Split PDF</button>
+                  <button className="btn btn-secondary" onClick={() => navigateToTool("sign-pdf")}>Sign PDF</button>
+                </>
+              )}
+            </div>
+          </div>
+        );
+      }
+      return null;
+    }
+
     switch (activeToolId) {
       case "convert-extract":
         return <ConvertExtractPanel files={files} />;
@@ -142,22 +174,24 @@ export default function ToolWorkspace({
     <WorkspaceNavProvider navigateToTool={navigateToTool}>
       <div
         className={`workspace-frame${
-          !hideWorkspaceChrome ? " workspace-frame--with-rail" : ""
+          (!hideWorkspaceChrome && activeTool) ? " workspace-frame--with-rail" : ""
         }`}
       >
-        {!hideWorkspaceChrome && (
+        {!hideWorkspaceChrome && activeTool && (
           <WorkspaceToolRail activeTool={activeToolId} onNavigate={navigateToTool} />
         )}
 
         <section
-          className={`workspace site--focused workspace--${activeTool.category}${
+          className={`workspace site--focused${
+            activeTool ? ` workspace--${activeTool.category}` : ""
+          }${
             isCompareTool ? " workspace--compare" : ""
           }${isHomeHero ? " workspace--home-hero" : ""}${
             hideWorkspaceChrome ? " workspace--compare-review" : ""
           }`}
           id="workspace"
         >
-          {!hideWorkspaceChrome && !isHomeHero && (
+          {!hideWorkspaceChrome && !isHomeHero && toolCopy && (
             <div className="section-heading workspace-heading">
               <h2>{toolCopy.name}</h2>
               <p>{toolCopy.description}</p>
@@ -181,29 +215,31 @@ export default function ToolWorkspace({
             />
           )}
 
-          <div
-            className={`workspace-layout${
-              isHomeHero ? " workspace-layout--home-hero" : ""
-            }${hideWorkspaceChrome ? " workspace-layout--compare-review" : ""}`}
-          >
-            <div className="workspace-action-column">{renderToolPanel()}</div>
+          {(!isHomeHero || entries.length > 0) && (
+            <div
+              className={`workspace-layout${
+                isHomeHero ? " workspace-layout--home-hero" : ""
+              }${hideWorkspaceChrome ? " workspace-layout--compare-review" : ""}`}
+            >
+              <div className="workspace-action-column">{renderToolPanel()}</div>
 
-            {!hideWorkspaceChrome && !isHomeHero && (
-              <WorkspaceFileTray
-                accept={WORKSPACE_ACCEPT}
-                uploadTitle={uploadConfig.title}
-                uploadLabel={uploadConfig.label}
-                entries={entries}
-                loading={loading}
-                entitlementsLabel={entitlements.label}
-                fileLimitMb={entitlements.fileLimitMb}
-                isPro={entitlements.isPro}
-                onFilesChange={handleIncomingFiles}
-                onRemoveFile={removeFile}
-                onClearAll={handleClearAll}
-              />
-            )}
-          </div>
+              {!hideWorkspaceChrome && !isHomeHero && (
+                <WorkspaceFileTray
+                  accept={WORKSPACE_ACCEPT}
+                  uploadTitle={uploadConfig.title}
+                  uploadLabel={uploadConfig.label}
+                  entries={entries}
+                  loading={loading}
+                  entitlementsLabel={entitlements.label}
+                  fileLimitMb={entitlements.fileLimitMb}
+                  isPro={entitlements.isPro}
+                  onFilesChange={handleIncomingFiles}
+                  onRemoveFile={removeFile}
+                  onClearAll={handleClearAll}
+                />
+              )}
+            </div>
+          )}
         </section>
       </div>
     </WorkspaceNavProvider>

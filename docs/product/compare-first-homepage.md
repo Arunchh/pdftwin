@@ -25,14 +25,13 @@ Compare remains **client-side** (PDF.js) — files never upload for viewing. SEO
 
 | Section | Component | Purpose |
 |---------|-----------|---------|
-| Compare hero | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | H1 headline → **upload dropzone** → embedded compare workspace |
-| Marketing hero | [`HeroSection.tsx`](../../frontend/src/components/layout/HeroSection.tsx) | Secondary trust copy, browse-all-tools CTA, compare guide link |
+| Compare hero | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | H1 headline → **upload dropzone** → suggested next steps (Compare, Merge, etc.) based on files dropped |
 | Workflow | [`HomeWorkflowSection.tsx`](../../frontend/src/components/layout/HomeWorkflowSection.tsx) | 3-step post-compare workflow with links into tools |
-| Tools + SEO | [`HomeToolsSection.tsx`](../../frontend/src/components/layout/HomeToolsSection.tsx) | 6 featured complementary tools + crawlable list of all 18 tools (`#tools`) |
+| Tools + SEO | [`HomeToolsSection.tsx`](../../frontend/src/components/layout/HomeToolsSection.tsx) | 6 featured complementary tools + quiet crawlable list of all 18 tools (`#tools`) |
 
-### Upload-first hero layout (2026-07-28)
+### File-led hero layout (UI/UX overhaul 2026-08-23)
 
-The home compare hero follows an **upload-first** flow: upload on the home hero, then use the default Compare tool. Tool selection happens via the header **All tools** mega menu or [`/tools/` catalog](./tool-workspace-ui.md#all-tools-catalog-page-tools). Vertical order inside [`HomeCompareHeroSection`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx):
+The home compare hero follows a **file-led** flow: upload on the home hero, then contextual tool suggestions appear depending on what you uploaded. Tool selection can also happen via the header **All tools** mega menu.
 
 ```
 ┌─────────────────────────────────────────────────────┐
@@ -42,9 +41,10 @@ The home compare hero follows an **upload-first** flow: upload on the home hero,
 │  · drag-and-drop or click to browse                 │
 │  · compact file list when files are present           │
 ├─────────────────────────────────────────────────────┤
-│  ┌────┬──────────────────────────────────────────┐  │
-│  │Rail│  Active tool panel (Compare by default)  │  │
-│  └────┴──────────────────────────────────────────┘  │
+│  ┌───────────────────────────────────────────────┐  │
+│  │  Suggested actions appear when files drop     │  │
+│  │  e.g. Compare PDFs, Merge PDFs (if 2+ files)  │  │
+│  └───────────────────────────────────────────────┘  │
 └─────────────────────────────────────────────────────┘
 ```
 
@@ -52,31 +52,23 @@ Implementation:
 
 | Piece | Path | Notes |
 |-------|------|-------|
-| Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace variant="homeHero" />` |
+| Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace toolId={null} variant="homeHero" />` |
 | Upload zone | [`WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) `variant="hero"` | Large dropzone; no sidebar panel wrapper |
-| Tool rail | [`WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx) | Vertical icon bar for single-PDF edit tools (split, watermark, sign, etc.) |
-| Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | `variant="homeHero"` reorders chrome; rail + single-column panel (no right file tray) |
+| Tool suggestions | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | When no tool is selected but files are uploaded, displays a grid of primary actions (Compare/Merge or Compress/Convert/Split/Sign) |
 
 On **`/tools/*` routes**, layout is **rail | tool panel | file tray** on desktop.
 
-CSS: `.workspace-hero-upload`, `.workspace-files-upload--hero`, `.workspace-layout--home-hero`, `.workspace-tool-rail` in [`index.css`](../../frontend/src/index.css).
+CSS: `.workspace-hero-upload`, `.workspace-files-upload--hero`, `.workspace-layout--home-hero`, `.workspace-suggestions` in [`index.css`](../../frontend/src/index.css).
 
-### Removed from home (still available elsewhere)
+### Removed from home (simplified UI)
 
-| Former home section | Still available at |
-|---------------------|-------------------|
-| `TrustBar` | Trust chips inline in hero; full trust copy on `/pricing`, `/resources` |
-| `ToolGrid` (full catalog) | Header **All tools** mega menu; `#tools` SEO index on home; each `/tools/*` route |
-| `FormatSupportSection` | `/formats` and nav **Formats** link |
-
-### Hero CTAs (secondary marketing block)
-
-The primary conversion path is **upload on the home hero** — no separate “Compare now” button required. [`HeroSection`](../../frontend/src/components/layout/HeroSection.tsx) provides secondary navigation:
-
-| Button | Target | Role |
-|--------|--------|------|
-| **Browse all tools** | `/#tools` | Scroll to SEO tool index |
-| **Compare PDF guide** | `/guides/compare-pdf-online` | SEO content bridge |
+| Former home section | Status |
+|---------------------|--------|
+| `AnnouncementBanner` | Waitlist banner deleted to calm the global chrome |
+| `HeroSection` | Second marketing hero block removed to focus entirely on the tool |
+| `TrustBar` | Deleted to reduce noise; trust signals moved to copy/footer |
+| `FormatSupportSection` | Removed from homepage/workspace routes; now only lives on `/formats` |
+| `ToolGrid` | Deleted; replaced with a cleaner `featured-tool-card` grid |
 
 ### Workflow steps (`messages.home.workflow.steps`)
 
@@ -205,14 +197,14 @@ Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 
 ### Homepage
 
-1. `/` — hero shows compare headline; **upload dropzone directly under H1**; no category/tool tabs under upload
-2. Upload a PDF on home — file appears in hero file list; use **All tools** nav to open another tool route
-3. Workflow section — 3 steps with working tool links
-4. `#tools` — all 18 tools linked by category; nav **All tools** scrolls here
-5. `/es/`, `/fr/`, `/nl/`, `/pt/` — same structure, translated copy
-6. View source — `<title>` and meta description include compare keywords
-7. Mobile — announcement bar stays compact (email-only form); hero upload remains usable
-8. Vertical tool rail — single-PDF icons on left; rail hidden in compare review mode
+1. `/` — hero shows compare headline; **upload dropzone directly under H1**; no initial tool panel
+2. Upload 2 PDFs on home — suggestions for Compare PDFs and Merge PDFs appear
+3. Upload 1 PDF on home — suggestions for Compress, Convert, Split, and Sign appear
+4. Workflow section — 3 steps with working tool links
+5. `#tools` — featured tools list and quiet `#tools` SEO index
+6. `/es/`, `/fr/`, `/nl/`, `/pt/` — same structure, translated copy
+7. View source — `<title>` and meta description include compare keywords
+8. Vertical tool rail — hidden on home until a tool is chosen, shows on `/tools/*`
 
 ### Compare tool
 

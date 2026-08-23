@@ -3,14 +3,16 @@ import type { ToolId } from "../config/tools";
 import { toolById, toolIdFromPath, toolPath } from "../config/tools";
 import { useI18n } from "../i18n/I18nProvider";
 
-export function useWorkspaceNavigation(initialToolId: ToolId) {
+export function useWorkspaceNavigation(initialToolId: ToolId | null) {
   const { locale, messages } = useI18n();
-  const [activeToolId, setActiveToolId] = useState(initialToolId);
+  const [activeToolId, setActiveToolId] = useState<ToolId | null>(initialToolId);
 
   const syncDocumentMeta = useCallback(
     (toolId: ToolId) => {
       const copy = messages.tools[toolId];
-      document.title = `${copy.name} | ${messages.meta.toolTitleSuffix}`;
+      if (copy) {
+        document.title = `${copy.name} | ${messages.meta.toolTitleSuffix}`;
+      }
     },
     [messages]
   );
@@ -34,7 +36,9 @@ export function useWorkspaceNavigation(initialToolId: ToolId) {
 
   useEffect(() => {
     setActiveToolId(initialToolId);
-    syncDocumentMeta(initialToolId);
+    if (initialToolId) {
+      syncDocumentMeta(initialToolId);
+    }
   }, [initialToolId, syncDocumentMeta]);
 
   useEffect(() => {
@@ -50,7 +54,7 @@ export function useWorkspaceNavigation(initialToolId: ToolId) {
     return () => window.removeEventListener("popstate", onPopState);
   }, [locale, syncDocumentMeta]);
 
-  const activeTool = toolById(activeToolId);
+  const activeTool = activeToolId ? toolById(activeToolId) : null;
 
   return {
     activeToolId,

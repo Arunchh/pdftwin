@@ -20,36 +20,40 @@ export default function HomeToolsSection() {
         <p>{complementary.subheading}</p>
       </div>
 
-      <nav className="home-featured-tools" aria-label={complementary.heading}>
-        <ul>
-          {featuredTools.map((tool) => (
-            <li key={tool.id}>
-              <a href={toolPath(tool.id, locale)}>{messages.tools[tool.id].name}</a>
-            </li>
-          ))}
-        </ul>
+      <nav className="home-featured-tools-grid" aria-label={complementary.heading}>
+        {featuredTools.map((tool) => {
+          const Icon = tool.icon;
+          const copy = messages.tools[tool.id];
+          return (
+            <a key={tool.id} href={toolPath(tool.id, locale)} className="featured-tool-card">
+              <span className={`featured-tool-icon featured-tool-icon--${tool.category}`}>
+                <Icon size={24} strokeWidth={1.5} />
+              </span>
+              <div>
+                <strong>{copy.name}</strong>
+                <p>{copy.description}</p>
+              </div>
+            </a>
+          );
+        })}
       </nav>
+      
+      <div className="home-browse-all">
+        <a href={localizePath("/tools")} className="btn btn-secondary">
+          {messages.nav.browseToolIndex}
+        </a>
+      </div>
 
       <div className="home-seo-tools">
-        <div className="section-heading">
+        <div className="sr-only">
           <h2>{seoTools.heading}</h2>
-          <p>{seoTools.subheading}</p>
-          <p className="home-tools-index-link">
-            <a href={localizePath("/tools")}>{messages.nav.browseToolIndex}</a>
-          </p>
         </div>
 
-        <nav className="home-seo-tools-nav" aria-label={seoTools.heading}>
+        <nav className="home-seo-tools-nav home-seo-tools-nav--quiet" aria-label={seoTools.heading}>
           {CATEGORY_ORDER.map((category) => (
             <HomeSeoCategoryLinks key={category} category={category} />
           ))}
         </nav>
-
-        <div className="home-tools-footer-links">
-          <a href="#formats">{messages.nav.formats}</a>
-          <a href={localizePath("/guides/compare-pdf-online")}>{messages.hero.seeCompareGuide}</a>
-          <a href={localizePath("/pricing")}>{messages.nav.pricing}</a>
-        </div>
       </div>
     </section>
   );

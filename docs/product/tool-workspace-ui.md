@@ -34,7 +34,7 @@ Tool discovery and switching between categories happen via the header **All tool
 
 ### Vertical tool rail (single-PDF edit tools)
 
-Paint- and PDF-viewer-style icon rail on the left margin (`WorkspaceToolRail`). Eight tools grouped by subcategory with dividers:
+Paint- and PDF-viewer-style icon rail on the left margin (`WorkspaceToolRail`). Eight tools grouped by subcategory with dividers. It acts as a **quiet switcher**, only styling the active tool distinctly and keeping the others low contrast.
 
 | Group | Tools |
 |-------|-------|
@@ -50,14 +50,14 @@ CSS: `.workspace-frame--with-rail`, `.workspace-tool-rail`.
 
 ### Home hero layout (`variant="homeHero"`)
 
-On `/` and `/{locale}/`, the embedded workspace uses an **upload-first, single-column** layout (iLovePDF-style):
+On `/` and `/{locale}/`, the embedded workspace uses an **file-led, single-column** layout (UI overhaul 2026-08-23):
 
 | Block | Order | Purpose |
 |-------|-------|---------|
 | **Hero upload** | 1 | Full-width prominent dropzone (`WorkspaceFileTray variant="hero"`) |
-| **Tool panel** | 2 | Active tool (Compare by default) — no right-side file tray |
+| **Tool panel / Suggestions** | 2 | If no tool selected but files uploaded, it shows a suggestion grid (Compare, Merge, etc.). Otherwise it shows the active tool. |
 
-Users pick a different tool from the header **All tools** mega menu or the [`/tools/` catalog](./tool-workspace-ui.md#all-tools-catalog-page-tools); the home hero no longer shows category or tool tabs under the upload zone.
+Users pick a different tool from the header **All tools** mega menu or the [`/tools/` catalog](./tool-workspace-ui.md#all-tools-catalog-page-tools); the home hero no longer defaults to showing the Compare panel if no files are uploaded.
 
 Files uploaded on the home hero persist in IndexedDB and remain available when switching tools client-side. See [compare-first homepage — upload-first hero](./compare-first-homepage.md#upload-first-hero-layout-2026-07-28).
 
@@ -165,7 +165,7 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `WorkspaceToolRail` | [`frontend/src/components/layout/WorkspaceToolRail.tsx`](../../frontend/src/components/layout/WorkspaceToolRail.tsx) | Vertical icon rail for single-PDF edit tools (split, watermark, sign, etc.) |
 | `WorkspaceFileTray` | [`frontend/src/components/WorkspaceFileTray.tsx`](../../frontend/src/components/WorkspaceFileTray.tsx) | Upload + file list; `variant="sidebar"` (tool pages) or `variant="hero"` (home) |
 | `FileDropzone` | [`frontend/src/components/FileDropzone.tsx`](../../frontend/src/components/FileDropzone.tsx) | Drag/drop + browse; Pro gate on oversized files |
-| `ToolResultCard` | [`frontend/src/components/ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) | Success state: filename, Download, next steps |
+| `ToolResultCard` | [`frontend/src/components/ToolResultCard.tsx`](../../frontend/src/components/ToolResultCard.tsx) | Success state: filename, Download (primary), next steps (secondary) |
 | `ToolPanelFeedback` | [`frontend/src/components/ToolPanelFeedback.tsx`](../../frontend/src/components/ToolPanelFeedback.tsx) | Error + notice + result card wrapper for panels |
 | `ToolWorkflowShell` | [`frontend/src/components/ToolWorkflowShell.tsx`](../../frontend/src/components/ToolWorkflowShell.tsx) | Step rail for multi-step tools |
 | `WorkspaceFileThumbnail` | [`frontend/src/components/WorkspaceFileThumbnail.tsx`](../../frontend/src/components/WorkspaceFileThumbnail.tsx) | Tray row preview (image, PDF, or type icon) |
@@ -183,7 +183,7 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
 | `workspaceNavStore` | [`frontend/src/stores/workspaceNavStore.ts`](../../frontend/src/stores/workspaceNavStore.ts) | Pub/sub for header tool pill label on client nav |
 | `useToolResult` | [`frontend/src/hooks/useToolResult.ts`](../../frontend/src/hooks/useToolResult.ts) | Pending download blob + error state for panels |
 | Upload config | [`frontend/src/config/upload.ts`](../../frontend/src/config/upload.ts) | Per-tool `accept`, titles, labels |
-| Next-step links | [`frontend/src/config/toolNextSteps.ts`](../../frontend/src/config/toolNextSteps.ts) | Suggested tools on result card |
+| Next-step links | [`frontend/src/config/toolNextSteps.ts`](../../frontend/src/config/toolNextSteps.ts) | Suggested tools on result card (max 2 main actions) |
 | Tool registry | [`frontend/src/config/tools.ts`](../../frontend/src/config/tools.ts) | 18 tools, categories, `inputScope`, subcategories, routes, `toolIdFromPath()` |
 
 ---
@@ -412,8 +412,8 @@ Mobile refinements prioritize reaching the tool panel quickly while keeping uplo
 
 ```
 User runs tool → processing → ToolResultCard appears
-  → User clicks Download (explicit)
-  → Optional: Next steps chips (e.g. Merge → Convert, Compress → Protect)
+  → Download button is the primary visual action
+  → Next steps (e.g. Merge, Convert) appear as secondary actions below
 ```
 
 ---

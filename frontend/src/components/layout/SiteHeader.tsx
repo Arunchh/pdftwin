@@ -33,7 +33,7 @@ export default function SiteHeader() {
             </a>
           )}
           {!entitlements.isPro && (
-            <button type="button" className="btn btn-primary btn-sm" onClick={openCheckout}>
+            <button type="button" className="site-header-signin" onClick={openCheckout}>
               {messages.nav.upgradePro}
             </button>
           )}

@@ -54,14 +54,14 @@ export default function ToolResultCard({ toolId, result, onDismiss }: ToolResult
 
       {nextSteps.length > 0 && (
         <div className="tool-result-next-steps">
-          <p className="tool-result-next-label">Next steps</p>
-          <div className="tool-result-next-chips">
-            {nextSteps.map((step) =>
+          <p className="tool-result-next-label">Continue with this file</p>
+          <div className="tool-result-next-actions">
+            {nextSteps.slice(0, 2).map((step) =>
               workspaceNav ? (
                 <button
                   key={step.toolId}
                   type="button"
-                  className="tool-result-next-chip"
+                  className="btn btn-secondary btn-sm"
                   onClick={() => workspaceNav.navigateToTool(step.toolId)}
                 >
                   {step.label}
@@ -71,10 +71,30 @@ export default function ToolResultCard({ toolId, result, onDismiss }: ToolResult
                 <a
                   key={step.toolId}
                   href={toolPath(step.toolId, locale)}
-                  className="tool-result-next-chip"
+                  className="btn btn-secondary btn-sm"
                 >
                   {step.label}
                   <ArrowRight size={14} aria-hidden="true" />
+                </a>
+              )
+            )}
+            {nextSteps.length > 2 && (
+              workspaceNav ? (
+                <button
+                  key={nextSteps[2].toolId}
+                  type="button"
+                  className="tool-result-next-link"
+                  onClick={() => workspaceNav.navigateToTool(nextSteps[2].toolId)}
+                >
+                  {nextSteps[2].label}
+                </button>
+              ) : (
+                <a
+                  key={nextSteps[2].toolId}
+                  href={toolPath(nextSteps[2].toolId, locale)}
+                  className="tool-result-next-link"
+                >
+                  {nextSteps[2].label}
                 </a>
               )
             )}

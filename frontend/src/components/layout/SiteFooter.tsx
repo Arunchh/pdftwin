@@ -27,9 +27,6 @@ export default function SiteFooter() {
           <a href="/resources">{messages.footer.resources}</a>
           <a href="/blog">{messages.footer.blog}</a>
           <a href="/compare/ilovepdf">{messages.footer.compare}</a>
-          <button type="button" className="site-footer-link-btn" onClick={openCheckout}>
-            {messages.footer.upgradePro}
-          </button>
         </div>
         <p className="site-footer-note">{messages.footer.note}</p>
       </div>

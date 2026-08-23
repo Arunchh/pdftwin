@@ -60,7 +60,7 @@ Pay for **time, volume, and server-heavy work**:
 
 ## Conversion triggers (non-scammy)
 
-Upgrade moments — never block mid-download or watermark:
+Upgrade moments — never block mid-download or watermark. These are presented via "soft" UI panels (`panel-soft`), keeping with our calm UI approach, rather than aggressive, high-contrast paywalls:
 
 1. File **> 50 MB** → Pro supports up to 200 MB (`UploadProGate`)  
 2. **4th Word/Excel export** of the day → `ConvertLimitGate`  

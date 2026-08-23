@@ -91,10 +91,10 @@
   --success-bg: var(--sapphire-50);
   --success-text: var(--sapphire-700);
   --success-border: var(--sapphire-100);
-  --error: #ff3366;
-  --error-bg: #ffe5ee;
-  --error-text: #e6004c;
-  --error-border: #ffb8cc;
+  --error: var(--emerald-600);
+  --error-bg: var(--emerald-50);
+  --error-text: var(--emerald-700);
+  --error-border: var(--emerald-200);
   --warning-bg: var(--amber-50);
   --warning-text: var(--amber-700);
   --warning-border: var(--amber-200);
@@ -3239,14 +3239,14 @@ textarea {
 }
 
 .workspace-tool-rail-btn:hover {
-  color: var(--cat-pdf-ops-text);
-  background: var(--cat-pdf-ops-bg);
+  color: var(--text);
+  background: var(--surface-hover);
 }
 
 .workspace-tool-rail-btn.active {
-  color: var(--cat-pdf-ops-text);
-  background: var(--cat-pdf-ops-bg);
-  box-shadow: inset 0 0 0 1px var(--cat-pdf-ops-border);
+  color: var(--text);
+  background: var(--surface);
+  box-shadow: inset 0 0 0 1px var(--border);
 }
 
 .workspace-tool-rail-tooltip {

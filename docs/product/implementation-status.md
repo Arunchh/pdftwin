@@ -2,6 +2,14 @@
 
 > Last updated: 2026-07-28 · [Docs hub](../README.md) · [Monetization plan](../strategy/monetization-plan.md)
 
+### Shipped (2026-08-23 — UI/UX Overhaul & Attention Diet)
+
+- **Calmed global chrome**: Removed the `AnnouncementBanner` to clear up the header. Simplified `SiteHeader` CTAs, demoting the "Upgrade" button and the secondary marketing hero. Moved `FormatSupportSection` exclusively to `/formats`.
+- **File-led home**: Rebuilt the empty state on the home page around the core purpose + dropzone. When files are uploaded, context-aware suggestions (Compare PDFs, Merge PDFs, Compress, etc.) are shown. The tool rail is hidden until a specific tool is chosen.
+- **Result as next chapter**: The `ToolResultCard` now makes "Download" the sole primary visual action. Next steps (like "Convert to Word" or "Merge") are presented as secondary actions below it, reducing cognitive load. Added post-review next steps to the `ComparePanel`.
+- **Workspace quieted**: Softened the UI of paywall components (`UploadProGate`, `ConvertLimitGate`, `MergeBatchGate`) with a `panel-soft` styling instead of aggressive, attention-grabbing colors. The tool rail `.workspace-tool-rail` now acts as a quiet switcher.
+- **Visual hierarchy**: Enforced a single accent color for primary actions. Violet is used exclusively for the Compare tool, and coral for error/destructive actions. Cleaned up unused components (`ToolGrid.tsx`, `HeroSection.tsx`) and CSS.
+
 ### Shipped (2026-07-28 — remove workspace tool switcher)
 
 - **Workspace tool switcher removed** — [`WorkspaceToolSwitcher.tsx`](../../frontend/src/components/layout/WorkspaceToolSwitcher.tsx) deleted; category and tool tabs no longer render under the home upload zone or on `/tools/*` routes. Users pick tools from the header **All tools** mega menu or [`/tools/` catalog](./tool-workspace-ui.md#all-tools-catalog-page-tools). The vertical **tool rail** remains for switching between related single-PDF edit tools within a session.
