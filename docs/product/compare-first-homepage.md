@@ -66,7 +66,7 @@ Implementation:
 | Compare panel | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) | Setup + review viewer; file assignment moved to tray |
 | Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | Lifts `compareLeftFile` / `compareRightFile` state; renders `CompareFileTray` instead of `WorkspaceFileTray` when compare tool active |
 
-On **`/tools/compare`** and **home (`/`)**, layout is **A4-width document canvas (center) | dual-slot file tray (right)** on desktop and tablet. The viewport is full-width, but the workspace column is capped at **one A4 page width** (~816px) for setup — like Word or Acrobat. In review mode, the dual-pane viewer expands to **two A4 widths**. Upload slots sit in a sticky right sidebar; from 900px up they display **side by side**.
+On **`/tools/compare`** and **home (`/`)**, layout is **A4-width document canvas (center) | dual-slot file tray (right)** on desktop and tablet for setup. The viewport is full-width, but the workspace column is capped at **one A4 page width** (~816px) for setup — like Word or Acrobat. In **review mode**, the viewer expands to **full viewport width** (no side margins or A4 cap); each pane gets `50%` of available width with minimal padding. Upload slots sit in a sticky right sidebar during setup; from 900px up they display **side by side**.
 
 CSS: `--a4-page-width`, `--workspace-compare-width`, `.workspace-layout`, `.compare-file-tray-slots` in [`index.css`](../../frontend/src/index.css).
 
@@ -78,7 +78,7 @@ The app shell is full-width on tablet/desktop (≥641px), but the **workspace co
 |------|-------|---------|
 | **Left margin** | Flexible `1fr` | Balances the layout |
 | **Document workspace** | `var(--a4-page-width)` (~51rem / 816px) | Tool panel or single compare setup |
-| **Compare review** | `2 × A4 + gap` (~104rem max) | Side-by-side page panes, centered |
+| **Compare review** | Full viewport width — `1fr 1fr` panes, no A4 cap | Side-by-side page panes fill available width |
 | **Right sidebar** | ~300–384px, sticky | **Left** + **Right** upload slots + **Compare** button |
 
 Upload slots use the horizontal space **outside** the document column — not inside the A4 canvas.
@@ -179,7 +179,7 @@ Click **Compare** in tray      Workspace chrome hidden (see below)
 | Feature | Details |
 |---------|---------|
 | **Zoom** | Linked or independent; ± buttons; keyboard `+` / `-` |
-| **Fit width** | `fitBothToWidth()` scales both panes from pane width and page dimensions; **ResizeObserver** on each pane re-runs fit when layout expands (e.g. after upload sidebar hides) |
+| **Fit width** | `fitBothToWidth()` scales both panes from measured inner width (computed padding); **ResizeObserver** re-runs fit when layout expands |
 | **View modes** | **Single page** (default) or **continuous scroll** |
 | **Page navigation** | Prev/next, page number input (single-page mode) |
 | **Scroll sync** | Linked scroll in continuous mode only |
@@ -190,7 +190,8 @@ Click **Compare** in tray      Workspace chrome hidden (see below)
 |-------|-----|
 | Zoom appeared broken | Removed `max-width: 100%` from `.compare-page-canvas` |
 | PDFs tiny white boxes on enter | **ResizeObserver** on `.compare-pane-scroll` re-runs `fitBothToWidth()` after `workspace-layout--compare-review` expands the column (setup fit ran while sidebar was still visible) |
-| Cramped viewer | Review panes: `min(78vh, A4 height)` with `min-height: 24rem`; viewer `min-height: calc(100vh - 12rem)` |
+| Wasted horizontal space in review | Review layout drops side `1fr` margins and A4 column cap; panes use `1fr 1fr`; `site-main` padding reduced; pane scroll padding tightened to `0.35rem` |
+| Cramped viewer | Review panes: up to `80vh` tall; viewer `min-height: calc(100vh - 12rem)` |
 | Immersive layout | Full-width grid when `workspace-layout--compare-review` |
 | Toolbar polish | Segmented `.compare-toolbar-group` chips, icon-only `.compare-toolbar-btn` controls, refined diff-mode toggle |
 

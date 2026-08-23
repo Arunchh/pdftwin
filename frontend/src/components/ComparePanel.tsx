@@ -47,7 +47,11 @@ import { toolPath } from "../config/tools";
 const MIN_SCALE = 0.35;
 const MAX_SCALE = 4;
 const SCALE_STEP = 0.2;
-const PANE_PADDING_PX = 24;
+function paneContentWidth(el: HTMLElement): number {
+  const style = getComputedStyle(el);
+  const paddingX = parseFloat(style.paddingLeft) + parseFloat(style.paddingRight);
+  return Math.max(0, el.clientWidth - paddingX);
+}
 const DEFAULT_DIFF_SENSITIVITY = 12;
 
 type ViewMode = "continuous" | "single";
@@ -483,8 +487,8 @@ export default function ComparePanel({
       ]);
       const leftBase = leftPage.getViewport({ scale: 1 });
       const rightBase = rightPage.getViewport({ scale: 1 });
-      const leftFit = (leftPane.clientWidth - PANE_PADDING_PX) / leftBase.width;
-      const rightFit = (rightPane.clientWidth - PANE_PADDING_PX) / rightBase.width;
+      const leftFit = paneContentWidth(leftPane) / leftBase.width;
+      const rightFit = paneContentWidth(rightPane) / rightBase.width;
       const nextScale = clampScale(Math.min(leftFit, rightFit));
       setLeftScale(nextScale);
       setRightScale(nextScale);

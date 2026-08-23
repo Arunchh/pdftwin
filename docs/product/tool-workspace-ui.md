@@ -498,16 +498,25 @@ Segmented control groups (`.compare-toolbar-group`) with compact icon-only butto
 
 Review mode enters in two layout passes: `ComparePanel` sets `reviewMode` first, then `ToolWorkspace` hides the file tray and applies `workspace-layout--compare-review`. Pane width grows between passes, so a one-shot fit on enter would lock zoom to the narrow setup column.
 
-`ComparePanel` attaches a **ResizeObserver** to both `.compare-pane-scroll` elements and calls `fitBothToWidth()` (debounced with `requestAnimationFrame`) whenever pane width changes. Skips fit when `clientWidth < 48px`.
+`ComparePanel` attaches a **ResizeObserver** to both `.compare-pane-scroll` elements and calls `fitBothToWidth()` (debounced with `requestAnimationFrame`) whenever pane width changes. Fit uses **measured inner width** (`clientWidth` minus computed horizontal padding), not a hardcoded constant. Skips fit when `clientWidth < 48px`.
+
+### Review layout (width)
+
+| Setup | Review |
+|-------|--------|
+| A4 document column + upload sidebar | Full-width single column |
+| `max-width: var(--a4-page-width)` | `max-width: none` |
+| `site-main` padding `clamp(1rem, 2.5vw, 2.5rem)` | `clamp(0.35rem, 0.75vw, 0.75rem)` via `:has(.workspace--compare-review)` |
+| N/A | `.compare-viewer--review`: `1fr 1fr` grid, `gap: 0.5rem`, minimal pane padding |
 
 ### CSS classes (compare-specific)
 
 | Class | Purpose |
 |-------|---------|
 | `.workspace--compare-review` | Workspace section when review mode active |
-| `.workspace-layout--compare-review` | Single-column full-width layout |
+| `.workspace-layout--compare-review` | Full-width single-column layout (no side margins) |
 | `.compare-panel--review` | Panel without setup chrome |
-| `.compare-viewer--review` | Full-width dual-pane viewer; taller scroll areas |
+| `.compare-viewer--review` | Full-width `1fr 1fr` dual-pane viewer; tight padding |
 | `.compare-toolbar` / `.compare-toolbar-group` / `.compare-toolbar-btn` | Segmented review toolbar |
 | `.compare-page-canvas` | No `max-width: 100%` — zoom renders at visible scale |
 
@@ -516,8 +525,8 @@ Review mode enters in two layout passes: `ComparePanel` sets `reviewMode` first,
 1. **Home `/`:** same dual-slot compare workspace as `/tools/compare`; H1 above workspace
 2. **Tool route `/tools/compare`:** tool heading + setup panel + dual-slot tray
 3. Empty slots: placeholder, icon, browse button; filled slots: thumbnail + filename
-4. Click **Compare** in the tray — chrome hidden, panes expand to dual A4 width
-5. PDF pages fill each pane (fit-to-width via ResizeObserver)
+4. Click **Compare** in the tray — chrome hidden, panes expand to full viewport width
+5. PDF pages fill each pane edge-to-edge (fit-to-width via ResizeObserver + measured padding)
 6. Zoom visibly changes page size
 7. **Change documents** — restores setup + dual-slot tray
 
