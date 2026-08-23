@@ -9,6 +9,9 @@ interface CompareFileTrayProps {
   onLeftFileChange: (file: File | null) => void;
   onRightFileChange: (file: File | null) => void;
   onSwap: () => void;
+  onCompare: () => void;
+  canCompare: boolean;
+  compareLoading: boolean;
   fileLimitMb: number;
   entitlementsLabel: string;
   isPro: boolean;
@@ -20,6 +23,9 @@ export default function CompareFileTray({
   onLeftFileChange,
   onRightFileChange,
   onSwap,
+  onCompare,
+  canCompare,
+  compareLoading,
   fileLimitMb,
   entitlementsLabel,
   isPro,
@@ -27,7 +33,7 @@ export default function CompareFileTray({
   const { messages } = useI18n();
   const copy = messages.compare;
 
-  const bothReady = Boolean(leftFile && rightFile);
+  const bothFilesSelected = Boolean(leftFile && rightFile);
 
   return (
     <aside className="workspace-files-column compare-file-tray">
@@ -53,10 +59,6 @@ export default function CompareFileTray({
           onFileChange={onLeftFileChange}
         />
 
-        <div className="compare-file-tray-divider" aria-hidden="true">
-          <span>{copy.vsLabel}</span>
-        </div>
-
         <CompareFileSlot
           label={copy.rightSlotLabel}
           file={rightFile}
@@ -68,7 +70,16 @@ export default function CompareFileTray({
         />
       </div>
 
-      {bothReady && (
+      <button
+        type="button"
+        className="btn btn-primary compare-file-tray-compare"
+        disabled={!bothFilesSelected || !canCompare || compareLoading}
+        onClick={onCompare}
+      >
+        {compareLoading ? copy.loading : copy.compareButton}
+      </button>
+
+      {bothFilesSelected && (
         <button type="button" className="btn btn-secondary btn-sm compare-file-tray-swap" onClick={onSwap}>
           <ArrowLeftRight size={15} />
           {copy.swapDocuments}

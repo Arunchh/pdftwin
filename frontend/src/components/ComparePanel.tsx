@@ -65,6 +65,8 @@ interface ComparePanelProps {
   onLeftFileChange: (file: File | null) => void;
   onRightFileChange: (file: File | null) => void;
   onReviewModeChange?: (active: boolean) => void;
+  compareTrigger?: number;
+  onReviewReadinessChange?: (state: { ready: boolean; loading: boolean }) => void;
 }
 
 function PageCanvas({
@@ -196,6 +198,8 @@ export default function ComparePanel({
   onLeftFileChange,
   onRightFileChange,
   onReviewModeChange,
+  compareTrigger = 0,
+  onReviewReadinessChange,
 }: ComparePanelProps) {
   const { messages, locale } = useI18n();
   const copy = messages.compare;
@@ -247,6 +251,18 @@ export default function ComparePanel({
   useEffect(() => {
     onReviewModeChange?.(reviewMode);
   }, [reviewMode, onReviewModeChange]);
+
+  useEffect(() => {
+    onReviewReadinessChange?.({ ready: readyForReview, loading });
+  }, [readyForReview, loading, onReviewReadinessChange]);
+
+  useEffect(() => {
+    if (!compareTrigger) return;
+    if (!readyForReview) return;
+    setReviewMode(true);
+    setHasReviewed(true);
+    setCurrentPage(1);
+  }, [compareTrigger, readyForReview]);
 
   useEffect(() => {
     let cancelled = false;
@@ -472,14 +488,6 @@ export default function ComparePanel({
     } catch {
       setMessage("Could not fit documents to pane width.");
     }
-  };
-
-  const enterReviewMode = () => {
-    if (!readyForReview) return;
-    setReviewMode(true);
-    setHasReviewed(true);
-    setCurrentPage(1);
-    void fitBothToWidth();
   };
 
   const exitReviewMode = () => {
@@ -913,11 +921,7 @@ export default function ComparePanel({
           )}
 
           {readyForReview ? (
-            <div className="compare-setup-actions">
-              <button type="button" className="btn btn-primary" onClick={enterReviewMode}>
-                {hasReviewed ? "Return to review" : copy.enterReview}
-              </button>
-            </div>
+            <p className="file-hint muted compare-setup-ready">{copy.setupReadyHint}</p>
           ) : (
             <div className="compare-setup-empty">
               <div className="compare-setup-empty-icon" aria-hidden="true">

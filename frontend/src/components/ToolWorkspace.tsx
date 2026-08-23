@@ -49,6 +49,9 @@ export default function ToolWorkspace({
   const [compareReviewMode, setCompareReviewMode] = useState(false);
   const [compareLeftFile, setCompareLeftFile] = useState<File | null>(null);
   const [compareRightFile, setCompareRightFile] = useState<File | null>(null);
+  const [compareTrigger, setCompareTrigger] = useState(0);
+  const [canCompare, setCanCompare] = useState(false);
+  const [compareLoading, setCompareLoading] = useState(false);
 
   const isCompareTool = activeToolId === "pdf-compare";
   const hideWorkspaceChrome = isCompareTool && compareReviewMode;
@@ -93,6 +96,15 @@ export default function ToolWorkspace({
     setCompareRightFile(compareLeftFile);
   };
 
+  const handleCompare = () => {
+    setCompareTrigger((current) => current + 1);
+  };
+
+  const handleReviewReadinessChange = (state: { ready: boolean; loading: boolean }) => {
+    setCanCompare(state.ready);
+    setCompareLoading(state.loading);
+  };
+
   const renderToolPanel = () => {
     if (!activeToolId) {
       return null;
@@ -125,6 +137,8 @@ export default function ToolWorkspace({
             onLeftFileChange={setCompareLeftFile}
             onRightFileChange={setCompareRightFile}
             onReviewModeChange={setCompareReviewMode}
+            compareTrigger={compareTrigger}
+            onReviewReadinessChange={handleReviewReadinessChange}
           />
         );
       case "arrange-merge":
@@ -199,6 +213,9 @@ export default function ToolWorkspace({
                 onLeftFileChange={setCompareLeftFile}
                 onRightFileChange={setCompareRightFile}
                 onSwap={handleCompareSwap}
+                onCompare={handleCompare}
+                canCompare={canCompare}
+                compareLoading={compareLoading}
                 fileLimitMb={entitlements.fileLimitMb}
                 entitlementsLabel={entitlements.label}
                 isPro={entitlements.isPro}

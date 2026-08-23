@@ -5388,18 +5388,9 @@ textarea {
 @media (min-width: 900px) {
   .compare-file-tray-slots {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 0.75rem;
     align-items: stretch;
-  }
-
-  .compare-file-tray-divider {
-    margin: 0;
-    align-self: center;
-  }
-
-  .compare-file-tray-divider::before {
-    display: none;
   }
 
   .compare-file-slot-body {
@@ -5640,6 +5631,21 @@ textarea {
 .compare-file-tray-swap {
   width: 100%;
   justify-content: center;
+}
+
+.compare-file-tray-compare {
+  width: 100%;
+  justify-content: center;
+  margin-top: 0.15rem;
+}
+
+.compare-setup-ready {
+  margin-top: 1.25rem;
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--amethyst-100);
+  background: var(--amethyst-50);
+  text-align: center;
 }
 
 .compare-file-tray-privacy {

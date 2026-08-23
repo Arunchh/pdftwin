@@ -90,7 +90,8 @@ export interface Messages {
     rightSlotPlaceholder: string;
     browsePdf: string;
     slotEmptyHint: string;
-    vsLabel: string;
+    compareButton: string;
+    setupReadyHint: string;
     leftLabel: string;
     rightLabel: string;
     remove: string;

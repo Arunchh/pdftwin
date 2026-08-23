@@ -215,7 +215,7 @@ Files uploaded in one tool remain available when switching to another (e.g. merg
   <section class="workspace workspace--home-compare workspace--compare" id="workspace">
     <div class="workspace-layout">
       <div class="workspace-action-column"><!-- ComparePanel setup --></div>
-      <aside class="compare-file-tray workspace-files-column"><!-- Original + Revised slots --></aside>
+      <aside class="compare-file-tray workspace-files-column"><!-- Left + Right slots + Compare --></aside>
     </div>
   </section>
 </div>
@@ -457,9 +457,9 @@ Compare is the only tool with a **second UI phase** that hides the standard work
 
 ```
 /tools/compare or / (setup)
-  → Add Original + Revised PDFs in CompareFileTray (right column)
+  → Add Left + Right PDFs in CompareFileTray (right column)
   → Each slot shows live page-1 thumbnail when filled
-  → Click "Open compare viewer"
+  → Click **Compare** in the tray (enabled when both PDFs are loaded)
   → reviewMode = true
        ├─ Hide: workspace heading, WorkspaceToolRail, CompareFileTray
        ├─ Show: full-width toolbar + dual-pane viewer
@@ -473,6 +473,8 @@ Compare is the only tool with a **second UI phase** that hides the standard work
 |-----------------|-----------|---------|
 | `leftFile`, `rightFile` | Workspace → Panel | Controlled compare documents |
 | `onLeftFileChange`, `onRightFileChange` | Panel/Tray → Workspace | Update slot assignment |
+| `compareTrigger` | Workspace → Panel | Fires review mode when user clicks **Compare** |
+| `onReviewReadinessChange` | Panel → Workspace | `{ ready, loading }` for tray button state |
 | `onReviewModeChange(active)` | Panel → Workspace | Toggle chrome visibility |
 
 Compare uses [`CompareFileTray`](../../frontend/src/components/compare/CompareFileTray.tsx) instead of [`WorkspaceFileTray`](../../frontend/src/components/WorkspaceFileTray.tsx) in the right column.
@@ -503,7 +505,7 @@ Compare uses [`CompareFileTray`](../../frontend/src/components/compare/CompareFi
 1. **Home `/`:** same dual-slot compare workspace as `/tools/compare`; H1 above workspace
 2. **Tool route `/tools/compare`:** tool heading + setup panel + dual-slot tray
 3. Empty slots: placeholder, icon, browse button; filled slots: thumbnail + filename
-4. After **Open compare viewer** — chrome hidden, panes use full width
+4. Click **Compare** in the tray — chrome hidden, panes use full width
 5. Zoom visibly changes page size
 6. **Change documents** — restores setup + dual-slot tray
 

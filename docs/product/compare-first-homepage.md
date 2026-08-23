@@ -39,13 +39,10 @@ The home page and `/tools/compare` now share **one layout**. Landing on `/` is e
 ├──────────────────────────────────────────────────────────────────┤
 │  ┌─────────────────────────────┬──────────────────────────────┐  │
 │  │  ComparePanel (setup)       │  CompareFileTray (right)     │  │
-│  │  · setup title + description│  ┌ Original ──────────────┐ │  │
-│  │  · "Open compare viewer"    │  │ drop / browse / preview │ │  │
-│  │    when both PDFs ready     │  └─────────────────────────┘ │  │
-│  │                             │           vs                 │  │
-│  │                             │  ┌ Revised ────────────────┐ │  │
-│  │                             │  │ drop / browse / preview │ │  │
-│  │                             │  └─────────────────────────┘ │  │
+│  │  · setup title + hint       │  ┌ Left ───┐ ┌ Right ───┐  │  │
+│  │                             │  │ preview  │ │ preview  │  │  │
+│  │                             │  └──────────┘ └──────────┘  │  │
+│  │                             │  [ Compare ]  (primary CTA)   │  │
 │  └─────────────────────────────┴──────────────────────────────┘  │
 └──────────────────────────────────────────────────────────────────┘
 ```
@@ -64,7 +61,7 @@ Implementation:
 | Piece | Path | Notes |
 |-------|------|-------|
 | Hero shell | [`HomeCompareHeroSection.tsx`](../../frontend/src/components/layout/HomeCompareHeroSection.tsx) | Renders H1 + `<ToolWorkspace toolId="pdf-compare" variant="homeCompare" />` |
-| Compare file tray | [`CompareFileTray.tsx`](../../frontend/src/components/compare/CompareFileTray.tsx) | Right sidebar: Original + Revised slots (side-by-side from 900px), swap button, privacy copy |
+| Compare file tray | [`CompareFileTray.tsx`](../../frontend/src/components/compare/CompareFileTray.tsx) | Right sidebar: **Left** + **Right** slots, **Compare** button, swap, privacy copy |
 | Upload slot | [`CompareFileSlot.tsx`](../../frontend/src/components/compare/CompareFileSlot.tsx) | Per-slot drag/drop, browse, PDF thumbnail preview, remove |
 | Compare panel | [`ComparePanel.tsx`](../../frontend/src/components/ComparePanel.tsx) | Setup + review viewer; file assignment moved to tray |
 | Workspace shell | [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx) | Lifts `compareLeftFile` / `compareRightFile` state; renders `CompareFileTray` instead of `WorkspaceFileTray` when compare tool active |
@@ -82,7 +79,7 @@ The app shell is full-width on tablet/desktop (≥641px), but the **workspace co
 | **Left margin** | Flexible `1fr` | Balances the layout |
 | **Document workspace** | `var(--a4-page-width)` (~51rem / 816px) | Tool panel or single compare setup |
 | **Compare review** | `2 × A4 + gap` (~104rem max) | Side-by-side page panes, centered |
-| **Right sidebar** | ~300–384px, sticky | Original + Revised upload slots |
+| **Right sidebar** | ~300–384px, sticky | **Left** + **Right** upload slots + **Compare** button |
 
 Upload slots use the horizontal space **outside** the document column — not inside the A4 canvas.
 
@@ -112,11 +109,12 @@ Each slot in the right column is a self-contained upload surface:
 
 | State | UI |
 |-------|-----|
-| **Empty** | Dashed border, upload icon, placeholder copy ("Drop your original PDF here"), **Browse PDF** button |
+| **Empty** | Dashed border, upload icon, placeholder copy ("Drop your left PDF here"), **Browse PDF** button |
 | **Filled** | Live **page-1 thumbnail** (PDF.js via `useFileThumbnail`), filename, file size, remove button |
-| **Both filled** | **Swap documents** button between slots |
+| **Both files selected** | **Compare** button enabled once both PDFs are loaded (`canCompare`); shows loading text while PDF.js opens files |
+| **Both ready** | **Swap documents** secondary button available |
 
-Slots are labeled **Original** and **Revised** (i18n: `compare.leftSlotLabel`, `compare.rightSlotLabel`). Visual polish: gradient tray background, inset highlights, hover/drag states, shimmer loading skeleton for thumbnails.
+Slots are labeled **Left** and **Right** (i18n: `compare.leftSlotLabel`, `compare.rightSlotLabel`). There is no **vs** divider between slots. The primary **Compare** button (`compare.compareButton`) sits below the slots and triggers review mode via `compareTrigger` in [`ToolWorkspace.tsx`](../../frontend/src/components/ToolWorkspace.tsx).
 
 Files are held in React state in `ToolWorkspace` (`compareLeftFile`, `compareRightFile`) — not the generic IndexedDB workspace tray. This keeps compare's two-file requirement explicit and avoids the old tray → assign-left/right indirection.
 
@@ -158,9 +156,9 @@ All five locales (EN, ES, FR, NL, PT) have updated `meta`, `hero`, `home`, `comp
 ```
 Setup                          Review (immersive)
 ─────                          ──────────────────
-Add Original + Revised PDFs    Full-width dual panes
+Add Left + Right PDFs          Full-width dual panes
 in CompareFileTray (right)     Toolbar: zoom, fit, page nav, fullscreen
-Click "Open compare viewer"    Workspace chrome hidden (see below)
+Click **Compare** in tray      Workspace chrome hidden (see below)
 ```
 
 ### Workspace integration
@@ -175,7 +173,8 @@ Click "Open compare viewer"    Workspace chrome hidden (see below)
 |-----------------|-----------|---------|
 | `leftFile`, `rightFile` | Workspace → Panel + Tray | Controlled compare documents |
 | `onLeftFileChange`, `onRightFileChange` | Panel/Tray → Workspace | Update slot assignment |
-| `onReviewModeChange(active)` | Panel → Workspace | Toggle chrome visibility |
+| `compareTrigger` | Workspace → Panel | Incremented when user clicks **Compare** in tray; enters review when PDFs are ready |
+| `onReviewReadinessChange` | Panel → Workspace | Reports `{ ready, loading }` so the tray can enable/disable **Compare** |
 
 | Feature | Details |
 |---------|---------|
@@ -205,7 +204,7 @@ Styles: [`frontend/src/index.css`](../../frontend/src/index.css) — `.compare-p
 | `home.workflow` | `heading`, `subheading`, `steps[]` | `HomeWorkflowSection` |
 | `home.complementary` | `heading`, `subheading`, `toolIds[]` | `HomeToolsSection` |
 | `home.seoTools` | `heading`, `subheading` | `HomeToolsSection` SEO nav |
-| `compare` | Full panel + file tray copy (`fileTrayTitle`, `leftSlotPlaceholder`, `browsePdf`, `setupAwaitingFiles`, toolbar, zoom, pages, fullscreen) | `ComparePanel`, `CompareFileTray`, `CompareFileSlot` |
+| `compare` | Full panel + file tray copy (`leftSlotLabel`, `rightSlotLabel`, `compareButton`, `setupReadyHint`, toolbar, zoom, pages, fullscreen) | `ComparePanel`, `CompareFileTray`, `CompareFileSlot` |
 
 Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 
@@ -242,7 +241,7 @@ Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 
 1. `/` — hero shows compare H1; **same compare workspace as `/tools/compare`** (panel left, dual upload slots right)
 2. Empty slots show placeholder + browse button; filled slots show page-1 thumbnail + filename
-3. Both PDFs added — **Open compare viewer** enabled in setup panel
+3. Both PDFs added — **Compare** button enabled in right sidebar (after PDF.js loads both files)
 4. Workflow section — 3 steps with working tool links
 5. `#tools` — featured tools list and quiet `#tools` SEO index
 6. `/es/`, `/fr/`, `/nl/`, `/pt/` — same structure, translated copy
@@ -250,9 +249,9 @@ Types: [`frontend/src/i18n/types.ts`](../../frontend/src/i18n/types.ts).
 
 ### Compare tool (home and `/tools/compare`)
 
-1. Add Original + Revised PDFs in right-column slots; live thumbnails appear
-2. **Swap documents** — swaps slot assignment
-3. **Open compare viewer** — enters review mode
+1. Add **Left** and **Right** PDFs in right-column slots; live thumbnails appear
+2. **Compare** button enables after both PDFs load
+3. Click **Compare** — enters review mode
 4. Review mode — file tray and tool rail hidden; dual panes full width
 5. Zoom in/out — visible size changes (not just resolution)
 6. **Fit width** — both panes scale to pane width
